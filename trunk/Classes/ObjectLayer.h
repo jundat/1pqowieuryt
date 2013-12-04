@@ -11,6 +11,7 @@ class ObjectLayer : public cocos2d::CCLayer
 {
 public:
 	ObjectLayer(){
+		m_arrEnemi = new CCArray();
 		m_arrPlayerBullets = new CCArray();
 		m_arrEnemiBullets = new CCArray();
 	};
@@ -24,15 +25,23 @@ public:
 	virtual void ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent);
 
 public:
-	void PlayerFireCallback(float dt);
+	void SchedulePlayerFire(float dt);
+	void ScheduleGenerateEnemi(float dt);
 	void AddBullet(Bullet* bullet);
+
+private:
+	void _UpdateCollision();
 
 private:
 	Ship* m_player;
 	bool m_IsTouchedPlayer; //check if touched player
 	
+	CCArray* m_arrEnemi;
+	float m_timeToGenerateEnemi;
+
 	CCArray* m_arrPlayerBullets;
 	CCArray* m_arrEnemiBullets;
+	
 };
 
 #endif // __GAME_OBJECT_MANAGER_H__

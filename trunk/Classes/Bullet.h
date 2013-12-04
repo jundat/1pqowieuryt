@@ -17,7 +17,7 @@ public:
 
 	virtual void update(float delta);
 
-	CC_SYNTHESIZE(int, m_type, Type);
+	CC_SYNTHESIZE(int, m_type, BulletType);
 	CC_SYNTHESIZE(float, m_vx, Vx);
 	CC_SYNTHESIZE(float, m_vy, Vy);
 };

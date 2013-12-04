@@ -58,7 +58,7 @@ void BackgroundLayer::update(float dt) {
 	spaceDusts->addObject(_spacedust1);
 	spaceDusts->addObject(_spacedust2);
 
-	for ( int ii = 0; ii <spaceDusts->count(); ii++ ) {
+	for ( int ii = 0; ii < spaceDusts->count(); ii++ ) {
 		CCSprite * spaceDust = (CCSprite *)(spaceDusts->objectAtIndex(ii));
 		float yPosition = _backgroundNode->convertToWorldSpace(spaceDust->getPosition()).y;
 		float size = spaceDust->getContentSize().height;
@@ -73,7 +73,7 @@ void BackgroundLayer::update(float dt) {
 	backGrounds->addObject(_spacialanomaly);
 	backGrounds->addObject(_spacialanomaly2);
 
-	for ( int ii = 0; ii <backGrounds->count(); ii++ ) {
+	for ( int ii = 0; ii < backGrounds->count(); ii++ ) {
 		CCSprite * background = (CCSprite *)(backGrounds->objectAtIndex(ii));
 		float yPosition = _backgroundNode->convertToWorldSpace(background->getPosition()).y;
 		float size = background->getContentSize().height;
