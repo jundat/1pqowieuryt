@@ -1,5 +1,6 @@
 #include "Ship.h"
 #include "Bullet.h"
+#include "ObjectLayer.h"
 USING_NS_CC;
 
 
@@ -14,10 +15,6 @@ Ship::Ship() : GameObject()
 
 	//////////////////////////////////////////////////////////////////////////
 
-	m_arrBullets = new CCArray();
-
-	//////////////////////////////////////////////////////////////////////////
-
 	this->scheduleUpdate();
 }
 
@@ -28,21 +25,12 @@ Ship::~Ship()
 
 void Ship::Fire()
 {
-
+	Bullet* bullet = new Bullet(K_BULLET_PLAYER, this->getPosition());
+	ObjectLayer* parent = (ObjectLayer*)this->getParent();
+	parent->AddBullet(bullet);
 }
 
 void Ship::update( float delta )
 {
-	CCObject* it;
-
-	CCARRAY_FOREACH(m_arrBullets, it)
-	{
-		Bullet* bullet = dynamic_cast<Bullet*>(it);
-		if (NULL != bullet)
-		{
-			//auto update
-
-		}
-	}
 }
 

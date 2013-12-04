@@ -12,15 +12,14 @@ const static int K_BULLET_ENEMI = 1;
 class Bullet : public GameObject
 {
 public:
-	Bullet(int type);
+	Bullet(int type, CCPoint position);
 	~Bullet();
 
 	virtual void update(float delta);
-	void setVelocity(float vx, float vy);
 
-private:
-	float vx;
-	float vy;
+	CC_SYNTHESIZE(int, m_type, Type);
+	CC_SYNTHESIZE(float, m_vx, Vx);
+	CC_SYNTHESIZE(float, m_vy, Vy);
 };
 
 #endif //__BULLET_H__

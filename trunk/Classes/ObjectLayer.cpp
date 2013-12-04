@@ -1,4 +1,5 @@
 #include "ObjectLayer.h"
+#include "Global.h"
 
 USING_NS_CC;
 
@@ -27,7 +28,11 @@ bool ObjectLayer::init()
 	this->addChild(m_player);
 	m_IsTouchedPlayer = false;
 	
+	//m_playerFireTimer = CCTimer::timerWithTarget(this, schedule_selector( ObjectLayer::PlayerFire), 0.5f);
+	this->schedule(schedule_selector(ObjectLayer::PlayerFireCallback), PLAYER_TIME_TO_FIRE);
 	//////////////////////////////////////////////////////////////////////////
+
+	this->scheduleUpdate();
 
     return true;
 }
@@ -60,4 +65,65 @@ void ObjectLayer::ccTouchEnded( CCTouch *pTouch, CCEvent *pEvent )
 	m_IsTouchedPlayer = false;
 }
 
+void ObjectLayer::PlayerFireCallback(float dt)
+{
+	m_player->Fire();
+}
+
+//Player or enemi call to add bullet when fire
+void ObjectLayer::AddBullet(Bullet* bullet )
+{
+	this->addChild(bullet);
+
+	switch(bullet->getType())
+	{
+	case K_BULLET_PLAYER:
+		m_arrPlayerBullets->addObject(bullet);
+		break;
+
+	case K_BULLET_ENEMI:
+		m_arrEnemiBullets->addObject(bullet);
+		break;
+	}
+}
+
+void ObjectLayer::update( float delta )
+{
+	CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
+	CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
+
+	CCObject* it;
+
+	//Player's bullets
+	CCARRAY_FOREACH(m_arrPlayerBullets, it)
+	{
+		Bullet* bullet = dynamic_cast<Bullet*>(it);
+		if (NULL != bullet)
+		{
+			//out of screen
+			if (bullet->getPositionY() > visibleSize.height)
+			{
+				this->removeChild(bullet);
+				m_arrPlayerBullets->fastRemoveObject(it);
+			}
+		}
+	}
+
+	//Enemi's bullets
+	CCARRAY_FOREACH(m_arrEnemiBullets, it)
+	{
+		Bullet* bullet = dynamic_cast<Bullet*>(it);
+		if (NULL != bullet)
+		{
+			//out of screen
+			if (bullet->getPositionY() < 0)
+			{
+				this->removeChild(bullet);
+				m_arrEnemiBullets->fastRemoveObject(it);
+			}
+		}
+	}
+}
+
 #pragma endregion TOUCH HANDLER
+

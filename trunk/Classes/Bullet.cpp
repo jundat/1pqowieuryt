@@ -3,26 +3,28 @@
 USING_NS_CC;
 
 
-Bullet::Bullet(int type) : GameObject()
+Bullet::Bullet(int type, CCPoint position) : GameObject()
 {
 	CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
 	CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
 
 	m_sprite = CCSprite::create("bullet.png");
-	m_sprite->setPosition(CCPointZero);
+	m_sprite->setPosition(position);
 	this->addChild(m_sprite);
 
 	//////////////////////////////////////////////////////////////////////////
-	switch (type)
+	this->m_type = type;
+
+	switch (m_type)
 	{
 	case K_BULLET_PLAYER:
-		vx = PLAYER_BULLET_1_VX;
-		vy = PLAYER_BULLET_1_VY;
+		m_vx = PLAYER_BULLET_1_VX;
+		m_vy = PLAYER_BULLET_1_VY;
 		break;
 
 	case K_BULLET_ENEMI:
-		vx = ENEMI_BULLET_1_VX;
-		vy = ENEMI_BULLET_1_VY;
+		m_vx = ENEMI_BULLET_1_VX;
+		m_vy = ENEMI_BULLET_1_VY;
 		break;
 	}
 
@@ -38,12 +40,6 @@ Bullet::~Bullet()
 
 void Bullet::update( float delta )
 {
-	this->setPositionX(vx * delta + this->getPositionX());
-	this->setPositionY(vy * delta + this->getPositionY());
-}
-
-void Bullet::setVelocity( float _vx, float _vy )
-{
-	vx = _vx;
-	vy = _vy;
+	this->setPositionX(m_vx * delta * 1000 + this->getPositionX());
+	this->setPositionY(m_vy * delta * 1000 + this->getPositionY());
 }

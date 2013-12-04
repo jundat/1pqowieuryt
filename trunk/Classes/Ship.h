@@ -16,9 +16,6 @@ public:
 	void Fire();
 	virtual void update(float delta);
 
-private:
-	CCArray* m_arrBullets;
-
 };
 
 #endif //__SHIP_H__
