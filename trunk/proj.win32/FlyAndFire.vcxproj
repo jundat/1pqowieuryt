@@ -133,6 +133,7 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
     <ClCompile Include="..\Classes\BulletManager.cpp" />
     <ClCompile Include="..\Classes\CCParallaxNodeExtras.cpp" />
     <ClCompile Include="..\Classes\BackgroundLayer.cpp" />
+    <ClCompile Include="..\Classes\EffectLayer.cpp" />
     <ClCompile Include="..\Classes\Enemi.cpp" />
     <ClCompile Include="..\Classes\GameObject.cpp" />
     <ClCompile Include="..\Classes\ObjectLayer.cpp" />
@@ -147,6 +148,7 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
     <ClInclude Include="..\Classes\BulletManager.h" />
     <ClInclude Include="..\Classes\CCParallaxNodeExtras.h" />
     <ClInclude Include="..\Classes\BackgroundLayer.h" />
+    <ClInclude Include="..\Classes\EffectLayer.h" />
     <ClInclude Include="..\Classes\Enemi.h" />
     <ClInclude Include="..\Classes\GameObject.h" />
     <ClInclude Include="..\Classes\Global.h" />

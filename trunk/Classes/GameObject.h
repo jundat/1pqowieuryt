@@ -11,12 +11,10 @@ public:
 	GameObject();
 	~GameObject();
 
+	CC_SYNTHESIZE(CCSprite*, m_sprite, Sprite);
+
 public:
 	virtual CCRect boundingBox();
-
-protected:
-	/* data */
-	CCSprite* m_sprite;
 
 };
 

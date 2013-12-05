@@ -15,9 +15,12 @@ public:
 	CC_SYNTHESIZE(int, m_type, EnemiType);
 	CC_SYNTHESIZE(float, m_vx, Vx);
 	CC_SYNTHESIZE(float, m_vy, Vy);
+	CC_SYNTHESIZE(float, m_hp, Hp);
 
 public:
 	void Fire();
+	void HitBullet(float delayTimeBeforeDie);
+	void RemoveSeft();
 	virtual void update(float delta);
 };
 

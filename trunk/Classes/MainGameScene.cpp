@@ -1,5 +1,5 @@
 #include "MainGameScene.h"
-
+#include "AudioManager.h"
 USING_NS_CC;
 
 CCScene* MainGameScene::scene()
@@ -30,6 +30,13 @@ bool MainGameScene::init()
 
 
 	//////////////////////////////////////////////////////////////////////////
+	//preload sound effect
+	//AudioManager::sharedAudioManager()->SetEnableEffect(false);
+	AudioManager::sharedAudioManager()->PlayEffect("explosion.wav");
+	//AudioManager::sharedAudioManager()->SetEnableEffect(true);
+	//////////////////////////////////////////////////////////////////////////
+
+	
 
     return true;
 }

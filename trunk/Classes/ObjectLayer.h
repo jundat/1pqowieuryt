@@ -4,6 +4,7 @@
 #include "cocos2d.h"
 #include "Ship.h"
 #include "Bullet.h"
+#include "EffectLayer.h"
 
 USING_NS_CC;
 
@@ -33,6 +34,9 @@ private:
 	void _UpdateCollision();
 
 private:
+	int m_score;
+	CCLabelTTF* m_pLabelScore;
+
 	Ship* m_player;
 	bool m_IsTouchedPlayer; //check if touched player
 	
@@ -41,7 +45,9 @@ private:
 
 	CCArray* m_arrPlayerBullets;
 	CCArray* m_arrEnemiBullets;
-	
+
+	EffectLayer* m_EffectLayer;
+
 };
 
 #endif // __GAME_OBJECT_MANAGER_H__

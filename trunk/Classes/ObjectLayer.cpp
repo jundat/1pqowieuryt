@@ -2,7 +2,7 @@
 #include "Global.h"
 #include "AudioManager.h"
 #include "Enemi.h"
-
+#include "EffectLayer.h"
 
 USING_NS_CC;
 
@@ -26,6 +26,13 @@ bool ObjectLayer::init()
 
 	//////////////////////////////////////////////////////////////////////////
 
+	m_score = 0;
+
+	m_pLabelScore = CCLabelTTF::create("0", "Marker Felt.ttf", 48);
+	m_pLabelScore->setPosition(ccp(origin.x + visibleSize.width/2,
+		origin.y + visibleSize.height - m_pLabelScore->getContentSize().height));
+	this->addChild(m_pLabelScore, 10);
+
 	m_player = new Ship();
 	m_player->setPosition(ccp(origin.x + visibleSize.width/2, origin.y + visibleSize.height * 0.1));
 	this->addChild(m_player);
@@ -34,7 +41,25 @@ bool ObjectLayer::init()
 	this->schedule(schedule_selector(ObjectLayer::SchedulePlayerFire), PLAYER_TIME_TO_FIRE);
 	m_timeToGenerateEnemi = DEFAULT_TIME_TO_GENERATE_ENEMI;
 	this->schedule(schedule_selector(ObjectLayer::ScheduleGenerateEnemi), m_timeToGenerateEnemi);
+	
+	//ramdom type
+// 	Enemi* enemi = new Enemi(ENEMI_TYPE_3);
+// 
+// 	//random position
+// 	float x = 400;
+// 	float y = 640;
+// 
+// 	//add
+// 	enemi->setPosition(ccp(x, y));
+// 	m_arrEnemi->addObject(enemi);
+// 	this->addChild(enemi);
+
+
+	m_EffectLayer = new EffectLayer();
+	m_EffectLayer->init();
+	this->addChild(m_EffectLayer, 10);
 	//////////////////////////////////////////////////////////////////////////
+	
 
 	this->scheduleUpdate();
 
@@ -48,7 +73,7 @@ bool ObjectLayer::ccTouchBegan( CCTouch *pTouch, CCEvent *pEvent )
 {
 	m_IsTouchedPlayer = false;
 
-	if (m_player->boundingBox().containsPoint(m_player->convertToNodeSpace(pTouch->getLocation()))) //
+	if (m_player->boundingBox().containsPoint(pTouch->getLocation())) //m_player->convertToNodeSpace(pTouch->getLocation()))) //
 	{
 		m_IsTouchedPlayer = true;
 	}
@@ -68,6 +93,10 @@ void ObjectLayer::ccTouchEnded( CCTouch *pTouch, CCEvent *pEvent )
 {
 	m_IsTouchedPlayer = false;
 }
+
+
+#pragma endregion TOUCH HANDLER
+
 
 void ObjectLayer::SchedulePlayerFire(float dt)
 {
@@ -193,7 +222,7 @@ void ObjectLayer::_UpdateCollision()
 				{
 					CCRect enemiRect = enemi->boundingBox();
 					
-					if (bulletRect.intersectsRect(enemiRect))
+					if (enemiRect.intersectsRect(bulletRect))
 					{
 						this->removeChild(bullet);
 						m_arrPlayerBullets->removeObject(it1);
@@ -202,6 +231,14 @@ void ObjectLayer::_UpdateCollision()
 
 						//sound
 						AudioManager::sharedAudioManager()->PlayEffect("explosion.wav");
+						m_EffectLayer->AddExploisionEff(enemi->getEnemiType(), enemi->getPosition());
+						//enemi->HitBullet(TIME_BEFORE_REMOVE_ENEMI);
+
+						//score
+						//
+						m_score += enemi->getEnemiType();
+						CCString* sscore = CCString::createWithFormat("%d", m_score);
+						m_pLabelScore->setString(sscore->getCString());
 					}
 				}
 			}
@@ -211,6 +248,4 @@ void ObjectLayer::_UpdateCollision()
 }
 
 
-
-#pragma endregion TOUCH HANDLER
 

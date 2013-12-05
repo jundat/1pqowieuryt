@@ -16,10 +16,14 @@ bool BackgroundLayer::init()
     CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
 
 	//////////////////////////////////////////////////////////////////////////
+
+	CCSprite* bg = CCSprite::create("bgMainGame.png");
+	bg->setPosition(ccp(origin.x + visibleSize.width/2, origin.y + visibleSize.height/2));
+	this->addChild(bg, -2);
 	
 	// 1) Create the CCParallaxNode
 	_backgroundNode = CCParallaxNodeExtras::node();
-	this->addChild(_backgroundNode,-1);
+	this->addChild(_backgroundNode, -1);
 
 	// 2) Create the sprites will be added to the CCParallaxNode
 	_spacedust1 = CCSprite::create("bg_front_spacedust.png");

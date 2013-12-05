@@ -9,7 +9,6 @@ Bullet::Bullet(int type, CCPoint position) : GameObject()
 	CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
 
 	m_sprite = CCSprite::create("bullet.png");
-	m_sprite->setPosition(position);
 	this->addChild(m_sprite);
 
 	//////////////////////////////////////////////////////////////////////////
@@ -27,6 +26,8 @@ Bullet::Bullet(int type, CCPoint position) : GameObject()
 		m_vy = ENEMI_BULLET_1_VY;
 		break;
 	}
+
+	this->setPosition(position);
 
 	//////////////////////////////////////////////////////////////////////////
 

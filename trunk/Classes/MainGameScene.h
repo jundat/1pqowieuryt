@@ -4,6 +4,7 @@
 #include "cocos2d.h"
 #include "BackgroundLayer.h"
 #include "ObjectLayer.h"
+#include "EffectLayer.h"
 
 USING_NS_CC;
 
@@ -17,6 +18,8 @@ public:
 private:
 	BackgroundLayer* m_BackgroundLayer;
 	ObjectLayer* m_ObjLayer;
+
+	int m_score;
 };
 
 #endif // __MAIN_GAME_SCENE_H__
