@@ -71,27 +71,35 @@ bool ObjectLayer::init()
 
 bool ObjectLayer::ccTouchBegan( CCTouch *pTouch, CCEvent *pEvent )
 {
-	m_IsTouchedPlayer = false;
+	//m_IsTouchedPlayer = false;
 
-	if (m_player->boundingBox().containsPoint(pTouch->getLocation())) //m_player->convertToNodeSpace(pTouch->getLocation()))) //
-	{
-		m_IsTouchedPlayer = true;
-	}
+	//if (m_player->boundingBox().containsPoint(pTouch->getLocation())) //m_player->convertToNodeSpace(pTouch->getLocation()))) //
+	//{
+	//	m_IsTouchedPlayer = true;
+		m_lastPoint = pTouch->getLocation();
+	//}
 
 	return true;
 }
 
 void ObjectLayer::ccTouchMoved( CCTouch *pTouch, CCEvent *pEvent )
 {
-	if (m_IsTouchedPlayer)
-	{
-		m_player->setPosition(pTouch->getLocation());
-	}
+	//if (m_IsTouchedPlayer)
+	//{
+		CCPoint curPoint = pTouch->getLocation();
+
+		float dx = curPoint.x - m_lastPoint.x;
+		float dy = curPoint.y - m_lastPoint.y;
+		
+		m_player->setPosition(m_player->getPositionX() + dx, m_player->getPositionY() + dy);
+
+		m_lastPoint = curPoint;
+	//}
 }
 
 void ObjectLayer::ccTouchEnded( CCTouch *pTouch, CCEvent *pEvent )
 {
-	m_IsTouchedPlayer = false;
+	//m_IsTouchedPlayer = false;
 }
 
 

@@ -11,9 +11,9 @@ const static float ENEMI_BULLET_1_VX = 0;
 const static float ENEMI_BULLET_1_VY = - 1.0f;
 
 const static float PLAYER_BULLET_1_VX = 0;
-const static float PLAYER_BULLET_1_VY = + 0.4f;
+const static float PLAYER_BULLET_1_VY = + 0.7f;
 
-const static float PLAYER_TIME_TO_FIRE = 0.5f;
+const static float PLAYER_TIME_TO_FIRE = 0.3f;
 
 const static float DEFAULT_TIME_TO_GENERATE_ENEMI = 1.0f;
 

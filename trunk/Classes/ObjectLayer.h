@@ -39,6 +39,7 @@ private:
 
 	Ship* m_player;
 	bool m_IsTouchedPlayer; //check if touched player
+	CCPoint m_lastPoint;
 	
 	CCArray* m_arrEnemi;
 	float m_timeToGenerateEnemi;
