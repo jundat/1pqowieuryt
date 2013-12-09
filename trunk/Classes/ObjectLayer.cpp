@@ -17,6 +17,11 @@ bool ObjectLayer::init()
         return false;
     }
 
+	//////////////////////////////////////////////////////////////////////////
+	CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, 0, true);
+	this->setTouchEnabled(true);
+	//////////////////////////////////////////////////////////////////////////
+
     CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
     CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
 
@@ -42,10 +47,6 @@ bool ObjectLayer::init()
 	this->addChild(m_player);
 	m_IsTouchedPlayer = false;
 
-	m_Joystick = HSJoystick::create();
-	m_player->setJoystick(m_Joystick);
-	this->addChild(m_Joystick, 100);
-	
 	this->schedule(schedule_selector(ObjectLayer::SchedulePlayerFire), PLAYER_TIME_TO_FIRE);
 	m_timeToGenerateEnemi = DEFAULT_TIME_TO_GENERATE_ENEMI;
 	this->schedule(schedule_selector(ObjectLayer::ScheduleGenerateEnemi), m_timeToGenerateEnemi);
@@ -58,6 +59,35 @@ bool ObjectLayer::init()
 
     return true;
 }
+
+
+
+#pragma region TOUCH HANDLER
+
+bool ObjectLayer::ccTouchBegan( CCTouch *pTouch, CCEvent *pEvent )
+{
+	m_lastPoint = pTouch->getLocation();
+	return true;
+}
+
+void ObjectLayer::ccTouchMoved( CCTouch *pTouch, CCEvent *pEvent )
+{
+	CCPoint curPoint = pTouch->getLocation();
+
+	float dx = curPoint.x - m_lastPoint.x;
+	float dy = curPoint.y - m_lastPoint.y;
+
+	m_player->setPosition(m_player->getPositionX() + dx, m_player->getPositionY() + dy);
+	m_lastPoint = curPoint;
+}
+
+void ObjectLayer::ccTouchEnded( CCTouch *pTouch, CCEvent *pEvent )
+{
+}
+
+#pragma endregion TOUCH HANDLER
+
+
 
 void ObjectLayer::SchedulePlayerFire(float dt)
 {

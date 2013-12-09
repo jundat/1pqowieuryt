@@ -5,7 +5,6 @@
 #include "Ship.h"
 #include "Bullet.h"
 #include "EffectLayer.h"
-#include "HSJoystick.h"
 #include "Global.h"
 
 USING_NS_CC;
@@ -25,6 +24,10 @@ public:
 	virtual void update(float delta);
 
 public:
+	virtual bool ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent);
+	virtual void ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent);
+	virtual void ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent);
+
 	void SchedulePlayerFire(float dt);
 	void ScheduleGenerateEnemi(float dt);
 	void AddBullet(Bullet* bullet);
@@ -39,7 +42,6 @@ private:
 	Ship* m_player;
 	bool m_IsTouchedPlayer; //check if touched player
 	CCPoint m_lastPoint;
-	HSJoystick* m_Joystick;
 		
 	CCArray* m_arrEnemi;
 	float m_timeToGenerateEnemi;

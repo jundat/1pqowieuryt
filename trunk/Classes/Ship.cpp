@@ -40,8 +40,6 @@ void Ship::Fire()
 
 void Ship::update( float delta )
 {
-	this->setPosition(ccpAdd(getPosition(), ccpMult(m_refJoystick->GetVelocity(), 10.0f)));
-
 	//limit on screen
 	CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
 	CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
