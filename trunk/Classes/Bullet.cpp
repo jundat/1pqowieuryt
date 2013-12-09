@@ -5,6 +5,22 @@ USING_NS_CC;
 
 Bullet::Bullet(int type, CCPoint position) : GameObject()
 {
+	this->setBulletType(type);
+	this->setPosition(position);
+}
+
+Bullet::~Bullet()
+{
+
+}
+
+bool Bullet::init()
+{
+	if (!GameObject::init())
+	{
+		return false;
+	}
+
 	CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
 	CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
 
@@ -12,8 +28,6 @@ Bullet::Bullet(int type, CCPoint position) : GameObject()
 	this->addChild(m_sprite);
 
 	//////////////////////////////////////////////////////////////////////////
-	this->m_type = type;
-
 	switch (m_type)
 	{
 	case K_BULLET_PLAYER:
@@ -26,17 +40,10 @@ Bullet::Bullet(int type, CCPoint position) : GameObject()
 		m_vy = ENEMI_BULLET_1_VY;
 		break;
 	}
-
-	this->setPosition(position);
-
 	//////////////////////////////////////////////////////////////////////////
 
 	this->scheduleUpdate();
-}
-
-Bullet::~Bullet()
-{
-
+	return true;
 }
 
 void Bullet::update( float delta )

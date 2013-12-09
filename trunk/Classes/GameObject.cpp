@@ -2,8 +2,14 @@
 USING_NS_CC;
 
 
-GameObject::GameObject()
+
+bool GameObject::init()
 {
+	if (! CCNode::init())
+	{
+		return false;
+	}
+	return true;
 }
 
 GameObject::~GameObject()

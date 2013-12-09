@@ -8,13 +8,21 @@ USING_NS_CC;
 
 Enemi::Enemi(int type) : GameObject()
 {
+	this->setEnemiType(type);
+}
+
+bool Enemi::init()
+{
+	if (!GameObject::init())
+	{
+		return false;
+	}
+
 	CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
 	CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
 
 	//////////////////////////////////////////////////////////////////////////
 	
-	this->setEnemiType(type);
-
 	switch(m_type)
 	{
 	case ENEMI_TYPE_1:
@@ -23,7 +31,7 @@ Enemi::Enemi(int type) : GameObject()
 		this->setVy(ENEMI_1_VY);
 		this->setHp(ENEMI_1_HP);
 		break;
-		
+
 	case ENEMI_TYPE_2:
 		m_sprite = CCSprite::create("enemi_2.png");
 		this->setVx(ENEMI_2_VX);
@@ -49,11 +57,12 @@ Enemi::Enemi(int type) : GameObject()
 	//////////////////////////////////////////////////////////////////////////
 
 	this->scheduleUpdate();
+	return true;
 }
 
 void Enemi::Fire()
 {
-	Bullet* bullet = new Bullet(K_BULLET_ENEMI, this->getPosition());
+	Bullet* bullet = Bullet::create(K_BULLET_ENEMI, this->getPosition());
 	ObjectLayer* parent = (ObjectLayer*)this->getParent();
 	parent->AddBullet(bullet);
 }

@@ -6,6 +6,7 @@
 #include "ObjectLayer.h"
 #include "EffectLayer.h"
 
+
 USING_NS_CC;
 
 class MainGameScene : public cocos2d::CCLayer
@@ -13,13 +14,12 @@ class MainGameScene : public cocos2d::CCLayer
 public:
     virtual bool init();
     static cocos2d::CCScene* scene();
-    CREATE_FUNC(MainGameScene);
+	CREATE_FUNC(MainGameScene);
+	void menuCloseCallback(CCObject* pSender);
 
 private:
 	BackgroundLayer* m_BackgroundLayer;
 	ObjectLayer* m_ObjLayer;
-
-	int m_score;
 };
 
 #endif // __MAIN_GAME_SCENE_H__

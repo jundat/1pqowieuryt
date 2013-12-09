@@ -6,6 +6,7 @@
 
 USING_NS_CC;
 
+
 // on "init" you need to initialize your instance
 bool ObjectLayer::init()
 {
@@ -16,15 +17,18 @@ bool ObjectLayer::init()
         return false;
     }
 
-	//////////////////////////////////////////////////////////////////////////
-	CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, 0, true);
-	this->setTouchEnabled(true);
-	//////////////////////////////////////////////////////////////////////////
-    
     CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
     CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
 
 	//////////////////////////////////////////////////////////////////////////
+
+	m_arrEnemi = new CCArray();
+	m_arrPlayerBullets = new CCArray();
+	m_arrEnemiBullets = new CCArray();
+
+	m_arrEnemi->retain();
+	m_arrPlayerBullets->retain();
+	m_arrEnemiBullets->retain();
 
 	m_score = 0;
 
@@ -33,116 +37,64 @@ bool ObjectLayer::init()
 		origin.y + visibleSize.height - m_pLabelScore->getContentSize().height));
 	this->addChild(m_pLabelScore, 10);
 
-	m_player = new Ship();
+	m_player = Ship::create();
 	m_player->setPosition(ccp(origin.x + visibleSize.width/2, origin.y + visibleSize.height * 0.1));
 	this->addChild(m_player);
 	m_IsTouchedPlayer = false;
+
+	m_Joystick = HSJoystick::create();
+	m_player->setJoystick(m_Joystick);
+	this->addChild(m_Joystick, 100);
 	
 	this->schedule(schedule_selector(ObjectLayer::SchedulePlayerFire), PLAYER_TIME_TO_FIRE);
 	m_timeToGenerateEnemi = DEFAULT_TIME_TO_GENERATE_ENEMI;
 	this->schedule(schedule_selector(ObjectLayer::ScheduleGenerateEnemi), m_timeToGenerateEnemi);
 	
-	//ramdom type
-// 	Enemi* enemi = new Enemi(ENEMI_TYPE_3);
-// 
-// 	//random position
-// 	float x = 400;
-// 	float y = 640;
-// 
-// 	//add
-// 	enemi->setPosition(ccp(x, y));
-// 	m_arrEnemi->addObject(enemi);
-// 	this->addChild(enemi);
-
-
-	m_EffectLayer = new EffectLayer();
-	m_EffectLayer->init();
+	m_EffectLayer = EffectLayer::create();
 	this->addChild(m_EffectLayer, 10);
 	//////////////////////////////////////////////////////////////////////////
-	
 
 	this->scheduleUpdate();
 
     return true;
 }
 
-
-#pragma region TOUCH HANDLER
-
-bool ObjectLayer::ccTouchBegan( CCTouch *pTouch, CCEvent *pEvent )
-{
-	//m_IsTouchedPlayer = false;
-
-	//if (m_player->boundingBox().containsPoint(pTouch->getLocation())) //m_player->convertToNodeSpace(pTouch->getLocation()))) //
-	//{
-	//	m_IsTouchedPlayer = true;
-		m_lastPoint = pTouch->getLocation();
-	//}
-
-	return true;
-}
-
-void ObjectLayer::ccTouchMoved( CCTouch *pTouch, CCEvent *pEvent )
-{
-	//if (m_IsTouchedPlayer)
-	//{
-		CCPoint curPoint = pTouch->getLocation();
-
-		float dx = curPoint.x - m_lastPoint.x;
-		float dy = curPoint.y - m_lastPoint.y;
-		
-		m_player->setPosition(m_player->getPositionX() + dx, m_player->getPositionY() + dy);
-
-		m_lastPoint = curPoint;
-	//}
-}
-
-void ObjectLayer::ccTouchEnded( CCTouch *pTouch, CCEvent *pEvent )
-{
-	//m_IsTouchedPlayer = false;
-}
-
-
-#pragma endregion TOUCH HANDLER
-
-
 void ObjectLayer::SchedulePlayerFire(float dt)
 {
 	m_player->Fire();
 }
-
 
 //schedule generate enemi 
 void ObjectLayer::ScheduleGenerateEnemi( float dt )
 {
 	//ramdom type
 	int type = (int)(CCRANDOM_0_1() * NUMBER_OF_ENEMI) + 1;
-	Enemi* enemi = new Enemi(type);
+	Enemi* enemi = Enemi::create(type);
+	float w = enemi->boundingBox().size.width;
 
 	//random position
 	CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
-	float x = (int)(CCRANDOM_0_1() * visibleSize.width);
+	float x = (int)(CCRANDOM_0_1() * (visibleSize.width - w));
 	float y = visibleSize.height + enemi->boundingBox().size.height/2;
+	enemi->setPosition(ccp(x + w/2, y));
 
-	//add
-	enemi->setPosition(ccp(x, y));
 	m_arrEnemi->addObject(enemi);
 	this->addChild(enemi);
 }
 
 //Player or enemi call to add bullet when fire
-void ObjectLayer::AddBullet(Bullet* bullet )
+void ObjectLayer::AddBullet(Bullet* bullet)
 {
-	this->addChild(bullet);
-
 	switch(bullet->getBulletType())
 	{
 	case K_BULLET_PLAYER:
 		m_arrPlayerBullets->addObject(bullet);
+		this->addChild(bullet);
 		break;
 
 	case K_BULLET_ENEMI:
 		m_arrEnemiBullets->addObject(bullet);
+		this->addChild(bullet);
 		break;
 	}
 }
@@ -164,7 +116,7 @@ void ObjectLayer::update( float delta )
 			if (bullet->getPositionY() > visibleSize.height)
 			{
 				this->removeChild(bullet);
-				m_arrPlayerBullets->fastRemoveObject(it);
+				m_arrPlayerBullets->removeObject(bullet);
 			}
 		}
 	}
@@ -179,32 +131,33 @@ void ObjectLayer::update( float delta )
 			if (bullet->getPositionY() < 0)
 			{
 				this->removeChild(bullet);
-				m_arrEnemiBullets->fastRemoveObject(it);
+				m_arrEnemiBullets->removeObject(bullet);
 			}
 		}
 	}
 
-	//update enemi
+	//Enemi
 	CCARRAY_FOREACH(m_arrEnemi, it)
 	{
 		Enemi* enemi = dynamic_cast<Enemi*>(it);
+	
 		if (NULL != enemi)
 		{
 			//out of screen
 			if (enemi->getPositionY() < - enemi->boundingBox().size.height)
 			{
 				this->removeChild(enemi);
-				m_arrEnemi->fastRemoveObject(it);
+				m_arrEnemi->removeObject(enemi);
 			}
 		}
 	}
 
 	//update collision
-	_UpdateCollision();
+	_updateCollision();
 }
 
 //check collision every frame
-void ObjectLayer::_UpdateCollision()
+void ObjectLayer::_updateCollision()
 {
 	CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
 	CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
@@ -233,9 +186,9 @@ void ObjectLayer::_UpdateCollision()
 					if (enemiRect.intersectsRect(bulletRect))
 					{
 						this->removeChild(bullet);
-						m_arrPlayerBullets->removeObject(it1);
+						m_arrPlayerBullets->removeObject(bullet);
 						this->removeChild(enemi);
-						m_arrEnemi->removeObject(it2);
+						m_arrEnemi->removeObject(enemi);
 
 						//sound
 						AudioManager::sharedAudioManager()->PlayEffect("explosion.wav");

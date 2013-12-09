@@ -33,7 +33,30 @@ const static float ENEMI_2_VY = -0.2f;
 const static float ENEMI_3_VX = 0;
 const static float ENEMI_3_VY = -0.1f;
 
-const static float TIME_BEFORE_REMOVE_ENEMI = 1.0f;
+const static float TIME_BEFORE_REMOVE_ENEMI = 0.5f;
+
+
+
+
+
+
+#define LIMIT_VALUE(x, minX, maxX) \
+{\
+	if(x < minX) { x = minX; }\
+	if(x > maxX) { x = maxX; }\
+}
+
+
+
+#define RELEASE(pObj) \
+do\
+{\
+	if((pObj) != NULL) {\
+		(pObj)->release();\
+		delete (pObj);\
+		(pObj) = NULL;\
+	}\
+} while(0);
+
 
 #endif //__GLOBAL_H__
-

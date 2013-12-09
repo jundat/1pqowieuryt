@@ -1,5 +1,7 @@
 #include "MainGameScene.h"
 #include "AudioManager.h"
+#include "MenuScene.h"
+
 USING_NS_CC;
 
 CCScene* MainGameScene::scene()
@@ -19,25 +21,38 @@ bool MainGameScene::init()
     {
         return false;
     }
-    
-    m_BackgroundLayer = new BackgroundLayer();
-	m_BackgroundLayer->init();
+
+	CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
+	CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
+
+    m_BackgroundLayer = BackgroundLayer::create();
 	this->addChild(m_BackgroundLayer);
 
-	m_ObjLayer = new ObjectLayer();
-	m_ObjLayer->init();
+	m_ObjLayer = ObjectLayer::create();
 	this->addChild(m_ObjLayer);
 
-
+	CCMenuItemImage *pCloseItem = CCMenuItemImage::create(
+		"btnHome.png",
+		"btnHome.png",
+		this,
+		menu_selector(MainGameScene::menuCloseCallback));
+	pCloseItem->setPosition(ccp(origin.x + visibleSize.width - pCloseItem->getContentSize().width/2,
+		origin.y + visibleSize.height - pCloseItem->getContentSize().height/2));
+	CCMenu* pMenu = CCMenu::create(pCloseItem, NULL);
+	pMenu->setPosition(CCPointZero);
+	this->addChild(pMenu, 1);
+	
 	//////////////////////////////////////////////////////////////////////////
 	//preload sound effect
-	//AudioManager::sharedAudioManager()->SetEnableEffect(false);
 	AudioManager::sharedAudioManager()->PlayEffect("explosion.wav");
-	//AudioManager::sharedAudioManager()->SetEnableEffect(true);
 	//////////////////////////////////////////////////////////////////////////
-
 	
-
     return true;
 }
 
+
+void MainGameScene::menuCloseCallback(CCObject* pSender)
+{
+	CCScene *pScene = MenuScene::scene();
+	CCDirector::sharedDirector()->replaceScene(pScene);
+}

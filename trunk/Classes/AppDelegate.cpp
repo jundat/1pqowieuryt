@@ -1,6 +1,7 @@
 #include "AppDelegate.h"
-#include "MainGameScene.h"
 #include "Global.h"
+#include "MainGameScene.h"
+#include "MenuScene.h"
 
 USING_NS_CC;
 
@@ -33,7 +34,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	pEGLView->setDesignResolutionSize(800, 1280, kResolutionExactFit);
 
     // create a scene. it's an autorelease object
-    CCScene *pScene = MainGameScene::scene();
+    CCScene *pScene = MenuScene::scene(); // MainGameScene::scene(); //
 
     // run
     pDirector->runWithScene(pScene);

@@ -22,12 +22,12 @@ bool BackgroundLayer::init()
 	this->addChild(bg, -2);
 	
 	// 1) Create the CCParallaxNode
-	_backgroundNode = CCParallaxNodeExtras::node();
+	_backgroundNode = CCParallaxNodeExtras::create();
 	this->addChild(_backgroundNode, -1);
 
 	// 2) Create the sprites will be added to the CCParallaxNode
-	_spacedust1 = CCSprite::create("bg_front_spacedust.png");
-	_spacedust2 = CCSprite::create("bg_front_spacedust.png");
+	//_spacedust1 = CCSprite::create("bg_front_spacedust.png");
+	//_spacedust2 = CCSprite::create("bg_front_spacedust.png");
 	_planetsunrise = CCSprite::create("bg_planetsunrise.png");
 	_galaxy = CCSprite::create("bg_galaxy.png");
 	_spacialanomaly = CCSprite::create("bg_spacialanomaly.png");
@@ -38,8 +38,8 @@ bool BackgroundLayer::init()
 	CCPoint bgSpeed = ccp(0.05, 0.05);
 
 	// 4) Add children to CCParallaxNode
-	_backgroundNode->addChild(_spacedust1, 0, dustSpeed, ccp(visibleSize.width/2, 0)); // 2
-	_backgroundNode->addChild(_spacedust2, 0, dustSpeed, ccp(visibleSize.width/2, _spacedust1->getContentSize().height));
+	//_backgroundNode->addChild(_spacedust1, 0, dustSpeed, ccp(visibleSize.width/2, 0)); // 2
+	//_backgroundNode->addChild(_spacedust2, 0, dustSpeed, ccp(visibleSize.width/2, _spacedust1->getContentSize().height));
 	_backgroundNode->addChild(_galaxy, -1, bgSpeed, ccp(visibleSize.width * 0.7, 0));
 	_backgroundNode->addChild(_planetsunrise, -1 , bgSpeed, ccp(visibleSize.width * 0,  600));
 	_backgroundNode->addChild(_spacialanomaly, -1, bgSpeed, ccp(visibleSize.width * 0.3, 900));
@@ -58,18 +58,18 @@ void BackgroundLayer::update(float dt) {
 	_backgroundNode->setPosition(ccpAdd(_backgroundNode->getPosition(), ccpMult(backgroundScrollVert, dt)));
 
 	//////////////////////////////////////////////////////////////////////////
-	CCArray *spaceDusts = CCArray::createWithCapacity(2);
-	spaceDusts->addObject(_spacedust1);
-	spaceDusts->addObject(_spacedust2);
+	//CCArray *spaceDusts = CCArray::createWithCapacity(2);
+	//spaceDusts->addObject(_spacedust1);
+	//spaceDusts->addObject(_spacedust2);
 
-	for ( int ii = 0; ii < spaceDusts->count(); ii++ ) {
-		CCSprite * spaceDust = (CCSprite *)(spaceDusts->objectAtIndex(ii));
-		float yPosition = _backgroundNode->convertToWorldSpace(spaceDust->getPosition()).y;
-		float size = spaceDust->getContentSize().height;
-		if ( yPosition < - size/2 ) {
-			_backgroundNode->incrementOffset(ccp(0, spaceDust->getContentSize().height*2),spaceDust); 
-		}
-	}
+// 	for ( int ii = 0; ii < spaceDusts->count(); ii++ ) {
+// 		CCSprite * spaceDust = (CCSprite *)(spaceDusts->objectAtIndex(ii));
+// 		float yPosition = _backgroundNode->convertToWorldSpace(spaceDust->getPosition()).y;
+// 		float size = spaceDust->getContentSize().height;
+// 		if ( yPosition < - size/2 ) {
+// 			_backgroundNode->incrementOffset(ccp(0, spaceDust->getContentSize().height*2),spaceDust); 
+// 		}
+// 	}
 
 	CCArray *backGrounds = CCArray::createWithCapacity(4);
 	backGrounds->addObject(_galaxy);

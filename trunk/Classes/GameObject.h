@@ -8,9 +8,10 @@ USING_NS_CC;
 class GameObject : public CCNode
 {
 public:
-	GameObject();
+	GameObject():CCNode(){}
 	~GameObject();
-
+	virtual bool init();
+	CREATE_FUNC(GameObject);
 	CC_SYNTHESIZE(CCSprite*, m_sprite, Sprite);
 
 public:

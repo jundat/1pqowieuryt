@@ -19,11 +19,11 @@ public:
 	bool IsEnableEffect();
 	void SetEnableBackground(bool b);
 	void SetEnableEffect(bool b);
-	void LoadBackground(char* path);
-	void PlayBackground(char* path, bool loop = true);
+	void LoadBackground(const char* path);
+	void PlayBackground(const char* path, bool loop = true);
 	void PauseBackground();
 	void StopBackground();
-	void PlayEffect(char *path,  bool isLoop = false);
+	void PlayEffect(const char *path,  bool isLoop = false);
 
 private:
 	AudioManager();

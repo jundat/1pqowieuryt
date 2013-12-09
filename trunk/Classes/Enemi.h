@@ -11,6 +11,13 @@ class Enemi : public GameObject
 public:
 	Enemi(int type);
 	~Enemi(){};
+	virtual bool init();
+	static Enemi* create(int type) {
+		Enemi* en = new Enemi(type);
+		en->init();
+		en->autorelease();
+		return en;
+	}
 
 	CC_SYNTHESIZE(int, m_type, EnemiType);
 	CC_SYNTHESIZE(float, m_vx, Vx);

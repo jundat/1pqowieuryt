@@ -50,13 +50,13 @@ void AudioManager::SetEnableEffect(bool b)
 }
 
 
-void AudioManager::LoadBackground(char* path)
+void AudioManager::LoadBackground(const char* path)
 {
 	SimpleAudioEngine::sharedEngine()->preloadBackgroundMusic(CCFileUtils::sharedFileUtils()->fullPathForFilename(path).c_str());
 }
 
 
-void AudioManager::PlayBackground(char* path, bool loop)
+void AudioManager::PlayBackground(const char* path, bool loop)
 {
 	if (m_bEnableBackground)
 		SimpleAudioEngine::sharedEngine()->playBackgroundMusic(CCFileUtils::sharedFileUtils()->fullPathForFilename(path).c_str(), loop);
@@ -78,7 +78,7 @@ void AudioManager::StopBackground()
 	}
 }
 
-void AudioManager::PlayEffect(char *path, bool isLoop)
+void AudioManager::PlayEffect(const char *path, bool isLoop)
 {
 	if (m_bEnableEffect)
 		SimpleAudioEngine::sharedEngine()->playEffect(CCFileUtils::sharedFileUtils()->fullPathForFilename(path).c_str(), isLoop);

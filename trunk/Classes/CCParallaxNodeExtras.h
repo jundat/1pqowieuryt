@@ -8,12 +8,12 @@ USING_NS_CC;
 class CCParallaxNodeExtras : public CCParallaxNode {
 
 public :
-
 	// Need to provide a constructor 
-	CCParallaxNodeExtras();
+	CCParallaxNodeExtras():CCParallaxNode(){};
+	~CCParallaxNodeExtras(){};
 
 	// just to avoid ugly later cast and also for safety
-	static CCParallaxNodeExtras * node();
+	CREATE_FUNC(CCParallaxNodeExtras);
 
 	// Facility method (it’s expected to have it soon in COCOS2DX)    
 	void incrementOffset(CCPoint offset, CCNode* node);  

@@ -15,16 +15,7 @@ bool EffectLayer::init()
     CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
     CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
 
-	//////////////////////////////////////////////////////////////////////////
-	
-	this->scheduleUpdate();
-	//////////////////////////////////////////////////////////////////////////
-
     return true;
-}
-
-void EffectLayer::update(float dt) {
-	
 }
 
 void EffectLayer::AddExploisionEff(int enemiSize, CCPoint p )

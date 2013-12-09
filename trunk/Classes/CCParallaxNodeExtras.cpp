@@ -7,15 +7,6 @@ class CCPointObject  : CCObject {
 	CC_SYNTHESIZE(CCNode *, m_pChild, Child)	// weak ref
 };
 
-// Need to provide a constructor 
-CCParallaxNodeExtras::CCParallaxNodeExtras() {
-	CCParallaxNode(); // call parent constructor
-}
-
-CCParallaxNodeExtras * CCParallaxNodeExtras::node() {
-	return new CCParallaxNodeExtras();       
-}
-
 void CCParallaxNodeExtras::incrementOffset(CCPoint offset,CCNode* node){
 	for( unsigned int i = 0; i < m_pParallaxArray->num; i++) {
 		CCPointObject *point = (CCPointObject *)m_pParallaxArray->arr[i];

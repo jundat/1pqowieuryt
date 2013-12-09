@@ -8,14 +8,13 @@ USING_NS_CC;
 class EffectLayer : public cocos2d::CCLayer
 {
 public:
-	EffectLayer(){};
-
+	EffectLayer():CCLayer(){};
 	~EffectLayer(){
 		CCSpriteFrameCache::sharedSpriteFrameCache()->removeUnusedSpriteFrames();
 	};
 
 	virtual bool init();
-	void update(float dt);
+	CREATE_FUNC(EffectLayer);
 
 public:
 	void AddExploisionEff(int enemiSize, CCPoint p);
