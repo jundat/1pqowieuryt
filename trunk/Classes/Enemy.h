@@ -18,7 +18,7 @@ public:
 		en->autorelease();
 		return en;
 	}
-
+	
 	CC_SYNTHESIZE(int, m_type, EnemyType); //not use
 	CC_SYNTHESIZE(float, m_difficulty, Difficulty); //độ khó
 	CC_SYNTHESIZE(float, m_vx, Vx);

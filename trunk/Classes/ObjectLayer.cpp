@@ -4,8 +4,12 @@
 #include "Enemy.h"
 #include "EffectLayer.h"
 #include "MainGameScene.h"
+#include "CollisionDetection.h"
 
 USING_NS_CC;
+
+//pixel check collision
+CCRenderTexture* ObjectLayer::_rt = NULL;
 
 
 // on "init" you need to initialize your instance
@@ -64,6 +68,12 @@ bool ObjectLayer::init()
 	//////////////////////////////////////////////////////////////////////////
 	this->schedule(schedule_selector(ObjectLayer::ScheduleCheckCollision), CCDirector::sharedDirector()->getAnimationInterval());
 	this->scheduleUpdate();
+
+	//pixel check collision
+	_rt  = CCRenderTexture::create(visibleSize.width, visibleSize.height);
+	_rt->retain();
+	_rt->setPosition(ccp(visibleSize.width/2, visibleSize.height/2));
+	_rt->setVisible(false);
 
     return true;
 }
@@ -269,17 +279,26 @@ void ObjectLayer::ScheduleCheckCollision(float dt)
 
 			if (playerRect.intersectsRect(bulletRect))
 			{
-				this->removeChild(bullet);
-				m_arrEnemyBullets->removeObject(bullet);
-				
-				//sound
-				AudioManager::sharedAudioManager()->PlayEffect("explosion.wav");
-				m_EffectLayer->AddExploisionEff(G_ENEMY_TYPE, m_player->getPosition());
-				m_player->HitBullet(bullet->getDamage());
+				//pixel check collision	
 
-				//
-				CCString* s = CCString::createWithFormat("HP: %d", (m_player->getHp() > 0) ? m_player->getHp() : 0);
-				m_pLabelHp->setString(s->getCString());
+				CCSprite* sprBullet = CCSprite::createWithTexture(bullet->getSprite()->getTexture());
+				CCSprite* sprPlayer = CCSprite::createWithTexture(m_player->getSprite()->getTexture());
+				sprBullet->setPosition(bullet->getPosition());
+				sprPlayer->setPosition(m_player->getPosition());
+				if (CollisionDetection::GetInstance()->areTheSpritesColliding(sprBullet, sprPlayer, true, _rt)) 
+				{
+					this->removeChild(bullet);
+					m_arrEnemyBullets->removeObject(bullet);
+
+					//sound
+					AudioManager::sharedAudioManager()->PlayEffect("explosion.wav");
+					m_EffectLayer->AddExploisionEff(G_ENEMY_TYPE, m_player->getPosition());
+					m_player->HitBullet(bullet->getDamage());
+
+					//
+					CCString* s = CCString::createWithFormat("HP: %d", (m_player->getHp() > 0) ? m_player->getHp() : 0);
+					m_pLabelHp->setString(s->getCString());
+				}				
 			}
 		}
 	}

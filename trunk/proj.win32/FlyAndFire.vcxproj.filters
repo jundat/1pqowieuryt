@@ -51,6 +51,9 @@
     <ClCompile Include="..\Classes\LoseDialog.cpp">
       <Filter>Classes</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\CollisionDetection.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -99,6 +102,9 @@
       <Filter>Classes</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\MyMacro.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\CollisionDetection.h">
       <Filter>Classes</Filter>
     </ClInclude>
   </ItemGroup>

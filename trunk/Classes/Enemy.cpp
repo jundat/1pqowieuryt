@@ -20,8 +20,8 @@ static void DifficultySplit(float difficulty, float& vy, int& hp, int& dm)
 // 	vy = A * (difficulty/(A+B+C));
 // 	hp = B * (difficulty/(A+B+C));
 // 	dm = C * (difficulty/(A+B+C));
-
-	vy = -0.5f; // -0.05f; // ENEMY_2_VY;
+	static float currentVy = G_MIN_ENEMY_VY;
+	vy = currentVy;
 	hp = G_ENEMY_HP;
 	dm = G_ENEMY_DAM;
 }
@@ -60,7 +60,10 @@ bool Enemy::init()
 
 void Enemy::Fire()
 {
-	Bullet* bullet = Bullet::create(G_BULLET_ENEMY_ID, G_BULLET_VY_FROM_ENEMY * this->getVy(), this->getDamage(), this->getPosition());
+	float bulletvy = G_BULLET_VY_FROM_ENEMY * this->getVy();
+	bulletvy = (bulletvy < G_MIN_ENEMY_BULLET_VY) ? bulletvy : G_MIN_ENEMY_BULLET_VY;
+
+	Bullet* bullet = Bullet::create(G_BULLET_ENEMY_ID, bulletvy, this->getDamage(), this->getPosition());
 	ObjectLayer* parent = (ObjectLayer*)this->getParent();
 	parent->AddBullet(bullet);
 }
