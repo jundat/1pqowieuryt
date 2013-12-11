@@ -19,8 +19,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
     CCEGLView* pEGLView = CCEGLView::sharedOpenGLView();
 
 #ifdef WIN32
-	pEGLView->setFrameSize(DESIGN_WIDTH, DESIGN_HEIGHT);
-	pEGLView->setFrameZoomFactor(SCALE_FACTOR);
+	pEGLView->setFrameSize(G_DESIGN_WIDTH, G_DESIGN_HEIGHT);
+	pEGLView->setFrameZoomFactor(G_SCALE_FACTOR);
 #endif
 
     pDirector->setOpenGLView(pEGLView);
@@ -34,7 +34,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	pEGLView->setDesignResolutionSize(800, 1280, kResolutionExactFit);
 
     // create a scene. it's an autorelease object
-    CCScene *pScene = MenuScene::scene(); // MainGameScene::scene(); //
+    CCScene *pScene =  MainGameScene::scene();  // MenuScene::scene(); //
 
     // run
     pDirector->runWithScene(pScene);

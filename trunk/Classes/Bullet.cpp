@@ -3,9 +3,11 @@
 USING_NS_CC;
 
 
-Bullet::Bullet(int type, CCPoint position) : GameObject()
+Bullet::Bullet(int type, float vy, float damage, CCPoint position) : GameObject()
 {
 	this->setBulletType(type);
+	this->setVy(vy);
+	this->setDamage(damage);
 	this->setPosition(position);
 }
 
@@ -24,22 +26,23 @@ bool Bullet::init()
 	CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
 	CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
 
-	m_sprite = CCSprite::create("bullet.png");
+	//////////////////////////////////////////////////////////////////////////
+
+	this->setVx(0);
+
+	if (m_type == G_BULLET_ENEMY_ID)
+	{
+		m_sprite = CCSprite::create("enemy_bullet.png");
+		m_sprite->setAnchorPoint(ccp(0.5f, 0.5f));
+		m_sprite->setScaleY(-1);
+	}
+	else
+	{
+		m_sprite = CCSprite::create("bullet.png");
+	}
+
 	this->addChild(m_sprite);
 
-	//////////////////////////////////////////////////////////////////////////
-	switch (m_type)
-	{
-	case K_BULLET_PLAYER:
-		m_vx = PLAYER_BULLET_1_VX;
-		m_vy = PLAYER_BULLET_1_VY;
-		break;
-
-	case K_BULLET_ENEMI:
-		m_vx = ENEMI_BULLET_1_VX;
-		m_vy = ENEMI_BULLET_1_VY;
-		break;
-	}
 	//////////////////////////////////////////////////////////////////////////
 
 	this->scheduleUpdate();

@@ -17,6 +17,11 @@ public:
 	CREATE_FUNC(MainGameScene);
 	void menuCloseCallback(CCObject* pSender);
 
+public:
+	void showEndGame(int score);
+	void okCallback();
+	void cancelCallback();
+
 private:
 	BackgroundLayer* m_BackgroundLayer;
 	ObjectLayer* m_ObjLayer;

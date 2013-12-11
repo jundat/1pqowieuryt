@@ -3,20 +3,18 @@
 
 #include "cocos2d.h"
 #include "GameObject.h"
+#include "Global.h"
 
 USING_NS_CC;
-
-const static int K_BULLET_PLAYER = 2;
-const static int K_BULLET_ENEMI = 1;
 
 class Bullet : public GameObject
 {
 public:
-	Bullet(int type, CCPoint position);
+	Bullet(int type, float vy, float damage, CCPoint position);
 	~Bullet();
 	virtual bool init();
-	static Bullet* create(int type, CCPoint position) {
-		Bullet* b = new Bullet(type, position);
+	static Bullet* create(int type, float vy, float damage, CCPoint position) {
+		Bullet* b = new Bullet(type, vy, damage, position);
 		b->init();
 		b->autorelease();
 		return b;
@@ -25,6 +23,7 @@ public:
 	CC_SYNTHESIZE(int, m_type, BulletType);
 	CC_SYNTHESIZE(float, m_vx, Vx);
 	CC_SYNTHESIZE(float, m_vy, Vy);
+	CC_SYNTHESIZE(int, m_damage, Damage); //
 };
 
 #endif //__BULLET_H__

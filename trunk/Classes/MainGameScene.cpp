@@ -1,6 +1,8 @@
 #include "MainGameScene.h"
 #include "AudioManager.h"
 #include "MenuScene.h"
+#include "LoseDialog.h"
+#include "ObjectLayer.h"
 
 USING_NS_CC;
 
@@ -55,4 +57,20 @@ void MainGameScene::menuCloseCallback(CCObject* pSender)
 {
 	CCScene *pScene = MenuScene::scene();
 	CCDirector::sharedDirector()->replaceScene(pScene);
+}
+
+void MainGameScene::showEndGame( int score )
+{
+	LoseDialog* lose = LoseDialog::create();
+	this->addChild(lose);
+}
+
+void MainGameScene::okCallback()
+{
+	m_ObjLayer->ContinueGame();
+}
+
+void MainGameScene::cancelCallback()
+{
+	m_ObjLayer->RestartGame();
 }

@@ -18,14 +18,14 @@ bool EffectLayer::init()
     return true;
 }
 
-void EffectLayer::AddExploisionEff(int enemiSize, CCPoint p )
+void EffectLayer::AddExploisionEff(int enemySize, CCPoint p )
 {
 	CCSpriteFrameCache* cache = CCSpriteFrameCache::sharedSpriteFrameCache();
 	cache->addSpriteFramesWithFile("explosion_1.plist");
 	cache->addSpriteFramesWithFile("explosion_2.plist");
 	cache->addSpriteFramesWithFile("explosion_3.plist");
 
-	CCString* strSpriteName = CCString::createWithFormat("explosion_%d (1).png", enemiSize);
+	CCString* strSpriteName = CCString::createWithFormat("explosion_%d (1).png", enemySize);
 	CCSprite* m_pSprite1 = CCSprite::createWithSpriteFrameName(strSpriteName->getCString());
 
 	m_pSprite1->setPosition(p);
@@ -34,7 +34,7 @@ void EffectLayer::AddExploisionEff(int enemiSize, CCPoint p )
 	CCArray* animFrames = CCArray::createWithCapacity(12);
 	for(int i = 1; i < 12; i++) 
 	{
-		strSpriteName = CCString::createWithFormat("explosion_%d (%d).png", enemiSize, i);
+		strSpriteName = CCString::createWithFormat("explosion_%d (%d).png", enemySize, i);
 		CCSpriteFrame* frame = cache->spriteFrameByName( strSpriteName->getCString() );
 		animFrames->addObject(frame);
 	}

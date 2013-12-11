@@ -6,6 +6,7 @@
 #include "Bullet.h"
 #include "EffectLayer.h"
 #include "Global.h"
+#include "MyMacro.h"
 
 USING_NS_CC;
 
@@ -14,9 +15,9 @@ class ObjectLayer : public cocos2d::CCLayer
 public:
 	ObjectLayer(){}
 	~ObjectLayer(){
-		RELEASE(m_arrEnemi);
+		RELEASE(m_arrEnemy);
 		RELEASE(m_arrPlayerBullets);
-		RELEASE(m_arrEnemiBullets);
+		RELEASE(m_arrEnemyBullets);
 	};
 
     virtual bool init();
@@ -28,26 +29,30 @@ public:
 	virtual void ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent);
 	virtual void ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent);
 
-	void SchedulePlayerFire(float dt);
-	void ScheduleGenerateEnemi(float dt);
+	void ScheduleGenerateEnemy(float dt);
 	void AddBullet(Bullet* bullet);
+	void ContinueGame();
+	void RestartGame();
 
 private:
-	void _updateCollision();
+	void ScheduleCheckCollision(float dt);
 
 private:
+	CC_SYNTHESIZE(float, m_playedTime, PlayedTime);
+
+	bool isEndGame;
 	int m_score;
 	CCLabelTTF* m_pLabelScore;
+	CCLabelTTF* m_pLabelHp;
 
 	Ship* m_player;
-	bool m_IsTouchedPlayer; //check if touched player
 	CCPoint m_lastPoint;
 		
-	CCArray* m_arrEnemi;
-	float m_timeToGenerateEnemi;
+	CCArray* m_arrEnemy;
+	float m_timeToGenerateEnemy;
 	
 	CCArray* m_arrPlayerBullets;
-	CCArray* m_arrEnemiBullets;
+	CCArray* m_arrEnemyBullets;
 
 	EffectLayer* m_EffectLayer;
 
