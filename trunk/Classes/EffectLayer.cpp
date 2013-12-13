@@ -18,8 +18,11 @@ bool EffectLayer::init()
     return true;
 }
 
-void EffectLayer::AddExploisionEff(int enemySize, CCPoint p )
+float EffectLayer::AddExploisionEff(int enemySize, CCPoint p )
 {
+	int NUM_FRAME = 12;
+	float TIME_ANIMATION = 0.1f;
+
 	CCSpriteFrameCache* cache = CCSpriteFrameCache::sharedSpriteFrameCache();
 	cache->addSpriteFramesWithFile("explosion_1.plist");
 	cache->addSpriteFramesWithFile("explosion_2.plist");
@@ -31,21 +34,23 @@ void EffectLayer::AddExploisionEff(int enemySize, CCPoint p )
 	m_pSprite1->setPosition(p);
 	this->addChild(m_pSprite1);
 
-	CCArray* animFrames = CCArray::createWithCapacity(12);
-	for(int i = 1; i < 12; i++) 
+	CCArray* animFrames = CCArray::createWithCapacity(NUM_FRAME);
+	for(int i = 1; i < NUM_FRAME; i++) 
 	{
 		strSpriteName = CCString::createWithFormat("explosion_%d (%d).png", enemySize, i);
 		CCSpriteFrame* frame = cache->spriteFrameByName( strSpriteName->getCString() );
 		animFrames->addObject(frame);
 	}
 
-	CCAnimation* animation = CCAnimation::createWithSpriteFrames(animFrames, 0.1f);
+	CCAnimation* animation = CCAnimation::createWithSpriteFrames(animFrames, TIME_ANIMATION);
 	m_pSprite1->runAction(
 		CCSequence::create(
 			CCAnimate::create(animation), 
 			CCCallFuncN::create(this, callfuncN_selector(EffectLayer::RemoveEffCallback)),
 			NULL
 	));
+
+	return NUM_FRAME * TIME_ANIMATION;
 }
 
 void EffectLayer::RemoveEffCallback(CCNode* pSender)

@@ -3,6 +3,7 @@
 
 #include "cocos2d.h"
 #include "GameObject.h"
+#include "EffectLayer.h"
 
 USING_NS_CC;
 
@@ -17,12 +18,26 @@ public:
 private:
 	CC_SYNTHESIZE(int, m_hp, Hp);
 	CC_SYNTHESIZE(int, m_damage, Damage);
+	CC_SYNTHESIZE(int, m_bulletLevel, BulletLevel); //0-1-2
+
+	bool m_isArmor;
+	CCSprite* m_sprArmor;
+	EffectLayer* m_EffectLayer;
+
+public:
+	void EnableArmor();
+	void UpgradeBullet();
+	void DowngradeBullet();
+
+private:
+	void DisableArmor();
 
 public:
 	virtual void update(float delta);
 	void Fire();
 	void ScheduleFire(float dt);
 	void HitBullet(int damage);
+	void Dead();
 	void Restart();
 };
 

@@ -2,11 +2,12 @@
 #define __GAME_OBJECT_MANAGER_H__
 
 #include "cocos2d.h"
+#include "Global.h"
+#include "MyMacro.h"
 #include "Ship.h"
 #include "Bullet.h"
 #include "EffectLayer.h"
-#include "Global.h"
-#include "MyMacro.h"
+#include "Item.h"
 
 USING_NS_CC;
 
@@ -15,7 +16,7 @@ class ObjectLayer : public cocos2d::CCLayer
 public:
 	ObjectLayer(){}
 	~ObjectLayer(){
-		RELEASE(m_arrEnemy);
+		RELEASE(m_arrEnemies);
 		RELEASE(m_arrPlayerBullets);
 		RELEASE(m_arrEnemyBullets);
 	};
@@ -31,28 +32,40 @@ public:
 
 	void ScheduleGenerateEnemy(float dt);
 	void AddBullet(Bullet* bullet);
+	void AddItem(Item* item);
+	void IncreaseBoom();
+	void ActiveBoom(CCObject* pSender);
 	void ContinueGame();
 	void RestartGame();
+
+public:
+	void AfterDeadEffectCallback();
 
 private:
 	void ScheduleCheckCollision(float dt);
 
 private:
 	CC_SYNTHESIZE(float, m_playedTime, PlayedTime);
-
-	bool isEndGame;
-	int m_score;
-	CCLabelTTF* m_pLabelScore;
-	CCLabelTTF* m_pLabelHp;
-
-	Ship* m_player;
-	CCPoint m_lastPoint;
+	CC_SYNTHESIZE(int, m_score, Score);
+	CC_SYNTHESIZE(float, m_difficulty, Difficulty);
+	CC_SYNTHESIZE(bool, m_isEndGame, IsEndGame);
+	CC_SYNTHESIZE(Ship*, m_player, Player);
+	CC_SYNTHESIZE(int, m_numberBoom, NumberBoom);
+	
+	CCLabelBMFont* m_labelScore;
+	CCLabelBMFont* m_labelHp;
+	CCLabelBMFont* m_labelBoom;
+	CCMenuItemImage* m_itemBoom;
 		
-	CCArray* m_arrEnemy;
+	CCPoint m_lastPoint;
+	
+	CCArray* m_arrEnemies;
 	float m_timeToGenerateEnemy;
 	
 	CCArray* m_arrPlayerBullets;
 	CCArray* m_arrEnemyBullets;
+	
+	CCArray* m_arrItems;
 
 	EffectLayer* m_EffectLayer;
 };

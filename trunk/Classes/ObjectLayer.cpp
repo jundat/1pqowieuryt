@@ -29,33 +29,52 @@ bool ObjectLayer::init()
 
 	//////////////////////////////////////////////////////////////////////////
 
-	m_arrEnemy = new CCArray();
+	m_arrEnemies = new CCArray();
 	m_arrPlayerBullets = new CCArray();
 	m_arrEnemyBullets = new CCArray();
+	m_arrItems = new CCArray();
 
-	m_arrEnemy->retain();
+	m_arrEnemies->retain();
 	m_arrPlayerBullets->retain();
 	m_arrEnemyBullets->retain();
+	m_arrItems->retain();
 
-	isEndGame = false;
+	m_isEndGame = false;
 	m_score = 0;
 	m_playedTime = 0;
+	m_difficulty = 0;
+	m_numberBoom = 0;
 
-	m_pLabelScore = CCLabelTTF::create("0", "Marker Felt.ttf", 48);
-	m_pLabelScore->setPosition(ccp(origin.x + visibleSize.width/2,
-		origin.y + visibleSize.height - m_pLabelScore->getContentSize().height));
-	this->addChild(m_pLabelScore, 10);
-
+	m_labelScore = CCLabelBMFont::create("0", "Mia_64.fnt");
+	m_labelScore->setScale(48.0f/64);
+	m_labelScore->setPosition(ccp(origin.x + visibleSize.width/2,
+		origin.y + visibleSize.height - m_labelScore->getContentSize().height));
+	this->addChild(m_labelScore, 10);
 
 	m_player = Ship::create();
 	m_player->setPosition(ccp(origin.x + visibleSize.width/2, origin.y + visibleSize.height * 0.1));
 	this->addChild(m_player);
 
 	CCString* s = CCString::createWithFormat("HP: %d", m_player->getHp());
-	m_pLabelHp = CCLabelTTF::create(s->getCString(), "Marker Felt.ttf", 48);
-	m_pLabelHp->setPosition(ccp(origin.x + m_pLabelHp->getContentSize().width/2,
-		origin.y + visibleSize.height - m_pLabelHp->getContentSize().height));
-	this->addChild(m_pLabelHp, 10);
+	m_labelHp = CCLabelBMFont::create(s->getCString(), "Mia_64.fnt");
+	m_labelHp->setScale(48.0f/64);
+	m_labelHp->setPosition(ccp(origin.x + m_labelHp->getContentSize().width/2,
+		origin.y + visibleSize.height - m_labelHp->getContentSize().height));
+	this->addChild(m_labelHp, 10);
+
+	m_itemBoom = CCMenuItemImage::create("icon_boom.png", "icon_boom.png", this, menu_selector(ObjectLayer::ActiveBoom));
+	m_itemBoom->setPosition(ccp(origin.x + m_itemBoom->getContentSize().width/2 - visibleSize.width/2, 
+		origin.y + m_itemBoom->getContentSize().height/2 - visibleSize.height/2));
+	m_itemBoom->setVisible(false);
+	CCMenu* menu = CCMenu::create(m_itemBoom, NULL);
+	this->addChild(menu);
+
+	m_labelBoom = CCLabelBMFont::create("0", "Mia_64.fnt");
+	m_labelBoom->setPosition(ccp(origin.x + m_itemBoom->getContentSize().width + m_labelBoom->getContentSize().width,
+		origin.y + m_itemBoom->getContentSize().height/4 + m_labelBoom->getContentSize().height/4));
+	m_labelBoom->setVisible(false);
+	this->addChild(m_labelBoom, 10);
+
 
 	m_timeToGenerateEnemy = G_DEFAULT_TIME_TO_GENERATE_ENEMY;
 	this->schedule(schedule_selector(ObjectLayer::ScheduleGenerateEnemy), m_timeToGenerateEnemy);
@@ -95,12 +114,16 @@ void ObjectLayer::ccTouchEnded( CCTouch *pTouch, CCEvent *pEvent )
 
 #pragma endregion
 
-//schedule generate enemy 
+//schedule generate enemy
 void ObjectLayer::ScheduleGenerateEnemy( float dt )
 {
-	//ramdom type
-	float diff = CCRANDOM_0_1();
-	Enemy* enemy = Enemy::create(diff);
+	m_difficulty = m_score + m_playedTime;
+	
+	CCLOG("Difficulty: %f \tTime: %f", m_difficulty, m_playedTime);
+
+	//////////////////////////////////////////////////////////////////////////
+
+	Enemy* enemy = Enemy::create(m_difficulty);
 	float w = enemy->boundingBox().size.width;
 
 	//random position
@@ -109,7 +132,7 @@ void ObjectLayer::ScheduleGenerateEnemy( float dt )
 	float y = visibleSize.height + enemy->boundingBox().size.height/2;
 	enemy->setPosition(ccp(x + w/2, y));
 
-	m_arrEnemy->addObject(enemy);
+	m_arrEnemies->addObject(enemy);
 	this->addChild(enemy);
 }
 
@@ -130,28 +153,39 @@ void ObjectLayer::AddBullet(Bullet* bullet)
 	}
 }
 
+void ObjectLayer::AddItem( Item* item )
+{
+	m_arrItems->addObject(item);
+	this->addChild(item);
+}
+
 void ObjectLayer::update( float delta )
 {
-	if (m_player->getHp() <= 0 && isEndGame == false)
+	if (m_player->getHp() <= 0 && m_isEndGame == false)
 	{
 		CCDirector::sharedDirector()->getTouchDispatcher()->removeDelegate(this);
-		m_player->setVisible(false);
 		this->unschedule(schedule_selector(ObjectLayer::ScheduleCheckCollision));
 		this->unschedule(schedule_selector(ObjectLayer::ScheduleGenerateEnemy));
 		this->unscheduleUpdate();
 		this->setTouchEnabled(false);
-		MainGameScene* parent = (MainGameScene*) this->getParent();
-		parent->showEndGame(m_score);
 		
-		isEndGame = true;
+		CCSequence* sequence = CCSequence::create(
+			CCDelayTime::create(1),
+			CCCallFunc::create(this, callfunc_selector(ObjectLayer::AfterDeadEffectCallback)),
+			NULL
+		);
+
+		this->runAction(sequence);
+
+		m_isEndGame = true;
 	}
 
 	//////////////////////////////////////////////////////////////////////////
 	m_playedTime += delta;
 
-	CCLOG("HP: \t%d", m_player->getHp());
-	CCLOG("Score: \t%d", m_score);
-	CCLOG("Time: \t%f", m_playedTime);
+	//CCLOG("HP: \t%d", m_player->getHp());
+	//CCLOG("Score: \t%d", m_score);
+	//CCLOG("Time: \t%f", m_playedTime);
 
 	CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
 	CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
@@ -187,9 +221,24 @@ void ObjectLayer::update( float delta )
 			}
 		}
 	}
+	
+	//Items
+	CCARRAY_FOREACH(m_arrItems, it)
+	{
+		Item* item = dynamic_cast<Item*>(it);
+		if (NULL != item)
+		{
+			//out of screen
+			if (item->getPositionY() < 0)
+			{
+				this->removeChild(item);
+				m_arrItems->removeObject(item);
+			}
+		}
+	}
 
 	//Enemy
-	CCARRAY_FOREACH(m_arrEnemy, it)
+	CCARRAY_FOREACH(m_arrEnemies, it)
 	{
 		Enemy* enemy = dynamic_cast<Enemy*>(it);
 	
@@ -198,20 +247,42 @@ void ObjectLayer::update( float delta )
 			//dead
 			if (enemy->getHp() <= 0)
 			{
-				this->removeChild(enemy);
-				m_arrEnemy->removeObject(enemy);
+				m_arrEnemies->removeObject(enemy);
 
+				//item
+				Item* item;
+				int rd = (int)(CCRANDOM_0_1() * 20) + 1;
+				rd = 3;
+				if (rd == 1)
+				{
+					item = Item::create(G_ITEM_ARMOR, -0.3, enemy->getPosition());
+					this->AddItem(item);
+				} 
+				else if (rd == 2)
+				{
+					item = Item::create(G_ITEM_UPGRADE_BULLET, -0.3, enemy->getPosition());
+					this->AddItem(item);
+				} 
+				else if (rd == 3)
+				{
+					item = Item::create(G_ITEM_BOOM, -0.3, enemy->getPosition());
+					this->AddItem(item);
+				} 
+				else
+				{
+				}
+				
 				//score
 				m_score += enemy->getDamage();
 				CCString* sscore = CCString::createWithFormat("%d", m_score);
-				m_pLabelScore->setString(sscore->getCString());
+				m_labelScore->setString(sscore->getCString());
 			}
 
 			//out of screen
 			if (enemy->getPositionY() < - enemy->boundingBox().size.height)
 			{
 				this->removeChild(enemy);
-				m_arrEnemy->removeObject(enemy);
+				m_arrEnemies->removeObject(enemy);
 			}
 		}
 	}
@@ -224,6 +295,7 @@ void ObjectLayer::ScheduleCheckCollision(float dt)
 	CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
 
 	CCObject* it1 = NULL;
+	CCRect playerRect = m_player->boundingBox();
 
 	//////////////////////////////////////////////////////////////////////////
 	//player's bullet -----VS------ Enemy
@@ -237,7 +309,7 @@ void ObjectLayer::ScheduleCheckCollision(float dt)
 			CCObject* it2 = NULL;
 
 			//foreach all enemy
-			CCARRAY_FOREACH(m_arrEnemy, it2)
+			CCARRAY_FOREACH(m_arrEnemies, it2)
 			{
 				Enemy* enemy = dynamic_cast<Enemy*>(it2);
 				if (NULL != enemy)
@@ -251,7 +323,6 @@ void ObjectLayer::ScheduleCheckCollision(float dt)
 
 						//sound
 						AudioManager::sharedAudioManager()->PlayEffect("explosion.wav");
-						m_EffectLayer->AddExploisionEff(enemy->getEnemyType(), enemy->getPosition());
 						enemy->HitBullet(bullet->getDamage());
 					}
 				}
@@ -261,7 +332,6 @@ void ObjectLayer::ScheduleCheckCollision(float dt)
 
 	//////////////////////////////////////////////////////////////////////////
 	//Enemy's bullet -----VS------ Player
-	CCRect playerRect = m_player->boundingBox();
 	CCARRAY_FOREACH(m_arrEnemyBullets, it1)
 	{
 		Bullet* bullet = dynamic_cast<Bullet*>(it1);
@@ -276,12 +346,67 @@ void ObjectLayer::ScheduleCheckCollision(float dt)
 
 				//sound
 				AudioManager::sharedAudioManager()->PlayEffect("explosion.wav");
-				m_EffectLayer->AddExploisionEff(G_ENEMY_TYPE, m_player->getPosition());
 				m_player->HitBullet(bullet->getDamage());
 
 				//
 				CCString* s = CCString::createWithFormat("HP: %d", (m_player->getHp() > 0) ? m_player->getHp() : 0);
-				m_pLabelHp->setString(s->getCString());
+				m_labelHp->setString(s->getCString());
+			}
+		}
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	//Enemy -----------VS------------- Player
+	CCARRAY_FOREACH(m_arrEnemies, it1)
+	{
+		Enemy* enemy = dynamic_cast<Enemy*>(it1);
+		if (NULL != enemy)
+		{
+			CCRect enemyRect = enemy->boundingBox();
+
+			if (enemyRect.intersectsRect(playerRect))
+			{
+				//sound
+				AudioManager::sharedAudioManager()->PlayEffect("explosion.wav");
+				
+				m_player->HitBullet(1000);
+				enemy->HitBullet(1000);
+				m_arrEnemies->removeObject(enemy);
+			}
+		}
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	//Items -----VS------ Player
+	CCARRAY_FOREACH(m_arrItems, it1)
+	{
+		Item* item = dynamic_cast<Item*>(it1);
+		if (NULL != item)
+		{
+			CCRect itemRect = item->boundingBox();
+
+			if (playerRect.intersectsRect(itemRect))
+			{
+				switch (item->getItemType())
+				{
+				case G_ITEM_UPGRADE_BULLET:
+					m_player->UpgradeBullet();
+					break;
+
+				case G_ITEM_ARMOR:
+					m_player->EnableArmor();
+					break;
+
+				case G_ITEM_BOOM:
+					this->IncreaseBoom();
+					break;
+				}
+
+				this->removeChild(item);
+				m_arrItems->removeObject(item);
+
+				//sound
+				AudioManager::sharedAudioManager()->PlayEffect("item.wav");
 			}
 		}
 	}
@@ -296,15 +421,18 @@ void ObjectLayer::ContinueGame()
 	//reset:
 	//	player's HP
 
+	CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
+	CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
 
 	CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, 0, true);
 	this->setTouchEnabled(true);
-	isEndGame = false;
+	m_isEndGame = false;
 	//reset
 	m_player->setVisible(true);
 	m_player->Restart();
 	CCString* s = CCString::createWithFormat("HP: %d", (m_player->getHp() > 0) ? m_player->getHp() : 0);
-	m_pLabelHp->setString(s->getCString());
+	m_labelHp->setString(s->getCString());
+	m_player->setPosition(ccp(origin.x + visibleSize.width/2, origin.y + visibleSize.height * 0.1));
 	this->schedule(schedule_selector(ObjectLayer::ScheduleGenerateEnemy), m_timeToGenerateEnemy);
 	this->schedule(schedule_selector(ObjectLayer::ScheduleCheckCollision), CCDirector::sharedDirector()->getAnimationInterval());
 	this->scheduleUpdate();
@@ -317,11 +445,13 @@ void ObjectLayer::RestartGame()
 	//	player's HP
 	//	player's Position
 	//	score
+	//	numberBoom
 	
 	m_playedTime = 0;
 	m_score = 0;
+	m_numberBoom = 0;
 
-	m_arrEnemy->removeAllObjects();
+	m_arrEnemies->removeAllObjects();
 	m_arrEnemyBullets->removeAllObjects();
 	m_arrPlayerBullets->removeAllObjects();
 
@@ -330,16 +460,90 @@ void ObjectLayer::RestartGame()
 
 	CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, 0, true);
 	this->setTouchEnabled(true);
-	isEndGame = false;
+	m_isEndGame = false;
 	m_player->setVisible(true);
 	m_player->Restart();
-	CCString* s = CCString::createWithFormat("HP: %d", (m_player->getHp() > 0) ? m_player->getHp() : 0);
-	m_pLabelHp->setString(s->getCString());
 	m_player->setPosition(ccp(origin.x + visibleSize.width/2, origin.y + visibleSize.height * 0.1));
+	CCString* s = CCString::createWithFormat("HP: %d", (m_player->getHp() > 0) ? m_player->getHp() : 0);
+	m_labelHp->setString(s->getCString());
+
+	m_labelBoom->setVisible(false);
+	m_itemBoom->setVisible(false);
+
 	this->schedule(schedule_selector(ObjectLayer::ScheduleGenerateEnemy), m_timeToGenerateEnemy);
 	this->schedule(schedule_selector(ObjectLayer::ScheduleCheckCollision), CCDirector::sharedDirector()->getAnimationInterval());
 	this->scheduleUpdate();
 }
 
+void ObjectLayer::AfterDeadEffectCallback()
+{
+	m_player->Dead();
 
+	MainGameScene* parent = (MainGameScene*) this->getParent();
+	parent->showEndGame(m_score);
+	
+	//remove all enemy
+	CCObject* it;
+	CCARRAY_FOREACH(m_arrEnemies, it)
+	{
+		Enemy* enemy = dynamic_cast<Enemy*>(it);
+		if (NULL != enemy)
+		{
+			this->removeChild(enemy);
+		}
+	}
 
+	m_arrEnemies->removeAllObjects();
+
+	//remove all enemy's bullet
+	CCARRAY_FOREACH(m_arrEnemyBullets, it)
+	{
+		Bullet* bullet = dynamic_cast<Bullet*>(it);
+		if (NULL != bullet)
+		{
+			this->removeChild(bullet);
+		}
+	}
+
+	m_arrEnemyBullets->removeAllObjects();
+}
+
+void ObjectLayer::IncreaseBoom()
+{
+	m_numberBoom++;
+	m_numberBoom = (m_numberBoom < G_MAX_PLAYER_BOOM) ? m_numberBoom : G_MAX_PLAYER_BOOM;
+
+	CCString* s = CCString::createWithFormat("%d", m_numberBoom);
+	m_labelBoom->setString(s->getCString());
+
+	m_labelBoom->setVisible(true);
+	m_itemBoom->setVisible(true);
+}
+
+void ObjectLayer::ActiveBoom(CCObject* pSender)
+{
+	m_numberBoom--;
+	m_numberBoom = (m_numberBoom > 0) ? m_numberBoom : 0;
+
+	CCString* s = CCString::createWithFormat("%d", m_numberBoom);
+	m_labelBoom->setString(s->getCString());
+
+	if (m_numberBoom == 0)
+	{
+		m_labelBoom->setVisible(false);
+		m_itemBoom->setVisible(false);
+	}
+
+	//explosion all enemies
+	CCObject* it;
+	
+	CCARRAY_FOREACH(m_arrEnemies, it)
+	{
+		Enemy* enemy = dynamic_cast<Enemy*>(it);
+
+		if (NULL != enemy)
+		{
+			enemy->HitBullet(1000);
+		}
+	}
+}

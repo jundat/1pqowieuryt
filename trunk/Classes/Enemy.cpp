@@ -20,12 +20,25 @@ static void DifficultySplit(float difficulty, float& vy, int& hp, int& dm)
 // 	vy = A * (difficulty/(A+B+C));
 // 	hp = B * (difficulty/(A+B+C));
 // 	dm = C * (difficulty/(A+B+C));
-	static float currentVy = G_MIN_ENEMY_VY;
-	vy = currentVy;
-	hp = G_ENEMY_HP;
-	dm = G_ENEMY_DAM;
-}
 
+	
+	//0.05 -> 0.5
+	//delta = 0.45 in 480s
+	//1000 / 0.45 = 2222 (~2000)
+	vy = G_MIN_ENEMY_VY - difficulty/2000; //min -> min + 0.45
+
+	//min = 1
+	//max = 5
+	//1000 / 4 = 250 (~200)
+	hp = G_MIN_ENEMY_HP + difficulty/200;
+
+	//min = 1
+	//max = 5
+	//1000 / 4 = 250 (~200)
+	dm = G_MIN_ENEMY_DAM + difficulty/200;
+
+	CCLOG("Vy: %f\tHp: %d\tDam: %d", vy, hp, dm);
+}
 
 Enemy::Enemy(float difficulty) : GameObject()
 {
@@ -45,11 +58,15 @@ bool Enemy::init()
 	//////////////////////////////////////////////////////////////////////////
 
 	DifficultySplit(m_difficulty, m_vy, m_hp, m_damage);
+
 	this->setVx(0);
 	this->setEnemyType(G_ENEMY_TYPE);
 	m_sprite = CCSprite::create("enemy_1.png");
 	m_sprite->setPosition(CCPointZero);
 	this->addChild(m_sprite);
+
+	m_EffectLayer = EffectLayer::create();
+	this->addChild(m_EffectLayer, 100);
 
 	this->schedule(schedule_selector(Enemy::ScheduleFire), G_ENEMY_TIME_TO_FIRE);
 	//////////////////////////////////////////////////////////////////////////
@@ -82,4 +99,31 @@ void Enemy::update( float delta )
 void Enemy::HitBullet(int damage)
 {
 	m_hp -= damage;
+
+	if (m_hp > 0)
+	{
+		//small effect explosion
+		m_EffectLayer->AddExploisionEff(2, CCPointZero);
+	}
+	else
+	{
+		CCSize s = getContentSize();
+		CCPoint p1 = CCPointZero;
+		CCPoint p2 = ccp(-s.width/2, s.height/2);
+		CCPoint p3 = ccp(s.width/2, s.height/2);
+
+		//big effect explosion
+		float t1 = m_EffectLayer->AddExploisionEff(3, p1);
+		float t2 = m_EffectLayer->AddExploisionEff(3, p2);
+		float t3 = m_EffectLayer->AddExploisionEff(3, p3);
+		t1 = (t1 > t2) ? t1 : t2;
+		t1 = (t1 > t3) ? t1 : t3;
+
+		CCSequence* sequence = CCSequence::create(
+			CCDelayTime::create(t1),
+			CCCallFunc::create(this, callfunc_selector(Enemy::removeFromParent)),
+			NULL
+			);
+		this->runAction(sequence);
+	}
 }

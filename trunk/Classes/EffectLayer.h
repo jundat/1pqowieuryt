@@ -17,7 +17,7 @@ public:
 	CREATE_FUNC(EffectLayer);
 
 public:
-	void AddExploisionEff(int enemySize, CCPoint p);
+	float AddExploisionEff(int enemySize, CCPoint p);
 
 private: //callback
 	void RemoveEffCallback(CCNode* pSender);

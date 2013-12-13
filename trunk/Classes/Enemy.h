@@ -26,6 +26,8 @@ public:
 	CC_SYNTHESIZE(int, m_hp, Hp); //2
 	CC_SYNTHESIZE(int, m_damage, Damage); //3 ~ damage for bullet
 
+	EffectLayer* m_EffectLayer;	
+
 public:
 	void Fire();
 	void ScheduleFire(float dt);

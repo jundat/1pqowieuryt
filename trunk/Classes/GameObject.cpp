@@ -23,3 +23,8 @@ cocos2d::CCRect GameObject::boundingBox()
 	return rect;
 }
 
+cocos2d::CCSize GameObject::getContentSize()
+{
+	return boundingBox().size;
+}
+

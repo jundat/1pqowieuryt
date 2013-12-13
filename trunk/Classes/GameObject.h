@@ -16,7 +16,7 @@ public:
 
 public:
 	virtual CCRect boundingBox();
-
+	virtual CCSize getContentSize();
 };
 
 #endif //__GAME_OBJECT_H__
