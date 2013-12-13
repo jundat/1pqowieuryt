@@ -29,6 +29,9 @@ public:
 	EffectLayer* m_EffectLayer;	
 
 public:
+	static void DifficultySplit(float difficulty, float& vy, int& hp, int& dm);
+
+public:
 	void Fire();
 	void ScheduleFire(float dt);
 	void HitBullet(int damage);

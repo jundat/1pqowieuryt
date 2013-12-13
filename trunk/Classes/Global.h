@@ -29,7 +29,7 @@ const static float G_PLAYER_ARMOR_TIME = 10.0f;
 const static float G_PLAYER_BULLET_VY = +1.0f;
 
 const static float G_PLAYER_TIME_TO_FIRE = 0.4f;
-const static float G_ENEMY_TIME_TO_FIRE = 2.0f;
+const static float G_ENEMY_TIME_TO_FIRE = 2.5f;
 
 const static float G_DEFAULT_TIME_TO_GENERATE_ENEMY = 1.0f;
 

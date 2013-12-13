@@ -15,8 +15,8 @@ public:
 
 private:
 	CCParallaxNodeExtras *_backgroundNode;
-	//CCSprite *_spacedust1;
-	//CCSprite *_spacedust2;
+// 	CCSprite *_spacedust1;
+// 	CCSprite *_spacedust2;
 	CCSprite *_planetsunrise;
 	CCSprite *_galaxy;
 	CCSprite *_spacialanomaly;

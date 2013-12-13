@@ -10,7 +10,9 @@ public:
     static cocos2d::CCScene* scene();
     CREATE_FUNC(MenuScene);
     
-    void menuCloseCallback(CCObject* pSender);
+    void playCallback(CCObject* pSender);
+	void settingCallback(CCObject* pSender);
+	void exitCallback(CCObject* pSender);
 };
 
 #endif // __MENU_SCENE_H__

@@ -17,10 +17,15 @@ public:
 	static AudioManager* sharedAudioManager();
 	bool IsEnableBackground();
 	bool IsEnableEffect();
+	bool IsPlayingBackground();
 	void SetEnableBackground(bool b);
 	void SetEnableEffect(bool b);
+
+	void SetVolumeMusic(float _value);
+	void SetVolumeFX(float _value);
+
 	void LoadBackground(const char* path);
-	void PlayBackground(const char* path, bool loop = true);
+	void PlayBackground(const char* path, bool isPlayAgain = false, bool loop = true);
 	void PauseBackground();
 	void StopBackground();
 	void PlayEffect(const char *path,  bool isLoop = false);
@@ -28,6 +33,7 @@ public:
 private:
 	AudioManager();
 
+	bool m_isPlayingBackground;
 	bool m_bEnableBackground;
 	bool m_bEnableEffect;
 };

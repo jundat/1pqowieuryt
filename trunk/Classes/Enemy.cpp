@@ -6,7 +6,7 @@
 USING_NS_CC;
 
 
-static void DifficultySplit(float difficulty, float& vy, int& hp, int& dm)
+void Enemy::DifficultySplit(float difficulty, float& vy, int& hp, int& dm)
 {
 	//vy = A * diff
 	//hp = B * diff
@@ -26,6 +26,9 @@ static void DifficultySplit(float difficulty, float& vy, int& hp, int& dm)
 	//delta = 0.45 in 480s
 	//1000 / 0.45 = 2222 (~2000)
 	vy = G_MIN_ENEMY_VY - difficulty/2000; //min -> min + 0.45
+
+	float delta = (CCRANDOM_0_1() * 0.1f) - 0.05f;
+	vy += delta;
 
 	//min = 1
 	//max = 5
@@ -61,7 +64,11 @@ bool Enemy::init()
 
 	this->setVx(0);
 	this->setEnemyType(G_ENEMY_TYPE);
-	m_sprite = CCSprite::create("enemy_1.png");
+
+	int n = (int)(CCRANDOM_0_1() * 3) + 1;
+	CCString* s = CCString::createWithFormat("enemy_%d.png", n);
+	m_sprite = CCSprite::create(s->getCString());
+
 	m_sprite->setPosition(CCPointZero);
 	this->addChild(m_sprite);
 

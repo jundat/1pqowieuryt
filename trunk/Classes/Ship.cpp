@@ -160,6 +160,7 @@ void Ship::Dead()
 
 void Ship::Restart()
 {
+	m_bulletLevel = G_MIN_PLAYER_BULLET_LEVEL;
 	this->setHp(G_PLAYER_HP);
 	this->setVisible(true);
 	this->schedule(schedule_selector(Ship::ScheduleFire), G_PLAYER_TIME_TO_FIRE);

@@ -1,5 +1,7 @@
 #include "MenuScene.h"
 #include "MainGameScene.h"
+#include "SettingScene.h"
+#include "AudioManager.h"
 
 USING_NS_CC;
 
@@ -23,54 +25,67 @@ bool MenuScene::init()
     CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
 
     /////////////////////////////
-    // 2. add a menu item with "X" image, which is clicked to quit the program
-    //    you may modify it.
 
-    // add a "close" icon to exit the progress. it's an autorelease object
-    CCMenuItemImage *pCloseItem = CCMenuItemImage::create(
-                                        "btnPlay.png",
-                                        "btnPlay.png",
+	CCSprite* bg = CCSprite::create("bg_menu.png");
+	bg->setPosition(ccp(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
+	this->addChild(bg, 0);
+
+	CCSprite* menuTop = CCSprite::create("menu_top.png");
+	menuTop->setPosition(ccp(visibleSize.width/2 + origin.x, - 280 + visibleSize.height + origin.y));
+	this->addChild(menuTop, 0);
+
+    CCMenuItemImage *playItem = CCMenuItemImage::create(
+                                        "new_button.png",
+                                        "new_button_press.png",
                                         this,
-                                        menu_selector(MenuScene::menuCloseCallback));
+                                        menu_selector(MenuScene::playCallback));
     
-	pCloseItem->setPosition(ccp(origin.x + visibleSize.width/2,
+	playItem->setPosition(ccp(origin.x + visibleSize.width/2,
                                 origin.y + visibleSize.height/2));
 
-    // create menu, it's an autorelease object
-    CCMenu* pMenu = CCMenu::create(pCloseItem, NULL);
+	CCMenuItemImage *settingItem = CCMenuItemImage::create(
+		"setting_button.png",
+		"setting_button_press.png",
+		this,
+		menu_selector(MenuScene::settingCallback));
+
+	settingItem->setPosition(ccp(origin.x + visibleSize.width/2,
+		playItem->getPositionY() - playItem->getContentSize().height/2 - settingItem->getContentSize().height/2 - 10));
+
+
+	CCMenuItemImage *exitItem = CCMenuItemImage::create(
+		"exit_button.png",
+		"exit_button_press.png",
+		this,
+		menu_selector(MenuScene::exitCallback));
+
+	exitItem->setPosition(ccp(origin.x + visibleSize.width/2,
+		settingItem->getPositionY() - settingItem->getContentSize().height/2 - exitItem->getContentSize().height/2 - 10));
+
+
+    CCMenu* pMenu = CCMenu::create(playItem, settingItem, exitItem, NULL);
     pMenu->setPosition(CCPointZero);
     this->addChild(pMenu, 1);
 
-    /////////////////////////////
-    // 3. add your codes below...
+	AudioManager::sharedAudioManager()->PlayBackground("background.wav");
 
-    // add a label shows "Hello World"
-    // create and initialize a label
-    
-    CCLabelTTF* pLabel = CCLabelTTF::create("Hello World", "Arial", 24);
-    
-    // position the label on the center of the screen
-    pLabel->setPosition(ccp(origin.x + visibleSize.width/2,
-                            origin.y + visibleSize.height - pLabel->getContentSize().height));
-
-    // add the label as a child to this layer
-    this->addChild(pLabel, 1);
-
-    // add "MenuScene" splash screen"
-    CCSprite* pSprite = CCSprite::create("bgMainGame.png");
-
-    // position the sprite on the center of the screen
-    pSprite->setPosition(ccp(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
-
-    // add the sprite as a child to this layer
-    this->addChild(pSprite, 0);
-    
     return true;
 }
 
 
-void MenuScene::menuCloseCallback(CCObject* pSender)
+void MenuScene::playCallback(CCObject* pSender)
 {
     CCScene *pScene = MainGameScene::scene();
 	CCDirector::sharedDirector()->replaceScene(pScene);
+}
+
+void MenuScene::settingCallback( CCObject* pSender )
+{
+	CCScene *pScene = SettingScene::scene();
+	CCDirector::sharedDirector()->replaceScene(pScene);
+}
+
+void MenuScene::exitCallback( CCObject* pSender )
+{
+	CCDirector::sharedDirector()->end();
 }

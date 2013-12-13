@@ -15,13 +15,14 @@ static AudioManager *m_Instance;
 
 AudioManager::AudioManager()
 {
-	
+	m_isPlayingBackground = false;
 }
 
 AudioManager* AudioManager::sharedAudioManager()
 {
-	if (m_Instance == 0)
+	if (m_Instance == 0) {
 		m_Instance = new AudioManager();
+	}
 	return m_Instance;
 
 }
@@ -56,10 +57,21 @@ void AudioManager::LoadBackground(const char* path)
 }
 
 
-void AudioManager::PlayBackground(const char* path, bool loop)
+void AudioManager::PlayBackground(const char* path, bool isPlayAgain, bool loop)
 {
-	if (m_bEnableBackground)
-		SimpleAudioEngine::sharedEngine()->playBackgroundMusic(CCFileUtils::sharedFileUtils()->fullPathForFilename(path).c_str(), loop);
+	if (m_bEnableBackground) {
+		if (IsPlayingBackground())
+		{
+			if (isPlayAgain)
+			{
+				SimpleAudioEngine::sharedEngine()->playBackgroundMusic(CCFileUtils::sharedFileUtils()->fullPathForFilename(path).c_str(), loop);
+			}
+		}
+		else
+		{
+			SimpleAudioEngine::sharedEngine()->playBackgroundMusic(CCFileUtils::sharedFileUtils()->fullPathForFilename(path).c_str(), loop);
+		}
+	}
 }
 
 void AudioManager::PauseBackground()
@@ -80,8 +92,23 @@ void AudioManager::StopBackground()
 
 void AudioManager::PlayEffect(const char *path, bool isLoop)
 {
-	if (m_bEnableEffect)
+	if (m_bEnableEffect) {
 		SimpleAudioEngine::sharedEngine()->playEffect(CCFileUtils::sharedFileUtils()->fullPathForFilename(path).c_str(), isLoop);
+	}
 }
 
+bool AudioManager::IsPlayingBackground()
+{
+	return SimpleAudioEngine::sharedEngine()->isBackgroundMusicPlaying();
+}
+
+void AudioManager::SetVolumeMusic(float _value)
+{
+	CocosDenshion::SimpleAudioEngine::sharedEngine()->setBackgroundMusicVolume(_value);
+}
+
+void AudioManager::SetVolumeFX(float _value)
+{
+	CocosDenshion::SimpleAudioEngine::sharedEngine()->setEffectsVolume(_value);
+}
 

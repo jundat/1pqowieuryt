@@ -252,20 +252,20 @@ void ObjectLayer::update( float delta )
 				//item
 				Item* item;
 				int rd = (int)(CCRANDOM_0_1() * 20) + 1;
-				rd = 3;
-				if (rd == 1)
+				
+				if (rd <= 1)
 				{
-					item = Item::create(G_ITEM_ARMOR, -0.3, enemy->getPosition());
+					item = Item::create(G_ITEM_ARMOR, -0.3f, enemy->getPosition());
 					this->AddItem(item);
 				} 
-				else if (rd == 2)
+				else if (rd <= 2)
 				{
-					item = Item::create(G_ITEM_UPGRADE_BULLET, -0.3, enemy->getPosition());
+					item = Item::create(G_ITEM_UPGRADE_BULLET, -0.3f, enemy->getPosition());
 					this->AddItem(item);
 				} 
-				else if (rd == 3)
+				else if (rd <= 3)
 				{
-					item = Item::create(G_ITEM_BOOM, -0.3, enemy->getPosition());
+					item = Item::create(G_ITEM_BOOM, -0.3f, enemy->getPosition());
 					this->AddItem(item);
 				} 
 				else
@@ -522,28 +522,30 @@ void ObjectLayer::IncreaseBoom()
 
 void ObjectLayer::ActiveBoom(CCObject* pSender)
 {
-	m_numberBoom--;
-	m_numberBoom = (m_numberBoom > 0) ? m_numberBoom : 0;
-
-	CCString* s = CCString::createWithFormat("%d", m_numberBoom);
-	m_labelBoom->setString(s->getCString());
-
-	if (m_numberBoom == 0)
+	if (m_numberBoom > 0)
 	{
-		m_labelBoom->setVisible(false);
-		m_itemBoom->setVisible(false);
-	}
+		m_numberBoom--;
 
-	//explosion all enemies
-	CCObject* it;
-	
-	CCARRAY_FOREACH(m_arrEnemies, it)
-	{
-		Enemy* enemy = dynamic_cast<Enemy*>(it);
+		CCString* s = CCString::createWithFormat("%d", m_numberBoom);
+		m_labelBoom->setString(s->getCString());
 
-		if (NULL != enemy)
+		if (m_numberBoom == 0)
 		{
-			enemy->HitBullet(1000);
+			m_labelBoom->setVisible(false);
+			m_itemBoom->setVisible(false);
+		}
+
+		//explosion all enemies
+		CCObject* it;
+
+		CCARRAY_FOREACH(m_arrEnemies, it)
+		{
+			Enemy* enemy = dynamic_cast<Enemy*>(it);
+
+			if (NULL != enemy)
+			{
+				enemy->HitBullet(1000);
+			}
 		}
 	}
 }

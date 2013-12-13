@@ -15,7 +15,7 @@ public:
     virtual bool init();
     static cocos2d::CCScene* scene();
 	CREATE_FUNC(MainGameScene);
-	void menuCloseCallback(CCObject* pSender);
+	void menuCallback(CCObject* pSender);
 
 public:
 	void showEndGame(int score);

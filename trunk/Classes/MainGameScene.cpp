@@ -37,7 +37,7 @@ bool MainGameScene::init()
 		"btnHome.png",
 		"btnHome.png",
 		this,
-		menu_selector(MainGameScene::menuCloseCallback));
+		menu_selector(MainGameScene::menuCallback));
 	pCloseItem->setPosition(ccp(origin.x + visibleSize.width - pCloseItem->getContentSize().width/2,
 		origin.y + visibleSize.height - pCloseItem->getContentSize().height/2));
 	CCMenu* pMenu = CCMenu::create(pCloseItem, NULL);
@@ -45,15 +45,11 @@ bool MainGameScene::init()
 	this->addChild(pMenu, 1);
 	
 	//////////////////////////////////////////////////////////////////////////
-	//preload sound effect
-	AudioManager::sharedAudioManager()->PlayEffect("explosion.wav");
-	//////////////////////////////////////////////////////////////////////////
 	
     return true;
 }
 
-
-void MainGameScene::menuCloseCallback(CCObject* pSender)
+void MainGameScene::menuCallback(CCObject* pSender)
 {
 	CCScene *pScene = MenuScene::scene();
 	CCDirector::sharedDirector()->replaceScene(pScene);
