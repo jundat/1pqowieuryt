@@ -67,7 +67,7 @@ bool MenuScene::init()
     pMenu->setPosition(CCPointZero);
     this->addChild(pMenu, 1);
 
-	AudioManager::sharedAudioManager()->PlayBackground("background.wav");
+	AudioManager::sharedAudioManager()->PlayBackground("background.ogg");
 
     return true;
 }

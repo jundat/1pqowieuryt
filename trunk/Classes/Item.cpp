@@ -28,20 +28,17 @@ bool Item::init()
 	//////////////////////////////////////////////////////////////////////////
 	this->setVx(0);
 
-	switch (m_type)
+	if (m_type == G_ITEM_UPGRADE_BULLET)
 	{
-	case G_ITEM_UPGRADE_BULLET:
 		m_sprite = CCSprite::create("item_upgrade_bullet.png");
-		break;
-
-	case G_ITEM_ARMOR:
+	} 
+	else if (m_type == G_ITEM_ARMOR)
+	{
 		m_sprite = CCSprite::create("item_armor.png");
-		break;
-
-	case G_ITEM_BOOM:
+	}
+	else if (m_type == G_ITEM_BOOM)
+	{
 		m_sprite = CCSprite::create("item_boom.png");
-		break;
-
 	}
 
 	this->addChild(m_sprite);

@@ -139,17 +139,17 @@ void ObjectLayer::ScheduleGenerateEnemy( float dt )
 //Player or enemy call to add bullet when fire
 void ObjectLayer::AddBullet(Bullet* bullet)
 {
-	switch(bullet->getBulletType())
+	int type = bullet->getBulletType();
+
+	if (type == G_BULLET_PLAYER_ID)
 	{
-	case G_BULLET_PLAYER_ID:
 		m_arrPlayerBullets->addObject(bullet);
 		this->addChild(bullet);
-		break;
-
-	case G_BULLET_ENEMY_ID:
+	} 
+	else if (type == G_BULLET_ENEMY_ID)
+	{
 		m_arrEnemyBullets->addObject(bullet);
 		this->addChild(bullet);
-		break;
 	}
 }
 
@@ -387,21 +387,21 @@ void ObjectLayer::ScheduleCheckCollision(float dt)
 
 			if (playerRect.intersectsRect(itemRect))
 			{
-				switch (item->getItemType())
+				int itemtype = item->getItemType();
+
+				if (itemtype == G_ITEM_UPGRADE_BULLET)
 				{
-				case G_ITEM_UPGRADE_BULLET:
 					m_player->UpgradeBullet();
-					break;
-
-				case G_ITEM_ARMOR:
+				} 
+				else if (itemtype == G_ITEM_ARMOR)
+				{
 					m_player->EnableArmor();
-					break;
-
-				case G_ITEM_BOOM:
-					this->IncreaseBoom();
-					break;
 				}
-
+				else if (itemtype == G_ITEM_BOOM)
+				{
+					this->IncreaseBoom();
+				}
+				
 				this->removeChild(item);
 				m_arrItems->removeObject(item);
 
