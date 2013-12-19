@@ -3,6 +3,7 @@
 #include "CCEGLView.h"
 
 #include "Global.h"
+#include "ConfigLoader.h"
 
 USING_NS_CC;
 
@@ -11,8 +12,11 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
                        LPTSTR    lpCmdLine,
                        int       nCmdShow)
 {
+
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
+
+	ConfigLoader::shareConfigLoader();
 
     // create the application instance
     AppDelegate app;

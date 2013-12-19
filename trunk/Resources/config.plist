@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+    <dict>
+      <key>G_DESIGN_WIDTH</key>
+		  <string>800</string>
+	  <key>G_DESIGN_HEIGHT</key>
+		  <string>1280</string>
+	  <key>G_SCALE_FACTOR</key>
+		  <string>0.55</string>
+	  <key>G_PLAYER_HP</key>
+		  <string>100</string>
+	  <key>G_PLAYER_DAMAGE</key>
+		  <string>1</string>
+	  <key>G_MIN_PLAYER_BULLET_LEVEL</key>
+		  <string>1</string>
+	  <key>G_MAX_PLAYER_BULLET_LEVEL</key>
+		  <string>3</string>
+
+
+	  <key>G_MAX_PLAYER_BOOM</key>
+		  <string>3</string>
+
+
+	  <key>G_MIN_ENEMY_HP</key>
+		  <string>1</string>
+	  <key>G_MIN_ENEMY_DAM</key>
+		  <string>1</string>
+	  <key>G_PLAYER_ARMOR_TIME</key>
+		  <string>10.0</string>
+	  <key>G_PLAYER_BULLET_VY</key>
+		  <string>1.0</string>
+
+
+	  <key>G_PLAYER_TIME_TO_FIRE</key>
+		  <string>0.4</string>
+	  <key>G_ENEMY_TIME_TO_FIRE</key>
+		  <string>2.5</string>
+
+
+	  <key>G_DEFAULT_TIME_TO_GENERATE_ENEMY</key>
+		  <string>1.0</string>
+
+
+	  <key>G_MIN_ENEMY_VY</key>
+		  <string>-0.3</string>
+	  <key>G_MAX_ENEMY_VY</key>
+		  <string>-0.05</string>
+
+
+	  <key>G_MIN_ENEMY_BULLET_VY</key>
+		  <string>-0.4</string>
+	  <key>G_BULLET_VY_FROM_ENEMY</key>
+		  <string>1.5</string>
+
+		
+	  <key>G_DEFAULT_DIFFICULTY</key>
+		  <string>1.0</string>
+
+
+      <key>G_VELOCITY_IN_DIFFICULTY</key>
+        <string>2000</string>
+      <key>G_HP_IN_DIFFICULTY</key>
+        <string>200</string>
+      <key>G_DAMAGE_IN_DIFFICULTY</key>
+        <string>200</string>
+      
+      
+    </dict>
+</plist>

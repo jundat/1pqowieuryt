@@ -35,7 +35,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
     // create a scene. it's an autorelease object
     CCScene *pScene = MenuScene::scene(); // MainGameScene::scene(); // 
-
+	
     // run
     pDirector->runWithScene(pScene);
 

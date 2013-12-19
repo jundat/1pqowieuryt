@@ -3,48 +3,59 @@
 
 
 //////////////////////////////////////////////////////////////////////////
-//common
-
- static int G_DESIGN_WIDTH = 800;
- static int G_DESIGN_HEIGHT = 1280;
- static float G_SCALE_FACTOR = 0.55f;
 
 //////////////////////////////////////////////////////////////////////////
 //player & enemy
 
- static int G_PLAYER_HP = 100;
- static int G_PLAYER_DAMAGE = 1;
- static int G_MIN_PLAYER_BULLET_LEVEL = 1;
- static int G_MAX_PLAYER_BULLET_LEVEL = 3;
+//ID
+ extern int G_BULLET_PLAYER_ID;
+ extern int G_BULLET_ENEMY_ID;
 
- static int G_MAX_PLAYER_BOOM = 3;
+ extern float G_ENEMY_TYPE;
 
- static int G_ITEM_UPGRADE_BULLET = 1;
- static int G_ITEM_ARMOR = 2;
- static int G_ITEM_BOOM = 3;
+ extern int G_ITEM_UPGRADE_BULLET;
+ extern int G_ITEM_ARMOR;
+ extern int G_ITEM_BOOM;
 
- static int G_MIN_ENEMY_HP = 1;
- static int G_MIN_ENEMY_DAM = 1;
- static float G_PLAYER_ARMOR_TIME = 10.0f;
- static float G_PLAYER_BULLET_VY = +1.0f;
+const static int G_MOVE_STRAINGH = 0;
+const static int G_MOVE_CIRCLE_LEFT = 1;
+const static int G_MOVE_CIRCLE_RIGHT = 2;
 
- static float G_PLAYER_TIME_TO_FIRE = 0.4f;
- static float G_ENEMY_TIME_TO_FIRE = 2.5f;
+//////////////////////////////////////////////////////////////////////////
 
- static float G_DEFAULT_TIME_TO_GENERATE_ENEMY = 1.0f;
+//Variant
+ extern int G_DESIGN_WIDTH;
+ extern int G_DESIGN_HEIGHT;
+ extern float G_SCALE_FACTOR;
 
- static float G_ENEMY_TYPE = 3;
+ extern int G_PLAYER_HP;
+ extern int G_PLAYER_DAMAGE;
+ extern int G_MIN_PLAYER_BULLET_LEVEL;
+ extern int G_MAX_PLAYER_BULLET_LEVEL;
 
- static int G_BULLET_PLAYER_ID = 1;
- static int G_BULLET_ENEMY_ID = 2;
+ extern int G_MAX_PLAYER_BOOM;
 
- static float G_MIN_ENEMY_VY = -0.05f;
- static float G_MAX_ENEMY_VY = -0.5f;
+ extern int G_MIN_ENEMY_HP;
+ extern int G_MIN_ENEMY_DAM;
+ extern float G_PLAYER_ARMOR_TIME;
+ extern float G_PLAYER_BULLET_VY;
 
- static float G_MIN_ENEMY_BULLET_VY = -0.4f;
- static float G_BULLET_VY_FROM_ENEMY = 1.5f; //bulletVy =  BULLET_VY_FROM_ENEMY * enemyVy
+ extern float G_PLAYER_TIME_TO_FIRE;
+ extern float G_ENEMY_TIME_TO_FIRE;
 
- static float G_DEFAULT_DIFFICULTY = 1.0f;
+ extern float G_DEFAULT_TIME_TO_GENERATE_ENEMY;
+
+ extern float G_MIN_ENEMY_VY;
+ extern float G_MAX_ENEMY_VY;
+
+ extern float G_MIN_ENEMY_BULLET_VY;
+ extern float G_BULLET_VY_FROM_ENEMY; //bulletVy =  BULLET_VY_FROM_ENEMY * enemyVy
+
+ extern float G_DEFAULT_DIFFICULTY;
+
+ extern float G_VELOCITY_IN_DIFFICULTY;		//velocity = diff / G_VELOCITY_IN_DIFFICULTY
+ extern float G_HP_IN_DIFFICULTY;			//hp = diff / G_HP_IN_DIFFICULTY
+ extern float G_DAMAGE_IN_DIFFICULTY;		//damage = diff / G_DAMAGE_IN_DIFFICULTY
 
 
 

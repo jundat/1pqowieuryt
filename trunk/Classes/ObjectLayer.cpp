@@ -117,20 +117,22 @@ void ObjectLayer::ccTouchEnded( CCTouch *pTouch, CCEvent *pEvent )
 //schedule generate enemy
 void ObjectLayer::ScheduleGenerateEnemy( float dt )
 {
-	m_difficulty = m_score + m_playedTime;
-	
-	CCLOG("Difficulty: %f \tTime: %f", m_difficulty, m_playedTime);
-
-	//////////////////////////////////////////////////////////////////////////
-
-	Enemy* enemy = Enemy::create(m_difficulty);
-	float w = enemy->boundingBox().size.width;
-
-	//random position
 	CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
-	float x = (int)(CCRANDOM_0_1() * (visibleSize.width - w));
+	CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
+
+	m_difficulty = m_score + m_playedTime; //CCLOG("Difficulty: %f \tTime: %f", m_difficulty, m_playedTime);
+	int movetype = G_MOVE_STRAINGH;
+
+	float h = visibleSize.height;
+	float w = visibleSize.width;
+
+	Enemy* enemy = Enemy::create(m_difficulty, movetype);
+	float enemyW = enemy->boundingBox().size.width;
+			
+	float x = (int)(CCRANDOM_0_1() * (visibleSize.width - enemyW));
 	float y = visibleSize.height + enemy->boundingBox().size.height/2;
-	enemy->setPosition(ccp(x + w/2, y));
+
+	enemy->setPosition(ccp(x + enemyW/2, y));
 
 	m_arrEnemies->addObject(enemy);
 	this->addChild(enemy);

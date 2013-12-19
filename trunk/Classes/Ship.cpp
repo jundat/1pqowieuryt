@@ -128,9 +128,10 @@ void Ship::update( float delta )
 
 void Ship::HitBullet( int damage )
 {
-	if (m_isArmor == false)
+	if (m_isArmor == false || damage >= 1000)
 	{
 		m_hp -= damage;
+		m_hp  = (m_hp > 0) ? m_hp : 0;
 
 		if (m_hp > 0)
 		{
@@ -161,6 +162,7 @@ void Ship::Dead()
 void Ship::Restart()
 {
 	m_bulletLevel = G_MIN_PLAYER_BULLET_LEVEL;
+	this->DisableArmor();
 	this->setHp(G_PLAYER_HP);
 	this->setVisible(true);
 	this->schedule(schedule_selector(Ship::ScheduleFire), G_PLAYER_TIME_TO_FIRE);

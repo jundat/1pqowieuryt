@@ -27,8 +27,8 @@ void Enemy::DifficultySplit(float difficulty, float& vy, int& hp, int& dm)
 	//1000 / 0.45 = 2222 (~2000)
 	vy = G_MIN_ENEMY_VY - difficulty/2000; //min -> min + 0.45
 
-	float delta = (CCRANDOM_0_1() * 0.1f) - 0.05f;
-	vy += delta;
+// 	float delta = (CCRANDOM_0_1() * 0.1f) - 0.05f;
+// 	vy += delta;
 
 	//min = 1
 	//max = 5
@@ -43,9 +43,10 @@ void Enemy::DifficultySplit(float difficulty, float& vy, int& hp, int& dm)
 	CCLOG("Vy: %f\tHp: %d\tDam: %d", vy, hp, dm);
 }
 
-Enemy::Enemy(float difficulty) : GameObject()
+Enemy::Enemy(float difficulty, int MOVE_TYPE) : GameObject()
 {
 	this->setDifficulty(difficulty);
+	this->setMoveType(MOVE_TYPE);
 }
 
 bool Enemy::init()
@@ -65,7 +66,7 @@ bool Enemy::init()
 	this->setVx(0);
 	this->setEnemyType(G_ENEMY_TYPE);
 
-	int n = (int)(CCRANDOM_0_1() * 3) + 1;
+	int n = 1;//(int)(CCRANDOM_0_1() * 3) + 1;
 	CCString* s = CCString::createWithFormat("enemy_%d.png", n);
 	m_sprite = CCSprite::create(s->getCString());
 
@@ -77,8 +78,51 @@ bool Enemy::init()
 
 	this->schedule(schedule_selector(Enemy::ScheduleFire), G_ENEMY_TIME_TO_FIRE);
 	//////////////////////////////////////////////////////////////////////////
+	
+	switch (m_moveType)
+	{
+	case G_MOVE_STRAINGH:
+		{
+			float d = 5 + visibleSize.height + m_sprite->getContentSize().height;
+			float t = abs(d / m_vy / 1000.0);
+			CCAction* move = CCMoveBy::create(t, ccp(0, -d));
+			this->runAction(move);
+		}
+		break;
 
-	this->scheduleUpdate();
+	case G_MOVE_CIRCLE_LEFT:
+		{
+			float h = visibleSize.height;
+			float w = visibleSize.width;
+			ccBezierConfig conf = {
+				ccp(-w, -h),
+				ccp(0, -h/2),
+				ccp(0, -h)
+			};
+
+			CCAction* bezier = CCBezierBy::create(abs(h/m_vy/1000.0), conf);
+			this->runAction(bezier);
+		}
+		break;
+
+	case G_MOVE_CIRCLE_RIGHT:
+		{
+			float h = visibleSize.height;
+			float w = visibleSize.width;
+			ccBezierConfig conf = {
+				ccp(w, -h),
+				ccp(0, -h/2),
+				ccp(0, -h)
+			};
+
+			CCAction* bezier = CCBezierBy::create(abs(h/m_vy/1000.0), conf);
+			this->runAction(bezier);
+		}
+		break;
+	}
+
+
+	//////////////////////////////////////////////////////////////////////////
 	return true;
 }
 
@@ -95,12 +139,6 @@ void Enemy::Fire()
 void Enemy::ScheduleFire( float dt )
 {
 	this->Fire();
-}
-
-void Enemy::update( float delta )
-{
-	this->setPositionX(m_vx * delta * 1000 + this->getPositionX());
-	this->setPositionY(m_vy * delta * 1000 + this->getPositionY());
 }
 
 void Enemy::HitBullet(int damage)
