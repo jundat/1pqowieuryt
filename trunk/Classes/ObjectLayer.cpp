@@ -88,9 +88,9 @@ bool ObjectLayer::init()
 	this->scheduleUpdate();
 
 	//pixel check collision
-	_rt  = CCRenderTexture::create(2*visibleSize.width, 2*visibleSize.height);
+	_rt  = CCRenderTexture::create(visibleSize.width, visibleSize.height);
 	_rt->retain();
-	_rt->setPosition(ccp(visibleSize.width, visibleSize.height));
+	_rt->setPosition(ccp(visibleSize.width/2, visibleSize.height/2));
 	_rt->setVisible(false);
 
     return true;

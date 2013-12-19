@@ -46,7 +46,7 @@ bool SettingScene::init()
 	CCMenuItem* soundOn = CCMenuItemImage::create("sound_on.png", NULL, NULL);
 	CCMenuItem* soundOff = CCMenuItemImage::create("sound_off.png", NULL, NULL);
 	soundToggle = CCMenuItemToggle::createWithTarget(this,  menu_selector(SettingScene::soundCallback), soundOn, soundOff, NULL);
-	
+		
 	if(AudioManager::sharedAudioManager()->IsEnableBackground())
 	{
 		soundToggle->setSelectedIndex(0);

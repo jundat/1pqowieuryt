@@ -19,6 +19,12 @@ public:
 		RELEASE(m_arrEnemies);
 		RELEASE(m_arrPlayerBullets);
 		RELEASE(m_arrEnemyBullets);
+		RELEASE(m_arrItems);
+		
+		if (_rt != NULL)
+		{
+			_rt->release();
+		}
 	};
 
     virtual bool init();
