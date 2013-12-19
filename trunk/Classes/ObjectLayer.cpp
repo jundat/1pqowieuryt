@@ -8,6 +8,8 @@
 
 USING_NS_CC;
 
+//pixel check collision
+CCRenderTexture* ObjectLayer::_rt = NULL;
 
 // on "init" you need to initialize your instance
 bool ObjectLayer::init()
@@ -85,9 +87,15 @@ bool ObjectLayer::init()
 	this->schedule(schedule_selector(ObjectLayer::ScheduleCheckCollision), CCDirector::sharedDirector()->getAnimationInterval());
 	this->scheduleUpdate();
 
+	//pixel check collision
+	_rt  = CCRenderTexture::create(2*visibleSize.width, 2*visibleSize.height);
+	_rt->retain();
+	_rt->setPosition(ccp(visibleSize.width, visibleSize.height));
+	_rt->setVisible(false);
 
     return true;
 }
+
 
 #pragma region TOUCH HANDLER
 
@@ -113,6 +121,7 @@ void ObjectLayer::ccTouchEnded( CCTouch *pTouch, CCEvent *pEvent )
 }
 
 #pragma endregion
+
 
 //schedule generate enemy
 void ObjectLayer::ScheduleGenerateEnemy( float dt )
@@ -339,9 +348,14 @@ void ObjectLayer::ScheduleCheckCollision(float dt)
 		Bullet* bullet = dynamic_cast<Bullet*>(it1);
 		if (NULL != bullet)
 		{
-			CCRect bulletRect = bullet->boundingBox();
+			//pixel check collision	
+			CCSprite* sprBullet = CCSprite::createWithTexture(bullet->getSprite()->getTexture());
+			CCSprite* sprPlayer = CCSprite::createWithTexture(m_player->getSprite()->getTexture());
+			sprBullet->setPosition(bullet->getPosition());
+			sprPlayer->setPosition(m_player->getPosition());
 
-			if (playerRect.intersectsRect(bulletRect))
+			if (CollisionDetection::GetInstance()->areTheSpritesColliding(sprBullet, sprPlayer, true, _rt))
+			//if(bullet->boundingBox().intersectsRect(playerRect))
 			{
 				this->removeChild(bullet);
 				m_arrEnemyBullets->removeObject(bullet);

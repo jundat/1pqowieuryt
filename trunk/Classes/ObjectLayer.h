@@ -68,6 +68,9 @@ private:
 	CCArray* m_arrItems;
 
 	EffectLayer* m_EffectLayer;
+
+	//pixel check collision
+	static CCRenderTexture* _rt;
 };
 
 #endif // __GAME_OBJECT_MANAGER_H__

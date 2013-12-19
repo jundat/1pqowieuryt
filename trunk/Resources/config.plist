@@ -35,7 +35,7 @@
 	  <key>G_PLAYER_TIME_TO_FIRE</key>
 		  <string>0.4</string>
 	  <key>G_ENEMY_TIME_TO_FIRE</key>
-		  <string>2.5</string>
+		  <string>0.8</string>
 
 
 	  <key>G_DEFAULT_TIME_TO_GENERATE_ENEMY</key>
@@ -43,7 +43,7 @@
 
 
 	  <key>G_MIN_ENEMY_VY</key>
-		  <string>-0.3</string>
+		  <string>-0.05</string>
 	  <key>G_MAX_ENEMY_VY</key>
 		  <string>-0.05</string>
 

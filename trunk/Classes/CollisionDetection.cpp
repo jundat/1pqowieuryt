@@ -33,10 +33,10 @@ CollisionDetection::CollisionDetection() {
     uniformColorBlue = glGetUniformLocation(glProgram->getProgram(), "u_color_blue");
  
     // A large buffer created and re-used again and again to store glReadPixels data
-    buffer = (ccColor4B *)malloc( sizeof(ccColor4B) * 10000 );
+    //buffer = (ccColor4B *)malloc( sizeof(ccColor4B) * 10000 );
 }
  
-bool CollisionDetection::areTheSpritesColliding(cocos2d::CCSprite* spr1, cocos2d::CCSprite* spr2, bool pp, CCRenderTexture* _rt) {
+bool CollisionDetection::areTheSpritesColliding(cocos2d::CCSprite* spr1, cocos2d::CCSprite* spr2, bool isCheckPerPixel, CCRenderTexture* _rt) {
     bool isColliding = false;
  
     // Rectangle of the intersecting area if the sprites are colliding according to Bounding Box collision
@@ -49,9 +49,11 @@ bool CollisionDetection::areTheSpritesColliding(cocos2d::CCSprite* spr1, cocos2d
     // Look for simple bounding box collision
     if (r1.intersectsRect(r2)) {
         // If we're not checking for pixel perfect collisions, return true
-        if (!pp) {
+        if (!isCheckPerPixel) {
             return true;
         }
+
+		//////////////////////////////////////////////////////////////////////////
  
         float tempX;
         float tempY;
@@ -92,15 +94,20 @@ bool CollisionDetection::areTheSpritesColliding(cocos2d::CCSprite* spr1, cocos2d
         spr2->setShaderProgram(glProgram);
         glProgram->use();
 
+		CCLOG("CHECK::: before begin");
+
         // Clearing the Secondary Draw buffer of all previous values
         _rt->beginWithClear( 0, 0, 0, 0);
-	
+		
+		CCLOG("CHECK::: after begin");
 		//////////////////////////////////////////////////////////////////////////
 
         // The below two values are being used in the custom shaders to set the value of RED and BLUE colors to be used
         glUniform1i(uniformColorRed, 255);
         glUniform1i(uniformColorBlue, 0);
- 
+
+		CCLOG("CHECK::: after begin 1");
+
         // The blend function is important we don't want the pixel value of the RED color being over-written by the BLUE color.
        // We want both the colors at a single pixel and hence get a PINK color (so that we have both the RED and BLUE pixels)
 		ccBlendFunc b1 = {GL_SRC_ALPHA, GL_ONE};
@@ -108,31 +115,47 @@ bool CollisionDetection::areTheSpritesColliding(cocos2d::CCSprite* spr1, cocos2d
  
         // The visit() function draws the sprite in the _rt draw buffer its a Cocos2d-x function
         spr1->visit();
- 
+
+		CCLOG("CHECK::: after begin 2");
+
         // Setting the shader program back to the default shader being used by our game        
 		spr1->setShaderProgram(CCShaderCache::sharedShaderCache()->programForKey(kCCShader_PositionTextureColor));
         // Setting the default blender function being used by the game
 		ccBlendFunc b2 = {CC_BLEND_SRC, CC_BLEND_DST};
         spr1->setBlendFunc(b2);
- 
+
+		CCLOG("CHECK::: after begin 3");
+
         // Setting new values for the same shader but for our second sprite as this time we want to have an all BLUE sprite
         glUniform1i(uniformColorRed, 0);
         glUniform1i(uniformColorBlue, 255);
 		ccBlendFunc b3 = {GL_SRC_ALPHA, GL_ONE};
         spr2->setBlendFunc(b3);
- 
+
+		CCLOG("CHECK::: after begin 4");
+
         spr2->visit();
  
         spr2->setShaderProgram(CCShaderCache::sharedShaderCache()->programForKey(kCCShader_PositionTextureColor));
 		ccBlendFunc b4 = {CC_BLEND_SRC, CC_BLEND_DST};
         spr2->setBlendFunc(b4);
- 
+
+		CCLOG("CHECK::: after begin 5");
+
+		buffer = (ccColor4B *)malloc( sizeof(ccColor4B) * w * h );
+
         // Get color values of intersection area
         glReadPixels(x, y, w, h, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
- 
+
+		//////////////////////////////////////////////////////////////////////////
+
+		CCLOG("CHECK::: after begin 6");
+
         _rt->end();
- 
-        // Read buffer
+
+		CCLOG("CHECK::: after begin 7");
+
+//		// Read buffer
         unsigned int step = 1;
         for(unsigned int i=0; i<numPixels; i+=step) {
             ccColor4B color = buffer[i];
@@ -142,6 +165,12 @@ bool CollisionDetection::areTheSpritesColliding(cocos2d::CCSprite* spr1, cocos2d
                 break;
             }
         }
+
+		delete[] buffer;
+
+		CCLOG("CHECK::: after begin 8");
+
     }
+
     return isColliding;
 }
