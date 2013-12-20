@@ -1,70 +1,77 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
     <dict>
-      <key>G_DESIGN_WIDTH</key>
-		  <string>800</string>
-	  <key>G_DESIGN_HEIGHT</key>
-		  <string>1280</string>
-	  <key>G_SCALE_FACTOR</key>
-		  <string>0.55</string>
-	  <key>G_PLAYER_HP</key>
-		  <string>100</string>
-	  <key>G_PLAYER_DAMAGE</key>
-		  <string>1</string>
-	  <key>G_MIN_PLAYER_BULLET_LEVEL</key>
-		  <string>1</string>
-	  <key>G_MAX_PLAYER_BULLET_LEVEL</key>
-		  <string>3</string>
+      <key>G_DESIGN_WIDTH</key> <!-- Chiều rộng màn hình, ko nên sửa -->
+		    <string>800</string>
+	    <key>G_DESIGN_HEIGHT</key> <!-- Chiều cao màn hình, ko nên sửa -->
+		    <string>1280</string>
+	    <key>G_SCALE_FACTOR</key> <!-- Scale màn hình cho vừa với màn hình windows, ko cần sửa lắm -->
+		    <string>0.55</string>
+	    <key>G_PLAYER_HP</key> <!-- Mặc định HP của Player -->
+		    <string>100</string>
+	    <key>G_PLAYER_DAMAGE</key> <!-- Mặc định damage của Player = damage của đạn mà player bắn ra. Khi enemy bị trúng thì Hp sẽ bị trừ đúng lượng damage này -->
+		    <string>1</string>
+	    <key>G_MIN_PLAYER_BULLET_LEVEL</key> <!-- Level đạn thấp nhất, hiện tại là 1 làn đạn -->
+		    <string>1</string>
+	    <key>G_MAX_PLAYER_BULLET_LEVEL</key> <!-- Level đạn cao nhất, hiện tại là 3 làn đạn, và chưa hỗ trợ cao hơn -->
+		    <string>3</string>
+	    <key>G_TIMEOUT_BULLET_LEVEL</key> <!-- Thời gian timeout để giảm số làn đạn, đơn vị sencond -->
+		    <string>5.0</string>
+
+	    <key>G_ITEM_BULLET_RANDOM_PERCENT</key> <!-- Tỷ lệ random ra item tăng level đạn (chưa đúng) -->
+		    <string>0.1</string>
+	    <key>G_ITEM_ARMOR_RANDOM_PERCENT</key> <!-- Tỷ lệ random ra item giáp (chưa đúng) -->
+		    <string>0.2</string>
+	    <key>G_ITEM_BOOM_RANDOM_PERCENT</key> <!-- Tỷ lệ random ra item boom (chưa đúng) -->
+		    <string>0.3</string>
 
 
-	  <key>G_MAX_PLAYER_BOOM</key>
-		  <string>3</string>
+
+	    <key>G_MAX_PLAYER_BOOM</key> <!-- Số boom lớn nhất có thể có 1 lúc -->
+		    <string>3</string>
 
 
-	  <key>G_MIN_ENEMY_HP</key>
-		  <string>1</string>
-	  <key>G_MIN_ENEMY_DAM</key>
-		  <string>1</string>
-	  <key>G_PLAYER_ARMOR_TIME</key>
-		  <string>10.0</string>
-	  <key>G_PLAYER_BULLET_VY</key>
-		  <string>1.0</string>
+	    <key>G_MIN_ENEMY_HP</key> <!-- Hp thấp nhất của Enemy, mặc định lúc mới vào game -->
+		    <string>1</string>
+	    <key>G_MIN_ENEMY_DAM</key> <!-- Damage thấp nhất của Enemy, mặc định lúc mới vào game -->
+		    <string>1</string>
+
+	    <key>G_PLAYER_ARMOR_TIME</key> <!-- Thời gian để giáp bảo vệ cho player -->
+		    <string>10.0</string>
+	    <key>G_PLAYER_BULLET_VY</key> <!-- Tốc độ đạn của Player -->
+		    <string>1.0</string>
 
 
-	  <key>G_PLAYER_TIME_TO_FIRE</key>
-		  <string>0.4</string>
-	  <key>G_ENEMY_TIME_TO_FIRE</key>
-		  <string>0.8</string>
+	    <key>G_PLAYER_TIME_TO_FIRE</key> <!-- Thời gian giữa 2 lần bắn đạn của Player -->
+		    <string>0.4</string>
+	    <key>G_ENEMY_TIME_TO_FIRE</key> <!-- Thời gian giữa 2 lần bắn đạn của Enemy -->
+		    <string>0</string>
 
 
-	  <key>G_DEFAULT_TIME_TO_GENERATE_ENEMY</key>
-		  <string>1.0</string>
+	    <key>G_DEFAULT_TIME_TO_GENERATE_ENEMY</key> <!-- Thời gian giữa 2 lần sinh ra Enemy -->
+		    <string>1.0</string>
 
 
-	  <key>G_MIN_ENEMY_VY</key>
-		  <string>-0.05</string>
-	  <key>G_MAX_ENEMY_VY</key>
-		  <string>-0.05</string>
+	    <key>G_MIN_ENEMY_VY</key> <!-- Vận tốc nhỏ nhất của Enemy (số âm, vì bay ngược chiều lại) -->
+		    <string>-0.09</string>
+	    <key>G_MAX_ENEMY_VY</key> <!-- Vận tốc lớn nhất của Enemy (số âm, vì bay ngược chiều lại) -->
+		    <string>-0.05</string>
 
 
-	  <key>G_MIN_ENEMY_BULLET_VY</key>
-		  <string>-0.4</string>
-	  <key>G_BULLET_VY_FROM_ENEMY</key>
-		  <string>1.5</string>
+	    <key>G_MIN_ENEMY_BULLET_VY</key> <!-- Vận tốc nhỏ nhất của đạn của Enemy -->
+		    <string>-0.4</string>
+	    <key>G_BULLET_VY_FROM_ENEMY</key> <!-- Tỷ lệ nhân, Vận tốc đạn của Enemy  = G_BULLET_VY_FROM_ENEMY x Vận tốc bay của Enemy -->
+		    <string>1.5</string>
 
 		
-	  <key>G_DEFAULT_DIFFICULTY</key>
-		  <string>1.0</string>
+	    <key>G_DEFAULT_DIFFICULTY</key> <!-- Độ khó mặc định -->
+		    <string>1.0</string>
 
 
-      <key>G_VELOCITY_IN_DIFFICULTY</key>
+      <key>G_VELOCITY_IN_DIFFICULTY</key> <!-- Vận tốc Enemy tại thời điểm sinh ra = G_MIN_ENEMY_VY - difficulty / G_VELOCITY_IN_DIFFICULTY; (dấu - vì Enemy bay ngược lại) -->
         <string>2000</string>
-      <key>G_HP_IN_DIFFICULTY</key>
+      <key>G_HP_IN_DIFFICULTY</key> <!-- Hp Enemy tại thời điểm sinh ra = G_MIN_ENEMY_HP + difficulty / G_HP_IN_DIFFICULTY; -->
         <string>200</string>
-      <key>G_DAMAGE_IN_DIFFICULTY</key>
-        <string>200</string>
-      
-      
+      <key>G_DAMAGE_IN_DIFFICULTY</key> <!-- Damage Enemy tại thời điểm sinh ra = G_MIN_ENEMY_DAM + difficulty/ G_DAMAGE_IN_DIFFICULTY; -->
+        <string>200</string>      
     </dict>
 </plist>

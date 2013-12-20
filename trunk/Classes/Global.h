@@ -21,6 +21,8 @@ const static int G_MOVE_STRAINGH = 0;
 const static int G_MOVE_CIRCLE_LEFT = 1;
 const static int G_MOVE_CIRCLE_RIGHT = 2;
 
+
+
 //////////////////////////////////////////////////////////////////////////
 
 //Variant
@@ -32,6 +34,13 @@ const static int G_MOVE_CIRCLE_RIGHT = 2;
  extern int G_PLAYER_DAMAGE;
  extern int G_MIN_PLAYER_BULLET_LEVEL;
  extern int G_MAX_PLAYER_BULLET_LEVEL;
+
+ extern float G_TIMEOUT_BULLET_LEVEL;
+
+ extern float G_ITEM_BULLET_RANDOM_PERCENT;
+ extern float G_ITEM_ARMOR_RANDOM_PERCENT;
+ extern float G_ITEM_BOOM_RANDOM_PERCENT;
+
 
  extern int G_MAX_PLAYER_BOOM;
 

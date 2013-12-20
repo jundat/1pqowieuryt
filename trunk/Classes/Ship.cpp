@@ -38,7 +38,10 @@ bool Ship::init()
 	m_EffectLayer = EffectLayer::create();
 	this->addChild(m_EffectLayer, 100);
 
-	this->schedule(schedule_selector(Ship::ScheduleFire), G_PLAYER_TIME_TO_FIRE);
+	if (G_PLAYER_TIME_TO_FIRE > 0)
+	{
+		this->schedule(schedule_selector(Ship::ScheduleFire), G_PLAYER_TIME_TO_FIRE);
+	}
 	//////////////////////////////////////////////////////////////////////////
 	
 	this->scheduleUpdate();
@@ -180,6 +183,12 @@ void Ship::UpgradeBullet()
 		CCFadeOut* fade = CCFadeOut::create(0.7f);
 		CCSpawn* spaw = CCSpawn::create(move, fade, NULL);
 		sprLevelUp->runAction(spaw);
+
+		//timeout
+		CCDelayTime* delay = CCDelayTime::create(G_TIMEOUT_BULLET_LEVEL);
+		CCCallFunc* callf = CCCallFunc::create(this, callfunc_selector(Ship::DowngradeBullet));
+		CCSequence* seq = CCSequence::create(delay, callf, NULL);
+		this->runAction(seq);
 	}
 	else
 	{
@@ -189,7 +198,25 @@ void Ship::UpgradeBullet()
 
 void Ship::DowngradeBullet()
 {
-	m_bulletLevel--;
-	m_bulletLevel = (m_bulletLevel >= G_MIN_PLAYER_BULLET_LEVEL) ? m_bulletLevel : G_MIN_PLAYER_BULLET_LEVEL;
+	if (m_bulletLevel >= G_MIN_PLAYER_BULLET_LEVEL)
+	{
+		this->Fire();
+		this->Fire();
+		this->Fire();
+
+		m_bulletLevel--;
+
+		this->Fire();
+		this->Fire();
+		this->Fire();
+		
+		if (m_bulletLevel > G_MIN_PLAYER_BULLET_LEVEL)
+		{
+			CCDelayTime* delay = CCDelayTime::create(G_TIMEOUT_BULLET_LEVEL);
+			CCCallFunc* callf = CCCallFunc::create(this, callfunc_selector(Ship::DowngradeBullet));
+			CCSequence* seq = CCSequence::create(delay, callf, NULL);
+			this->runAction(seq);
+		}
+	}
 }
 

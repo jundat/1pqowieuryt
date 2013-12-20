@@ -1,0 +1,5 @@
+- Difficulty Split
+- Ship's Bullet level Timeout
+- Enemy's time to fire = -1
+- Ship's time to fire = -1
+- 

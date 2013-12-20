@@ -96,9 +96,6 @@ bool ObjectLayer::init()
     return true;
 }
 
-
-#pragma region TOUCH HANDLER
-
 bool ObjectLayer::ccTouchBegan( CCTouch *pTouch, CCEvent *pEvent )
 {
 	m_lastPoint = pTouch->getLocation();
@@ -119,9 +116,6 @@ void ObjectLayer::ccTouchMoved( CCTouch *pTouch, CCEvent *pEvent )
 void ObjectLayer::ccTouchEnded( CCTouch *pTouch, CCEvent *pEvent )
 {
 }
-
-#pragma endregion
-
 
 //schedule generate enemy
 void ObjectLayer::ScheduleGenerateEnemy( float dt )
@@ -262,25 +256,22 @@ void ObjectLayer::update( float delta )
 
 				//item
 				Item* item;
-				int rd = (int)(CCRANDOM_0_1() * 20) + 1;
+				float rd = CCRANDOM_0_1();
 				
-				if (rd <= 1)
-				{
-					item = Item::create(G_ITEM_ARMOR, -0.3f, enemy->getPosition());
-					this->AddItem(item);
-				} 
-				else if (rd <= 2)
+				if (rd <= G_ITEM_BULLET_RANDOM_PERCENT)
 				{
 					item = Item::create(G_ITEM_UPGRADE_BULLET, -0.3f, enemy->getPosition());
 					this->AddItem(item);
 				} 
-				else if (rd <= 3)
+				else if (rd <= G_ITEM_ARMOR_RANDOM_PERCENT)
+				{
+					item = Item::create(G_ITEM_ARMOR, -0.3f, enemy->getPosition());
+					this->AddItem(item);
+				} 
+				else if (rd <= G_ITEM_BOOM_RANDOM_PERCENT)
 				{
 					item = Item::create(G_ITEM_BOOM, -0.3f, enemy->getPosition());
 					this->AddItem(item);
-				} 
-				else
-				{
 				}
 				
 				//score

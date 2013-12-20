@@ -25,7 +25,7 @@ void Enemy::DifficultySplit(float difficulty, float& vy, int& hp, int& dm)
 	//0.05 -> 0.5
 	//delta = 0.45 in 480s
 	//1000 / 0.45 = 2222 (~2000)
-	vy = G_MIN_ENEMY_VY - difficulty/2000; //min -> min + 0.45
+	vy = G_MIN_ENEMY_VY - difficulty / G_VELOCITY_IN_DIFFICULTY; //min -> min + 0.45
 
 // 	float delta = (CCRANDOM_0_1() * 0.1f) - 0.05f;
 // 	vy += delta;
@@ -33,12 +33,12 @@ void Enemy::DifficultySplit(float difficulty, float& vy, int& hp, int& dm)
 	//min = 1
 	//max = 5
 	//1000 / 4 = 250 (~200)
-	hp = G_MIN_ENEMY_HP + difficulty/200;
+	hp = G_MIN_ENEMY_HP + difficulty / G_HP_IN_DIFFICULTY;
 
 	//min = 1
 	//max = 5
 	//1000 / 4 = 250 (~200)
-	dm = G_MIN_ENEMY_DAM + difficulty/200;
+	dm = G_MIN_ENEMY_DAM + difficulty / G_DAMAGE_IN_DIFFICULTY;
 
 	CCLOG("Vy: %f\tHp: %d\tDam: %d", vy, hp, dm);
 }
@@ -76,7 +76,10 @@ bool Enemy::init()
 	m_EffectLayer = EffectLayer::create();
 	this->addChild(m_EffectLayer, 100);
 
-	this->schedule(schedule_selector(Enemy::ScheduleFire), G_ENEMY_TIME_TO_FIRE);
+	if (G_ENEMY_TIME_TO_FIRE > 0)
+	{
+		this->schedule(schedule_selector(Enemy::ScheduleFire), G_ENEMY_TIME_TO_FIRE);
+	}
 	//////////////////////////////////////////////////////////////////////////
 	
 	switch (m_moveType)
