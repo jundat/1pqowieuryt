@@ -123,7 +123,7 @@ void ObjectLayer::ScheduleGenerateEnemy( float dt )
 	CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
 	CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
 
-	m_difficulty = m_score + m_playedTime; //CCLOG("Difficulty: %f \tTime: %f", m_difficulty, m_playedTime);
+	m_difficulty = m_score;// + m_playedTime; //CCLOG("Difficulty: %f \tTime: %f", m_difficulty, m_playedTime);
 	int movetype = G_MOVE_STRAINGH;
 
 	float h = visibleSize.height;

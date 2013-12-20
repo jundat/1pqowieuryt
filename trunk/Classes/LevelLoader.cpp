@@ -1,0 +1,80 @@
+#include "LevelLoader.h"
+#include "cocos2d.h"
+
+USING_NS_CC;
+
+CCString* LevelLoader::s_levelFile = CCStringMake("level.csv");
+LevelLoader* LevelLoader::s_instance = NULL;
+
+LevelLoader::LevelLoader(void)
+{
+	m_dict = CCDictionary::create();
+
+	unsigned long bufferSize = 0;
+	std::string fileData  = std::string(CCString::createWithContentsOfFile(s_levelFile->getCString())->getCString());
+	std::string smallStr;
+
+	fileData = fileData.substr(0, fileData.find_last_not_of('\n'));
+
+	int beginIndex = 1;
+	int score, hp;
+	float velocity;
+	
+	bool isBroken = false;
+	while(isBroken == false)
+	{
+		beginIndex = fileData.find_first_of('\n');
+		
+		if(beginIndex <= 0) {
+			isBroken = true;
+			beginIndex = fileData.length() - 1;
+		}
+
+		smallStr = fileData.substr(0, beginIndex + 1); //pos, len
+
+		if (smallStr.find_first_of('\n') <= 1)
+		{
+			break;
+		}
+
+		fileData = fileData.substr(beginIndex + 1); //pos, end
+
+		sscanf(smallStr.c_str(), "%d,%d,%f\n", &score, &hp, &velocity);
+		CCLOG("%d|%d|%f", score, hp, velocity);
+
+		LevelData* ld = LevelData::create(score, hp, velocity);
+		m_dict->setObject(ld, score);
+	}
+}
+
+
+LevelLoader* LevelLoader::shareConfigLoader()
+{
+	if (s_instance == NULL)
+	{
+		s_instance = new LevelLoader();
+	}
+	
+	return s_instance;
+}
+
+LevelData* LevelLoader::GetValueLowerThan( int keyScore )
+{
+	int validKey;
+	CCDictElement* pElement = NULL;
+	CCDICT_FOREACH(m_dict, pElement)
+	{
+		int newKey = pElement->getIntKey();
+		if (keyScore < newKey)
+		{
+			keyScore = validKey;
+			return (LevelData*)m_dict->objectForKey(keyScore);
+		}
+		else
+		{
+			validKey = newKey;
+		}
+	}
+
+	return NULL;
+}

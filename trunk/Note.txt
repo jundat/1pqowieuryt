@@ -3,3 +3,10 @@
 - Enemy's time to fire = -1
 - Ship's time to fire = -1
 - 
+
+
+------------------
+
+- Game level file
+- File difficulty
+- 

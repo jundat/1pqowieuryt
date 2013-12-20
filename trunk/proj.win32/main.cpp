@@ -4,6 +4,7 @@
 
 #include "Global.h"
 #include "ConfigLoader.h"
+#include "LevelLoader.h"
 #include "AudioManager.h"
 
 USING_NS_CC;
@@ -18,11 +19,8 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
     UNREFERENCED_PARAMETER(lpCmdLine);
 
 	ConfigLoader::shareConfigLoader();
+	LevelLoader::shareConfigLoader();
 
-// 	AudioManager::sharedAudioManager()->SetEnableBackground(false);
-// 	AudioManager::sharedAudioManager()->SetEnableEffect(false);
-
-    // create the application instance
     AppDelegate app;
     CCEGLView* eglView = CCEGLView::sharedOpenGLView();
     eglView->setViewName("Fly And Fire");
