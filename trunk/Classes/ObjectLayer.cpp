@@ -275,7 +275,7 @@ void ObjectLayer::update( float delta )
 				}
 				
 				//score
-				m_score += enemy->getDamage();
+				m_score += 1;// enemy->getHp();
 				CCString* sscore = CCString::createWithFormat("%d", m_score);
 				m_labelScore->setString(sscore->getCString());
 			}

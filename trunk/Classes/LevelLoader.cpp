@@ -9,6 +9,7 @@ LevelLoader* LevelLoader::s_instance = NULL;
 LevelLoader::LevelLoader(void)
 {
 	m_dict = CCDictionary::create();
+	m_dict->retain();
 
 	unsigned long bufferSize = 0;
 	std::string fileData  = std::string(CCString::createWithContentsOfFile(s_levelFile->getCString())->getCString());
@@ -16,15 +17,18 @@ LevelLoader::LevelLoader(void)
 
 	fileData = fileData.substr(0, fileData.find_last_not_of('\n'));
 
-	int beginIndex = 1;
+	int beginIndex  = fileData.find_first_of('\n'); //REMOVE 1st line
+	smallStr = fileData.substr(0, beginIndex + 1); //pos, len
+	fileData = fileData.substr(beginIndex + 1); //pos, end
+
 	int score, hp;
 	float velocity;
-	
+
 	bool isBroken = false;
 	while(isBroken == false)
 	{
 		beginIndex = fileData.find_first_of('\n');
-		
+
 		if(beginIndex <= 0) {
 			isBroken = true;
 			beginIndex = fileData.length() - 1;
@@ -60,21 +64,5 @@ LevelLoader* LevelLoader::shareConfigLoader()
 
 LevelData* LevelLoader::GetValueLowerThan( int keyScore )
 {
-	int validKey;
-	CCDictElement* pElement = NULL;
-	CCDICT_FOREACH(m_dict, pElement)
-	{
-		int newKey = pElement->getIntKey();
-		if (keyScore < newKey)
-		{
-			keyScore = validKey;
-			return (LevelData*)m_dict->objectForKey(keyScore);
-		}
-		else
-		{
-			validKey = newKey;
-		}
-	}
-
-	return NULL;
+	return (LevelData*)m_dict->objectForKey(keyScore);
 }

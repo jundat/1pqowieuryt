@@ -41,9 +41,19 @@ void Enemy::DifficultySplit(float difficulty, float& vy, int& hp, int& dm)
 // 	//1000 / 4 = 250 (~200)
 // 	dm = G_MIN_ENEMY_DAM + difficulty / G_DAMAGE_IN_DIFFICULTY;
 
-	LevelData* ld = LevelLoader::shareConfigLoader()->GetValueLowerThan(difficulty);
-	hp = ld->m_hp;
-	vy = ld->m_velocity;
+	static int HP = G_MIN_ENEMY_HP;
+	static float VELOCITY = G_MIN_ENEMY_VY;
+
+	LevelData* ld = LevelLoader::shareConfigLoader()->GetValueLowerThan((int)difficulty);
+
+	if (ld != NULL)
+	{
+		HP = ld->m_hp;
+		VELOCITY = ld->m_velocity;
+	}
+
+	hp = HP;
+	vy = VELOCITY;
 	
 	dm = 0;
 
