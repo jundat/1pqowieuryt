@@ -1,10 +1,11 @@
-#include "ObjectLayer.h"
+﻿#include "ObjectLayer.h"
 #include "Global.h"
 #include "AudioManager.h"
 #include "Enemy.h"
 #include "EffectLayer.h"
 #include "MainGameScene.h"
 #include "CollisionDetection.h"
+#include "DataManager.h"
 
 USING_NS_CC;
 
@@ -47,8 +48,19 @@ bool ObjectLayer::init()
 	m_difficulty = 0;
 	m_numberBoom = 0;
 
-	m_labelScore = CCLabelBMFont::create("0", "Mia_64.fnt");
-	m_labelScore->setScale(48.0f/64);
+
+	time_t timer;
+	timer = time(NULL);
+	tm* _tm = localtime(&timer);
+
+	//CCLOG("Current time: %dh %dp %ds at %d/%d/%d", _tm->tm_hour, _tm->tm_min, _tm->tm_sec, _tm->tm_mday, _tm->tm_mon + 1, _tm->tm_year + 1900);
+
+	CCString* s = CCString::createWithFormat("Current time: %dh %dp %ds at %d/%d/%d", _tm->tm_hour, _tm->tm_min, _tm->tm_sec, _tm->tm_mday, _tm->tm_mon + 1, _tm->tm_year + 1900);
+
+	//CCString* s = CCString::createWithFormat("0/%d", DataManager::GetInstance()->GetCurrenHighScore());
+	m_labelScore = CCLabelBMFont::create(s->getCString(), "Mia_64.fnt");
+	//m_labelScore->setScale(48.0f/64);
+	m_labelScore->setScale(30.0f/64);
 	m_labelScore->setPosition(ccp(origin.x + visibleSize.width/2,
 		origin.y + visibleSize.height - m_labelScore->getContentSize().height));
 	this->addChild(m_labelScore, 10);
@@ -57,12 +69,13 @@ bool ObjectLayer::init()
 	m_player->setPosition(ccp(origin.x + visibleSize.width/2, origin.y + visibleSize.height * 0.1));
 	this->addChild(m_player);
 
-	CCString* s = CCString::createWithFormat("HP: %d", m_player->getHp());
+	s = CCString::createWithFormat("HP: %d", m_player->getHp());
 	m_labelHp = CCLabelBMFont::create(s->getCString(), "Mia_64.fnt");
 	m_labelHp->setScale(48.0f/64);
 	m_labelHp->setPosition(ccp(origin.x + m_labelHp->getContentSize().width/2,
 		origin.y + visibleSize.height - m_labelHp->getContentSize().height));
 	this->addChild(m_labelHp, 10);
+
 
 	m_itemBoom = CCMenuItemImage::create("icon_boom.png", "icon_boom.png", this, menu_selector(ObjectLayer::ActiveBoom));
 	m_itemBoom->setPosition(ccp(origin.x + m_itemBoom->getContentSize().width/2 - visibleSize.width/2, 
@@ -76,6 +89,7 @@ bool ObjectLayer::init()
 		origin.y + m_itemBoom->getContentSize().height/4 + m_labelBoom->getContentSize().height/4));
 	m_labelBoom->setVisible(false);
 	this->addChild(m_labelBoom, 10);
+
 
 
 	m_timeToGenerateEnemy = G_DEFAULT_TIME_TO_GENERATE_ENEMY;
@@ -275,9 +289,12 @@ void ObjectLayer::update( float delta )
 				}
 				
 				//score
-				m_score += 1;// enemy->getHp();
-				CCString* sscore = CCString::createWithFormat("%d", m_score);
+				m_score += enemy->getOriginHp(); //Hp ở trên set = 0 rồi
+				m_score = (m_score < 0) ? 0 : m_score;
+				CCString* sscore = CCString::createWithFormat("%d/%d", m_score, DataManager::GetInstance()->GetCurrenHighScore());
 				m_labelScore->setString(sscore->getCString());
+
+				DataManager::GetInstance()->SetCurrentHighScore(m_score);
 			}
 
 			//out of screen
@@ -355,7 +372,6 @@ void ObjectLayer::ScheduleCheckCollision(float dt)
 				AudioManager::sharedAudioManager()->PlayEffect("explosion.wav");
 				m_player->HitBullet(bullet->getDamage());
 
-				//
 				CCString* s = CCString::createWithFormat("HP: %d", (m_player->getHp() > 0) ? m_player->getHp() : 0);
 				m_labelHp->setString(s->getCString());
 			}
@@ -379,6 +395,9 @@ void ObjectLayer::ScheduleCheckCollision(float dt)
 				m_player->HitBullet(1000);
 				enemy->HitBullet(1000);
 				m_arrEnemies->removeObject(enemy);
+				
+				CCString* s = CCString::createWithFormat("HP: %d", (m_player->getHp() > 0) ? m_player->getHp() : 0);
+				m_labelHp->setString(s->getCString());
 			}
 		}
 	}

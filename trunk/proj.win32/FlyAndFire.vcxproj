@@ -134,6 +134,7 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
     <ClCompile Include="..\Classes\BackgroundLayer.cpp" />
     <ClCompile Include="..\Classes\CollisionDetection.cpp" />
     <ClCompile Include="..\Classes\ConfigLoader.cpp" />
+    <ClCompile Include="..\Classes\DataManager.cpp" />
     <ClCompile Include="..\Classes\EffectLayer.cpp" />
     <ClCompile Include="..\Classes\Enemy.cpp" />
     <ClCompile Include="..\Classes\GameObject.cpp" />
@@ -156,6 +157,7 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
     <ClInclude Include="..\Classes\BackgroundLayer.h" />
     <ClInclude Include="..\Classes\CollisionDetection.h" />
     <ClInclude Include="..\Classes\ConfigLoader.h" />
+    <ClInclude Include="..\Classes\DataManager.h" />
     <ClInclude Include="..\Classes\EffectLayer.h" />
     <ClInclude Include="..\Classes\Enemy.h" />
     <ClInclude Include="..\Classes\GameObject.h" />

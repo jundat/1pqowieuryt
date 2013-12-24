@@ -6,54 +6,21 @@
 
 USING_NS_CC;
 
+int Enemy::S_HP = G_MIN_ENEMY_HP;
+float Enemy::S_VELOCITY = G_MIN_ENEMY_VY;
 
 void Enemy::DifficultySplit(float difficulty, float& vy, int& hp, int& dm)
 {
-// 	//vy = A * diff
-// 	//hp = B * diff
-// 	//dm = C * diff
-// 	//
-// 	//random A, B, C
-// // 	float A = CCRANDOM_0_1();
-// // 	float B = CCRANDOM_0_1();
-// // 	float C = CCRANDOM_0_1();
-// // 
-// // 	vy = A * (difficulty/(A+B+C));
-// // 	hp = B * (difficulty/(A+B+C));
-// // 	dm = C * (difficulty/(A+B+C));
-// 
-// 	
-// 	//0.05 -> 0.5
-// 	//delta = 0.45 in 480s
-// 	//1000 / 0.45 = 2222 (~2000)
-// 	vy = G_MIN_ENEMY_VY - difficulty / G_VELOCITY_IN_DIFFICULTY; //min -> min + 0.45
-// 
-// // 	float delta = (CCRANDOM_0_1() * 0.1f) - 0.05f;
-// // 	vy += delta;
-// 
-// 	//min = 1
-// 	//max = 5
-// 	//1000 / 4 = 250 (~200)
-// 	hp = G_MIN_ENEMY_HP + difficulty / G_HP_IN_DIFFICULTY;
-// 
-// 	//min = 1
-// 	//max = 5
-// 	//1000 / 4 = 250 (~200)
-// 	dm = G_MIN_ENEMY_DAM + difficulty / G_DAMAGE_IN_DIFFICULTY;
-
-	static int HP = G_MIN_ENEMY_HP;
-	static float VELOCITY = G_MIN_ENEMY_VY;
-
 	LevelData* ld = LevelLoader::shareConfigLoader()->GetValueLowerThan((int)difficulty);
 
 	if (ld != NULL)
 	{
-		HP = ld->m_hp;
-		VELOCITY = ld->m_velocity;
+		S_HP = ld->m_hp;
+		S_VELOCITY = ld->m_velocity;
 	}
 
-	hp = HP;
-	vy = VELOCITY;
+	hp = S_HP;
+	vy = S_VELOCITY;
 	
 	dm = 0;
 
@@ -79,6 +46,7 @@ bool Enemy::init()
 	//////////////////////////////////////////////////////////////////////////
 
 	DifficultySplit(m_difficulty, m_vy, m_hp, m_damage);
+	m_originHp = m_hp;
 
 	this->setVx(0);
 	this->setEnemyType(G_ENEMY_TYPE);

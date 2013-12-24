@@ -12,16 +12,21 @@ LOCAL_SRC_FILES := hellocpp/main.cpp \
      ../../Classes/BackgroundLayer.cpp  \
      ../../Classes/Bullet.cpp  \
      ../../Classes/CCParallaxNodeExtras.cpp  \
+	 ../../Classes/CollisionDetection.cpp  \
+	 ../../Classes/ConfigLoader.cpp  \
+	 ../../Classes/DataManager.cpp  \
      ../../Classes/EffectLayer.cpp  \
      ../../Classes/Enemy.cpp  \
      ../../Classes/GameObject.cpp  \
-     ../../Classes/MainGameScene.cpp  \
-     ../../Classes/ObjectLayer.cpp  \
-     ../../Classes/Ship.cpp  \
-     ../../Classes/MenuScene.cpp  \
+	 ../../Classes/Global.cpp  \
      ../../Classes/Item.cpp  \
+	 ../../Classes/LevelLoader.cpp  \
      ../../Classes/LoseDialog.cpp  \
+     ../../Classes/MainGameScene.cpp  \
+     ../../Classes/MenuScene.cpp  \
+     ../../Classes/ObjectLayer.cpp  \
      ../../Classes/SettingScene.cpp  \
+     ../../Classes/Ship.cpp  \
 
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../Classes

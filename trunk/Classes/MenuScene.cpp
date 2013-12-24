@@ -2,6 +2,7 @@
 #include "MainGameScene.h"
 #include "SettingScene.h"
 #include "AudioManager.h"
+#include "DataManager.h"
 
 USING_NS_CC;
 
@@ -31,7 +32,7 @@ bool MenuScene::init()
 	this->addChild(bg, 0);
 
 	CCSprite* menuTop = CCSprite::create("menu_top.png");
-	menuTop->setPosition(ccp(visibleSize.width/2 + origin.x, - 280 + visibleSize.height + origin.y));
+	menuTop->setPosition(ccp(visibleSize.width/2 + origin.x, -50 - menuTop->getContentSize().height/2 + visibleSize.height + origin.y));
 	this->addChild(menuTop, 0);
 
     CCMenuItemImage *playItem = CCMenuItemImage::create(
@@ -41,7 +42,7 @@ bool MenuScene::init()
                                         menu_selector(MenuScene::playCallback));
     
 	playItem->setPosition(ccp(origin.x + visibleSize.width/2,
-                                origin.y + visibleSize.height/2));
+                                origin.y + visibleSize.height/2 - 100));
 
 	CCMenuItemImage *settingItem = CCMenuItemImage::create(
 		"setting_button.png",
@@ -66,6 +67,9 @@ bool MenuScene::init()
     CCMenu* pMenu = CCMenu::create(playItem, settingItem, exitItem, NULL);
     pMenu->setPosition(CCPointZero);
     this->addChild(pMenu, 1);
+
+
+
 
 	AudioManager::sharedAudioManager()->PlayBackground("background.ogg");
 

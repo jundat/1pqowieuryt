@@ -1,13 +1,13 @@
 <plist version="1.0">
     <dict>
-      <key>G_DESIGN_WIDTH</key> <!-- Chiều rộng màn hình, ko nên sửa -->
+      	<key>G_DESIGN_WIDTH</key> <!-- Chiều rộng màn hình, ko nên sửa -->
 		    <string>800</string>
 	    <key>G_DESIGN_HEIGHT</key> <!-- Chiều cao màn hình, ko nên sửa -->
 		    <string>1280</string>
 	    <key>G_SCALE_FACTOR</key> <!-- Scale màn hình cho vừa với màn hình windows, ko cần sửa lắm -->
 		    <string>0.55</string>
 	    <key>G_PLAYER_HP</key> <!-- Mặc định HP của Player -->
-		    <string>100</string>
+		    <string>1</string>
 	    <key>G_PLAYER_DAMAGE</key> <!-- Mặc định damage của Player = damage của đạn mà player bắn ra. Khi enemy bị trúng thì Hp sẽ bị trừ đúng lượng damage này -->
 		    <string>1</string>
 	    <key>G_MIN_PLAYER_BULLET_LEVEL</key> <!-- Level đạn thấp nhất, hiện tại là 1 làn đạn -->
@@ -25,6 +25,11 @@
 		    <string>0.3</string>
 
 
+	    <key>G_PLAYER_LIFE</key> <!-- Số mạng khởi tạo ban đầu của người chơi -->
+		    <string>5</string>
+
+	    <key>G_PLAYER_TIME_TO_REVIVE</key> <!-- Thời gian để revive 1 mạng (đơn vị giây)-->
+		    <string>10</string>
 
 	    <key>G_MAX_PLAYER_BOOM</key> <!-- Số boom lớn nhất có thể có 1 lúc -->
 		    <string>3</string>
@@ -67,11 +72,11 @@
 		    <string>1.0</string>
 
 
-      <key>G_VELOCITY_IN_DIFFICULTY</key> <!-- Vận tốc Enemy tại thời điểm sinh ra = G_MIN_ENEMY_VY - difficulty / G_VELOCITY_IN_DIFFICULTY; (dấu - vì Enemy bay ngược lại) -->
-        <string>2000</string>
-      <key>G_HP_IN_DIFFICULTY</key> <!-- Hp Enemy tại thời điểm sinh ra = G_MIN_ENEMY_HP + difficulty / G_HP_IN_DIFFICULTY; -->
-        <string>200</string>
-      <key>G_DAMAGE_IN_DIFFICULTY</key> <!-- Damage Enemy tại thời điểm sinh ra = G_MIN_ENEMY_DAM + difficulty/ G_DAMAGE_IN_DIFFICULTY; -->
-        <string>200</string>      
+      	<key>G_VELOCITY_IN_DIFFICULTY</key> <!-- Vận tốc Enemy tại thời điểm sinh ra = G_MIN_ENEMY_VY - difficulty / G_VELOCITY_IN_DIFFICULTY; (dấu - vì Enemy bay ngược lại) -->
+        	<string>2000</string>
+      	<key>G_HP_IN_DIFFICULTY</key> <!-- Hp Enemy tại thời điểm sinh ra = G_MIN_ENEMY_HP + difficulty / G_HP_IN_DIFFICULTY; -->
+        	<string>200</string>
+      	<key>G_DAMAGE_IN_DIFFICULTY</key> <!-- Damage Enemy tại thời điểm sinh ra = G_MIN_ENEMY_DAM + difficulty/ G_DAMAGE_IN_DIFFICULTY; -->
+        	<string>200</string>      
     </dict>
 </plist>

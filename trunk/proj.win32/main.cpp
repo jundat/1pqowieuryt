@@ -6,6 +6,7 @@
 #include "ConfigLoader.h"
 #include "LevelLoader.h"
 #include "AudioManager.h"
+#include <time.h>
 
 USING_NS_CC;
 

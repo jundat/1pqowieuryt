@@ -41,6 +41,8 @@ const static int G_MOVE_CIRCLE_RIGHT = 2;
  extern float G_ITEM_ARMOR_RANDOM_PERCENT;
  extern float G_ITEM_BOOM_RANDOM_PERCENT;
 
+ extern float G_PLAYER_TIME_TO_REVIVE;
+ extern int G_PLAYER_LIFE; 
 
  extern int G_MAX_PLAYER_BOOM;
 

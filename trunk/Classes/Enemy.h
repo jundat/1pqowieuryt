@@ -25,7 +25,11 @@ public:
 	CC_SYNTHESIZE(float, m_vy, Vy); //1
 	CC_SYNTHESIZE(int, m_moveType, MoveType); //1
 	CC_SYNTHESIZE(int, m_hp, Hp); //2
+	CC_SYNTHESIZE(int, m_originHp, OriginHp); //2
 	CC_SYNTHESIZE(int, m_damage, Damage); //3 ~ damage for bullet
+
+	static int S_HP;
+	static float S_VELOCITY;
 
 	EffectLayer* m_EffectLayer;	
 

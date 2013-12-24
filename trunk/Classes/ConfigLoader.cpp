@@ -59,6 +59,9 @@ ConfigLoader::ConfigLoader(void)
 	G_ITEM_BULLET_RANDOM_PERCENT = GetValue("G_ITEM_BULLET_RANDOM_PERCENT")->floatValue();
 	G_ITEM_ARMOR_RANDOM_PERCENT = GetValue("G_ITEM_ARMOR_RANDOM_PERCENT")->floatValue();
 	G_ITEM_BOOM_RANDOM_PERCENT = GetValue("G_ITEM_BOOM_RANDOM_PERCENT")->floatValue();
+
+	G_PLAYER_TIME_TO_REVIVE = GetValue("G_PLAYER_TIME_TO_REVIVE")->floatValue();
+	G_PLAYER_LIFE = GetValue("G_PLAYER_LIFE")->floatValue();
 }
 
 
