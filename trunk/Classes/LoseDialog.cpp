@@ -18,59 +18,72 @@ bool LoseDialog::init()
 
 	//////////////////////////////////////////////////////////////////////////
 
+	CCPoint pcenter = ccp(400, G_DESIGN_HEIGHT-783);
+	CCPoint pcancel = ccp(259, G_DESIGN_HEIGHT-783);
+	CCPoint pok = ccp(541, G_DESIGN_HEIGHT-783);
+	float textScale = 0.6f;
+
 	CCSprite* bg = CCSprite::create("lose_dialog.png");
 	bg->setPosition(ccp(origin.x + visibleSize.width/2, origin.y + visibleSize.height/2));
 	this->addChild(bg, -2);
 	
-	CCMenuItemImage* cancelButton = CCMenuItemImage::create(
-		"button.png",
-		"buttonPress.png",
-		this,
-		menu_selector(LoseDialog::CancelCallBack));
-
-	cancelButton->setScale(0.6f);
-	cancelButton->setPosition(ccp(origin.x + 254, origin.y + visibleSize.height - 965 + 20));
-
-	CCMenu* menu;
-
 	if (m_canBeRevived)
 	{
+		CCMenuItemImage* cancelButton = CCMenuItemImage::create(
+			"button.png",
+			"buttonPress.png",
+			this,
+			menu_selector(LoseDialog::CancelCallBack));
+
+		cancelButton->setScale(0.6f);
+		cancelButton->setPosition(pcancel);
+
 		CCMenuItemImage* okButton = CCMenuItemImage::create(
 			"button.png",
 			"buttonPress.png",
 			this,
 			menu_selector(LoseDialog::OkCallBack));
 		okButton->setScale(0.6f);
-		okButton->setPosition(ccp(origin.x + 546, origin.y + visibleSize.height - 965 + 20));
+		okButton->setPosition(pok);
 
-		menu = CCMenu::create(cancelButton, okButton, NULL);
+		CCMenu* menu = CCMenu::create(cancelButton, okButton, NULL);
 		menu->setPosition(origin);
 		this->addChild(menu);
 		
-		CCLabelTTF* cancel = CCLabelTTF::create("Cancel", "Marker Felt.ttf", 32);
-		cancel->setFontFillColor(ccc3(0,0,0));
-		cancel->setColor(ccc3(0,0,0));
-		cancel->setPosition(ccp(origin.x + 254, origin.y + visibleSize.height - 965 + 20));
+		CCLabelBMFont* cancel = CCLabelBMFont::create("Again", "Mia_64.fnt");
+		cancel->setScale(textScale);
+		cancel->setPosition(pcancel);
 		this->addChild(cancel);
 
-		CCLabelTTF* ok = CCLabelTTF::create("Ok", "Marker Felt.ttf", 32);
-		ok->setFontFillColor(ccc3(0,0,0));
-		ok->setColor(ccc3(0,0,0));
-		ok->setPosition(ccp(origin.x + 546, origin.y + visibleSize.height - 965 + 20));
+		CCLabelBMFont* ok = CCLabelBMFont::create("Revive", "Mia_64.fnt");
+		ok->setScale(textScale);
+		ok->setPosition(pok);
 		this->addChild(ok);
 	} 
 	else
 	{
-		menu = CCMenu::create(cancelButton, NULL);
+		CCMenuItemImage* cancelButton = CCMenuItemImage::create(
+			"button.png",
+			"buttonPress.png",
+			this,
+			menu_selector(LoseDialog::CancelCallBack));
+
+		cancelButton->setScale(0.6f);
+		cancelButton->setPosition(pcenter);
+
+		CCMenu* menu = CCMenu::create(cancelButton, NULL);
 		menu->setPosition(origin);
 		this->addChild(menu);
 
-		CCLabelTTF* cancel = CCLabelTTF::create("Cancel", "Marker Felt.ttf", 32);
-		cancel->setFontFillColor(ccc3(0,0,0));
-		cancel->setColor(ccc3(0,0,0));
-		cancel->setPosition(ccp(origin.x + 254, origin.y + visibleSize.height - 965 + 20));
+		CCLabelBMFont* cancel = CCLabelBMFont::create("Again", "Mia_64.fnt");
+		cancel->setScale(textScale);
+		cancel->setPosition(pcenter);
 		this->addChild(cancel);
 	}
+	
+	CCLabelBMFont* msg = CCLabelBMFont::create("You lose !", "Mia_64.fnt");
+	msg->setPosition(ccp(visibleSize.width/2, visibleSize.height/2 + 100));
+	this->addChild(msg);
 
     return true;
 }

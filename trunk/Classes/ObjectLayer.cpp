@@ -389,7 +389,7 @@ void ObjectLayer::ScheduleCheckCollision(float dt)
 				//sound
 				AudioManager::sharedAudioManager()->PlayEffect("explosion.wav");
 				
-				m_player->HitBullet(1000);
+				m_player->HitBullet(1);
 				enemy->HitBullet(1000);
 				m_arrEnemies->removeObject(enemy);
 				
