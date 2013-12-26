@@ -8,10 +8,20 @@ USING_NS_CC;
 class LoseDialog : public cocos2d::CCLayer
 {
 public:
-	LoseDialog():CCLayer(){};
+	LoseDialog(bool canBeRevived):CCLayer(){
+		this->m_canBeRevived = canBeRevived;
+	};
 	~LoseDialog(){};
     virtual bool init();
-	CREATE_FUNC(LoseDialog);
+	static LoseDialog* create(bool canBeRevived) {
+		LoseDialog* dig = new LoseDialog(canBeRevived);
+		dig->init();
+		dig->autorelease();
+		return dig;
+	}
+
+private:
+	bool m_canBeRevived;
 
 public:
 	void CancelCallBack(CCObject* pSender);

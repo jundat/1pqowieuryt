@@ -3,6 +3,7 @@
 #include "SettingScene.h"
 #include "AudioManager.h"
 #include "DataManager.h"
+#include <time.h>
 
 USING_NS_CC;
 
@@ -76,11 +77,47 @@ bool MenuScene::init()
     return true;
 }
 
-
 void MenuScene::playCallback(CCObject* pSender)
 {
-    CCScene *pScene = MainGameScene::scene();
-	CCDirector::sharedDirector()->replaceScene(pScene);
+	//check if last_player_life > 0
+	int lastLife = DataManager::sharedDataManager()->GetLastPlayerLife();
+	lastLife = (lastLife > G_MAX_PLAYER_LIFE) ? G_MAX_PLAYER_LIFE : lastLife;
+	DataManager::sharedDataManager()->SetLastPlayerLife(lastLife);
+
+	CCLOG("Last life: %d", lastLife);
+
+	if (lastLife > 0)
+	{
+		CCScene *pScene = MainGameScene::scene();
+		CCDirector::sharedDirector()->replaceScene(pScene);
+		CCLOG("LastLife > 0 -> Play");
+	} 
+	else
+	{
+		//get revive_life
+		tm* lasttm = DataManager::sharedDataManager()->GetLastDeadTime();
+		time_t lastTime = mktime(lasttm);
+		time_t curTime = time(NULL);
+		double seconds = difftime(curTime, lastTime);
+
+		lastLife = (int)(seconds / G_PLAYER_TIME_TO_REVIVE);
+		lastLife = (lastLife > G_MAX_PLAYER_LIFE) ? G_MAX_PLAYER_LIFE : lastLife;
+
+		CCLOG("Revive Last life: %d", lastLife);
+
+		if (lastLife > 0)
+		{
+			DataManager::sharedDataManager()->SetLastPlayerLife(lastLife);
+			CCScene *pScene = MainGameScene::scene();
+			CCDirector::sharedDirector()->replaceScene(pScene);
+			CCLOG("Revive->LastLife > 0 -> Play");
+		}
+		else
+		{
+			CCLOG("Revive->LastLife < 0 -> Can not play");
+			return;
+		}
+	}
 }
 
 void MenuScene::settingCallback( CCObject* pSender )

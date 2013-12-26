@@ -30,8 +30,6 @@ bool ObjectLayer::init()
     CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
     CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
 
-	//////////////////////////////////////////////////////////////////////////
-
 	m_arrEnemies = new CCArray();
 	m_arrPlayerBullets = new CCArray();
 	m_arrEnemyBullets = new CCArray();
@@ -48,26 +46,25 @@ bool ObjectLayer::init()
 	m_difficulty = 0;
 	m_numberBoom = 0;
 
-
-	time_t timer;
-	timer = time(NULL);
-	tm* _tm = localtime(&timer);
-
-	//CCLOG("Current time: %dh %dp %ds at %d/%d/%d", _tm->tm_hour, _tm->tm_min, _tm->tm_sec, _tm->tm_mday, _tm->tm_mon + 1, _tm->tm_year + 1900);
-
-	CCString* s = CCString::createWithFormat("Current time: %dh %dp %ds at %d/%d/%d", _tm->tm_hour, _tm->tm_min, _tm->tm_sec, _tm->tm_mday, _tm->tm_mon + 1, _tm->tm_year + 1900);
-
-	//CCString* s = CCString::createWithFormat("0/%d", DataManager::GetInstance()->GetCurrenHighScore());
-	m_labelScore = CCLabelBMFont::create(s->getCString(), "Mia_64.fnt");
-	//m_labelScore->setScale(48.0f/64);
-	m_labelScore->setScale(30.0f/64);
-	m_labelScore->setPosition(ccp(origin.x + visibleSize.width/2,
-		origin.y + visibleSize.height - m_labelScore->getContentSize().height));
-	this->addChild(m_labelScore, 10);
-
 	m_player = Ship::create();
 	m_player->setPosition(ccp(origin.x + visibleSize.width/2, origin.y + visibleSize.height * 0.1));
 	this->addChild(m_player);
+
+	CCString* s = CCString::createWithFormat("Your best: %d", DataManager::sharedDataManager()->GetCurrenHighScore());
+	CCLabelBMFont* lbHighScore = CCLabelBMFont::create(s->getCString(), "Mia_64.fnt");
+	lbHighScore->setPosition(ccp(origin.x + visibleSize.width/2, origin.y + visibleSize.height/2));
+	this->addChild(lbHighScore, 10);
+	lbHighScore->runAction(CCSequence::create(
+		CCDelayTime::create(1.0f),
+		CCFadeOut::create(2.0f),
+		NULL));
+	
+	s = CCString::createWithFormat("0/%d", DataManager::sharedDataManager()->GetCurrenHighScore());
+	m_labelScore = CCLabelBMFont::create(s->getCString(), "Mia_64.fnt");
+	m_labelScore->setScale(48.0f/64);
+	m_labelScore->setPosition(ccp(origin.x + visibleSize.width/2,
+		origin.y + visibleSize.height - m_labelScore->getContentSize().height));
+	this->addChild(m_labelScore, 10);
 
 	s = CCString::createWithFormat("HP: %d", m_player->getHp());
 	m_labelHp = CCLabelBMFont::create(s->getCString(), "Mia_64.fnt");
@@ -97,7 +94,7 @@ bool ObjectLayer::init()
 	
 	m_EffectLayer = EffectLayer::create();
 	this->addChild(m_EffectLayer, 10);
-	//////////////////////////////////////////////////////////////////////////
+
 	this->schedule(schedule_selector(ObjectLayer::ScheduleCheckCollision), CCDirector::sharedDirector()->getAnimationInterval());
 	this->scheduleUpdate();
 
@@ -291,10 +288,10 @@ void ObjectLayer::update( float delta )
 				//score
 				m_score += enemy->getOriginHp(); //Hp ở trên set = 0 rồi
 				m_score = (m_score < 0) ? 0 : m_score;
-				CCString* sscore = CCString::createWithFormat("%d/%d", m_score, DataManager::GetInstance()->GetCurrenHighScore());
+				CCString* sscore = CCString::createWithFormat("%d/%d", m_score, DataManager::sharedDataManager()->GetCurrenHighScore());
 				m_labelScore->setString(sscore->getCString());
 
-				DataManager::GetInstance()->SetCurrentHighScore(m_score);
+				DataManager::sharedDataManager()->SetCurrentHighScore(m_score);
 			}
 
 			//out of screen

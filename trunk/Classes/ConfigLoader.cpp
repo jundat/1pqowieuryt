@@ -61,7 +61,7 @@ ConfigLoader::ConfigLoader(void)
 	G_ITEM_BOOM_RANDOM_PERCENT = GetValue("G_ITEM_BOOM_RANDOM_PERCENT")->floatValue();
 
 	G_PLAYER_TIME_TO_REVIVE = GetValue("G_PLAYER_TIME_TO_REVIVE")->floatValue();
-	G_PLAYER_LIFE = GetValue("G_PLAYER_LIFE")->floatValue();
+	G_MAX_PLAYER_LIFE = GetValue("G_MAX_PLAYER_LIFE")->floatValue();
 }
 
 

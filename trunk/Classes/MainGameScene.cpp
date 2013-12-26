@@ -3,6 +3,8 @@
 #include "MenuScene.h"
 #include "LoseDialog.h"
 #include "ObjectLayer.h"
+#include "DataManager.h"
+#include <time.h>
 
 USING_NS_CC;
 
@@ -57,16 +59,54 @@ void MainGameScene::menuCallback(CCObject* pSender)
 
 void MainGameScene::showEndGame( int score )
 {
-	LoseDialog* lose = LoseDialog::create();
-	this->addChild(lose);
+	//check if enough last_life
+	int lastLife = DataManager::sharedDataManager()->GetLastPlayerLife();
+	lastLife--;
+	DataManager::sharedDataManager()->SetLastPlayerLife(lastLife);
+	
+	CCLOG("Last life: %d", lastLife);
+
+	if (lastLife == 0) //end game
+	{
+		time_t curTime = time(NULL);
+		tm* _tm = localtime(&curTime);
+		DataManager::sharedDataManager()->SetLastDeadTimeNow();
+		DataManager::sharedDataManager()->SetIsJustRevived(false);
+		CCLOG("Not Enough Life To Play -> End game", "Info");
+		CCScene *pScene = MenuScene::scene();
+		CCDirector::sharedDirector()->replaceScene(pScene);
+	}
+	else
+	{
+		CCLOG("Enough Life To Play -> Continue", "Info");
+		bool isJustRevived = DataManager::sharedDataManager()->GetIsJustRevived();
+		LoseDialog* lose = LoseDialog::create(! isJustRevived);
+		this->addChild(lose);
+
+		if (isJustRevived == true)
+		{
+			CCLOG("Can not revived again...", "Info");
+		}
+		
+		DataManager::sharedDataManager()->SetIsJustRevived(false);
+	}
 }
 
+//revived just 1 time for 1 life
 void MainGameScene::okCallback()
 {
+ 	int lastLife = DataManager::sharedDataManager()->GetLastPlayerLife();
+ 	lastLife++;
+ 	DataManager::sharedDataManager()->SetLastPlayerLife(lastLife);
+	
+	CCLOG("Revive, lastLife: %d", lastLife);
+	
+	DataManager::sharedDataManager()->SetIsJustRevived(true);
 	m_ObjLayer->ContinueGame();
 }
 
 void MainGameScene::cancelCallback()
 {
+	DataManager::sharedDataManager()->SetIsJustRevived(false);
 	m_ObjLayer->RestartGame();
 }

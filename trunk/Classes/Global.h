@@ -1,6 +1,7 @@
 #ifndef __GLOBAL_H__
 #define __GLOBAL_H__
 
+#include <string>
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -25,7 +26,7 @@ const static int G_MOVE_CIRCLE_RIGHT = 2;
 
 //////////////////////////////////////////////////////////////////////////
 
-//Variant
+//Config
  extern int G_DESIGN_WIDTH;
  extern int G_DESIGN_HEIGHT;
  extern float G_SCALE_FACTOR;
@@ -42,7 +43,7 @@ const static int G_MOVE_CIRCLE_RIGHT = 2;
  extern float G_ITEM_BOOM_RANDOM_PERCENT;
 
  extern float G_PLAYER_TIME_TO_REVIVE;
- extern int G_PLAYER_LIFE; 
+ extern int G_MAX_PLAYER_LIFE; 
 
  extern int G_MAX_PLAYER_BOOM;
 
