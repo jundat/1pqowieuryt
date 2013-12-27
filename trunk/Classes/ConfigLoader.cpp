@@ -81,7 +81,7 @@ ConfigLoader* ConfigLoader::shareConfigLoader()
 
 const CCString* ConfigLoader::GetValue( char* key )
 {
-	const CCString* v = m_dict->valueForKey(key);
+	const CCString* v = m_dict->valueForKey(std::string(key));
 	if (v->length() == 0)
 	{
 		CCLOG("NOT A VALID KEY CONFIG: %s", key);

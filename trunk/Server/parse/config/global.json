@@ -1,0 +1,11 @@
+{
+    "applications": {
+        "FlyAndFire": {
+            "applicationId": "h6NHFlPE69MuxSjTeGqfFLiy0ME5TUEJBtFZ2RZE", 
+            "masterKey": "VUwBOXV3DCmZZaS28M1GYgZopdHvwepjPPU3JV6D"
+        }, 
+        "_default": {
+            "link": "FlyAndFire"
+        }
+    }
+}
