@@ -3,9 +3,11 @@
 #include "SettingScene.h"
 #include "AudioManager.h"
 #include "DataManager.h"
+#include "ParseClient.h"
 #include <time.h>
 
 USING_NS_CC;
+USING_NS_CC_EXT;
 
 CCScene* MenuScene::scene()
 {
@@ -69,12 +71,48 @@ bool MenuScene::init()
     pMenu->setPosition(CCPointZero);
     this->addChild(pMenu, 1);
 
+	//////////////////////////////////////////////////////////////////////////
 
+	ParseClient::sharedParseClient()->callCloudFunction(
+		"testCloudFunction", 
+		"{\"name\":\"Pham Tan Long\"}", 
+		httpresponse_selector(MenuScene::onHttpRequestCompleted), 
+		"testCloutFunction");
 
+	//////////////////////////////////////////////////////////////////////////
+	
 
 	AudioManager::sharedAudioManager()->PlayBackground("background.ogg");
 
     return true;
+}
+
+void MenuScene::onHttpRequestCompleted( CCHttpClient *sender, CCHttpResponse *response )
+{
+	if (!response)
+	{
+		return;
+	}
+
+	//Show info
+	CCLOG("-----------------BEGIN-------------------");
+	CCLOG("Request: [%s] completed", response->getHttpRequest()->getTag());
+	CCLOG("Status: [%i]", response->getResponseCode());
+
+	if (!response->isSucceed())
+	{
+		CCLog("Request Failed: Error buffer: %s", response->getErrorBuffer());
+	}
+	else
+	{
+	}
+
+	std::vector<char> *buffer = response->getResponseData();
+	std::string str(buffer->begin(), buffer->end());
+	CCLOG("Content: %s", str.c_str());
+
+	
+	CCLOG("-----------------END-------------------");
 }
 
 void MenuScene::playCallback(CCObject* pSender)

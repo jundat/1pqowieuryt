@@ -24,9 +24,16 @@ app.get('/hello', function(req, res) {
 
 //POST to http://wordswithking.parseapp.com/echo
 app.post(
+	'/postecho', 
+	function(req, res) {
+		res.send(req.visitor);
+	}
+);
+
+app.get(
 	'/echo', 
 	function(req, res) {
-		res.send(req.query.message);
+		res.send("echo GET " + req.query.message);
 	}
 );
 
