@@ -29,12 +29,15 @@ AudioManager* AudioManager::sharedAudioManager()
 
 bool AudioManager::IsEnableBackground()
 {
+
+	m_bEnableBackground = CCUserDefault::sharedUserDefault()->getBoolForKey("IS_ENABLE_SOUND_BACKGROUND", true);
 	return m_bEnableBackground;
 }
 
 
 bool AudioManager::IsEnableEffect()
 {
+	m_bEnableEffect = CCUserDefault::sharedUserDefault()->getBoolForKey("IS_ENABLE_SOUND_EFFECT", true);
 	return m_bEnableEffect;
 }
 
@@ -42,12 +45,16 @@ bool AudioManager::IsEnableEffect()
 void AudioManager::SetEnableBackground(bool b)
 {
 	m_bEnableBackground = b;
+	CCUserDefault::sharedUserDefault()->setBoolForKey("IS_ENABLE_SOUND_BACKGROUND", m_bEnableBackground);
+	CCUserDefault::sharedUserDefault()->flush();
 }
 
 
 void AudioManager::SetEnableEffect(bool b)
 {
 	m_bEnableEffect = b;
+	CCUserDefault::sharedUserDefault()->setBoolForKey("IS_ENABLE_SOUND_EFFECT", m_bEnableEffect);
+	CCUserDefault::sharedUserDefault()->flush();
 }
 
 
@@ -59,7 +66,7 @@ void AudioManager::LoadBackground(const char* path)
 
 void AudioManager::PlayBackground(const char* path, bool isPlayAgain, bool loop)
 {
-	if (m_bEnableBackground) {
+	if (IsEnableBackground()) {
 		if (IsPlayingBackground())
 		{
 			if (isPlayAgain)
@@ -92,7 +99,7 @@ void AudioManager::StopBackground()
 
 void AudioManager::PlayEffect(const char *path, bool isLoop)
 {
-	if (m_bEnableEffect) {
+	if (IsEnableEffect()) {
 		SimpleAudioEngine::sharedEngine()->playEffect(CCFileUtils::sharedFileUtils()->fullPathForFilename(path).c_str(), isLoop);
 	}
 }
@@ -105,10 +112,14 @@ bool AudioManager::IsPlayingBackground()
 void AudioManager::SetVolumeMusic(float _value)
 {
 	CocosDenshion::SimpleAudioEngine::sharedEngine()->setBackgroundMusicVolume(_value);
+	CCUserDefault::sharedUserDefault()->setFloatForKey("SOUND_BACKGROUND_VOLUME", _value);
+	CCUserDefault::sharedUserDefault()->flush();
 }
 
 void AudioManager::SetVolumeFX(float _value)
 {
 	CocosDenshion::SimpleAudioEngine::sharedEngine()->setEffectsVolume(_value);
+	CCUserDefault::sharedUserDefault()->setFloatForKey("SOUND_EFFECT_VOLUME", _value);
+	CCUserDefault::sharedUserDefault()->flush();
 }
 
