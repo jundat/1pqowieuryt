@@ -5,6 +5,7 @@
 #include "ObjectLayer.h"
 #include "DataManager.h"
 #include <time.h>
+#include "PauseDialog.h"
 
 USING_NS_CC;
 
@@ -39,7 +40,7 @@ bool MainGameScene::init()
 		"btnHome.png",
 		"btnHome.png",
 		this,
-		menu_selector(MainGameScene::menuCallback));
+		menu_selector(MainGameScene::pauseCallback));
 	pCloseItem->setPosition(ccp(origin.x + visibleSize.width - pCloseItem->getContentSize().width/2,
 		origin.y + visibleSize.height - pCloseItem->getContentSize().height/2));
 	CCMenu* pMenu = CCMenu::create(pCloseItem, NULL);
@@ -51,10 +52,18 @@ bool MainGameScene::init()
     return true;
 }
 
-void MainGameScene::menuCallback(CCObject* pSender)
+void MainGameScene::pauseCallback(CCObject* pSender)
 {
-	CCScene *pScene = MenuScene::scene();
-	CCDirector::sharedDirector()->replaceScene(pScene);
+	m_BackgroundLayer->Pause();
+	m_ObjLayer->Pause();
+	PauseDialog* dialog = PauseDialog::create();
+	this->addChild(dialog);
+}
+
+void MainGameScene::resumeCallback() 
+{
+	m_BackgroundLayer->Resume();
+	m_ObjLayer->Resume();
 }
 
 void MainGameScene::showEndGame( int score )

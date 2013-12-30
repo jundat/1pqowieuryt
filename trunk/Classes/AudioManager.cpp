@@ -16,6 +16,8 @@ static AudioManager *m_Instance;
 AudioManager::AudioManager()
 {
 	m_isPlayingBackground = false;
+	m_bEnableBackground = CCUserDefault::sharedUserDefault()->getBoolForKey("IS_ENABLE_SOUND_BACKGROUND", true);
+	m_bEnableEffect = CCUserDefault::sharedUserDefault()->getBoolForKey("IS_ENABLE_SOUND_EFFECT", true);
 }
 
 AudioManager* AudioManager::sharedAudioManager()
@@ -29,7 +31,6 @@ AudioManager* AudioManager::sharedAudioManager()
 
 bool AudioManager::IsEnableBackground()
 {
-
 	m_bEnableBackground = CCUserDefault::sharedUserDefault()->getBoolForKey("IS_ENABLE_SOUND_BACKGROUND", true);
 	return m_bEnableBackground;
 }
@@ -66,7 +67,7 @@ void AudioManager::LoadBackground(const char* path)
 
 void AudioManager::PlayBackground(const char* path, bool isPlayAgain, bool loop)
 {
-	if (IsEnableBackground()) {
+	if (m_bEnableBackground) {
 		if (IsPlayingBackground())
 		{
 			if (isPlayAgain)
@@ -99,7 +100,7 @@ void AudioManager::StopBackground()
 
 void AudioManager::PlayEffect(const char *path, bool isLoop)
 {
-	if (IsEnableEffect()) {
+	if (m_bEnableEffect) {
 		SimpleAudioEngine::sharedEngine()->playEffect(CCFileUtils::sharedFileUtils()->fullPathForFilename(path).c_str(), isLoop);
 	}
 }

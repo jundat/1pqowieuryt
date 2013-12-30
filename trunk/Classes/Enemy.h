@@ -37,6 +37,7 @@ public:
 	static void DifficultySplit(float difficulty, float& vy, int& hp, int& dm);
 
 public:
+	virtual void update(float delta);
 	void Fire();
 	void ScheduleFire(float dt);
 	void HitBullet(int damage);

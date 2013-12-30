@@ -67,51 +67,20 @@ bool Enemy::init()
 	}
 	//////////////////////////////////////////////////////////////////////////
 	
-	switch (m_moveType)
-	{
-	case G_MOVE_STRAINGH:
-		{
-			float d = 5 + visibleSize.height + m_sprite->getContentSize().height;
-			float t = abs(d / m_vy / 1000.0);
-			CCAction* move = CCMoveBy::create(t, ccp(0, -d));
-			this->runAction(move);
-		}
-		break;
-
-	case G_MOVE_CIRCLE_LEFT:
-		{
-			float h = visibleSize.height;
-			float w = visibleSize.width;
-			ccBezierConfig conf = {
-				ccp(-w, -h),
-				ccp(0, -h/2),
-				ccp(0, -h)
-			};
-
-			CCAction* bezier = CCBezierBy::create(abs(h/m_vy/1000.0), conf);
-			this->runAction(bezier);
-		}
-		break;
-
-	case G_MOVE_CIRCLE_RIGHT:
-		{
-			float h = visibleSize.height;
-			float w = visibleSize.width;
-			ccBezierConfig conf = {
-				ccp(w, -h),
-				ccp(0, -h/2),
-				ccp(0, -h)
-			};
-
-			CCAction* bezier = CCBezierBy::create(abs(h/m_vy/1000.0), conf);
-			this->runAction(bezier);
-		}
-		break;
-	}
-
+	//float d = 5 + visibleSize.height + m_sprite->getContentSize().height;
+	//float t = abs(d / m_vy / 1000.0);
+	//CCAction* move = CCMoveBy::create(t, ccp(0, -d));
+	//this->runAction(move);
 
 	//////////////////////////////////////////////////////////////////////////
+	this->scheduleUpdate();
 	return true;
+}
+
+void Enemy::update( float delta )
+{
+	this->setPositionX(m_vx * delta * 1000 + this->getPositionX());
+	this->setPositionY(m_vy * delta * 1000 + this->getPositionY());
 }
 
 void Enemy::Fire()

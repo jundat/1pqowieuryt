@@ -24,7 +24,8 @@ private:
 	
 public:
 	void update(float dt);
-	
+	void Pause();
+	void Resume();
 };
 
 #endif // __GAME_BACKGROUND_LAYER_H__

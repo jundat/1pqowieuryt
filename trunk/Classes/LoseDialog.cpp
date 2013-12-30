@@ -23,7 +23,7 @@ bool LoseDialog::init()
 	CCPoint pok = ccp(541, G_DESIGN_HEIGHT-783);
 	float textScale = 0.6f;
 
-	CCSprite* bg = CCSprite::create("lose_dialog.png");
+	CCSprite* bg = CCSprite::create("dialog.png");
 	bg->setPosition(ccp(origin.x + visibleSize.width/2, origin.y + visibleSize.height/2));
 	this->addChild(bg, -2);
 	

@@ -20,6 +20,7 @@ private:
 	CC_SYNTHESIZE(int, m_damage, Damage);
 	CC_SYNTHESIZE(int, m_bulletLevel, BulletLevel); //0-1-2
 
+	float m_timeToFire;
 	bool m_isArmor;
 	CCSprite* m_sprArmor;
 	EffectLayer* m_EffectLayer;
@@ -35,7 +36,6 @@ private:
 public:
 	virtual void update(float delta);
 	void Fire();
-	void ScheduleFire(float dt);
 	void HitBullet(int damage);
 	void Dead();
 	void Restart();

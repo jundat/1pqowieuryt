@@ -38,10 +38,7 @@ bool Ship::init()
 	m_EffectLayer = EffectLayer::create();
 	this->addChild(m_EffectLayer, 100);
 
-	if (G_PLAYER_TIME_TO_FIRE > 0)
-	{
-		this->schedule(schedule_selector(Ship::ScheduleFire), G_PLAYER_TIME_TO_FIRE);
-	}
+	m_timeToFire = 0;
 	//////////////////////////////////////////////////////////////////////////
 	
 	this->scheduleUpdate();
@@ -108,11 +105,6 @@ void Ship::Fire()
 	}
 }
 
-void Ship::ScheduleFire( float dt )
-{
-	this->Fire();
-}
-
 void Ship::update( float delta )
 {
 	//limit on screen
@@ -127,6 +119,15 @@ void Ship::update( float delta )
 	LIMIT_VALUE(x, origin.x + w_2, origin.x + visibleSize.width - w_2);
 	LIMIT_VALUE(y, origin.y + h_2, origin.y + visibleSize.height - h_2);
 	this->setPosition(x, y);
+
+	//fire
+
+	m_timeToFire += delta;
+	if (m_timeToFire >= G_PLAYER_TIME_TO_FIRE)
+	{
+		m_timeToFire = 0;
+		this->Fire();
+	}
 }
 
 void Ship::HitBullet( int damage )
@@ -159,7 +160,7 @@ void Ship::HitBullet( int damage )
 void Ship::Dead()
 {
 	this->setVisible(false);
-	this->unschedule(schedule_selector(Ship::ScheduleFire));
+	this->unscheduleUpdate();
 }
 
 void Ship::Restart()
@@ -168,7 +169,7 @@ void Ship::Restart()
 	this->DisableArmor();
 	this->setHp(G_PLAYER_HP);
 	this->setVisible(true);
-	this->schedule(schedule_selector(Ship::ScheduleFire), G_PLAYER_TIME_TO_FIRE);
+	this->scheduleUpdate();
 }
 
 void Ship::UpgradeBullet()
@@ -219,4 +220,3 @@ void Ship::DowngradeBullet()
 		}
 	}
 }
-

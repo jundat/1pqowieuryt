@@ -147,6 +147,7 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
     <ClCompile Include="..\Classes\MenuScene.cpp" />
     <ClCompile Include="..\Classes\ObjectLayer.cpp" />
     <ClCompile Include="..\Classes\MainGameScene.cpp" />
+    <ClCompile Include="..\Classes\PauseDialog.cpp" />
     <ClCompile Include="..\Classes\SettingScene.cpp" />
     <ClCompile Include="..\Classes\Ship.cpp" />
     <ClCompile Include="main.cpp" />
@@ -172,6 +173,7 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
     <ClInclude Include="..\Classes\MyMacro.h" />
     <ClInclude Include="..\Classes\ObjectLayer.h" />
     <ClInclude Include="..\Classes\MainGameScene.h" />
+    <ClInclude Include="..\Classes\PauseDialog.h" />
     <ClInclude Include="..\Classes\SettingScene.h" />
     <ClInclude Include="..\Classes\Ship.h" />
     <ClInclude Include="main.h" />

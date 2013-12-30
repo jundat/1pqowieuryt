@@ -180,10 +180,10 @@ void ObjectLayer::update( float delta )
 	if (m_player->getHp() <= 0 && m_isEndGame == false)
 	{
 		CCDirector::sharedDirector()->getTouchDispatcher()->removeDelegate(this);
+		this->setTouchEnabled(false);
 		this->unschedule(schedule_selector(ObjectLayer::ScheduleCheckCollision));
 		this->unschedule(schedule_selector(ObjectLayer::ScheduleGenerateEnemy));
 		this->unscheduleUpdate();
-		this->setTouchEnabled(false);
 		
 		CCSequence* sequence = CCSequence::create(
 			CCDelayTime::create(1),
@@ -569,6 +569,74 @@ void ObjectLayer::ActiveBoom(CCObject* pSender)
 			{
 				enemy->HitBullet(1000);
 			}
+		}
+	}
+}
+
+void ObjectLayer::Pause()
+{
+	CCDirector::sharedDirector()->getTouchDispatcher()->removeDelegate(this);
+	this->setTouchEnabled(false);
+	this->unschedule(schedule_selector(ObjectLayer::ScheduleCheckCollision));
+	this->unschedule(schedule_selector(ObjectLayer::ScheduleGenerateEnemy));
+	this->unscheduleUpdate();
+
+	m_player->unscheduleUpdate();
+
+	CCObject* it;
+
+	//enemy
+	CCARRAY_FOREACH(m_arrEnemies, it)
+	{
+		Enemy* enemy = dynamic_cast<Enemy*>(it);
+
+		if (NULL != enemy)
+		{
+			enemy->unscheduleUpdate();
+		}
+	}
+
+	//items
+	CCARRAY_FOREACH(m_arrItems, it)
+	{
+		Item* item = dynamic_cast<Item*>(it);
+
+		if (NULL != item)
+		{
+			item->unscheduleUpdate();
+		}
+	}
+}
+
+void ObjectLayer::Resume()
+{
+	CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, 0, true);
+	this->setTouchEnabled(true);
+	this->schedule(schedule_selector(ObjectLayer::ScheduleGenerateEnemy), m_timeToGenerateEnemy);
+	this->schedule(schedule_selector(ObjectLayer::ScheduleCheckCollision), CCDirector::sharedDirector()->getAnimationInterval());
+	this->scheduleUpdate();
+
+	m_player->scheduleUpdate();
+
+	CCObject* it;
+	CCARRAY_FOREACH(m_arrEnemies, it)
+	{
+		Enemy* enemy = dynamic_cast<Enemy*>(it);
+
+		if (NULL != enemy)
+		{
+			enemy->scheduleUpdate();
+		}
+	}
+
+	//items
+	CCARRAY_FOREACH(m_arrItems, it)
+	{
+		Item* item = dynamic_cast<Item*>(it);
+
+		if (NULL != item)
+		{
+			item->scheduleUpdate();
 		}
 	}
 }

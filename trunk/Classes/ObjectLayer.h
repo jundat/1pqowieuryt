@@ -43,6 +43,8 @@ public:
 	void ActiveBoom(CCObject* pSender);
 	void ContinueGame();
 	void RestartGame();
+	void Pause();
+	void Resume();
 
 public:
 	void AfterDeadEffectCallback();

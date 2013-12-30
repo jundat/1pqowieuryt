@@ -88,3 +88,13 @@ void BackgroundLayer::update(float dt) {
 		}
 	}
 }
+
+void BackgroundLayer::Pause()
+{
+	this->unscheduleUpdate();
+}
+
+void BackgroundLayer::Resume()
+{
+	this->scheduleUpdate();
+}
