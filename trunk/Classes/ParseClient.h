@@ -44,7 +44,7 @@ public:
 	}
 
 	//pSelector = void onHttpRequestCompleted(CCHttpClient *sender, CCHttpResponse *response);
-	void callCloudFunction(char* funcName, char* jsonData, SEL_HttpResponse pSelector, char* tag = NULL);
+	void callCloudFunction(const char* funcName, const char* jsonData, SEL_HttpResponse pSelector, const char* tag = NULL);
 
 private:
 	static ParseClient* _instance;

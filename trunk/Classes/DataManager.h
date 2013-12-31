@@ -16,6 +16,11 @@ private:
 public:
 	static DataManager* sharedDataManager();
 
+	std::string	GetUsername();
+	void	SetUsername(const char* username);
+	std::string	GetPassword();
+	void	SetPassword(const char* pass);
+
 	int		GetCurrenHighScore();
 	void	SetCurrentHighScore(int currentLevel);
 
@@ -31,6 +36,8 @@ public:
 
 	int		GetValueFromKey(char* key);
 	void	SetValueFromKey(char* key, int val);
+
+	
 	
 	~DataManager(void);
 };

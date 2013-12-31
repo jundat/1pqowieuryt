@@ -117,3 +117,25 @@ void DataManager::SetIsJustRevived(bool isJustRevived)
 	CCUserDefault::sharedUserDefault()->setBoolForKey("G_IS_JUST_REVIVED", isJustRevived);
 	CCUserDefault::sharedUserDefault()->flush();
 }
+
+std::string DataManager::GetUsername()
+{
+	return CCUserDefault::sharedUserDefault()->getStringForKey("G_USERNAME", "NULL");
+}
+
+void DataManager::SetUsername(const char* username)
+{
+	CCUserDefault::sharedUserDefault()->setStringForKey("G_USERNAME", std::string(username));
+	CCUserDefault::sharedUserDefault()->flush();
+}
+
+std::string DataManager::GetPassword()
+{
+	return CCUserDefault::sharedUserDefault()->getStringForKey("G_PASSWORD", "NULL");
+}
+
+void DataManager::SetPassword(const char* pass )
+{
+	CCUserDefault::sharedUserDefault()->setStringForKey("G_PASSWORD", std::string(pass));
+	CCUserDefault::sharedUserDefault()->flush();
+}

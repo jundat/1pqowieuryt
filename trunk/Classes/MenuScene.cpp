@@ -1,9 +1,9 @@
 #include "MenuScene.h"
 #include "MainGameScene.h"
+#include "ScoreScene.h"
 #include "SettingScene.h"
 #include "AudioManager.h"
 #include "DataManager.h"
-#include "ParseClient.h"
 #include <time.h>
 
 USING_NS_CC;
@@ -47,6 +47,19 @@ bool MenuScene::init()
 	playItem->setPosition(ccp(origin.x + visibleSize.width/2,
                                 origin.y + visibleSize.height/2 - 100));
 
+	//
+
+	CCMenuItemImage *scoreItem = CCMenuItemImage::create(
+		"score_button.png",
+		"score_button_press.png",
+		this,
+		menu_selector(MenuScene::scoreCallback));
+
+	scoreItem->setPosition(ccp(origin.x + visibleSize.width/2,
+		playItem->getPositionY() - playItem->getContentSize().height/2 - scoreItem->getContentSize().height/2 - 10));
+
+	//
+
 	CCMenuItemImage *settingItem = CCMenuItemImage::create(
 		"setting_button.png",
 		"setting_button_press.png",
@@ -54,8 +67,9 @@ bool MenuScene::init()
 		menu_selector(MenuScene::settingCallback));
 
 	settingItem->setPosition(ccp(origin.x + visibleSize.width/2,
-		playItem->getPositionY() - playItem->getContentSize().height/2 - settingItem->getContentSize().height/2 - 10));
+		scoreItem->getPositionY() - scoreItem->getContentSize().height/2 - settingItem->getContentSize().height/2 - 10));
 
+	//
 
 	CCMenuItemImage *exitItem = CCMenuItemImage::create(
 		"exit_button.png",
@@ -66,53 +80,15 @@ bool MenuScene::init()
 	exitItem->setPosition(ccp(origin.x + visibleSize.width/2,
 		settingItem->getPositionY() - settingItem->getContentSize().height/2 - exitItem->getContentSize().height/2 - 10));
 
+	//
 
-    CCMenu* pMenu = CCMenu::create(playItem, settingItem, exitItem, NULL);
+    CCMenu* pMenu = CCMenu::create(playItem, scoreItem, settingItem, exitItem, NULL);
     pMenu->setPosition(CCPointZero);
     this->addChild(pMenu, 1);
-
-	//////////////////////////////////////////////////////////////////////////
-
-	ParseClient::sharedParseClient()->callCloudFunction(
-		"testCloudFunction", 
-		"{\"name\":\"Pham Tan Long\"}", 
-		httpresponse_selector(MenuScene::onHttpRequestCompleted), 
-		"testCloutFunction");
-
-	//////////////////////////////////////////////////////////////////////////
 	
-
 	AudioManager::sharedAudioManager()->PlayBackground("background.ogg");
 
     return true;
-}
-
-void MenuScene::onHttpRequestCompleted( CCHttpClient *sender, CCHttpResponse *response )
-{
-	if (!response)
-	{
-		return;
-	}
-
-	//Show info
-	CCLOG("-----------------BEGIN-------------------");
-	CCLOG("Request: [%s] completed", response->getHttpRequest()->getTag());
-	CCLOG("Status: [%i]", response->getResponseCode());
-
-	if (!response->isSucceed())
-	{
-		CCLog("Request Failed: Error buffer: %s", response->getErrorBuffer());
-	}
-	else
-	{
-	}
-
-	std::vector<char> *buffer = response->getResponseData();
-	std::string str(buffer->begin(), buffer->end());
-	CCLOG("Content: %s", str.c_str());
-
-	
-	CCLOG("-----------------END-------------------");
 }
 
 void MenuScene::playCallback(CCObject* pSender)
@@ -156,6 +132,12 @@ void MenuScene::playCallback(CCObject* pSender)
 			return;
 		}
 	}
+}
+
+void MenuScene::scoreCallback( CCObject* pSender )
+{
+	CCScene *pScene = ScoreScene::scene();
+	CCDirector::sharedDirector()->replaceScene(pScene);
 }
 
 void MenuScene::settingCallback( CCObject* pSender )

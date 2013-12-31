@@ -1,5 +1,8 @@
 ﻿//ENTRY POINT
 
+require('cloud/user.js');
+
+
 Parse.Cloud.define('testCloudFunction',
     function(req, res) {
         var name = req.params.name;
@@ -11,6 +14,4 @@ Parse.Cloud.define('testCloudFunction',
 		}
 
 		res.success(data);
-
-		//res.error("Failed");
 });

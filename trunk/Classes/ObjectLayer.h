@@ -61,7 +61,6 @@ private:
 	CC_SYNTHESIZE(int, m_numberBoom, NumberBoom);
 	
 	CCLabelBMFont* m_labelScore;
-	CCLabelBMFont* m_labelHp;
 	CCLabelBMFont* m_labelBoom;
 	CCMenuItemImage* m_itemBoom;
 		

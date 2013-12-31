@@ -2,6 +2,7 @@
 #define  _APP_DELEGATE_H_
 
 #include "cocos2d.h"
+#include "ParseClient.h"
 
 /**
 @brief    The cocos2d Application.
@@ -13,24 +14,14 @@ class  AppDelegate : private cocos2d::CCApplication
 public:
     AppDelegate();
     virtual ~AppDelegate();
+	
+	void initgame();
+	void onHttpRequestCompleted(cocos2d::extension::CCHttpClient *sender, cocos2d::extension::CCHttpResponse *response);
+	void processMessage(std::string str);
+	void submitScore();
 
-    /**
-    @brief    Implement CCDirector and CCScene init code here.
-    @return true    Initialize success, app continue.
-    @return false   Initialize failed, app terminate.
-    */
     virtual bool applicationDidFinishLaunching();
-
-    /**
-    @brief  The function be called when the application enter background
-    @param  the pointer of the application
-    */
     virtual void applicationDidEnterBackground();
-
-    /**
-    @brief  The function be called when the application enter foreground
-    @param  the pointer of the application
-    */
     virtual void applicationWillEnterForeground();
 };
 

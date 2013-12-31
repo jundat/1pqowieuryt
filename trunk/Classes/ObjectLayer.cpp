@@ -65,15 +65,7 @@ bool ObjectLayer::init()
 	m_labelScore->setPosition(ccp(origin.x + visibleSize.width/2,
 		origin.y + visibleSize.height - m_labelScore->getContentSize().height));
 	this->addChild(m_labelScore, 10);
-
-	s = CCString::createWithFormat("HP: %d", m_player->getHp());
-	m_labelHp = CCLabelBMFont::create(s->getCString(), "Mia_64.fnt");
-	m_labelHp->setScale(48.0f/64);
-	m_labelHp->setPosition(ccp(origin.x + m_labelHp->getContentSize().width/2,
-		origin.y + visibleSize.height - m_labelHp->getContentSize().height));
-	this->addChild(m_labelHp, 10);
-
-
+	
 	m_itemBoom = CCMenuItemImage::create("icon_boom.png", "icon_boom.png", this, menu_selector(ObjectLayer::ActiveBoom));
 	m_itemBoom->setPosition(ccp(origin.x + m_itemBoom->getContentSize().width/2 - visibleSize.width/2, 
 		origin.y + m_itemBoom->getContentSize().height/2 - visibleSize.height/2));
@@ -368,9 +360,6 @@ void ObjectLayer::ScheduleCheckCollision(float dt)
 				//sound
 				AudioManager::sharedAudioManager()->PlayEffect("explosion.wav");
 				m_player->HitBullet(bullet->getDamage());
-
-				CCString* s = CCString::createWithFormat("HP: %d", (m_player->getHp() > 0) ? m_player->getHp() : 0);
-				m_labelHp->setString(s->getCString());
 			}
 		}
 	}
@@ -392,9 +381,6 @@ void ObjectLayer::ScheduleCheckCollision(float dt)
 				m_player->HitBullet(1);
 				enemy->HitBullet(1000);
 				m_arrEnemies->removeObject(enemy);
-				
-				CCString* s = CCString::createWithFormat("HP: %d", (m_player->getHp() > 0) ? m_player->getHp() : 0);
-				m_labelHp->setString(s->getCString());
 			}
 		}
 	}
@@ -453,8 +439,6 @@ void ObjectLayer::ContinueGame()
 	//reset
 	m_player->setVisible(true);
 	m_player->Restart();
-	CCString* s = CCString::createWithFormat("HP: %d", (m_player->getHp() > 0) ? m_player->getHp() : 0);
-	m_labelHp->setString(s->getCString());
 	m_player->setPosition(ccp(origin.x + visibleSize.width/2, origin.y + visibleSize.height * 0.1));
 	this->schedule(schedule_selector(ObjectLayer::ScheduleGenerateEnemy), m_timeToGenerateEnemy);
 	this->schedule(schedule_selector(ObjectLayer::ScheduleCheckCollision), CCDirector::sharedDirector()->getAnimationInterval());
@@ -487,9 +471,7 @@ void ObjectLayer::RestartGame()
 	m_player->setVisible(true);
 	m_player->Restart();
 	m_player->setPosition(ccp(origin.x + visibleSize.width/2, origin.y + visibleSize.height * 0.1));
-	CCString* s = CCString::createWithFormat("HP: %d", (m_player->getHp() > 0) ? m_player->getHp() : 0);
-	m_labelHp->setString(s->getCString());
-
+	
 	m_labelBoom->setVisible(false);
 	m_itemBoom->setVisible(false);
 

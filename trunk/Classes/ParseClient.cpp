@@ -2,7 +2,7 @@
 
 ParseClient* ParseClient::_instance = NULL;
 
-void ParseClient::callCloudFunction(char* funcName, char* jsonData, SEL_HttpResponse pSelector, char* tag)
+void ParseClient::callCloudFunction(const char* funcName, const char* jsonData, SEL_HttpResponse pSelector, const char* tag)
 {
 	CCHttpRequest* request = new CCHttpRequest();
 	request->setHeaders(m_header);
