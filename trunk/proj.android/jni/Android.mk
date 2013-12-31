@@ -25,6 +25,9 @@ LOCAL_SRC_FILES := hellocpp/main.cpp \
      ../../Classes/MainGameScene.cpp  \
      ../../Classes/MenuScene.cpp  \
      ../../Classes/ObjectLayer.cpp  \
+     ../../Classes/ParseClient.cpp  \
+     ../../Classes/PauseDialog.cpp  \
+     ../../Classes/ScoreScene.cpp  \
      ../../Classes/SettingScene.cpp  \
      ../../Classes/Ship.cpp  \
 
