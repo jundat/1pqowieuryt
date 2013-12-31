@@ -6,31 +6,35 @@
 
 USING_NS_CC;
 
+
 int Enemy::S_HP = G_MIN_ENEMY_HP;
 float Enemy::S_VELOCITY = G_MIN_ENEMY_VY;
+float Enemy::S_GENERATE_TIME = G_DEFAULT_TIME_TO_GENERATE_ENEMY;
+
 
 void Enemy::DifficultySplit(float difficulty, float& vy, int& hp, int& dm)
 {
-	LevelData* ld = LevelLoader::shareConfigLoader()->GetValueLowerThan((int)difficulty);
+	LevelData* ld = LevelLoader::shareLevelLoader()->GetValueLowerThan((int)difficulty);
 
 	if (ld != NULL)
 	{
 		S_HP = ld->m_hp;
 		S_VELOCITY = ld->m_velocity;
+		S_GENERATE_TIME = ld->m_genTime;
+		CCLOG("--------------------- UPDATE NEW LEVEL ----- score %d ----- diff %f ---------------------", ld->m_score, difficulty);
+		CCLOG("--------------------- GEN TIME: %f", ld->m_genTime);
 	}
 
 	hp = S_HP;
 	vy = S_VELOCITY;
-	
 	dm = 0;
 
 	CCLOG("Vy: %f\tHp: %d\tDam: %d", vy, hp, dm);
 }
 
-Enemy::Enemy(float difficulty, int MOVE_TYPE) : GameObject()
+Enemy::Enemy(float difficulty) : GameObject()
 {
 	this->setDifficulty(difficulty);
-	this->setMoveType(MOVE_TYPE);
 }
 
 bool Enemy::init()

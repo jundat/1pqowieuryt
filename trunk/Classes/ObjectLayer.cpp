@@ -29,7 +29,7 @@ bool ObjectLayer::init()
 
     CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
     CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
-
+	
 	m_arrEnemies = new CCArray();
 	m_arrPlayerBullets = new CCArray();
 	m_arrEnemyBullets = new CCArray();
@@ -39,6 +39,8 @@ bool ObjectLayer::init()
 	m_arrPlayerBullets->retain();
 	m_arrEnemyBullets->retain();
 	m_arrItems->retain();
+
+	m_genTimeCounter = 0;
 
 	m_isEndGame = false;
 	m_score = 0;
@@ -79,11 +81,6 @@ bool ObjectLayer::init()
 	m_labelBoom->setVisible(false);
 	this->addChild(m_labelBoom, 10);
 
-
-
-	m_timeToGenerateEnemy = G_DEFAULT_TIME_TO_GENERATE_ENEMY;
-	this->schedule(schedule_selector(ObjectLayer::ScheduleGenerateEnemy), m_timeToGenerateEnemy);
-	
 	m_EffectLayer = EffectLayer::create();
 	this->addChild(m_EffectLayer, 10);
 
@@ -126,13 +123,12 @@ void ObjectLayer::ScheduleGenerateEnemy( float dt )
 	CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
 	CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
 
-	m_difficulty = m_score;// + m_playedTime; //CCLOG("Difficulty: %f \tTime: %f", m_difficulty, m_playedTime);
-	int movetype = G_MOVE_STRAINGH;
+	m_difficulty = m_score;
 
 	float h = visibleSize.height;
 	float w = visibleSize.width;
 
-	Enemy* enemy = Enemy::create(m_difficulty, movetype);
+	Enemy* enemy = Enemy::create(m_difficulty);
 	float enemyW = enemy->boundingBox().size.width;
 			
 	float x = (int)(CCRANDOM_0_1() * (visibleSize.width - enemyW));
@@ -190,6 +186,13 @@ void ObjectLayer::update( float delta )
 
 	//////////////////////////////////////////////////////////////////////////
 	m_playedTime += delta;
+
+	m_genTimeCounter += delta;
+	if (m_genTimeCounter >= Enemy::S_GENERATE_TIME)
+	{
+		m_genTimeCounter = 0;
+		ScheduleGenerateEnemy(delta);
+	}
 
 	//CCLOG("HP: \t%d", m_player->getHp());
 	//CCLOG("Score: \t%d", m_score);
@@ -435,12 +438,13 @@ void ObjectLayer::ContinueGame()
 
 	CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, 0, true);
 	this->setTouchEnabled(true);
+
+	m_genTimeCounter = 0;
 	m_isEndGame = false;
 	//reset
 	m_player->setVisible(true);
 	m_player->Restart();
 	m_player->setPosition(ccp(origin.x + visibleSize.width/2, origin.y + visibleSize.height * 0.1));
-	this->schedule(schedule_selector(ObjectLayer::ScheduleGenerateEnemy), m_timeToGenerateEnemy);
 	this->schedule(schedule_selector(ObjectLayer::ScheduleCheckCollision), CCDirector::sharedDirector()->getAnimationInterval());
 	this->scheduleUpdate();
 }
@@ -453,7 +457,8 @@ void ObjectLayer::RestartGame()
 	//	player's Position
 	//	score
 	//	numberBoom
-	
+
+	m_genTimeCounter = 0;
 	m_playedTime = 0;
 	m_score = 0;
 	m_numberBoom = 0;
@@ -475,7 +480,6 @@ void ObjectLayer::RestartGame()
 	m_labelBoom->setVisible(false);
 	m_itemBoom->setVisible(false);
 
-	this->schedule(schedule_selector(ObjectLayer::ScheduleGenerateEnemy), m_timeToGenerateEnemy);
 	this->schedule(schedule_selector(ObjectLayer::ScheduleCheckCollision), CCDirector::sharedDirector()->getAnimationInterval());
 	this->scheduleUpdate();
 }
@@ -594,10 +598,10 @@ void ObjectLayer::Resume()
 {
 	CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, 0, true);
 	this->setTouchEnabled(true);
-	this->schedule(schedule_selector(ObjectLayer::ScheduleGenerateEnemy), m_timeToGenerateEnemy);
 	this->schedule(schedule_selector(ObjectLayer::ScheduleCheckCollision), CCDirector::sharedDirector()->getAnimationInterval());
 	this->scheduleUpdate();
 
+	m_genTimeCounter = 0;
 	m_player->scheduleUpdate();
 
 	CCObject* it;

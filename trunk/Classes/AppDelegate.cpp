@@ -124,6 +124,7 @@ void AppDelegate::submitScore()
 	/************************************************************************/
 
 	ParseClient* pc = ParseClient::sharedParseClient();
+	pc->setRequestType(CCHttpRequest::kHttpPut);
 	int score = DataManager::sharedDataManager()->GetCurrenHighScore();
 	CCLOG("Call submitScore: %d", score);
 	std::string username = DataManager::sharedDataManager()->GetUsername();

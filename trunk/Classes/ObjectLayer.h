@@ -59,15 +59,15 @@ private:
 	CC_SYNTHESIZE(bool, m_isEndGame, IsEndGame);
 	CC_SYNTHESIZE(Ship*, m_player, Player);
 	CC_SYNTHESIZE(int, m_numberBoom, NumberBoom);
-	
+	CC_SYNTHESIZE(float, m_genTimeCounter, GenTimeCounter);
+
 	CCLabelBMFont* m_labelScore;
 	CCLabelBMFont* m_labelBoom;
 	CCMenuItemImage* m_itemBoom;
-		
+	
 	CCPoint m_lastPoint;
 	
 	CCArray* m_arrEnemies;
-	float m_timeToGenerateEnemy;
 	
 	CCArray* m_arrPlayerBullets;
 	CCArray* m_arrEnemyBullets;

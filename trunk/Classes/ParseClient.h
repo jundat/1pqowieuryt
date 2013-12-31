@@ -23,7 +23,12 @@ public:
 	
 	CCString* m_appId;
 	CCString* m_restId;
+	CCHttpRequest::HttpRequestType m_requestType;
 	std::vector<std::string> m_header;
+
+	void setRequestType(CCHttpRequest::HttpRequestType type) {
+		this->m_requestType = type;
+	}
 
 	void setAppId(CCString* appId) {
 		m_appId = appId;
@@ -51,6 +56,7 @@ private:
 	ParseClient() {
 		m_appId = CCString::create("h6NHFlPE69MuxSjTeGqfFLiy0ME5TUEJBtFZ2RZE");
 		m_restId = CCString::create("P0b6wS6boQgoZd2G5vQJTKd0JOQkgutqt3gN9Ifm");
+		m_requestType = CCHttpRequest::kHttpPost;
 		_calculateHeader();
 	}
 

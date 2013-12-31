@@ -22,7 +22,7 @@ LevelLoader::LevelLoader(void)
 	fileData = fileData.substr(beginIndex + 1); //pos, end
 
 	int score, hp;
-	float velocity;
+	float velocity, genTime;
 
 	bool isBroken = false;
 	while(isBroken == false)
@@ -43,16 +43,15 @@ LevelLoader::LevelLoader(void)
 
 		fileData = fileData.substr(beginIndex + 1); //pos, end
 
-		sscanf(smallStr.c_str(), "%d,%d,%f\n", &score, &hp, &velocity);
-		CCLOG("%d|%d|%f", score, hp, velocity);
-
-		LevelData* ld = LevelData::create(score, hp, velocity);
+		sscanf(smallStr.c_str(), "%d,%d,%f,%f\n", &score, &hp, &velocity, &genTime);
+		LevelData* ld = LevelData::create(score, hp, velocity, genTime);
+		CCLOG(ld->ToString());
 		m_dict->setObject(ld, score);
 	}
 }
 
 
-LevelLoader* LevelLoader::shareConfigLoader()
+LevelLoader* LevelLoader::shareLevelLoader()
 {
 	if (s_instance == NULL)
 	{

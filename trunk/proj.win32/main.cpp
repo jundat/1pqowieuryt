@@ -20,7 +20,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
     UNREFERENCED_PARAMETER(lpCmdLine);
 
 	ConfigLoader::shareConfigLoader();
-	LevelLoader::shareConfigLoader();
+	LevelLoader::shareLevelLoader();
 
     AppDelegate app;
     CCEGLView* eglView = CCEGLView::sharedOpenGLView();

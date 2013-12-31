@@ -11,25 +11,28 @@ USING_NS_CC;
 
 class LevelData : public CCObject {
 public:
-	LevelData(int score, int hp, float velocity) {
+	LevelData(int score, int hp, float velocity, float gentime) {
 			m_score = score;
 			m_hp = hp;
 			m_velocity = velocity;
+			m_genTime = gentime;
 	}
-	static LevelData* create(int score, int hp, float velocity) {
-		LevelData* ld = new LevelData(score, hp, velocity);
+
+	static LevelData* create(int score, int hp, float velocity, float gentime) {
+		LevelData* ld = new LevelData(score, hp, velocity, gentime);
 		ld->autorelease();
 		return ld;
 	}
 
 	const char* ToString() {
-		CCString* s = CCString::createWithFormat("(%d, %d, %f)", m_score, m_hp, m_velocity);
+		CCString* s = CCString::createWithFormat("(%d, %d, %f, %f)", m_score, m_hp, m_velocity, m_genTime);
 		return s->getCString();
 	}
 
 	int m_score;
 	int m_hp;
 	float m_velocity;
+	float m_genTime;
 };
 
 class LevelLoader
@@ -41,7 +44,7 @@ public:
 	}
 
 	static CCString* s_levelFile;
-	static LevelLoader* shareConfigLoader();
+	static LevelLoader* shareLevelLoader();
 
 	CCDictionary* m_dict;
 
