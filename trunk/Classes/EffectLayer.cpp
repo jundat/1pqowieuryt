@@ -28,16 +28,18 @@ float EffectLayer::AddExploisionEff(int enemySize, CCPoint p )
 	cache->addSpriteFramesWithFile("explosion_2.plist");
 	cache->addSpriteFramesWithFile("explosion_3.plist");
 
-	CCString* strSpriteName = CCString::createWithFormat("explosion_%d (1).png", enemySize);
+	CCString* strSpriteName = CCString::create("explosion_3 (1).png"); //explosion_%d (1).png, enemySize
 	CCSprite* m_pSprite1 = CCSprite::createWithSpriteFrameName(strSpriteName->getCString());
 
+	m_pSprite1->setScale(enemySize/3.0f); //////////////////////////////////////////////////////////////////////////
+	
 	m_pSprite1->setPosition(p);
 	this->addChild(m_pSprite1);
 
 	CCArray* animFrames = CCArray::createWithCapacity(NUM_FRAME);
 	for(int i = 1; i < NUM_FRAME; i++) 
 	{
-		strSpriteName = CCString::createWithFormat("explosion_%d (%d).png", enemySize, i);
+		strSpriteName = CCString::createWithFormat("explosion_3 (%d).png", i); //CCString::createWithFormat("explosion_%d (%d).png", enemySize, i);
 		CCSpriteFrame* frame = cache->spriteFrameByName( strSpriteName->getCString() );
 		animFrames->addObject(frame);
 	}

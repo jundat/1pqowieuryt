@@ -62,6 +62,7 @@ private:
 	CC_SYNTHESIZE(float, m_genTimeCounter, GenTimeCounter);
 
 	CCLabelBMFont* m_labelScore;
+	CCLabelBMFont* m_labelHp;
 	CCLabelBMFont* m_labelBoom;
 	CCMenuItemImage* m_itemBoom;
 	

@@ -38,6 +38,7 @@ bool Ship::init()
 	m_EffectLayer = EffectLayer::create();
 	this->addChild(m_EffectLayer, 100);
 
+	m_timeoutArmor = 0;
 	m_timeToFire = 0;
 	//////////////////////////////////////////////////////////////////////////
 	
@@ -120,8 +121,19 @@ void Ship::update( float delta )
 	LIMIT_VALUE(y, origin.y + h_2, origin.y + visibleSize.height - h_2);
 	this->setPosition(x, y);
 
-	//fire
+	//armor
+	m_timeoutArmor -= delta;
+	if (m_timeoutArmor <= 0)
+	{
+		m_timeoutArmor = -1;
+		if (m_bulletLevel > 0)
+		{
+			m_timeoutArmor = G_TIMEOUT_BULLET_LEVEL;
+			DowngradeBullet();
+		}
+	}
 
+	//fire
 	m_timeToFire += delta;
 	if (m_timeToFire >= G_PLAYER_TIME_TO_FIRE)
 	{
@@ -175,8 +187,11 @@ void Ship::Restart()
 void Ship::UpgradeBullet()
 {
 	m_bulletLevel++;
+
 	if (m_bulletLevel <= G_MAX_PLAYER_BULLET_LEVEL)
 	{
+		m_timeoutArmor = G_TIMEOUT_BULLET_LEVEL;
+
 		CCSprite* sprLevelUp = CCSprite::create("levelup.png");
 		this->addChild(sprLevelUp);
 
@@ -186,10 +201,10 @@ void Ship::UpgradeBullet()
 		sprLevelUp->runAction(spaw);
 
 		//timeout
-		CCDelayTime* delay = CCDelayTime::create(G_TIMEOUT_BULLET_LEVEL);
-		CCCallFunc* callf = CCCallFunc::create(this, callfunc_selector(Ship::DowngradeBullet));
-		CCSequence* seq = CCSequence::create(delay, callf, NULL);
-		this->runAction(seq);
+// 		CCDelayTime* delay = CCDelayTime::create(G_TIMEOUT_BULLET_LEVEL);
+// 		CCCallFunc* callf = CCCallFunc::create(this, callfunc_selector(Ship::DowngradeBullet));
+// 		CCSequence* seq = CCSequence::create(delay, callf, NULL);
+// 		this->runAction(seq);
 	}
 	else
 	{
@@ -201,22 +216,16 @@ void Ship::DowngradeBullet()
 {
 	if (m_bulletLevel >= G_MIN_PLAYER_BULLET_LEVEL)
 	{
-		this->Fire();
-		this->Fire();
-		this->Fire();
-
 		m_bulletLevel--;
 
-		this->Fire();
-		this->Fire();
-		this->Fire();
-		
 		if (m_bulletLevel > G_MIN_PLAYER_BULLET_LEVEL)
 		{
-			CCDelayTime* delay = CCDelayTime::create(G_TIMEOUT_BULLET_LEVEL);
-			CCCallFunc* callf = CCCallFunc::create(this, callfunc_selector(Ship::DowngradeBullet));
-			CCSequence* seq = CCSequence::create(delay, callf, NULL);
-			this->runAction(seq);
+			m_timeoutArmor = G_TIMEOUT_BULLET_LEVEL;
+
+// 			CCDelayTime* delay = CCDelayTime::create(G_TIMEOUT_BULLET_LEVEL);
+// 			CCCallFunc* callf = CCCallFunc::create(this, callfunc_selector(Ship::DowngradeBullet));
+// 			CCSequence* seq = CCSequence::create(delay, callf, NULL);
+// 			this->runAction(seq);
 		}
 	}
 }

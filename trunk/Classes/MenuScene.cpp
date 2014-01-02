@@ -45,7 +45,7 @@ bool MenuScene::init()
                                         menu_selector(MenuScene::playCallback));
     
 	playItem->setPosition(ccp(origin.x + visibleSize.width/2,
-                                origin.y + visibleSize.height/2 - 100));
+                                origin.y + visibleSize.height/2));
 
 	//
 
@@ -128,6 +128,7 @@ void MenuScene::playCallback(CCObject* pSender)
 		}
 		else
 		{
+			CCMessageBox("Not enough life, wait for 10s!", "Info");
 			CCLOG("Revive->LastLife < 0 -> Can not play");
 			return;
 		}

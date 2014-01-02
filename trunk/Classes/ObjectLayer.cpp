@@ -67,7 +67,15 @@ bool ObjectLayer::init()
 	m_labelScore->setPosition(ccp(origin.x + visibleSize.width/2,
 		origin.y + visibleSize.height - m_labelScore->getContentSize().height));
 	this->addChild(m_labelScore, 10);
-	
+
+	int lastLife = DataManager::sharedDataManager()->GetLastPlayerLife();
+	s = CCString::createWithFormat("Life: %d", lastLife);
+	m_labelHp = CCLabelBMFont::create(s->getCString(), "Mia_64.fnt");
+	m_labelHp->setScale(48.0f/64);
+	m_labelHp->setPosition(ccp(origin.x + m_labelHp->getContentSize().width/2,
+		origin.y + visibleSize.height - m_labelHp->getContentSize().height));
+	this->addChild(m_labelHp, 10);
+
 	m_itemBoom = CCMenuItemImage::create("icon_boom.png", "icon_boom.png", this, menu_selector(ObjectLayer::ActiveBoom));
 	m_itemBoom->setPosition(ccp(origin.x + m_itemBoom->getContentSize().width/2 - visibleSize.width/2, 
 		origin.y + m_itemBoom->getContentSize().height/2 - visibleSize.height/2));
@@ -434,6 +442,10 @@ void ObjectLayer::ContinueGame()
 	//reset:
 	//	player's HP
 
+	int lastLife = DataManager::sharedDataManager()->GetLastPlayerLife();
+	CCString* s = CCString::createWithFormat("Life: %d", lastLife);
+	m_labelHp->setString(s->getCString());
+
 	CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
 	CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
 
@@ -458,6 +470,10 @@ void ObjectLayer::RestartGame()
 	//	player's Position
 	//	score
 	//	numberBoom
+
+	int lastLife = DataManager::sharedDataManager()->GetLastPlayerLife();
+	CCString* s = CCString::createWithFormat("Life: %d", lastLife);
+	m_labelHp->setString(s->getCString());
 
 	m_genTimeCounter = 0;
 	m_playedTime = 0;

@@ -85,6 +85,20 @@ void MainGameScene::showEndGame( int score )
 		CCScene *pScene = MenuScene::scene();
 		CCDirector::sharedDirector()->replaceScene(pScene);
 	}
+// 	else if (lastLife == 0) //end game
+// 	{
+// 		CCLOG("Enough Life To Play -> Continue");
+// 		bool isJustRevived = DataManager::sharedDataManager()->GetIsJustRevived();
+// 		LoseDialog* lose = LoseDialog::create(! isJustRevived);
+// 		this->addChild(lose);
+// 
+// 		if (isJustRevived == true)
+// 		{
+// 			CCLOG("Can not revived again...");
+// 		}
+// 
+// 		DataManager::sharedDataManager()->SetIsJustRevived(false);
+// 	}
 	else
 	{
 		CCLOG("Enough Life To Play -> Continue");
