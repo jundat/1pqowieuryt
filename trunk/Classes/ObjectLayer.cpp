@@ -127,8 +127,9 @@ void ObjectLayer::ScheduleGenerateEnemy( float dt )
 
 	float h = visibleSize.height;
 	float w = visibleSize.width;
-
+	
 	Enemy* enemy = Enemy::create(m_difficulty);
+
 	float enemyW = enemy->boundingBox().size.width;
 			
 	float x = (int)(CCRANDOM_0_1() * (visibleSize.width - enemyW));

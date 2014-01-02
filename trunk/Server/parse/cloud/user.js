@@ -25,11 +25,11 @@ Parse.Cloud.define("signIn",
                 //Sing up
                 newUser.signUp(null, {
                     success: function(user) {
-                    	var result = "|signIn|" + username + "|";
+                    	var result = '|' + username + '|';
                         res.success(result);
                     },
                     error: function(user, error) {
-                        res.error("SignIn error: " + JSON.stringify(error));
+                        res.error('');
                     }
                 });
             }
@@ -49,12 +49,12 @@ Parse.Cloud.define("logIn",
         Parse.User.logIn(username, password, {
             success: function(user) {
 				var score = user.get('score');
-				var result = "|logIn|" + score + "|";
+				var result = '|' + score + '|';
                 
                 res.success(result);
             },
             error: function(user, error) {
-                res.error('LogIn error');
+                res.error('');
             }
         });
     }
@@ -65,6 +65,7 @@ Parse.Cloud.define("logIn",
 //Submit
 Parse.Cloud.define('submitScore',
     function(req, res) {
+    	Parse.Cloud.useMasterKey('VUwBOXV3DCmZZaS28M1GYgZopdHvwepjPPU3JV6D');
         var username = req.params.username;
         var score = req.params.score;
         
@@ -75,10 +76,10 @@ Parse.Cloud.define('submitScore',
             success: function(user) {
                 user.set('score', score);
                 user.save();
-                res.success('|submitScore|Success' + score + '|');
+                res.success('|' + score + '|');
             },
             error: function(error) {
-                res.error('Can not find username: ' + username);
+                res.error('');
             }
         });
     }

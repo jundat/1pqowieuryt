@@ -21,47 +21,47 @@ ConfigLoader::ConfigLoader(void)
 	CCLOG("------------CONFIG-----------");
 
 	//save to variant
-	G_DESIGN_WIDTH = GetValue("G_DESIGN_WIDTH")->intValue();
-	G_DESIGN_HEIGHT = GetValue("G_DESIGN_HEIGHT")->intValue();
-	G_SCALE_FACTOR = GetValue("G_SCALE_FACTOR")->floatValue();
+	G_DESIGN_WIDTH = GetValue(std::string("G_DESIGN_WIDTH"))->intValue();
+	G_DESIGN_HEIGHT = GetValue(std::string("G_DESIGN_HEIGHT"))->intValue();
+	G_SCALE_FACTOR = GetValue(std::string("G_SCALE_FACTOR"))->floatValue();
 
-	G_PLAYER_HP = GetValue("G_PLAYER_HP")->intValue();
-	G_PLAYER_DAMAGE = GetValue("G_PLAYER_DAMAGE")->intValue();
-	G_MIN_PLAYER_BULLET_LEVEL = GetValue("G_MIN_PLAYER_BULLET_LEVEL")->intValue();
-	G_MAX_PLAYER_BULLET_LEVEL = GetValue("G_MAX_PLAYER_BULLET_LEVEL")->intValue();
+	G_PLAYER_HP = GetValue(std::string("G_PLAYER_HP"))->intValue();
+	G_PLAYER_DAMAGE = GetValue(std::string("G_PLAYER_DAMAGE"))->intValue();
+	G_MIN_PLAYER_BULLET_LEVEL = GetValue(std::string("G_MIN_PLAYER_BULLET_LEVEL"))->intValue();
+	G_MAX_PLAYER_BULLET_LEVEL = GetValue(std::string("G_MAX_PLAYER_BULLET_LEVEL"))->intValue();
 	
-	G_MAX_PLAYER_BOOM = GetValue("G_MAX_PLAYER_BOOM")->intValue();
+	G_MAX_PLAYER_BOOM = GetValue(std::string("G_MAX_PLAYER_BOOM"))->intValue();
 
-	G_MIN_ENEMY_HP = GetValue("G_MIN_ENEMY_HP")->intValue();
-	G_MIN_ENEMY_DAM = GetValue("G_MIN_ENEMY_DAM")->intValue();
-	G_PLAYER_ARMOR_TIME = GetValue("G_PLAYER_ARMOR_TIME")->floatValue();
-	G_PLAYER_BULLET_VY = GetValue("G_PLAYER_BULLET_VY")->floatValue();
+	G_MIN_ENEMY_HP = GetValue(std::string("G_MIN_ENEMY_HP"))->intValue();
+	G_MIN_ENEMY_DAM = GetValue(std::string("G_MIN_ENEMY_DAM"))->intValue();
+	G_PLAYER_ARMOR_TIME = GetValue(std::string("G_PLAYER_ARMOR_TIME"))->floatValue();
+	G_PLAYER_BULLET_VY = GetValue(std::string("G_PLAYER_BULLET_VY"))->floatValue();
 
-	G_PLAYER_TIME_TO_FIRE = GetValue("G_PLAYER_TIME_TO_FIRE")->floatValue();
-	G_ENEMY_TIME_TO_FIRE = GetValue("G_ENEMY_TIME_TO_FIRE")->floatValue();
+	G_PLAYER_TIME_TO_FIRE = GetValue(std::string("G_PLAYER_TIME_TO_FIRE"))->floatValue();
+	G_ENEMY_TIME_TO_FIRE = GetValue(std::string("G_ENEMY_TIME_TO_FIRE"))->floatValue();
 	
-	G_DEFAULT_TIME_TO_GENERATE_ENEMY = GetValue("G_DEFAULT_TIME_TO_GENERATE_ENEMY")->floatValue();
+	G_DEFAULT_TIME_TO_GENERATE_ENEMY = GetValue(std::string("G_DEFAULT_TIME_TO_GENERATE_ENEMY"))->floatValue();
 	
-	G_MIN_ENEMY_VY = GetValue("G_MIN_ENEMY_VY")->floatValue();
-	G_MAX_ENEMY_VY = GetValue("G_MAX_ENEMY_VY")->floatValue();
+	G_MIN_ENEMY_VY = GetValue(std::string("G_MIN_ENEMY_VY"))->floatValue();
+	G_MAX_ENEMY_VY = GetValue(std::string("G_MAX_ENEMY_VY"))->floatValue();
 	
-	G_MIN_ENEMY_BULLET_VY = GetValue("G_MIN_ENEMY_BULLET_VY")->floatValue();
-	G_BULLET_VY_FROM_ENEMY = GetValue("G_BULLET_VY_FROM_ENEMY")->floatValue();
+	G_MIN_ENEMY_BULLET_VY = GetValue(std::string("G_MIN_ENEMY_BULLET_VY"))->floatValue();
+	G_BULLET_VY_FROM_ENEMY = GetValue(std::string("G_BULLET_VY_FROM_ENEMY"))->floatValue();
 	
-	G_DEFAULT_DIFFICULTY = GetValue("G_DEFAULT_DIFFICULTY")->floatValue();
+	G_DEFAULT_DIFFICULTY = GetValue(std::string("G_DEFAULT_DIFFICULTY"))->floatValue();
 
-	G_VELOCITY_IN_DIFFICULTY = GetValue("G_VELOCITY_IN_DIFFICULTY")->floatValue();
-	G_HP_IN_DIFFICULTY = GetValue("G_HP_IN_DIFFICULTY")->floatValue();
-	G_DAMAGE_IN_DIFFICULTY = GetValue("G_DAMAGE_IN_DIFFICULTY")->floatValue();
+	G_VELOCITY_IN_DIFFICULTY = GetValue(std::string("G_VELOCITY_IN_DIFFICULTY"))->floatValue();
+	G_HP_IN_DIFFICULTY = GetValue(std::string("G_HP_IN_DIFFICULTY"))->floatValue();
+	G_DAMAGE_IN_DIFFICULTY = GetValue(std::string("G_DAMAGE_IN_DIFFICULTY"))->floatValue();
 
-	G_TIMEOUT_BULLET_LEVEL = GetValue("G_TIMEOUT_BULLET_LEVEL")->floatValue();
+	G_TIMEOUT_BULLET_LEVEL = GetValue(std::string("G_TIMEOUT_BULLET_LEVEL"))->floatValue();
 
-	G_ITEM_BULLET_RANDOM_PERCENT = GetValue("G_ITEM_BULLET_RANDOM_PERCENT")->floatValue();
-	G_ITEM_ARMOR_RANDOM_PERCENT = GetValue("G_ITEM_ARMOR_RANDOM_PERCENT")->floatValue();
-	G_ITEM_BOOM_RANDOM_PERCENT = GetValue("G_ITEM_BOOM_RANDOM_PERCENT")->floatValue();
+	G_ITEM_BULLET_RANDOM_PERCENT = GetValue(std::string("G_ITEM_BULLET_RANDOM_PERCENT"))->floatValue();
+	G_ITEM_ARMOR_RANDOM_PERCENT = GetValue(std::string("G_ITEM_ARMOR_RANDOM_PERCENT"))->floatValue();
+	G_ITEM_BOOM_RANDOM_PERCENT = GetValue(std::string("G_ITEM_BOOM_RANDOM_PERCENT"))->floatValue();
 
-	G_PLAYER_TIME_TO_REVIVE = GetValue("G_PLAYER_TIME_TO_REVIVE")->floatValue();
-	G_MAX_PLAYER_LIFE = GetValue("G_MAX_PLAYER_LIFE")->floatValue();
+	G_PLAYER_TIME_TO_REVIVE = GetValue(std::string("G_PLAYER_TIME_TO_REVIVE"))->floatValue();
+	G_MAX_PLAYER_LIFE = GetValue(std::string("G_MAX_PLAYER_LIFE"))->floatValue();
 }
 
 
@@ -79,12 +79,12 @@ ConfigLoader* ConfigLoader::shareConfigLoader()
 	return s_instance;
 }
 
-const CCString* ConfigLoader::GetValue( char* key )
+const CCString* ConfigLoader::GetValue(const std::string key )
 {
-	const CCString* v = m_dict->valueForKey(std::string(key));
+	const CCString* v = m_dict->valueForKey(key);
 	if (v->length() == 0)
 	{
-		CCLOG("NOT A VALID KEY CONFIG: %s", key);
+		CCLOG("NOT A VALID KEY CONFIG: %s", key.c_str());
 		return CCStringMake("NULL_STRING");
 	}
 

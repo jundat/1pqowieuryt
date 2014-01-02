@@ -45,7 +45,7 @@ LevelLoader::LevelLoader(void)
 
 		sscanf(smallStr.c_str(), "%d,%d,%f,%f\n", &score, &hp, &velocity, &genTime);
 		LevelData* ld = LevelData::create(score, hp, velocity, genTime);
-		CCLOG(ld->ToString());
+		CCLOG("%s", ld->ToString());
 		m_dict->setObject(ld, score);
 	}
 }

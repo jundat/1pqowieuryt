@@ -19,7 +19,7 @@ public:
 
 	CCDictionary* m_dict;
 
-	const CCString* GetValue(char* key);
+	const CCString* GetValue(const std::string key);
 
 protected:
 	static ConfigLoader* s_instance;

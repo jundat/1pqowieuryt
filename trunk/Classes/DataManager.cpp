@@ -82,12 +82,12 @@ int DataManager::GetLastPlayerLife()
 	int flagFirstTime = CCUserDefault::sharedUserDefault()->getIntegerForKey("FLAG_FIRST_TIME", 0);
 	if (flagFirstTime != 0) //not the first time
 	{
-		CCLOG("NOT First time", "Info");
+		CCLOG("NOT First time");
 		return CCUserDefault::sharedUserDefault()->getIntegerForKey("G_LAST_PLAYER_LIFE");
 	} 
 	else //==0, first time
 	{
-		CCLOG("------------------ First time ------------------", "Info");
+		CCLOG("------------------ First time ------------------");
 		CCUserDefault::sharedUserDefault()->setIntegerForKey("FLAG_FIRST_TIME", 1);
 		SetLastPlayerLife(G_MAX_PLAYER_LIFE);
 		return G_MAX_PLAYER_LIFE;

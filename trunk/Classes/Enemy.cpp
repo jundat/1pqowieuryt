@@ -14,6 +14,7 @@ float Enemy::S_GENERATE_TIME = G_DEFAULT_TIME_TO_GENERATE_ENEMY;
 
 void Enemy::DifficultySplit(float difficulty, float& vy, int& hp, int& dm)
 {
+
 	LevelData* ld = LevelLoader::shareLevelLoader()->GetValueLowerThan((int)difficulty);
 
 	if (ld != NULL)
@@ -21,15 +22,19 @@ void Enemy::DifficultySplit(float difficulty, float& vy, int& hp, int& dm)
 		S_HP = ld->m_hp;
 		S_VELOCITY = ld->m_velocity;
 		S_GENERATE_TIME = ld->m_genTime;
-		CCLOG("--------------------- UPDATE NEW LEVEL ----- score %d ----- diff %f ---------------------", ld->m_score, difficulty);
-		CCLOG("--------------------- GEN TIME: %f", ld->m_genTime);
+		//CCLOG("--------------------- UPDATE NEW LEVEL ----- score %d ----- diff %f ---------------------", ld->m_score, difficulty);
+		//CCLOG("--------------------- GEN TIME: %f", ld->m_genTime);
 	}
 
 	hp = S_HP;
 	vy = S_VELOCITY;
+
+	float dv = CCRANDOM_0_1() * 0.2f - 0.1f;
+	vy += dv;
+
 	dm = 0;
 
-	CCLOG("Vy: %f\tHp: %d\tDam: %d", vy, hp, dm);
+	//CCLOG("Vy: %f\tHp: %d\tDam: %d", vy, hp, dm);
 }
 
 Enemy::Enemy(float difficulty) : GameObject()
@@ -55,7 +60,20 @@ bool Enemy::init()
 	this->setVx(0);
 	this->setEnemyType(G_ENEMY_TYPE);
 
-	int n = 1;//(int)(CCRANDOM_0_1() * 3) + 1;
+	int n = (int)(CCRANDOM_0_1() * 10);
+	if (n <= 6)
+	{
+		n = 1;
+	}
+	else if (n <= 8)
+	{
+		n = 2;
+	}
+	else
+	{
+		n = 3;
+	}
+
 	CCString* s = CCString::createWithFormat("enemy_%d.png", n);
 	m_sprite = CCSprite::create(s->getCString());
 
