@@ -3,6 +3,7 @@
 #include "ParseClient.h"
 #include "cocos-ext.h"
 #include "HttpClient.h"
+#include "GameClient.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -62,11 +63,7 @@ bool ScoreScene::init()
 	pMenu->setPosition(CCPointZero);
 	this->addChild(pMenu, 1);
 
-	ParseClient::sharedParseClient()->callCloudFunction(
-		"testCloudFunction", 
-		"{\"name\":\"Pham Tan Long\"}", 
-		httpresponse_selector(ScoreScene::onHttpRequestCompleted), 
-		"testCloutFunction");
+	GameClient::sharedGameClient()->getLeaderboard();
 
     return true;
 }

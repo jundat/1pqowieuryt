@@ -43,6 +43,7 @@ bool ObjectLayer::init()
 	m_genTimeCounter = 0;
 
 	m_isEndGame = false;
+	m_killedEnemies = 0;
 	m_score = 0;
 	m_playedTime = 0;
 	m_difficulty = 0;
@@ -57,12 +58,11 @@ bool ObjectLayer::init()
 	lbHighScore->setPosition(ccp(origin.x + visibleSize.width/2, origin.y + visibleSize.height/2));
 	this->addChild(lbHighScore, 10);
 	lbHighScore->runAction(CCSequence::create(
-		CCDelayTime::create(1.0f),
+		CCDelayTime::create(2.0f),
 		CCFadeOut::create(2.0f),
 		NULL));
 	
-	s = CCString::createWithFormat("0/%d", DataManager::sharedDataManager()->GetCurrenHighScore());
-	m_labelScore = CCLabelBMFont::create(s->getCString(), "Mia_64.fnt");
+	m_labelScore = CCLabelBMFont::create("0", "Mia_64.fnt");
 	m_labelScore->setScale(48.0f/64);
 	m_labelScore->setPosition(ccp(origin.x + visibleSize.width/2,
 		origin.y + visibleSize.height - m_labelScore->getContentSize().height));
@@ -131,7 +131,7 @@ void ObjectLayer::ScheduleGenerateEnemy( float dt )
 	CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
 	CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
 
-	m_difficulty = m_score;
+	m_difficulty = m_killedEnemies;
 
 	float h = visibleSize.height;
 	float w = visibleSize.width;
@@ -288,13 +288,24 @@ void ObjectLayer::update( float delta )
 					item = Item::create(G_ITEM_BOOM, -0.3f, enemy->getPosition());
 					this->AddItem(item);
 				}
-				
-				//score
-				m_score += enemy->getOriginHp(); //Hp ở trên set = 0 rồi
-				m_score = (m_score < 0) ? 0 : m_score;
-				CCString* sscore = CCString::createWithFormat("%d/%d", m_score, DataManager::sharedDataManager()->GetCurrenHighScore());
-				m_labelScore->setString(sscore->getCString());
 
+				m_killedEnemies++;
+
+				switch (enemy->getEnemyType())
+				{
+				case 1:
+					m_score += G_SCORE_1;
+					break;
+				case 2:
+					m_score += G_SCORE_2;
+					break;
+				case 3:
+					m_score += G_SCORE_3;
+					break;
+				}
+				
+				CCString* sscore = CCString::createWithFormat("%d/%d", m_score, m_killedEnemies);
+				m_labelScore->setString(sscore->getCString());
 				DataManager::sharedDataManager()->SetCurrentHighScore(m_score);
 			}
 
@@ -477,6 +488,7 @@ void ObjectLayer::RestartGame()
 
 	m_genTimeCounter = 0;
 	m_playedTime = 0;
+	m_killedEnemies = 0;
 	m_score = 0;
 	m_numberBoom = 0;
 
@@ -506,7 +518,7 @@ void ObjectLayer::AfterDeadEffectCallback()
 	m_player->Dead();
 
 	MainGameScene* parent = (MainGameScene*) this->getParent();
-	parent->showEndGame(m_score);
+	parent->showEndGame(m_score, m_killedEnemies);
 	
 	//remove all enemy
 	CCObject* it;

@@ -64,6 +64,15 @@ void GameClient::submitScore()
 	pc->callCloudFunction("submitScore", json->getCString(), httpresponse_selector(GameClient::submitScoreCompleted), "submitScore");
 }
 
+void GameClient::getLeaderboard()
+{
+	//use MasterKey
+	ParseClient* pc = ParseClient::sharedParseClient();
+	CCLOG("Call getLeaderboard");
+
+	pc->callCloudFunction("getLeaderboard", "{}", httpresponse_selector(GameClient::getLeaderboardCompleted), "getLeaderboard");
+}
+
 void GameClient::signInCompleted( cocos2d::extension::CCHttpClient *sender, cocos2d::extension::CCHttpResponse *response )
 {
 	if (!response) return;
@@ -151,3 +160,35 @@ void GameClient::submitScoreCompleted( cocos2d::extension::CCHttpClient *sender,
 
 	CCLOG("-----------------END-------------------");
 }
+
+void GameClient::getLeaderboardCompleted( cocos2d::extension::CCHttpClient *sender, cocos2d::extension::CCHttpResponse *response )
+{
+	if (!response) return;
+
+	//Show info
+	CCLOG("-----------------BEGIN-------------------");
+	CCLOG("GetLeaderboard completed");
+	CCLOG("Status: [%i]", response->getResponseCode());
+
+	if (!response->isSucceed())
+	{
+		CCLog("GetLeaderboard Failed: %s", response->getErrorBuffer());
+	}
+	else
+	{
+		std::vector<char> *buffer = response->getResponseData();
+		std::string str(buffer->begin(), buffer->end());
+		
+		CCLOG("Leaderboard: %s", str.c_str());
+
+		int ind1 = str.find_first_of("|");
+		int ind2 = str.find_first_of("|", ind1 + 1);
+
+		std::string username = str.substr(ind1 + 1, ind2 - ind1 - 1);
+		CCLOG("username: %s", username.c_str());
+		DataManager::sharedDataManager()->SetUsername(username.c_str()); //////////////////////////////////////////////////////////////////////////
+	}
+
+	CCLOG("-----------------END-------------------");
+}
+

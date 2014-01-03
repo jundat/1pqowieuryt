@@ -43,11 +43,11 @@
 	    <key>G_PLAYER_ARMOR_TIME</key> <!-- Thời gian để giáp bảo vệ cho player -->
 		    <string>10.0</string>
 	    <key>G_PLAYER_BULLET_VY</key> <!-- Tốc độ đạn của Player -->
-		    <string>1.5</string>
+		    <string>2.5</string>
 
 
 	    <key>G_PLAYER_TIME_TO_FIRE</key> <!-- Thời gian giữa 2 lần bắn đạn của Player -->
-		    <string>0.4</string>
+		    <string>0.2</string>
 	    <key>G_ENEMY_TIME_TO_FIRE</key> <!-- Thời gian giữa 2 lần bắn đạn của Enemy -->
 		    <string>0</string>
 

@@ -2,11 +2,9 @@
 
 USING_NS_CC;
 
-// on "init" you need to initialize your instance
+
 bool EffectLayer::init()
 {
-    //////////////////////////////
-    // 1. super init first
     if ( !CCLayer::init() )
     {
         return false;
@@ -24,11 +22,9 @@ float EffectLayer::AddExploisionEff(int enemySize, CCPoint p )
 	float TIME_ANIMATION = 0.1f;
 
 	CCSpriteFrameCache* cache = CCSpriteFrameCache::sharedSpriteFrameCache();
-	cache->addSpriteFramesWithFile("explosion_1.plist");
-	cache->addSpriteFramesWithFile("explosion_2.plist");
 	cache->addSpriteFramesWithFile("explosion_3.plist");
 
-	CCString* strSpriteName = CCString::create("explosion_3 (1).png"); //explosion_%d (1).png, enemySize
+	CCString* strSpriteName = CCString::create("explosion_3 (1).png");
 	CCSprite* m_pSprite1 = CCSprite::createWithSpriteFrameName(strSpriteName->getCString());
 
 	m_pSprite1->setScale(enemySize/3.0f); //////////////////////////////////////////////////////////////////////////
@@ -39,7 +35,7 @@ float EffectLayer::AddExploisionEff(int enemySize, CCPoint p )
 	CCArray* animFrames = CCArray::createWithCapacity(NUM_FRAME);
 	for(int i = 1; i < NUM_FRAME; i++) 
 	{
-		strSpriteName = CCString::createWithFormat("explosion_3 (%d).png", i); //CCString::createWithFormat("explosion_%d (%d).png", enemySize, i);
+		strSpriteName = CCString::createWithFormat("explosion_3 (%d).png", i);
 		CCSpriteFrame* frame = cache->spriteFrameByName( strSpriteName->getCString() );
 		animFrames->addObject(frame);
 	}

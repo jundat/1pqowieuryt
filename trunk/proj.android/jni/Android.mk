@@ -17,6 +17,7 @@ LOCAL_SRC_FILES := hellocpp/main.cpp \
 	 ../../Classes/DataManager.cpp  \
      ../../Classes/EffectLayer.cpp  \
      ../../Classes/Enemy.cpp  \
+     ../../Classes/GameClient.cpp  \
      ../../Classes/GameObject.cpp  \
 	 ../../Classes/Global.cpp  \
      ../../Classes/Item.cpp  \

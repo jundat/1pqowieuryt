@@ -28,15 +28,16 @@ public:
 	}
 
 	void startGame();
-
 	void signIn();
 	void logIn();
 	void submitScore();
+	void getLeaderboard();
 
 private:
 	void signInCompleted(cocos2d::extension::CCHttpClient *sender, cocos2d::extension::CCHttpResponse *response);
 	void logInCompleted(cocos2d::extension::CCHttpClient *sender, cocos2d::extension::CCHttpResponse *response);
 	void submitScoreCompleted(cocos2d::extension::CCHttpClient *sender, cocos2d::extension::CCHttpResponse *response);
+	void getLeaderboardCompleted(cocos2d::extension::CCHttpClient *sender, cocos2d::extension::CCHttpResponse *response);
 
 
 private:

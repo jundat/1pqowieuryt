@@ -61,3 +61,8 @@ float G_DEFAULT_DIFFICULTY = 1.0f;
 float G_VELOCITY_IN_DIFFICULTY = 2000;
 float G_HP_IN_DIFFICULTY = 200;
 float G_DAMAGE_IN_DIFFICULTY = 200;
+
+
+int G_SCORE_1 = 100;		//score for enemy_1
+int G_SCORE_2 = 300;		//score for enemy_2
+int G_SCORE_3 = 1000;		//score for enemy_3

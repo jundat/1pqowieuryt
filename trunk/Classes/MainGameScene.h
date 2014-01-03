@@ -19,7 +19,7 @@ public:
 	void resumeCallback();
 
 public:
-	void showEndGame(int score);
+	void showEndGame(int score, int killedEnemies);
 	void okCallback();
 	void cancelCallback();
 

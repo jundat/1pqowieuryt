@@ -81,9 +81,18 @@ bool LoseDialog::init()
 		this->addChild(cancel);
 	}
 	
-	CCLabelBMFont* msg = CCLabelBMFont::create("You lose !", "Mia_64.fnt");
-	msg->setPosition(ccp(visibleSize.width/2, visibleSize.height/2 + 100));
-	this->addChild(msg);
+	CCLabelBMFont* lbTitle = CCLabelBMFont::create("You lose !", "Mia_64.fnt");
+	lbTitle->setPosition(ccp(visibleSize.width/2, visibleSize.height/2 + 150));
+	this->addChild(lbTitle);
+
+	CCLabelBMFont* lbMsg = CCLabelBMFont::create("Score", "Mia_64.fnt");
+	lbMsg->setPosition(ccp(visibleSize.width/2, visibleSize.height/2 + 50));
+	this->addChild(lbMsg);
+
+	CCString* s = CCString::createWithFormat("%d", m_score);
+	CCLabelBMFont* lbScore = CCLabelBMFont::create(s->getCString(), "Mia_64.fnt");
+	lbScore->setPosition(ccp(visibleSize.width/2, visibleSize.height/2 - 50));
+	this->addChild(lbScore);
 
     return true;
 }

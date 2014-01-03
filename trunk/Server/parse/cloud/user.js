@@ -1,7 +1,8 @@
 //USER MANAGERMENT FUNCTIONS
 
+var NUMBER_TOP = 10;
 
-//OK
+
 //Sign in
 Parse.Cloud.define("signIn",
     function(req, res) {
@@ -38,7 +39,6 @@ Parse.Cloud.define("signIn",
 ); //end Sign in
 
 
-//OK
 //Log in
 Parse.Cloud.define("logIn",
     function(req, res) {
@@ -61,7 +61,6 @@ Parse.Cloud.define("logIn",
 ); //end Log in
 
 
-//OK
 //Submit
 Parse.Cloud.define('submitScore',
     function(req, res) {
@@ -84,3 +83,43 @@ Parse.Cloud.define('submitScore',
         });
     }
 ); //end submit
+
+
+//Get Leaderboard
+Parse.Cloud.define("getLeaderboard",
+	function(req, res) {
+		var query1 = new Parse.Query(Parse.User);
+		query1.select('username');
+		query1.select('name');
+		query1.select('score');
+		query1.descending('score');
+		query1.limit(NUMBER_TOP); //TOP 10
+		query1.find(
+		{
+			success: function(results) {
+				var list = "@"; //begin
+				var LEN = results.length;
+
+				for (var i = 0; i < LEN; i++) {
+					var user = 
+						results[i].get('username') + "|" + 
+						results[i].get('name') + "|" + 
+						results[i].get('score');
+					
+					if (i < LEN - 1) { 
+						user += ";" 
+					};
+
+					list += user;
+				};
+
+				list += "@"; //end
+
+				res.success(list);
+			},
+			error: function(error) {
+				res.error("Can not get Leaderboard");
+			}
+		});
+	}
+); //end Get Leaderboard

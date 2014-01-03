@@ -66,7 +66,7 @@ void MainGameScene::resumeCallback()
 	m_ObjLayer->Resume();
 }
 
-void MainGameScene::showEndGame( int score )
+void MainGameScene::showEndGame( int score, int killedEnemies )
 {
 	//check if enough last_life
 	int lastLife = DataManager::sharedDataManager()->GetLastPlayerLife();
@@ -103,7 +103,7 @@ void MainGameScene::showEndGame( int score )
 	{
 		CCLOG("Enough Life To Play -> Continue");
 		bool isJustRevived = DataManager::sharedDataManager()->GetIsJustRevived();
-		LoseDialog* lose = LoseDialog::create(! isJustRevived);
+		LoseDialog* lose = LoseDialog::create(! isJustRevived, score, killedEnemies);
 		this->addChild(lose);
 
 		if (isJustRevived == true)

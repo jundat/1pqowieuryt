@@ -21,8 +21,8 @@ public:
 	std::string	GetPassword();
 	void	SetPassword(const char* pass);
 
-	int		GetCurrenHighScore();
-	void	SetCurrentHighScore(int currentLevel);
+	long	GetCurrenHighScore();
+	void	SetCurrentHighScore(long currentScore);
 
 	tm*		GetLastDeadTime();
 	void	SetLastDeadTime(tm* time); //int hour, int min, int sec, int mday, int mon, int year);

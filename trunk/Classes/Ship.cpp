@@ -38,10 +38,11 @@ bool Ship::init()
 	m_EffectLayer = EffectLayer::create();
 	this->addChild(m_EffectLayer, 100);
 
-	m_timeoutArmor = 0;
+	m_bulletLevel = G_MIN_PLAYER_BULLET_LEVEL;
+	m_timeOutBulletLevel = m_bulletLevel * G_TIMEOUT_BULLET_LEVEL;
 	m_timeToFire = 0;
 	//////////////////////////////////////////////////////////////////////////
-	
+
 	this->scheduleUpdate();
 	return true;
 }
@@ -73,6 +74,10 @@ void Ship::Fire()
 	CCSize s = getContentSize();
 	ObjectLayer* parent = (ObjectLayer*)this->getParent();
 	Bullet *bullet1, *bullet2, *bullet3;
+
+	m_bulletLevel = (int)(m_timeOutBulletLevel / G_TIMEOUT_BULLET_LEVEL) + 1;
+	m_bulletLevel = (m_bulletLevel < G_MAX_PLAYER_BULLET_LEVEL) ? m_bulletLevel : G_MAX_PLAYER_BULLET_LEVEL;
+	m_bulletLevel = (m_bulletLevel > G_MIN_PLAYER_BULLET_LEVEL) ? m_bulletLevel : G_MIN_PLAYER_BULLET_LEVEL;
 
 	switch (m_bulletLevel)
 	{
@@ -122,17 +127,8 @@ void Ship::update( float delta )
 	this->setPosition(x, y);
 
 	//armor
-	m_timeoutArmor -= delta;
-	if (m_timeoutArmor <= 0)
-	{
-		m_timeoutArmor = -1;
-		if (m_bulletLevel > 0)
-		{
-			m_timeoutArmor = G_TIMEOUT_BULLET_LEVEL;
-			DowngradeBullet();
-		}
-	}
-
+	m_timeOutBulletLevel -= delta;
+	
 	//fire
 	m_timeToFire += delta;
 	if (m_timeToFire >= G_PLAYER_TIME_TO_FIRE)
@@ -178,6 +174,7 @@ void Ship::Dead()
 void Ship::Restart()
 {
 	m_bulletLevel = G_MIN_PLAYER_BULLET_LEVEL;
+	m_timeOutBulletLevel = m_bulletLevel * G_TIMEOUT_BULLET_LEVEL;
 	this->DisableArmor();
 	this->setHp(G_PLAYER_HP);
 	this->setVisible(true);
@@ -188,10 +185,8 @@ void Ship::UpgradeBullet()
 {
 	m_bulletLevel++;
 
-	if (m_bulletLevel <= G_MAX_PLAYER_BULLET_LEVEL)
+	if (m_bulletLevel <= G_MAX_PLAYER_BULLET_LEVEL) 
 	{
-		m_timeoutArmor = G_TIMEOUT_BULLET_LEVEL;
-
 		CCSprite* sprLevelUp = CCSprite::create("levelup.png");
 		this->addChild(sprLevelUp);
 
@@ -199,33 +194,11 @@ void Ship::UpgradeBullet()
 		CCFadeOut* fade = CCFadeOut::create(0.7f);
 		CCSpawn* spaw = CCSpawn::create(move, fade, NULL);
 		sprLevelUp->runAction(spaw);
-
-		//timeout
-// 		CCDelayTime* delay = CCDelayTime::create(G_TIMEOUT_BULLET_LEVEL);
-// 		CCCallFunc* callf = CCCallFunc::create(this, callfunc_selector(Ship::DowngradeBullet));
-// 		CCSequence* seq = CCSequence::create(delay, callf, NULL);
-// 		this->runAction(seq);
 	}
 	else
 	{
 		m_bulletLevel = G_MAX_PLAYER_BULLET_LEVEL;
 	}
-}
 
-void Ship::DowngradeBullet()
-{
-	if (m_bulletLevel >= G_MIN_PLAYER_BULLET_LEVEL)
-	{
-		m_bulletLevel--;
-
-		if (m_bulletLevel > G_MIN_PLAYER_BULLET_LEVEL)
-		{
-			m_timeoutArmor = G_TIMEOUT_BULLET_LEVEL;
-
-// 			CCDelayTime* delay = CCDelayTime::create(G_TIMEOUT_BULLET_LEVEL);
-// 			CCCallFunc* callf = CCCallFunc::create(this, callfunc_selector(Ship::DowngradeBullet));
-// 			CCSequence* seq = CCSequence::create(delay, callf, NULL);
-// 			this->runAction(seq);
-		}
-	}
+	m_timeOutBulletLevel = m_bulletLevel * G_TIMEOUT_BULLET_LEVEL;
 }

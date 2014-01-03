@@ -7,34 +7,25 @@
 USING_NS_CC;
 
 
-int Enemy::S_HP = G_MIN_ENEMY_HP;
+int Enemy::S_HP1 = G_MIN_ENEMY_HP;
+int Enemy::S_HP2 = G_MIN_ENEMY_HP;
+int Enemy::S_HP3 = G_MIN_ENEMY_HP;
 float Enemy::S_VELOCITY = G_MIN_ENEMY_VY;
 float Enemy::S_GENERATE_TIME = G_DEFAULT_TIME_TO_GENERATE_ENEMY;
 
 
-void Enemy::DifficultySplit(float difficulty, float& vy, int& hp, int& dm)
+void Enemy::DifficultySplit(float difficulty)
 {
-
 	LevelData* ld = LevelLoader::shareLevelLoader()->GetValueLowerThan((int)difficulty);
 
 	if (ld != NULL)
 	{
-		S_HP = ld->m_hp;
+		S_HP1 = ld->m_hp1;
+		S_HP2 = ld->m_hp2;
+		S_HP3 = ld->m_hp3;
 		S_VELOCITY = ld->m_velocity;
 		S_GENERATE_TIME = ld->m_genTime;
-		//CCLOG("--------------------- UPDATE NEW LEVEL ----- score %d ----- diff %f ---------------------", ld->m_score, difficulty);
-		//CCLOG("--------------------- GEN TIME: %f", ld->m_genTime);
 	}
-
-	hp = S_HP;
-	vy = S_VELOCITY;
-
-	float dv = CCRANDOM_0_1() * 0.2f - 0.1f;
-	vy += dv;
-
-	dm = 0;
-
-	//CCLOG("Vy: %f\tHp: %d\tDam: %d", vy, hp, dm);
 }
 
 Enemy::Enemy(float difficulty) : GameObject()
@@ -53,28 +44,36 @@ bool Enemy::init()
 	CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
 
 	//////////////////////////////////////////////////////////////////////////
+	DifficultySplit(m_difficulty);
 
-	DifficultySplit(m_difficulty, m_vy, m_hp, m_damage);
-	m_originHp = m_hp;
+	m_vy = S_VELOCITY;
+	float dv = CCRANDOM_0_1() * 0.2f - 0.1f;
+	m_vy += dv;
+
+	m_damage = 0;
 
 	this->setVx(0);
-	this->setEnemyType(G_ENEMY_TYPE);
 
-	int n = (int)(CCRANDOM_0_1() * 10);
-	if (n <= 6)
+	m_type = (int)(CCRANDOM_0_1() * 10);
+	if (m_type <= 6)
 	{
-		n = 1;
+		m_type = 1;
+		m_hp = S_HP1;
 	}
-	else if (n <= 8)
+	else if (m_type <= 8)
 	{
-		n = 2;
+		m_type = 2;
+		m_hp = S_HP2;
 	}
 	else
 	{
-		n = 3;
+		m_type = 3;
+		m_hp = S_HP3;
 	}
 
-	CCString* s = CCString::createWithFormat("enemy_%d.png", n);
+	m_originHp = m_hp;
+
+	CCString* s = CCString::createWithFormat("enemy_%d.png", m_type);
 	m_sprite = CCSprite::create(s->getCString());
 
 	m_sprite->setPosition(CCPointZero);
@@ -127,7 +126,7 @@ void Enemy::HitBullet(int damage)
 	if (m_hp > 0)
 	{
 		//small effect explosion
-		m_EffectLayer->AddExploisionEff(2, CCPointZero);
+		//m_EffectLayer->AddExploisionEff(2, CCPointZero);
 	}
 	else
 	{
