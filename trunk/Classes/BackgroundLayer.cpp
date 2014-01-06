@@ -15,77 +15,38 @@ bool BackgroundLayer::init()
     CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
     CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
 
-	//////////////////////////////////////////////////////////////////////////
-
-	CCSprite* bg = CCSprite::create("bg_stars.png");
-	bg->setPosition(ccp(origin.x + visibleSize.width/2, origin.y + visibleSize.height/2));
-	this->addChild(bg, -2);
+	bg1 = CCSprite::create("bg_stars.png");
+	bg2 = CCSprite::create("bg_stars.png");
+	CCSize size = bg1->getContentSize();
 	
-	// 1) Create the CCParallaxNode
-	_backgroundNode = CCParallaxNodeExtras::create();
-	this->addChild(_backgroundNode, -1);
+	bg1->setPosition(ccp(visibleSize.width/2, visibleSize.height/2));
+	bg2->setPosition(ccp(visibleSize.width/2, visibleSize.height/2));
 
-	// 2) Create the sprites will be added to the CCParallaxNode
-// 	_spacedust1 = CCSprite::create("bg_stars.png");
-// 	_spacedust2 = CCSprite::create("bg_stars.png");
-	_planetsunrise = CCSprite::create("bg_planetsunrise.png");
-	_galaxy = CCSprite::create("bg_galaxy.png");
-	_spacialanomaly = CCSprite::create("bg_spacialanomaly.png");
-	_spacialanomaly2 = CCSprite::create("bg_spacialanomaly2.png");
+	this->addChild(bg1);
+	this->addChild(bg2);
 
-	// 3) Determine relative movement speeds for space dust and background
-	CCPoint dustSpeed = ccp(0.1, 0.1);
-	CCPoint bgSpeed = ccp(0.05, 0.05);
-
-	// 4) Add children to CCParallaxNode
-// 	_backgroundNode->addChild(_spacedust1, 0, dustSpeed, ccp(visibleSize.width/2, 0)); // 2
-// 	_backgroundNode->addChild(_spacedust2, 0, dustSpeed, ccp(visibleSize.width/2, _spacedust1->getContentSize().height));
-	_backgroundNode->addChild(_galaxy, -1, bgSpeed, ccp(visibleSize.width * 0.7, 0));
-	_backgroundNode->addChild(_planetsunrise, -1 , bgSpeed, ccp(visibleSize.width * 0,  600));
-	_backgroundNode->addChild(_spacialanomaly, -1, bgSpeed, ccp(visibleSize.width * 0.3, 900));
-	_backgroundNode->addChild(_spacialanomaly2, -1, bgSpeed, ccp(visibleSize.width * 0.9, 1500));
-
-	//////////////////////////////////////////////////////////////////////////
-	
 	this->scheduleUpdate();
-	//////////////////////////////////////////////////////////////////////////
-
     return true;
 }
 
 void BackgroundLayer::update(float dt) {
-	CCPoint backgroundScrollVert = ccp(0, -1000);
-	_backgroundNode->setPosition(ccpAdd(_backgroundNode->getPosition(), ccpMult(backgroundScrollVert, dt)));
+	bg1->setPositionY(bg1->getPositionY() - 50 * dt);
 
-	//////////////////////////////////////////////////////////////////////////
-// 	CCArray *spaceDusts = CCArray::createWithCapacity(2);
-// 	spaceDusts->addObject(_spacedust1);
-// 	spaceDusts->addObject(_spacedust2);
-// 
-// 	for ( int ii = 0; ii < spaceDusts->count(); ii++ ) {
-// 		CCSprite * spaceDust = (CCSprite *)(spaceDusts->objectAtIndex(ii));
-// 		float yPosition = _backgroundNode->convertToWorldSpace(spaceDust->getPosition()).y;
-// 		float size = spaceDust->getContentSize().height;
-// 		if ( yPosition < - size/2 ) {
-// 			_backgroundNode->incrementOffset(ccp(0, spaceDust->getContentSize().height*2),spaceDust); 
-// 		}
-// 	}
+	CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
+	CCSize size = bg1->getContentSize();
 
-	CCArray *backGrounds = CCArray::createWithCapacity(4);
-	backGrounds->addObject(_galaxy);
-	backGrounds->addObject(_planetsunrise);
-	backGrounds->addObject(_spacialanomaly);
-	backGrounds->addObject(_spacialanomaly2);
-	
-	int count = (int)backGrounds->count();
-	
-	for ( int ii = 0; ii < count; ii++ ) {
-		CCSprite * background = (CCSprite *)(backGrounds->objectAtIndex(ii));
-		float yPosition = _backgroundNode->convertToWorldSpace(background->getPosition()).y;
-		float size = background->getContentSize().height;
-		if ( yPosition < -size ) {
-			_backgroundNode->incrementOffset(ccp(0, 2000),background); 
-		}
+	if (bg1->getPositionY() <= - size.height/2)
+	{
+		bg1->setPositionY(bg1->getPositionY() + size.height * 2);
+	}
+
+	if (bg1->getPositionY() <= visibleSize.height/2)
+	{
+		bg2->setPositionY(bg1->getPositionY() + size.height);
+	} 
+	else
+	{
+		bg2->setPositionY(bg1->getPositionY() - size.height);
 	}
 }
 

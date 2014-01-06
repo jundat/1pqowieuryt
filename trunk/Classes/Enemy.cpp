@@ -54,13 +54,13 @@ bool Enemy::init()
 
 	this->setVx(0);
 
-	m_type = (int)(CCRANDOM_0_1() * 10);
-	if (m_type <= 6)
+	float rd = CCRANDOM_0_1();
+	if (rd <= 0.7f)
 	{
 		m_type = 1;
 		m_hp = S_HP1;
 	}
-	else if (m_type <= 8)
+	else if (rd <= 0.95f)
 	{
 		m_type = 2;
 		m_hp = S_HP2;

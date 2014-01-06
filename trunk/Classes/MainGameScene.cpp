@@ -37,11 +37,11 @@ bool MainGameScene::init()
 	this->addChild(m_ObjLayer);
 
 	CCMenuItemImage *pCloseItem = CCMenuItemImage::create(
-		"btnHome.png",
-		"btnHome.png",
+		"pause_0.png",
+		"pause_1.png",
 		this,
 		menu_selector(MainGameScene::pauseCallback));
-	pCloseItem->setPosition(ccp(origin.x + visibleSize.width - pCloseItem->getContentSize().width/2,
+	pCloseItem->setPosition(ccp(origin.x + pCloseItem->getContentSize().width/2,
 		origin.y + visibleSize.height - pCloseItem->getContentSize().height/2));
 	CCMenu* pMenu = CCMenu::create(pCloseItem, NULL);
 	pMenu->setPosition(CCPointZero);

@@ -47,6 +47,17 @@ bool Ship::init()
 	return true;
 }
 
+cocos2d::CCRect Ship::collisionBox()
+{
+	float tw = 0.34f; // 1/3
+	float th = 0.5f; // 1/2
+	CCRect rect = GameObject::boundingBox();
+	rect.origin = ccp(this->getPosition().x - tw * rect.size.width/2, this->getPosition().y - th * rect.size.height/2);
+	rect.size.width = tw * rect.size.width;
+	rect.size.height = th * rect.size.height;
+	return rect;
+}
+
 void Ship::EnableArmor()
 {
 	if (false == m_isArmor)
@@ -87,10 +98,10 @@ void Ship::Fire()
 		break;
 
 	case 2:
-		bullet1 = Bullet::create(G_BULLET_PLAYER_ID, G_PLAYER_BULLET_VY, this->getDamage(), ccpAdd(this->getPosition(), ccp(-s.width/2, 0)));
+		bullet1 = Bullet::create(G_BULLET_PLAYER_ID, G_PLAYER_BULLET_VY, this->getDamage(), ccpAdd(this->getPosition(), ccp(-s.width/4, 0)));
 		parent->AddBullet(bullet1);
 
-		bullet2 = Bullet::create(G_BULLET_PLAYER_ID, G_PLAYER_BULLET_VY, this->getDamage(), ccpAdd(this->getPosition(), ccp(s.width/2, 0)));
+		bullet2 = Bullet::create(G_BULLET_PLAYER_ID, G_PLAYER_BULLET_VY, this->getDamage(), ccpAdd(this->getPosition(), ccp(s.width/4, 0)));
 		parent->AddBullet(bullet2);
 		break;
 

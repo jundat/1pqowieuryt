@@ -18,15 +18,15 @@
 		    <string>5.0</string>
 
 	    <key>G_ITEM_BULLET_RANDOM_PERCENT</key> <!-- Tỷ lệ random ra item tăng level đạn (chưa đúng) -->
-		    <string>0.1</string>
+		    <string>0.05</string>
 	    <key>G_ITEM_ARMOR_RANDOM_PERCENT</key> <!-- Tỷ lệ random ra item giáp (chưa đúng) -->
-		    <string>0.2</string>
+		    <string>0.1</string>
 	    <key>G_ITEM_BOOM_RANDOM_PERCENT</key> <!-- Tỷ lệ random ra item boom (chưa đúng) -->
-		    <string>0.3</string>
+		    <string>0.15</string>
 
 
 	    <key>G_MAX_PLAYER_LIFE</key> <!-- Số mạng khởi tạo ban đầu của người chơi -->
-		    <string>5</string>
+		    <string>50</string>
 
 	    <key>G_PLAYER_TIME_TO_REVIVE</key> <!-- Thời gian để revive 1 mạng (đơn vị giây)-->
 		    <string>10</string>
@@ -43,11 +43,11 @@
 	    <key>G_PLAYER_ARMOR_TIME</key> <!-- Thời gian để giáp bảo vệ cho player -->
 		    <string>10.0</string>
 	    <key>G_PLAYER_BULLET_VY</key> <!-- Tốc độ đạn của Player -->
-		    <string>2.5</string>
+		    <string>3.0</string>
 
 
 	    <key>G_PLAYER_TIME_TO_FIRE</key> <!-- Thời gian giữa 2 lần bắn đạn của Player -->
-		    <string>0.2</string>
+		    <string>0.15</string>
 	    <key>G_ENEMY_TIME_TO_FIRE</key> <!-- Thời gian giữa 2 lần bắn đạn của Enemy -->
 		    <string>0</string>
 

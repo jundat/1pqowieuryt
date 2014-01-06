@@ -61,20 +61,26 @@ bool ObjectLayer::init()
 		CCDelayTime::create(2.0f),
 		CCFadeOut::create(2.0f),
 		NULL));
+
+	CCSprite* temp = CCSprite::create("pause_0.png");
+	float w = temp->getContentSize().width;
+	float h = temp->getContentSize().height;
 	
 	m_labelScore = CCLabelBMFont::create("0", "Mia_64.fnt");
 	m_labelScore->setScale(48.0f/64);
-	m_labelScore->setPosition(ccp(origin.x + visibleSize.width/2,
-		origin.y + visibleSize.height - m_labelScore->getContentSize().height));
+	m_labelScore->setPosition(ccp(origin.x + 2 * w,
+		origin.y + visibleSize.height - h/2));
+	m_labelScore->setAlignment(CCTextAlignment::kCCTextAlignmentLeft);
+
 	this->addChild(m_labelScore, 10);
 
-	int lastLife = DataManager::sharedDataManager()->GetLastPlayerLife();
-	s = CCString::createWithFormat("Life: %d", lastLife);
-	m_labelHp = CCLabelBMFont::create(s->getCString(), "Mia_64.fnt");
-	m_labelHp->setScale(48.0f/64);
-	m_labelHp->setPosition(ccp(origin.x + m_labelHp->getContentSize().width/2,
-		origin.y + visibleSize.height - m_labelHp->getContentSize().height));
-	this->addChild(m_labelHp, 10);
+// 	int lastLife = DataManager::sharedDataManager()->GetLastPlayerLife();
+// 	s = CCString::createWithFormat("Life: %d", lastLife);
+// 	m_labelHp = CCLabelBMFont::create(s->getCString(), "Mia_64.fnt");
+// 	m_labelHp->setScale(48.0f/64);
+// 	m_labelHp->setPosition(ccp(origin.x + m_labelHp->getContentSize().width/2,
+// 		origin.y + visibleSize.height - m_labelHp->getContentSize().height));
+// 	this->addChild(m_labelHp, 10);
 
 	m_itemBoom = CCMenuItemImage::create("icon_boom.png", "icon_boom.png", this, menu_selector(ObjectLayer::ActiveBoom));
 	m_itemBoom->setPosition(ccp(origin.x + m_itemBoom->getContentSize().width/2 - visibleSize.width/2, 
@@ -270,23 +276,38 @@ void ObjectLayer::update( float delta )
 				m_arrEnemies->removeObject(enemy);
 
 				//item
-				Item* item;
+				Item* item = NULL;
 				float rd = CCRANDOM_0_1();
 				
 				if (rd <= G_ITEM_BULLET_RANDOM_PERCENT)
-				{
-					item = Item::create(G_ITEM_UPGRADE_BULLET, -0.3f, enemy->getPosition());
-					this->AddItem(item);
+				{	
+					if (m_player->getBulletLevel() < G_MAX_PLAYER_BULLET_LEVEL)
+					{
+						item = Item::create(G_ITEM_UPGRADE_BULLET, -0.3f, ccp(visibleSize.width/2, 3*visibleSize.height/4));
+						this->AddItem(item);
+					}
 				} 
 				else if (rd <= G_ITEM_ARMOR_RANDOM_PERCENT)
 				{
-					item = Item::create(G_ITEM_ARMOR, -0.3f, enemy->getPosition());
-					this->AddItem(item);
+					if (m_player->getArmorStatus() == false)
+					{
+						item = Item::create(G_ITEM_ARMOR, -0.3f, ccp(visibleSize.width/2, 3*visibleSize.height/4));
+						this->AddItem(item);
+					}
 				} 
 				else if (rd <= G_ITEM_BOOM_RANDOM_PERCENT)
 				{
-					item = Item::create(G_ITEM_BOOM, -0.3f, enemy->getPosition());
-					this->AddItem(item);
+					if (this->getNumberBoom() < G_MAX_PLAYER_BOOM)
+					{
+						item = Item::create(G_ITEM_BOOM, -0.3f, ccp(visibleSize.width/2, 3*visibleSize.height/4));
+						this->AddItem(item);
+					}
+				}
+
+				if (item != NULL)
+				{
+					CCAction* ac = CCJumpTo::create(1.5f, ccp(visibleSize.width/2, -item->boundingBox().size.height), 3*visibleSize.height/4, 1);
+					item->runAction(ac);
 				}
 
 				m_killedEnemies++;
@@ -304,7 +325,7 @@ void ObjectLayer::update( float delta )
 					break;
 				}
 				
-				CCString* sscore = CCString::createWithFormat("%d/%d", m_score, m_killedEnemies);
+				CCString* sscore = CCString::createWithFormat("%d", m_score);
 				m_labelScore->setString(sscore->getCString());
 				DataManager::sharedDataManager()->SetCurrentHighScore(m_score);
 			}
@@ -326,7 +347,7 @@ void ObjectLayer::ScheduleCheckCollision(float dt)
 	CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
 
 	CCObject* it1 = NULL;
-	CCRect playerRect = m_player->boundingBox();
+	CCRect playerRect = m_player->collisionBox();
 
 	//////////////////////////////////////////////////////////////////////////
 	//player's bullet -----VS------ Enemy
@@ -363,29 +384,29 @@ void ObjectLayer::ScheduleCheckCollision(float dt)
 
 	//////////////////////////////////////////////////////////////////////////
 	//Enemy's bullet -----VS------ Player
-	CCARRAY_FOREACH(m_arrEnemyBullets, it1)
-	{
-		Bullet* bullet = dynamic_cast<Bullet*>(it1);
-		if (NULL != bullet)
-		{
-			//pixel check collision	
-			CCSprite* sprBullet = CCSprite::createWithTexture(bullet->getSprite()->getTexture());
-			CCSprite* sprPlayer = CCSprite::createWithTexture(m_player->getSprite()->getTexture());
-			sprBullet->setPosition(bullet->getPosition());
-			sprPlayer->setPosition(m_player->getPosition());
-
-			if (CollisionDetection::GetInstance()->areTheSpritesColliding(sprBullet, sprPlayer, true, _rt))
-			//if(bullet->boundingBox().intersectsRect(playerRect))
-			{
-				this->removeChild(bullet);
-				m_arrEnemyBullets->removeObject(bullet);
-
-				//sound
-				AudioManager::sharedAudioManager()->PlayEffect("explosion.wav");
-				m_player->HitBullet(bullet->getDamage());
-			}
-		}
-	}
+// 	CCARRAY_FOREACH(m_arrEnemyBullets, it1)
+// 	{
+// 		Bullet* bullet = dynamic_cast<Bullet*>(it1);
+// 		if (NULL != bullet)
+// 		{
+// 			//pixel check collision	
+// 			CCSprite* sprBullet = CCSprite::createWithTexture(bullet->getSprite()->getTexture());
+// 			CCSprite* sprPlayer = CCSprite::createWithTexture(m_player->getSprite()->getTexture());
+// 			sprBullet->setPosition(bullet->getPosition());
+// 			sprPlayer->setPosition(m_player->getPosition());
+// 
+// 			if (CollisionDetection::GetInstance()->areTheSpritesColliding(sprBullet, sprPlayer, true, _rt))
+// 			//if(bullet->boundingBox().intersectsRect(playerRect))
+// 			{
+// 				this->removeChild(bullet);
+// 				m_arrEnemyBullets->removeObject(bullet);
+// 
+// 				//sound
+// 				AudioManager::sharedAudioManager()->PlayEffect("explosion.wav");
+// 				m_player->HitBullet(bullet->getDamage());
+// 			}
+// 		}
+// 	}
 
 	//////////////////////////////////////////////////////////////////////////
 	//Enemy -----------VS------------- Player
@@ -453,9 +474,9 @@ void ObjectLayer::ContinueGame()
 	//reset:
 	//	player's HP
 
-	int lastLife = DataManager::sharedDataManager()->GetLastPlayerLife();
-	CCString* s = CCString::createWithFormat("Life: %d", lastLife);
-	m_labelHp->setString(s->getCString());
+// 	int lastLife = DataManager::sharedDataManager()->GetLastPlayerLife();
+// 	CCString* s = CCString::createWithFormat("Life: %d", lastLife);
+// 	m_labelHp->setString(s->getCString());
 
 	CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
 	CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
@@ -482,9 +503,9 @@ void ObjectLayer::RestartGame()
 	//	score
 	//	numberBoom
 
-	int lastLife = DataManager::sharedDataManager()->GetLastPlayerLife();
-	CCString* s = CCString::createWithFormat("Life: %d", lastLife);
-	m_labelHp->setString(s->getCString());
+// 	int lastLife = DataManager::sharedDataManager()->GetLastPlayerLife();
+// 	CCString* s = CCString::createWithFormat("Life: %d", lastLife);
+// 	m_labelHp->setString(s->getCString());
 
 	m_genTimeCounter = 0;
 	m_playedTime = 0;
