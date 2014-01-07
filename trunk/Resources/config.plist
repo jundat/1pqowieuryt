@@ -15,14 +15,14 @@
 	    <key>G_MAX_PLAYER_BULLET_LEVEL</key> <!-- Level đạn cao nhất, hiện tại là 3 làn đạn, và chưa hỗ trợ cao hơn -->
 		    <string>3</string>
 	    <key>G_TIMEOUT_BULLET_LEVEL</key> <!-- Thời gian timeout để giảm số làn đạn, đơn vị sencond -->
-		    <string>5.0</string>
+		    <string>15.0</string>
 
 	    <key>G_ITEM_BULLET_RANDOM_PERCENT</key> <!-- Tỷ lệ random ra item tăng level đạn (chưa đúng) -->
 		    <string>0.05</string>
 	    <key>G_ITEM_ARMOR_RANDOM_PERCENT</key> <!-- Tỷ lệ random ra item giáp (chưa đúng) -->
-		    <string>0.1</string>
+		    <string>0.05</string>
 	    <key>G_ITEM_BOOM_RANDOM_PERCENT</key> <!-- Tỷ lệ random ra item boom (chưa đúng) -->
-		    <string>0.15</string>
+		    <string>0.05</string>
 
 
 	    <key>G_MAX_PLAYER_LIFE</key> <!-- Số mạng khởi tạo ban đầu của người chơi -->
@@ -77,6 +77,13 @@
       	<key>G_HP_IN_DIFFICULTY</key> <!-- Hp Enemy tại thời điểm sinh ra = G_MIN_ENEMY_HP + difficulty / G_HP_IN_DIFFICULTY; -->
         	<string>200</string>
       	<key>G_DAMAGE_IN_DIFFICULTY</key> <!-- Damage Enemy tại thời điểm sinh ra = G_MIN_ENEMY_DAM + difficulty/ G_DAMAGE_IN_DIFFICULTY; -->
-        	<string>200</string>      
+        	<string>200</string>
+
+		<key>G_ENEMY_1_PERCENT</key> <!-- Phần trăm máy bay 1 -->
+		    <string>0.80</string>
+	    <key>G_ENEMY_2_PERCENT</key> <!-- Phần trăm máy bay 2-->
+		    <string>0.15</string>
+	    <key>G_ENEMY_3_PERCENT</key> <!-- Phần trăm máy bay 3 -->
+		    <string>0.05</string>
     </dict>
 </plist>

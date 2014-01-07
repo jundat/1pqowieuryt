@@ -10,23 +10,11 @@ USING_NS_CC;
 int Enemy::S_HP1 = G_MIN_ENEMY_HP;
 int Enemy::S_HP2 = G_MIN_ENEMY_HP;
 int Enemy::S_HP3 = G_MIN_ENEMY_HP;
-float Enemy::S_VELOCITY = G_MIN_ENEMY_VY;
+float Enemy::S_VELOCITY1 = G_MIN_ENEMY_VY;
+float Enemy::S_VELOCITY2 = G_MIN_ENEMY_VY;
+float Enemy::S_VELOCITY3 = G_MIN_ENEMY_VY;
 float Enemy::S_GENERATE_TIME = G_DEFAULT_TIME_TO_GENERATE_ENEMY;
 
-
-void Enemy::DifficultySplit(float difficulty)
-{
-	LevelData* ld = LevelLoader::shareLevelLoader()->GetValueLowerThan((int)difficulty);
-
-	if (ld != NULL)
-	{
-		S_HP1 = ld->m_hp1;
-		S_HP2 = ld->m_hp2;
-		S_HP3 = ld->m_hp3;
-		S_VELOCITY = ld->m_velocity;
-		S_GENERATE_TIME = ld->m_genTime;
-	}
-}
 
 Enemy::Enemy(float difficulty) : GameObject()
 {
@@ -44,33 +32,44 @@ bool Enemy::init()
 	CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
 
 	//////////////////////////////////////////////////////////////////////////
-	DifficultySplit(m_difficulty);
+	LevelData* ld = LevelLoader::shareLevelLoader()->GetValueLowerThan((int)m_difficulty);
 
-	m_vy = S_VELOCITY;
-	float dv = CCRANDOM_0_1() * 0.2f - 0.1f;
-	m_vy += dv;
-
-	m_damage = 0;
-
-	this->setVx(0);
+	if (ld != NULL)
+	{
+		S_HP1 = ld->m_hp1;
+		S_HP2 = ld->m_hp2;
+		S_HP3 = ld->m_hp3;
+		S_VELOCITY1 = ld->m_velocity1;
+		S_VELOCITY2 = ld->m_velocity2;
+		S_VELOCITY3 = ld->m_velocity3;
+		S_GENERATE_TIME = ld->m_genTime;
+	}
 
 	float rd = CCRANDOM_0_1();
-	if (rd <= 0.65f)
+	if (rd <= G_ENEMY_1_PERCENT)
 	{
 		m_type = 1;
 		m_hp = S_HP1;
+		m_vy = S_VELOCITY1;
 	}
-	else if (rd <= 0.95f)
+	else if (rd <= G_ENEMY_1_PERCENT + G_ENEMY_2_PERCENT)
 	{
 		m_type = 2;
 		m_hp = S_HP2;
+		m_vy = S_VELOCITY2;
 	}
 	else
 	{
 		m_type = 3;
 		m_hp = S_HP3;
+		m_vy = S_VELOCITY3;
 	}
 
+	float dv = CCRANDOM_0_1() * 0.2f - 0.1f;
+	m_vy += dv;
+
+	m_damage = 0;
+	m_vx = 0;
 	m_originHp = m_hp;
 
 	CCString* s = CCString::createWithFormat("enemy_%d_0.png", m_type);

@@ -152,31 +152,31 @@ void Ship::Fire()
 	switch (m_bulletLevel)
 	{
 	case 1:
-		bullet1 = Bullet::create(G_BULLET_PLAYER_ID, G_PLAYER_BULLET_VY, this->getDamage(), this->getPosition());
+		bullet1 = Bullet::create(G_BULLET_PLAYER_ID, G_PLAYER_BULLET_VY, this->getDamage(), this->getPosition(), m_bulletLevel);
 		parent->AddBullet(bullet1);
 		break;
 
 	case 2:
-		bullet1 = Bullet::create(G_BULLET_PLAYER_ID, G_PLAYER_BULLET_VY, this->getDamage(), ccpAdd(this->getPosition(), ccp(-s.width/4, 0)));
+		bullet1 = Bullet::create(G_BULLET_PLAYER_ID, G_PLAYER_BULLET_VY, this->getDamage(), ccpAdd(this->getPosition(), ccp(-s.width/4, 0)), m_bulletLevel);
 		parent->AddBullet(bullet1);
 
-		bullet2 = Bullet::create(G_BULLET_PLAYER_ID, G_PLAYER_BULLET_VY, this->getDamage(), ccpAdd(this->getPosition(), ccp(s.width/4, 0)));
+		bullet2 = Bullet::create(G_BULLET_PLAYER_ID, G_PLAYER_BULLET_VY, this->getDamage(), ccpAdd(this->getPosition(), ccp(s.width/4, 0)), m_bulletLevel);
 		parent->AddBullet(bullet2);
 		break;
 
 	case 3:
-		bullet1 = Bullet::create(G_BULLET_PLAYER_ID, G_PLAYER_BULLET_VY, this->getDamage(), this->getPosition());
+		bullet1 = Bullet::create(G_BULLET_PLAYER_ID, G_PLAYER_BULLET_VY, this->getDamage(), this->getPosition(), m_bulletLevel);
 		parent->AddBullet(bullet1);
 
-		bullet2 = Bullet::create(G_BULLET_PLAYER_ID, G_PLAYER_BULLET_VY, this->getDamage(), ccpAdd(this->getPosition(), ccp(-s.width/2, 0)));
+		bullet2 = Bullet::create(G_BULLET_PLAYER_ID, G_PLAYER_BULLET_VY, this->getDamage(), ccpAdd(this->getPosition(), ccp(-s.width/2, 0)), m_bulletLevel);
 		parent->AddBullet(bullet2);
 
-		bullet3 = Bullet::create(G_BULLET_PLAYER_ID, G_PLAYER_BULLET_VY, this->getDamage(), ccpAdd(this->getPosition(), ccp(s.width/2, 0)));
+		bullet3 = Bullet::create(G_BULLET_PLAYER_ID, G_PLAYER_BULLET_VY, this->getDamage(), ccpAdd(this->getPosition(), ccp(s.width/2, 0)), m_bulletLevel);
 		parent->AddBullet(bullet3);
 		break;
 
 	default:
-		bullet1 = Bullet::create(G_BULLET_PLAYER_ID, G_PLAYER_BULLET_VY, this->getDamage(), this->getPosition());
+		bullet1 = Bullet::create(G_BULLET_PLAYER_ID, G_PLAYER_BULLET_VY, this->getDamage(), this->getPosition(), m_bulletLevel);
 		parent->AddBullet(bullet1);
 	}
 }

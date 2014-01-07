@@ -66,3 +66,7 @@ float G_DAMAGE_IN_DIFFICULTY = 200;
 int G_SCORE_1 = 100;		//score for enemy_1
 int G_SCORE_2 = 300;		//score for enemy_2
 int G_SCORE_3 = 1000;		//score for enemy_3
+
+float G_ENEMY_1_PERCENT = 0.8f;
+float G_ENEMY_2_PERCENT = 0.15f;
+float G_ENEMY_3_PERCENT = 0.05f;

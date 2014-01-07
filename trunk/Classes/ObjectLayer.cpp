@@ -289,16 +289,16 @@ void ObjectLayer::update( float delta )
 						item = Item::create(G_ITEM_UPGRADE_BULLET, -0.3f, ccp(visibleSize.width/2, 3*visibleSize.height/4));
 						this->AddItem(item);
 					}
-				} 
-				else if (rd <= G_ITEM_ARMOR_RANDOM_PERCENT)
-				{
-					if (m_player->getArmorStatus() == false)
-					{
-						item = Item::create(G_ITEM_ARMOR, -0.3f, ccp(visibleSize.width/2, 3*visibleSize.height/4));
-						this->AddItem(item);
-					}
-				} 
-				else if (rd <= G_ITEM_BOOM_RANDOM_PERCENT)
+				}
+// 				else if (rd <= G_ITEM_BULLET_RANDOM_PERCENT + G_ITEM_ARMOR_RANDOM_PERCENT)
+// 				{
+// 					if (m_player->getArmorStatus() == false)
+// 					{
+// 						item = Item::create(G_ITEM_ARMOR, -0.3f, ccp(visibleSize.width/2, 3*visibleSize.height/4));
+// 						this->AddItem(item);
+// 					}
+// 				}
+				else if (rd <= G_ITEM_BULLET_RANDOM_PERCENT + G_ITEM_ARMOR_RANDOM_PERCENT + G_ITEM_BOOM_RANDOM_PERCENT)
 				{
 					if (this->getNumberBoom() < G_MAX_PLAYER_BOOM)
 					{

@@ -3,12 +3,13 @@
 USING_NS_CC;
 
 
-Bullet::Bullet(int type, float vy, float damage, CCPoint position) : GameObject()
+Bullet::Bullet(int type, float vy, float damage, CCPoint position, int level) : GameObject()
 {
 	this->setBulletType(type);
 	this->setVy(vy);
 	this->setDamage(damage);
 	this->setPosition(position);
+	this->setLevel(level);
 }
 
 Bullet::~Bullet()
@@ -30,15 +31,13 @@ bool Bullet::init()
 
 	this->setVx(0);
 
-// 	if (m_type == G_BULLET_ENEMY_ID)
-// 	{
-// 		m_sprite = CCSprite::create("bullet.png");
-// 		m_sprite->setAnchorPoint(ccp(0.5f, 0.5f));
-// 		m_sprite->setScaleY(-1);
-// 	}
-// 	else
+	if (m_level == 1)
 	{
-		m_sprite = CCSprite::createWithSpriteFrameName("bullet.png");
+		m_sprite = CCSprite::createWithSpriteFrameName("bullet1.png");
+	}
+	else //2-3
+	{
+		m_sprite = CCSprite::createWithSpriteFrameName("bullet2.png");
 	}
 
 	this->addChild(m_sprite);

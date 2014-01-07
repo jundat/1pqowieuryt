@@ -32,7 +32,9 @@ public:
 	static int S_HP1;
 	static int S_HP2;
 	static int S_HP3;
-	static float S_VELOCITY;
+	static float S_VELOCITY1;
+	static float S_VELOCITY2;
+	static float S_VELOCITY3;
 	static float S_GENERATE_TIME;
 
 	CCRepeatForever* m_acFlying;

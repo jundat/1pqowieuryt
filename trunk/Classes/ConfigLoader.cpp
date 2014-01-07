@@ -62,6 +62,12 @@ ConfigLoader::ConfigLoader(void)
 
 	G_PLAYER_TIME_TO_REVIVE = GetValue(std::string("G_PLAYER_TIME_TO_REVIVE"))->floatValue();
 	G_MAX_PLAYER_LIFE = GetValue(std::string("G_MAX_PLAYER_LIFE"))->floatValue();
+
+
+	G_ENEMY_1_PERCENT = GetValue(std::string("G_ENEMY_1_PERCENT"))->floatValue();
+	G_ENEMY_2_PERCENT = GetValue(std::string("G_ENEMY_2_PERCENT"))->floatValue();
+	G_ENEMY_3_PERCENT = GetValue(std::string("G_ENEMY_3_PERCENT"))->floatValue();
+	
 }
 
 
