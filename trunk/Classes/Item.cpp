@@ -30,15 +30,15 @@ bool Item::init()
 
 	if (m_type == G_ITEM_UPGRADE_BULLET)
 	{
-		m_sprite = CCSprite::create("item_upgrade_bullet.png");
+		m_sprite = CCSprite::createWithSpriteFrameName("item_upgrade_bullet.png");
 	} 
 	else if (m_type == G_ITEM_ARMOR)
 	{
-		m_sprite = CCSprite::create("item_armor.png");
+		m_sprite = CCSprite::createWithSpriteFrameName("item_armor.png");
 	}
 	else if (m_type == G_ITEM_BOOM)
 	{
-		m_sprite = CCSprite::create("item_boom.png");
+		m_sprite = CCSprite::createWithSpriteFrameName("item_boom.png");
 	}
 
 	this->addChild(m_sprite);

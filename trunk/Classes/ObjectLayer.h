@@ -55,7 +55,7 @@ private:
 private:
 	CC_SYNTHESIZE(float, m_playedTime, PlayedTime);
 	CC_SYNTHESIZE(int, m_killedEnemies, KilledEnemies);
-	CC_SYNTHESIZE(long, m_score, Score);
+	CC_SYNTHESIZE(int, m_score, Score);
 	CC_SYNTHESIZE(float, m_difficulty, Difficulty);
 	CC_SYNTHESIZE(bool, m_isEndGame, IsEndGame);
 	CC_SYNTHESIZE(Ship*, m_player, Player);

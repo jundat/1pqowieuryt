@@ -6,10 +6,13 @@
 
 USING_NS_CC;
 
+#define ARMOR_TIME_ANIMATION 0.1f //(G_PLAYER_ARMOR_TIME / 2)
 
 Ship::~Ship()
 {
-
+	m_acFlying->release();
+	m_acExplosion->release();
+	m_acArmor->release();
 }
 
 bool Ship::init()
@@ -27,16 +30,70 @@ bool Ship::init()
 	CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
 	CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
 
-	m_sprite = CCSprite::create("ship.png");
+	m_sprite = CCSprite::createWithSpriteFrameName("ship_0.png");
 	m_sprite->setPosition(CCPointZero);
 	this->addChild(m_sprite);
 
-	m_sprArmor = CCSprite::create("armor.png");
-	this->addChild(m_sprArmor, -1);
-	m_sprArmor->setVisible(false);
+	//animation -------------------
+	
+	CCSpriteFrameCache* cache = CCSpriteFrameCache::sharedSpriteFrameCache();
+	CCString* strSpriteName = CCString::create("ship_0.png");
+	
+	//1 flying //0-1
+	
+	CCArray* animFramesFlying = CCArray::createWithCapacity(2);
+	for(int i = 0; i <= 1; i++)
+	{
+		strSpriteName = CCString::createWithFormat("ship_%d.png", i);
+		CCSpriteFrame* frame = cache->spriteFrameByName( strSpriteName->getCString() );
+		animFramesFlying->addObject(frame);
+	}
 
-	m_EffectLayer = EffectLayer::create();
-	this->addChild(m_EffectLayer, 100);
+	CCAnimation* animationFlying = CCAnimation::createWithSpriteFrames(animFramesFlying, 0.2f);
+	CCAnimate* animateFlying = CCAnimate::create(animationFlying);
+	m_acFlying = CCRepeatForever::create(animateFlying);
+	m_acFlying->retain();
+	
+	//2 explosion //2-3-4
+
+	CCArray* animFramesExplosion = CCArray::createWithCapacity(3);
+	for(int i = 2; i <= 4; i++)
+	{
+		strSpriteName = CCString::createWithFormat("ship_%d.png", i);
+		CCSpriteFrame* frame = cache->spriteFrameByName( strSpriteName->getCString() );
+		animFramesExplosion->addObject(frame);
+	}
+
+	CCAnimation* animationExplosion = CCAnimation::createWithSpriteFrames(animFramesExplosion, 0.2f);
+	m_acExplosion = CCAnimate::create(animationExplosion);
+	m_acExplosion->retain();
+
+	//3 armor // 5-6
+
+	CCArray* animFramesArmor = CCArray::createWithCapacity(2);
+	for(int i = 5; i <= 6; i++)
+	{
+		strSpriteName = CCString::createWithFormat("ship_%d.png", i);
+		CCSpriteFrame* frame = cache->spriteFrameByName( strSpriteName->getCString() );
+		animFramesArmor->addObject(frame);
+	}
+
+	CCAnimation* animationArmor = CCAnimation::createWithSpriteFrames(animFramesArmor, ARMOR_TIME_ANIMATION);
+	CCAnimate* animateArmor = CCAnimate::create(animationArmor);
+	CCRepeat* repeatArmor = CCRepeat::create(animateArmor, (int)((G_PLAYER_ARMOR_TIME - 3) / (ARMOR_TIME_ANIMATION * 2)));
+	
+	//CCBlink* blinkArmor = CCBlink::create(3, 12);
+	CCCallFunc* callfArmor = CCCallFunc::create(this, callfunc_selector(Ship::DisableArmor));
+
+	m_acArmor = CCSequence::create(repeatArmor, callfArmor, NULL);
+	m_acArmor->retain();
+	
+
+	//animation -------------------
+
+	
+	m_sprite->runAction(m_acFlying);
+
 
 	m_bulletLevel = G_MIN_PLAYER_BULLET_LEVEL;
 	m_timeOutBulletLevel = m_bulletLevel * G_TIMEOUT_BULLET_LEVEL;
@@ -49,8 +106,8 @@ bool Ship::init()
 
 cocos2d::CCRect Ship::collisionBox()
 {
-	float tw = 0.34f; // 1/3
-	float th = 0.5f; // 1/2
+	float tw = 0.21875f; // 1/3
+	float th = 0.46f; // 1/2
 	CCRect rect = GameObject::boundingBox();
 	rect.origin = ccp(this->getPosition().x - tw * rect.size.width/2, this->getPosition().y - th * rect.size.height/2);
 	rect.size.width = tw * rect.size.width;
@@ -63,26 +120,28 @@ void Ship::EnableArmor()
 	if (false == m_isArmor)
 	{
 		this->m_isArmor = true;
+		
+// 		CCDelayTime* delay = CCDelayTime::create(G_PLAYER_ARMOR_TIME - 5);
+// 		CCBlink* blink = CCBlink::create(3, 12);
+// 		CCCallFunc* callf = CCCallFunc::create(this, callfunc_selector(Ship::DisableArmor));
+// 		CCSequence* seq = CCSequence::create(delay, blink, callf, NULL);
+// 		
+// 		CCRepeatForever* ac = CCRepeatForever::create(m_acArmor);
+// 		CCSpawn* allac = CCSpawn::createWithTwoActions(seq, ac);
 
-		m_sprArmor->setVisible(true);
-
-		CCDelayTime* delay = CCDelayTime::create(G_PLAYER_ARMOR_TIME - 5);
-		CCBlink* blink = CCBlink::create(3, 12);
-		CCCallFunc* callf = CCCallFunc::create(this, callfunc_selector(Ship::DisableArmor));
-		CCSequence* seq = CCSequence::create(delay, blink, callf, NULL);
-		m_sprArmor->runAction(seq);
+		m_sprite->runAction(m_acArmor);
 	}
 }
 
 void Ship::DisableArmor()
 {
 	this->m_isArmor = false;
-	m_sprArmor->setVisible(false);
 }
 
 void Ship::Fire()
 {
 	CCSize s = getContentSize();
+	s.width = s.width/2;
 	ObjectLayer* parent = (ObjectLayer*)this->getParent();
 	Bullet *bullet1, *bullet2, *bullet3;
 
@@ -130,8 +189,8 @@ void Ship::update( float delta )
 	
 	float x = getPositionX();
 	float y = getPositionY();
-	float w_2 = boundingBox().size.width/2;
-	float h_2 = boundingBox().size.height/2;
+	float w_2 = collisionBox().size.width/2;
+	float h_2 = collisionBox().size.height/2;
 
 	LIMIT_VALUE(x, origin.x + w_2, origin.x + visibleSize.width - w_2);
 	LIMIT_VALUE(y, origin.y + h_2, origin.y + visibleSize.height - h_2);
@@ -156,22 +215,25 @@ void Ship::HitBullet( int damage )
 		m_hp -= damage;
 		m_hp  = (m_hp > 0) ? m_hp : 0;
 
-		if (m_hp > 0)
+// 		if (m_hp > 0)
+// 		{
+// 			//small effect explosion
+// 			//m_EffectLayer->AddExploisionEff(2, CCPointZero);
+// 		}
+// 		else
 		{
-			//small effect explosion
-			m_EffectLayer->AddExploisionEff(2, CCPointZero);
-		}
-		else
-		{
-			CCSize s = getContentSize();
-			CCPoint p1 = CCPointZero;
-			CCPoint p2 = ccp(-s.width/2, s.height/2);
-			CCPoint p3 = ccp(s.width/2, s.height/2);
+			m_sprite->stopAction(m_acFlying);
+			m_sprite->runAction(m_acExplosion);
 
-			//big effect explosion
-			m_EffectLayer->AddExploisionEff(3, p1);
-			m_EffectLayer->AddExploisionEff(3, p2);
-			m_EffectLayer->AddExploisionEff(3, p3);
+// 			CCSize s = getContentSize();
+// 			CCPoint p1 = CCPointZero;
+// 			CCPoint p2 = ccp(-s.width/2, s.height/2);
+// 			CCPoint p3 = ccp(s.width/2, s.height/2);
+// 
+// 			//big effect explosion
+// 			m_EffectLayer->AddExploisionEff(3, p1);
+// 			m_EffectLayer->AddExploisionEff(3, p2);
+// 			m_EffectLayer->AddExploisionEff(3, p3);
 		}
 	}
 }
@@ -185,7 +247,8 @@ void Ship::Dead()
 void Ship::Restart()
 {
 	m_bulletLevel = G_MIN_PLAYER_BULLET_LEVEL;
-	m_timeOutBulletLevel = m_bulletLevel * G_TIMEOUT_BULLET_LEVEL;
+	m_timeOutBulletLevel = m_bulletLevel * G_TIMEOUT_BULLET_LEVEL;	
+	m_sprite->runAction(m_acFlying);
 	this->DisableArmor();
 	this->setHp(G_PLAYER_HP);
 	this->setVisible(true);

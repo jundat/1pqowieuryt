@@ -26,7 +26,7 @@
 
 
 	    <key>G_MAX_PLAYER_LIFE</key> <!-- Số mạng khởi tạo ban đầu của người chơi -->
-		    <string>50</string>
+		    <string>5</string>
 
 	    <key>G_PLAYER_TIME_TO_REVIVE</key> <!-- Thời gian để revive 1 mạng (đơn vị giây)-->
 		    <string>10</string>

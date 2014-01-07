@@ -30,6 +30,9 @@ bool MainGameScene::init()
 	CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
 	CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
 
+	CCSpriteFrameCache* cache = CCSpriteFrameCache::sharedSpriteFrameCache();
+	cache->addSpriteFramesWithFile("MainGame.plist");
+
     m_BackgroundLayer = BackgroundLayer::create();
 	this->addChild(m_BackgroundLayer);
 

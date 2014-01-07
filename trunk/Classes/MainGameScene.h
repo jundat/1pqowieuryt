@@ -12,6 +12,10 @@ USING_NS_CC;
 class MainGameScene : public cocos2d::CCLayer
 {
 public:
+	~MainGameScene() {
+		CCSpriteFrameCache::sharedSpriteFrameCache()->removeUnusedSpriteFrames();
+	}
+
     virtual bool init();
     static cocos2d::CCScene* scene();
 	CREATE_FUNC(MainGameScene);

@@ -8,14 +8,14 @@ USING_NS_CC;
 class LoseDialog : public cocos2d::CCLayer
 {
 public:
-	LoseDialog(bool canBeRevived, long score, int killedEnemies):CCLayer(){
+	LoseDialog(bool canBeRevived, int score, int killedEnemies):CCLayer(){
 		this->m_canBeRevived = canBeRevived;
 		this->m_score = score;
 		this->m_killedEnemies = killedEnemies;
 	};
 	~LoseDialog(){};
     virtual bool init();
-	static LoseDialog* create(bool canBeRevived, long score, int killedEnemies) {
+	static LoseDialog* create(bool canBeRevived, int score, int killedEnemies) {
 		LoseDialog* dig = new LoseDialog(canBeRevived, score, killedEnemies);
 		dig->init();
 		dig->autorelease();
@@ -24,7 +24,7 @@ public:
 
 private:
 	bool m_canBeRevived;
-	long m_score;
+	int m_score;
 	int m_killedEnemies;
 
 public:

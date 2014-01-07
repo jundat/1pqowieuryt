@@ -134,6 +134,7 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
     <ClCompile Include="..\Classes\CCParallaxNodeExtras.cpp" />
     <ClCompile Include="..\Classes\BackgroundLayer.cpp" />
     <ClCompile Include="..\Classes\GameClient.cpp" />
+    <ClCompile Include="..\Classes\IntroScene.cpp" />
     <ClCompile Include="..\Classes\ParseClient.cpp" />
     <ClCompile Include="..\Classes\CollisionDetection.cpp" />
     <ClCompile Include="..\Classes\ConfigLoader.cpp" />
@@ -161,6 +162,7 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
     <ClInclude Include="..\Classes\CCParallaxNodeExtras.h" />
     <ClInclude Include="..\Classes\BackgroundLayer.h" />
     <ClInclude Include="..\Classes\GameClient.h" />
+    <ClInclude Include="..\Classes\IntroScene.h" />
     <ClInclude Include="..\Classes\ParseClient.h" />
     <ClInclude Include="..\Classes\CollisionDetection.h" />
     <ClInclude Include="..\Classes\ConfigLoader.h" />

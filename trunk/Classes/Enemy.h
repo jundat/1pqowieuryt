@@ -10,7 +10,9 @@ class Enemy : public GameObject
 {
 public:
 	Enemy(float difficulty);
-	~Enemy(){};
+	~Enemy(){
+		m_acExplosion->release();
+	};
 	virtual bool init();
 	static Enemy* create(float difficulty) {
 		Enemy* en = new Enemy(difficulty);
@@ -33,7 +35,9 @@ public:
 	static float S_VELOCITY;
 	static float S_GENERATE_TIME;
 
-	EffectLayer* m_EffectLayer;	
+	CCRepeatForever* m_acFlying;
+	CCSequence* m_acPreExplosion;
+	CCSequence* m_acExplosion;
 
 public:
 	static void DifficultySplit(float difficulty);

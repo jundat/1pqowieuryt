@@ -55,7 +55,7 @@ bool Enemy::init()
 	this->setVx(0);
 
 	float rd = CCRANDOM_0_1();
-	if (rd <= 0.7f)
+	if (rd <= 0.65f)
 	{
 		m_type = 1;
 		m_hp = S_HP1;
@@ -73,25 +73,131 @@ bool Enemy::init()
 
 	m_originHp = m_hp;
 
-	CCString* s = CCString::createWithFormat("enemy_%d.png", m_type);
-	m_sprite = CCSprite::create(s->getCString());
+	CCString* s = CCString::createWithFormat("enemy_%d_0.png", m_type);
+	m_sprite = CCSprite::createWithSpriteFrameName(s->getCString());
 
 	m_sprite->setPosition(CCPointZero);
 	this->addChild(m_sprite);
 
-	m_EffectLayer = EffectLayer::create();
-	this->addChild(m_EffectLayer, 100);
+	//////////////////////////////////////////////////////////////////////////
+
+	int NUM_FRAME_EXPLOSION = 0;
+	switch (m_type)
+	{
+	case 1:
+		NUM_FRAME_EXPLOSION = 3;
+		break;
+	case 2:
+		NUM_FRAME_EXPLOSION = 5;
+		break;
+	case 3:
+		NUM_FRAME_EXPLOSION = 8;
+		break;
+	}
+
+	CCSpriteFrameCache* cache = CCSpriteFrameCache::sharedSpriteFrameCache();
+	CCString* strSpriteName = CCString::createWithFormat("enemy_%d_0.png", m_type);
+
+	//explosion ================================
+
+	CCArray* animFrames = CCArray::createWithCapacity(NUM_FRAME_EXPLOSION);
+	for(int i = 0; i < NUM_FRAME_EXPLOSION; i++) 
+	{
+		strSpriteName = CCString::createWithFormat("enemy_%d_%d.png", m_type, i);
+		CCSpriteFrame* frame = cache->spriteFrameByName( strSpriteName->getCString() );
+		animFrames->addObject(frame);
+	}
+
+	CCAnimation* animation = CCAnimation::createWithSpriteFrames(animFrames, 0.1f);
+
+	m_acExplosion = CCSequence::create(
+		CCAnimate::create(animation),
+		CCCallFunc::create(this, callfunc_selector(Enemy::removeFromParent)),
+		NULL);
+	m_acExplosion->retain();
+
+	//pre explosion =========================
+
+	CCArray* animFramesPre;
+
+	switch(m_type) 
+	{
+	case 1:
+		{
+			animFramesPre = CCArray::createWithCapacity(2);
+			animFramesPre->addObject(cache->spriteFrameByName("enemy_1_0.png"));
+			animFramesPre->addObject(cache->spriteFrameByName("enemy_1_1.png"));
+			animFramesPre->addObject(cache->spriteFrameByName("enemy_1_0.png"));
+		}
+		break;
+	case 2:
+		{
+			animFramesPre = CCArray::createWithCapacity(2);
+			animFramesPre->addObject(cache->spriteFrameByName("enemy_2_0.png"));
+			animFramesPre->addObject(cache->spriteFrameByName("enemy_2_1.png"));
+			animFramesPre->addObject(cache->spriteFrameByName("enemy_2_0.png"));
+		}
+		break;
+	case 3:
+		{
+			animFramesPre = CCArray::createWithCapacity(3);
+			animFramesPre->addObject(cache->spriteFrameByName("enemy_3_1.png"));
+			animFramesPre->addObject(cache->spriteFrameByName("enemy_3_2.png"));
+			animFramesPre->addObject(cache->spriteFrameByName("enemy_3_3.png"));
+			animFramesPre->addObject(cache->spriteFrameByName("enemy_3_0.png"));
+		}
+		break;
+	}
+	
+	CCAnimation* animationPre = CCAnimation::createWithSpriteFrames(animFramesPre, 0.15f);
+
+	m_acPreExplosion = CCSequence::create(
+		CCAnimate::create(animationPre),
+		NULL);
+	m_acPreExplosion->retain();
+
+	// flying -===========================================
+
+	CCArray* animFramesFlying;
+
+	switch(m_type) 
+	{
+	case 1:
+		{
+			animFramesFlying = CCArray::createWithCapacity(1);
+			animFramesFlying->addObject(cache->spriteFrameByName("enemy_1_0.png"));
+		}
+		break;
+	case 2:
+		{
+			animFramesFlying = CCArray::createWithCapacity(1);
+			animFramesFlying->addObject(cache->spriteFrameByName("enemy_2_0.png"));
+		}
+		break;
+	case 3:
+		{
+			animFramesFlying = CCArray::createWithCapacity(2);
+			animFramesFlying->addObject(cache->spriteFrameByName("enemy_3_0.png"));
+			animFramesFlying->addObject(cache->spriteFrameByName("enemy_3_1.png"));
+		}
+		break;
+	}
+
+	CCAnimation* animationFlying = CCAnimation::createWithSpriteFrames(animFramesFlying, 0.2f);
+
+	m_acFlying = CCRepeatForever::create(CCAnimate::create(animationFlying));
+	m_acFlying->retain();
+
+	//-------------------------
+
+	m_sprite->runAction(m_acFlying);
+
+	//////////////////////////////////////////////////////////////////////////
 
 	if (G_ENEMY_TIME_TO_FIRE > 0)
 	{
 		this->schedule(schedule_selector(Enemy::ScheduleFire), G_ENEMY_TIME_TO_FIRE);
 	}
-	//////////////////////////////////////////////////////////////////////////
-	
-	//float d = 5 + visibleSize.height + m_sprite->getContentSize().height;
-	//float t = abs(d / m_vy / 1000.0);
-	//CCAction* move = CCMoveBy::create(t, ccp(0, -d));
-	//this->runAction(move);
 
 	//////////////////////////////////////////////////////////////////////////
 	this->scheduleUpdate();
@@ -125,28 +231,12 @@ void Enemy::HitBullet(int damage)
 
 	if (m_hp > 0)
 	{
-		//small effect explosion
-		//m_EffectLayer->AddExploisionEff(2, CCPointZero);
+		m_sprite->runAction(m_acPreExplosion);
 	}
 	else
 	{
-		CCSize s = getContentSize();
-		CCPoint p1 = CCPointZero;
-		CCPoint p2 = ccp(-s.width/2, s.height/2);
-		CCPoint p3 = ccp(s.width/2, s.height/2);
-
-		//big effect explosion
-		float t1 = m_EffectLayer->AddExploisionEff(3, p1);
-		float t2 = m_EffectLayer->AddExploisionEff(3, p2);
-		float t3 = m_EffectLayer->AddExploisionEff(3, p3);
-		t1 = (t1 > t2) ? t1 : t2;
-		t1 = (t1 > t3) ? t1 : t3;
-
-		CCSequence* sequence = CCSequence::create(
-			CCDelayTime::create(t1),
-			CCCallFunc::create(this, callfunc_selector(Enemy::removeFromParent)),
-			NULL
-			);
-		this->runAction(sequence);
+		m_sprite->stopAction(m_acFlying);
+		m_sprite->stopAction(m_acPreExplosion);
+		m_sprite->runAction(m_acExplosion);
 	}
 }

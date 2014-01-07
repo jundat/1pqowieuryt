@@ -30,10 +30,10 @@ bool MenuScene::init()
 
     /////////////////////////////
 
-	CCSprite* bg = CCSprite::create("bg_menu.png");
+	CCSprite* bg = CCSprite::create("bg_stars.png");
 	bg->setPosition(ccp(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
 	this->addChild(bg, 0);
-
+	
 	CCSprite* menuTop = CCSprite::create("menu_top.png");
 	menuTop->setPosition(ccp(visibleSize.width/2 + origin.x, -50 - menuTop->getContentSize().height/2 + visibleSize.height + origin.y));
 	this->addChild(menuTop, 0);

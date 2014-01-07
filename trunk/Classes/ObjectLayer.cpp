@@ -1,4 +1,5 @@
-﻿#include "ObjectLayer.h"
+﻿#include "cocos2d.h"
+#include "ObjectLayer.h"
 #include "Global.h"
 #include "AudioManager.h"
 #include "Enemy.h"
@@ -6,6 +7,7 @@
 #include "MainGameScene.h"
 #include "CollisionDetection.h"
 #include "DataManager.h"
+#include "cocos2d.h"
 
 USING_NS_CC;
 
@@ -70,7 +72,7 @@ bool ObjectLayer::init()
 	m_labelScore->setScale(48.0f/64);
 	m_labelScore->setPosition(ccp(origin.x + 2 * w,
 		origin.y + visibleSize.height - h/2));
-	m_labelScore->setAlignment(CCTextAlignment::kCCTextAlignmentLeft);
+	m_labelScore->setAlignment(kCCTextAlignmentLeft);
 
 	this->addChild(m_labelScore, 10);
 
@@ -90,6 +92,7 @@ bool ObjectLayer::init()
 	this->addChild(menu);
 
 	m_labelBoom = CCLabelBMFont::create("0", "Mia_64.fnt");
+	m_labelBoom->setScale(48.0f/64);
 	m_labelBoom->setPosition(ccp(origin.x + m_itemBoom->getContentSize().width + m_labelBoom->getContentSize().width,
 		origin.y + m_itemBoom->getContentSize().height/4 + m_labelBoom->getContentSize().height/4));
 	m_labelBoom->setVisible(false);

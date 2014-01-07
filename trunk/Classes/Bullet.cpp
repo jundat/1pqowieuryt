@@ -30,15 +30,15 @@ bool Bullet::init()
 
 	this->setVx(0);
 
-	if (m_type == G_BULLET_ENEMY_ID)
+// 	if (m_type == G_BULLET_ENEMY_ID)
+// 	{
+// 		m_sprite = CCSprite::create("bullet.png");
+// 		m_sprite->setAnchorPoint(ccp(0.5f, 0.5f));
+// 		m_sprite->setScaleY(-1);
+// 	}
+// 	else
 	{
-		m_sprite = CCSprite::create("enemy_bullet.png");
-		m_sprite->setAnchorPoint(ccp(0.5f, 0.5f));
-		m_sprite->setScaleY(-1);
-	}
-	else
-	{
-		m_sprite = CCSprite::create("bullet.png");
+		m_sprite = CCSprite::createWithSpriteFrameName("bullet.png");
 	}
 
 	this->addChild(m_sprite);

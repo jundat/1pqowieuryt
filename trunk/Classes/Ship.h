@@ -23,8 +23,10 @@ private:
 
 	float m_timeOutBulletLevel;
 	float m_timeToFire;
-	CCSprite* m_sprArmor;
-	EffectLayer* m_EffectLayer;
+
+	CCRepeatForever* m_acFlying; //0-1
+	CCAction* m_acExplosion; //2-3-4
+	CCSequence* m_acArmor; //5-6
 
 public:
 	void EnableArmor();

@@ -7,7 +7,7 @@ bool BackgroundLayer::init()
 {
     //////////////////////////////
     // 1. super init first
-    if ( !CCLayer::init() )
+    if ( !CCLayerColor::initWithColor(ccc4(195, 200, 201, 255)))
     {
         return false;
     }
