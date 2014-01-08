@@ -17,12 +17,12 @@
 	    <key>G_TIMEOUT_BULLET_LEVEL</key> <!-- Thời gian timeout để giảm số làn đạn, đơn vị sencond -->
 		    <string>15.0</string>
 
-	    <key>G_ITEM_BULLET_RANDOM_PERCENT</key> <!-- Tỷ lệ random ra item tăng level đạn (chưa đúng) -->
-		    <string>0.025</string>
+	    <key>G_ITEM_BULLET_RANDOM_PERCENT</key> <!-- Tỷ lệ random ra item tăng level đạn -->
+		    <string>0.015</string>
 	    <key>G_ITEM_ARMOR_RANDOM_PERCENT</key> <!-- Tỷ lệ random ra item giáp (chưa đúng) -->
-		    <string>0.025</string>
+		    <string>0.015</string>
 	    <key>G_ITEM_BOOM_RANDOM_PERCENT</key> <!-- Tỷ lệ random ra item boom (chưa đúng) -->
-		    <string>0.025</string>
+		    <string>0.015</string>
 
 
 	    <key>G_MAX_PLAYER_LIFE</key> <!-- Số mạng khởi tạo ban đầu của người chơi -->
