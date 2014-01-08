@@ -102,8 +102,12 @@ void MenuScene::playCallback(CCObject* pSender)
 
 	if (lastLife > 0)
 	{
-		CCScene *pScene = MainGameScene::scene();
+// 		CCScene *pScene = MainGameScene::scene();
+// 		CCDirector::sharedDirector()->replaceScene(pScene);
+
+		CCScene *pScene = CCTransitionFade::create(0.5, MainGameScene::scene());
 		CCDirector::sharedDirector()->replaceScene(pScene);
+
 		CCLOG("LastLife > 0 -> Play");
 	} 
 	else
@@ -122,8 +126,12 @@ void MenuScene::playCallback(CCObject* pSender)
 		if (lastLife > 0)
 		{
 			DataManager::sharedDataManager()->SetLastPlayerLife(lastLife);
-			CCScene *pScene = MainGameScene::scene();
+			
+// 			CCScene *pScene = MainGameScene::scene();
+// 			CCDirector::sharedDirector()->replaceScene(pScene);
+			CCScene *pScene = CCTransitionFade::create(0.5, MainGameScene::scene());
 			CCDirector::sharedDirector()->replaceScene(pScene);
+
 			CCLOG("Revive->LastLife > 0 -> Play");
 		}
 		else
@@ -137,13 +145,13 @@ void MenuScene::playCallback(CCObject* pSender)
 
 void MenuScene::scoreCallback( CCObject* pSender )
 {
-	CCScene *pScene = ScoreScene::scene();
+	CCScene *pScene = CCTransitionFade::create(0.5, ScoreScene::scene());
 	CCDirector::sharedDirector()->replaceScene(pScene);
 }
 
 void MenuScene::settingCallback( CCObject* pSender )
 {
-	CCScene *pScene = SettingScene::scene();
+	CCScene *pScene = CCTransitionFade::create(0.5, SettingScene::scene());
 	CCDirector::sharedDirector()->replaceScene(pScene);
 }
 

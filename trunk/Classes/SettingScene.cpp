@@ -25,7 +25,7 @@ bool SettingScene::init()
 
     /////////////////////////////
 
-	CCSprite* bg = CCSprite::create("bg_menu.png");
+	CCSprite* bg = CCSprite::create("bg_stars.png");
 	bg->setPosition(ccp(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
 	this->addChild(bg, 0);
 
@@ -103,7 +103,7 @@ bool SettingScene::init()
 
 void SettingScene::menuCallback(CCObject* pSender)
 {
-    CCScene *pScene = MenuScene::scene();
+	CCScene *pScene = CCTransitionFade::create(0.5, MenuScene::scene());
 	CCDirector::sharedDirector()->replaceScene(pScene);
 }
 

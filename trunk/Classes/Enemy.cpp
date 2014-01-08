@@ -65,7 +65,7 @@ bool Enemy::init()
 		m_vy = S_VELOCITY3;
 	}
 
-	float dv = CCRANDOM_0_1() * 0.2f - 0.1f;
+	float dv = CCRANDOM_0_1() * 0.4f - 0.2f;
 	m_vy += dv;
 
 	m_damage = 0;

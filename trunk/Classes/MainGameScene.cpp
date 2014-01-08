@@ -31,7 +31,8 @@ bool MainGameScene::init()
 	CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
 
 	CCSpriteFrameCache* cache = CCSpriteFrameCache::sharedSpriteFrameCache();
-	cache->addSpriteFramesWithFile("MainGame.plist");
+	cache->addSpriteFramesWithFile("MainGame_1.plist");
+	cache->addSpriteFramesWithFile("MainGame_2.plist");
 
     m_BackgroundLayer = BackgroundLayer::create();
 	this->addChild(m_BackgroundLayer);
@@ -71,6 +72,9 @@ void MainGameScene::resumeCallback()
 
 void MainGameScene::showEndGame( int score, int killedEnemies )
 {
+	CCDirector::sharedDirector()->getTouchDispatcher()->removeDelegate(this);
+	this->setTouchEnabled(false);
+
 	//check if enough last_life
 	int lastLife = DataManager::sharedDataManager()->GetLastPlayerLife();
 	lastLife--;
@@ -121,6 +125,9 @@ void MainGameScene::showEndGame( int score, int killedEnemies )
 //revived just 1 time for 1 life
 void MainGameScene::okCallback()
 {
+	CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, 0, true);
+	this->setTouchEnabled(true);
+
  	int lastLife = DataManager::sharedDataManager()->GetLastPlayerLife();
  	lastLife++;
  	DataManager::sharedDataManager()->SetLastPlayerLife(lastLife);
@@ -133,6 +140,9 @@ void MainGameScene::okCallback()
 
 void MainGameScene::cancelCallback()
 {
+	CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, 0, true);
+	this->setTouchEnabled(true);
+
 	DataManager::sharedDataManager()->SetIsJustRevived(false);
 	m_ObjLayer->RestartGame();
 }

@@ -65,7 +65,7 @@ bool PauseDialog::init()
 
 void PauseDialog::menuCallback( CCObject* pSender )
 {
-	CCScene *pScene = MenuScene::scene();
+	CCScene *pScene = CCTransitionFade::create(0.5, MenuScene::scene());
 	CCDirector::sharedDirector()->replaceScene(pScene);
 }
 
