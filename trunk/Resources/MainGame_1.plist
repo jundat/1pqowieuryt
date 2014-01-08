@@ -7,28 +7,28 @@
 		<key>bullet1.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{243,1012},{11,23}}</string>
+			<string>{{243,1012},{8,17}}</string>
 			<key>offset</key>
 			<string>{0,0}</string>
 			<key>rotated</key>
 			<true/>
 			<key>sourceColorRect</key>
-			<string>{{0,0},{11,23}}</string>
+			<string>{{0,0},{8,17}}</string>
 			<key>sourceSize</key>
-			<string>{11,23}</string>
+			<string>{8,17}</string>
 		</dict>
 		<key>bullet2.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{267,1012},{11,23}}</string>
+			<string>{{261,1012},{8,17}}</string>
 			<key>offset</key>
 			<string>{0,0}</string>
 			<key>rotated</key>
 			<true/>
 			<key>sourceColorRect</key>
-			<string>{{0,0},{11,23}}</string>
+			<string>{{0,0},{8,17}}</string>
 			<key>sourceSize</key>
-			<string>{11,23}</string>
+			<string>{8,17}</string>
 		</dict>
 		<key>enemy_2_4.png</key>
 		<dict>

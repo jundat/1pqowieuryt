@@ -25,7 +25,7 @@ private:
 	float m_timeToFire;
 
 	CCRepeatForever* m_acFlying; //0-1
-	CCAction* m_acExplosion; //2-3-4
+	CCSequence* m_acExplosion; //2-3-4
 	CCSequence* m_acArmor; //5-6
 
 public:

@@ -91,7 +91,7 @@ bool ObjectLayer::init()
 	CCMenu* menu = CCMenu::create(m_itemBoom, NULL);
 	this->addChild(menu);
 
-	m_labelBoom = CCLabelBMFont::create("0", "Mia_64.fnt");
+	m_labelBoom = CCLabelBMFont::create("x0", "Mia_64.fnt");
 	m_labelBoom->setScale(48.0f/64);
 	m_labelBoom->setPosition(ccp(origin.x + m_itemBoom->getContentSize().width + m_labelBoom->getContentSize().width,
 		origin.y + m_itemBoom->getContentSize().height/4 + m_labelBoom->getContentSize().height/4));
@@ -192,7 +192,7 @@ void ObjectLayer::update( float delta )
 		this->unscheduleUpdate();
 		
 		CCSequence* sequence = CCSequence::create(
-			CCDelayTime::create(1),
+			CCDelayTime::create(1.8f),
 			CCCallFunc::create(this, callfunc_selector(ObjectLayer::AfterDeadEffectCallback)),
 			NULL
 		);
@@ -281,35 +281,28 @@ void ObjectLayer::update( float delta )
 				//item
 				Item* item = NULL;
 				float rd = CCRANDOM_0_1();
+				float rdw = CCRANDOM_0_1() * (7.0f / 8.0f * G_DESIGN_WIDTH) + G_DESIGN_WIDTH / 8.0f;
 				
 				if (rd <= G_ITEM_BULLET_RANDOM_PERCENT)
-				{	
+				{
 					if (m_player->getBulletLevel() < G_MAX_PLAYER_BULLET_LEVEL)
 					{
-						item = Item::create(G_ITEM_UPGRADE_BULLET, -0.3f, ccp(visibleSize.width/2, 3*visibleSize.height/4));
+						item = Item::create(G_ITEM_UPGRADE_BULLET, -0.3f, ccp(rdw, 3.0f/4*visibleSize.height));
 						this->AddItem(item);
 					}
 				}
-// 				else if (rd <= G_ITEM_BULLET_RANDOM_PERCENT + G_ITEM_ARMOR_RANDOM_PERCENT)
-// 				{
-// 					if (m_player->getArmorStatus() == false)
-// 					{
-// 						item = Item::create(G_ITEM_ARMOR, -0.3f, ccp(visibleSize.width/2, 3*visibleSize.height/4));
-// 						this->AddItem(item);
-// 					}
-// 				}
-				else if (rd <= G_ITEM_BULLET_RANDOM_PERCENT + G_ITEM_ARMOR_RANDOM_PERCENT + G_ITEM_BOOM_RANDOM_PERCENT)
+				else if (rd <= G_ITEM_BULLET_RANDOM_PERCENT + G_ITEM_BOOM_RANDOM_PERCENT)
 				{
 					if (this->getNumberBoom() < G_MAX_PLAYER_BOOM)
 					{
-						item = Item::create(G_ITEM_BOOM, -0.3f, ccp(visibleSize.width/2, 3*visibleSize.height/4));
+						item = Item::create(G_ITEM_BOOM, -0.3f, ccp(rdw, 3.0f/4*visibleSize.height));
 						this->AddItem(item);
 					}
 				}
 
 				if (item != NULL)
 				{
-					CCAction* ac = CCJumpTo::create(1.5f, ccp(visibleSize.width/2, -item->boundingBox().size.height), 3*visibleSize.height/4, 1);
+					CCAction* ac = CCJumpTo::create(1.5f, ccp(rdw, -2-item->boundingBox().size.height), visibleSize.height/2, 1);
 					item->runAction(ac);
 				}
 
@@ -575,7 +568,7 @@ void ObjectLayer::IncreaseBoom()
 	m_numberBoom++;
 	m_numberBoom = (m_numberBoom < G_MAX_PLAYER_BOOM) ? m_numberBoom : G_MAX_PLAYER_BOOM;
 
-	CCString* s = CCString::createWithFormat("%d", m_numberBoom);
+	CCString* s = CCString::createWithFormat("x%d", m_numberBoom);
 	m_labelBoom->setString(s->getCString());
 
 	m_labelBoom->setVisible(true);
@@ -588,7 +581,7 @@ void ObjectLayer::ActiveBoom(CCObject* pSender)
 	{
 		m_numberBoom--;
 
-		CCString* s = CCString::createWithFormat("%d", m_numberBoom);
+		CCString* s = CCString::createWithFormat("x%d", m_numberBoom);
 		m_labelBoom->setString(s->getCString());
 
 		if (m_numberBoom == 0)

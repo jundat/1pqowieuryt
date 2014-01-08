@@ -31,7 +31,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	
 #ifdef WIN32
 	pEGLView->setFrameSize(G_DESIGN_WIDTH, G_DESIGN_HEIGHT);
-	pEGLView->setFrameZoomFactor(G_SCALE_FACTOR);
+	pEGLView->setFrameZoomFactor(0.38f);//G_SCALE_FACTOR);
 #endif
 	
     pDirector->setOpenGLView(pEGLView);

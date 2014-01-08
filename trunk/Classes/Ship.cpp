@@ -64,8 +64,14 @@ bool Ship::init()
 		animFramesExplosion->addObject(frame);
 	}
 
+	animFramesExplosion->addObject(cache->spriteFrameByName("ship_0.png"));
+
 	CCAnimation* animationExplosion = CCAnimation::createWithSpriteFrames(animFramesExplosion, 0.2f);
-	m_acExplosion = CCAnimate::create(animationExplosion);
+	CCAnimate* animateExplosion = CCAnimate::create(animationExplosion);
+	m_acExplosion = CCSequence::create(
+		animateExplosion,
+		CCBlink::create(1, 3),
+		NULL);
 	m_acExplosion->retain();
 
 	//3 armor // 5-6

@@ -29,7 +29,7 @@
 		    <string>5</string>
 
 	    <key>G_PLAYER_TIME_TO_REVIVE</key> <!-- Thời gian để revive 1 mạng (đơn vị giây)-->
-		    <string>10</string>
+		    <string>1</string>
 
 	    <key>G_MAX_PLAYER_BOOM</key> <!-- Số boom lớn nhất có thể có 1 lúc -->
 		    <string>3</string>
@@ -80,10 +80,10 @@
         	<string>200</string>
 
 		<key>G_ENEMY_1_PERCENT</key> <!-- Phần trăm máy bay 1 -->
-		    <string>0.80</string>
+		    <string>0.85</string>
 	    <key>G_ENEMY_2_PERCENT</key> <!-- Phần trăm máy bay 2-->
-		    <string>0.15</string>
+		    <string>0.175</string>
 	    <key>G_ENEMY_3_PERCENT</key> <!-- Phần trăm máy bay 3 -->
-		    <string>0.05</string>
+		    <string>0.025</string>
     </dict>
 </plist>
