@@ -13,7 +13,7 @@
 	    <key>G_MIN_PLAYER_BULLET_LEVEL</key> <!-- Level đạn thấp nhất, hiện tại là 1 làn đạn -->
 		    <string>1</string>
 	    <key>G_MAX_PLAYER_BULLET_LEVEL</key> <!-- Level đạn cao nhất, hiện tại là 3 làn đạn, và chưa hỗ trợ cao hơn -->
-		    <string>3</string>
+		    <string>2</string>
 	    <key>G_TIMEOUT_BULLET_LEVEL</key> <!-- Thời gian timeout để giảm số làn đạn, đơn vị sencond -->
 		    <string>15.0</string>
 

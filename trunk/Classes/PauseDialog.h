@@ -17,6 +17,7 @@ public:
 public:
 	void menuCallback(CCObject* pSender);
 	void resumeCallBack(CCObject* pSender);
+	void restartCallBack(CCObject* pSender);
 };
 
 #endif // __PAUSE_DIALOG_H__

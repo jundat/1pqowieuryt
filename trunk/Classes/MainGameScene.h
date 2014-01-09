@@ -28,8 +28,8 @@ public:
 
 public:
 	void showEndGame(int score, int killedEnemies);
-	void okCallback();
-	void cancelCallback();
+	void reviveCallback();
+	void restartCallback();
 
 private:
 	BackgroundLayer* m_BackgroundLayer;

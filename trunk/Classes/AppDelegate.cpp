@@ -39,13 +39,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
     pDirector->setAnimationInterval(1.0 / 60);
 	pEGLView->setDesignResolutionSize(G_DESIGN_WIDTH, G_DESIGN_HEIGHT, kResolutionShowAll);
 
-    CCScene *pScene;
-
-#ifdef WIN32
-	pScene = MenuScene::scene(); //  MenuScene::scene(); //  MainGameScene::scene(); //
-#else
-	pScene = IntroScene::scene(); //  MenuScene::scene(); //  MainGameScene::scene(); //
-#endif
+    CCScene *pScene = MenuScene::scene(); //  MenuScene::scene(); //  MainGameScene::scene(); //
+	
 	pDirector->runWithScene(pScene);
 
 	//////////////////////////////////////////////////////////////////////////

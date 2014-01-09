@@ -135,7 +135,7 @@ void MainGameScene::showEndGame( int score, int killedEnemies )
 }
 
 //revived just 1 time for 1 life
-void MainGameScene::okCallback()
+void MainGameScene::reviveCallback()
 {
 	m_isShowingLose = false;
 
@@ -152,7 +152,7 @@ void MainGameScene::okCallback()
 	m_ObjLayer->ContinueGame();
 }
 
-void MainGameScene::cancelCallback()
+void MainGameScene::restartCallback()
 {
 	m_isShowingLose = false;
 

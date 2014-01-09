@@ -11,49 +11,38 @@ bool PauseDialog::init()
 		return false;
 	}
 
-	CCPoint pcenter = ccp(400, G_DESIGN_HEIGHT-783);
-	CCPoint pcancel = ccp(259, G_DESIGN_HEIGHT-783);
-	CCPoint pok = ccp(541, G_DESIGN_HEIGHT-783);
+	CCPoint pcancel = ccp(400, G_DESIGN_HEIGHT/2 + 100);
+	CCPoint pok = ccp(400, G_DESIGN_HEIGHT/2);
+	CCPoint prestart = ccp(400, G_DESIGN_HEIGHT/2 - 100);
 	float textScale = 0.6f;
 
-	CCSprite* bg = CCSprite::create("dialog.png");
-	bg->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2));
-	this->addChild(bg, -2);
-
-	CCMenuItemImage* cancelButton = CCMenuItemImage::create(
-		"button.png",
-		"buttonPress.png",
+	CCMenuItemImage* exitButton = CCMenuItemImage::create(
+		"exit_button.png",
+		"exit_button_press.png",
 		this,
 		menu_selector(PauseDialog::menuCallback));
+	exitButton->setScale(0.6f);
+	exitButton->setPosition(pcancel);
 
-	cancelButton->setScale(0.6f);
-	cancelButton->setPosition(pcancel);
-
-	CCMenuItemImage* okButton = CCMenuItemImage::create(
-		"button.png",
-		"buttonPress.png",
+	CCMenuItemImage* resumeButton = CCMenuItemImage::create(
+		"resume.png",
+		"resume1.png",
 		this,
 		menu_selector(PauseDialog::resumeCallBack));
-	okButton->setScale(0.6f);
-	okButton->setPosition(pok);
+	resumeButton->setScale(0.6f);
+	resumeButton->setPosition(pok);
 
-	CCMenu* menu = CCMenu::create(cancelButton, okButton, NULL);
+	CCMenuItemImage* restartButton = CCMenuItemImage::create(
+		"restart.png",
+		"restart1.png",
+		this,
+		menu_selector(PauseDialog::restartCallBack));
+	restartButton->setScale(0.6f);
+	restartButton->setPosition(prestart);
+
+	CCMenu* menu = CCMenu::create(exitButton, resumeButton, restartButton, NULL);
 	menu->setPosition(CCPointZero);
 	this->addChild(menu);
-
-	CCLabelBMFont* cancel = CCLabelBMFont::create("MENU", "Mia_64.fnt");
-	cancel->setScale(textScale);
-	cancel->setPosition(pcancel);
-	this->addChild(cancel);
-
-	CCLabelBMFont* ok = CCLabelBMFont::create("RESUME", "Mia_64.fnt");
-	ok->setScale(textScale);
-	ok->setPosition(pok);
-	this->addChild(ok);
-	
-	CCLabelBMFont* msg = CCLabelBMFont::create("PAUSE", "Mia_64.fnt");
-	msg->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2 + 100));
-	this->addChild(msg);
 
 	return true;
 }
@@ -68,5 +57,12 @@ void PauseDialog::resumeCallBack( CCObject* pSender )
 {
 	MainGameScene* parent = (MainGameScene*) this->getParent();
 	parent->resumeCallback();
+	this->removeFromParent();
+}
+
+void PauseDialog::restartCallBack( CCObject* pSender )
+{
+	MainGameScene* parent = (MainGameScene*) this->getParent();
+	parent->restartCallback();
 	this->removeFromParent();
 }

@@ -50,14 +50,14 @@ bool ObjectLayer::init()
 	m_player->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT * 0.1));
 	this->addChild(m_player);
 
-	CCString* s = CCString::createWithFormat("Your best: %d", DataManager::sharedDataManager()->GetCurrenHighScore());
-	CCLabelBMFont* lbHighScore = CCLabelBMFont::create(s->getCString(), "Mia_64.fnt");
-	lbHighScore->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2));
-	this->addChild(lbHighScore, 10);
-	lbHighScore->runAction(CCSequence::create(
-		CCDelayTime::create(2.0f),
-		CCFadeOut::create(2.0f),
-		NULL));
+// 	CCString* s = CCString::createWithFormat("Your best: %d", DataManager::sharedDataManager()->GetCurrenHighScore());
+// 	CCLabelBMFont* lbHighScore = CCLabelBMFont::create(s->getCString(), "Mia_64.fnt");
+// 	lbHighScore->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2));
+// 	this->addChild(lbHighScore, 10);
+// 	lbHighScore->runAction(CCSequence::create(
+// 		CCDelayTime::create(2.0f),
+// 		CCFadeOut::create(2.0f),
+// 		NULL));
 
 	CCSprite* temp = CCSprite::create("pause_0.png");
 	float w = temp->getContentSize().width;
@@ -92,14 +92,6 @@ bool ObjectLayer::init()
 	this->addChild(m_labelBoom, 10);
 
 	
-	m_labelDebug = CCLabelBMFont::create("debug", "Mia_64.fnt");
-	m_labelDebug->setScale(32.0f/64);
-	m_labelDebug->setPosition(ccp(0, G_DESIGN_HEIGHT/2));
-	m_labelDebug->setVisible(false);
-	this->addChild(m_labelDebug, 10);
-
-
-
 	m_EffectLayer = EffectLayer::create();
 	this->addChild(m_EffectLayer, 10);
 
@@ -251,9 +243,9 @@ void ObjectLayer::update( float delta )
 				Item* item = NULL;
 				float rd = CCRANDOM_0_1();
 				float rdw = CCRANDOM_0_1() * (7.0f / 8.0f * G_DESIGN_WIDTH) + G_DESIGN_WIDTH / 8.0f;
-				CCLOG("Random Item: %f", rd);
+				
 				if (rd <= G_ITEM_BULLET_RANDOM_PERCENT)
-				{ CCLOG("----------------- bullet item ");
+				{
 					if (m_player->getBulletLevel() < G_MAX_PLAYER_BULLET_LEVEL)
 					{
 						item = Item::create(G_ITEM_UPGRADE_BULLET, -0.3f, ccp(rdw, 3.0f/4*G_DESIGN_HEIGHT));
@@ -261,7 +253,7 @@ void ObjectLayer::update( float delta )
 					}
 				}
 				else if (rd <= G_ITEM_BULLET_RANDOM_PERCENT + G_ITEM_BOOM_RANDOM_PERCENT)
-				{ CCLOG("----------------- boom item ");
+				{
 					if (this->getNumberBoom() < G_MAX_PLAYER_BOOM)
 					{
 						item = Item::create(G_ITEM_BOOM, -0.3f, ccp(rdw, 3.0f/4*G_DESIGN_HEIGHT));
@@ -271,7 +263,7 @@ void ObjectLayer::update( float delta )
 
 				if (item != NULL)
 				{
-					CCAction* ac = CCJumpTo::create(1.5f, ccp(rdw, -2-item->boundingBox().size.height), G_DESIGN_HEIGHT/2, 1);
+					CCAction* ac = CCJumpTo::create(1.5f, ccp(rdw, -2-item->boundingBox().size.height), 3.0f * G_DESIGN_HEIGHT/4.0f, 1);
 					item->runAction(ac);
 				}
 
@@ -446,7 +438,27 @@ void ObjectLayer::RestartGame()
 	m_score = 0;
 	m_numberBoom = 0;
 
+	//remove all enemy
+	CCObject* it;
+	CCARRAY_FOREACH(m_arrEnemies, it)
+	{
+		Enemy* enemy = dynamic_cast<Enemy*>(it);
+		if (NULL != enemy)
+		{
+			this->removeChild(enemy);
+		}
+	}
+
 	m_arrEnemies->removeAllObjects();
+
+	CCARRAY_FOREACH(m_arrPlayerBullets, it)
+	{
+		Bullet* bullet = dynamic_cast<Bullet*>(it);
+		if (NULL != bullet)
+		{
+			this->removeChild(bullet);
+		}
+	}
 	m_arrPlayerBullets->removeAllObjects();
 
 	CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, 0, true);

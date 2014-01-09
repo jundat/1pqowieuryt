@@ -97,13 +97,13 @@ bool LoseDialog::init()
 void LoseDialog::CancelCallBack( CCObject* pSender )
 {
 	MainGameScene* parent = (MainGameScene*) this->getParent();
-	parent->cancelCallback();
+	parent->restartCallback();
 	this->removeFromParent();
 }
 
 void LoseDialog::OkCallBack( CCObject* pSender )
 {
 	MainGameScene* parent = (MainGameScene*) this->getParent();
-	parent->okCallback();
+	parent->reviveCallback();
 	this->removeFromParent();
 }

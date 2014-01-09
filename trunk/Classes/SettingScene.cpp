@@ -1,4 +1,4 @@
-#include "MenuScene.h"
+﻿#include "MenuScene.h"
 #include "SettingScene.h"
 #include "AudioManager.h"
 #include "Global.h"
@@ -33,19 +33,23 @@ bool SettingScene::init()
 	setting_top->setPosition(ccp(G_DESIGN_WIDTH/2, - 110 + G_DESIGN_HEIGHT));
 	this->addChild(setting_top, 0);
 
-    CCMenuItemImage *backItem = CCMenuItemImage::create(
-                                        "back_button.png",
-                                        "back_button_press.png",
-                                        this,
-                                        menu_selector(SettingScene::menuCallback));
-    
-	backItem->setPosition(ccp(G_DESIGN_WIDTH/2, 0.75f * backItem->getContentSize().height));
 
+	CCMenuItemImage *backItem = CCMenuItemImage::create(
+		"button.png",
+		"buttonPress.png",
+		this,
+		menu_selector(SettingScene::menuCallback));
+
+	backItem->setPosition(ccp(G_DESIGN_WIDTH/2, backItem->getContentSize().height - 3));
+
+	CCLabelBMFont* lbHighScore = CCLabelBMFont::create("BACK", "Mia_64.fnt");
+	lbHighScore->setPosition(ccp(G_DESIGN_WIDTH/2, backItem->getContentSize().height - 3));
+	this->addChild(lbHighScore, 10);
 
 	CCMenuItem* soundOn = CCMenuItemImage::create("sound_on.png", NULL, NULL);
 	CCMenuItem* soundOff = CCMenuItemImage::create("sound_off.png", NULL, NULL);
 	soundToggle = CCMenuItemToggle::createWithTarget(this,  menu_selector(SettingScene::soundCallback), soundOn, soundOff, NULL);
-		
+	
 	if(AudioManager::sharedAudioManager()->IsEnableBackground())
 	{
 		soundToggle->setSelectedIndex(0);
@@ -63,14 +67,13 @@ bool SettingScene::init()
 
 	//////////////////////////////////////////////////////////////////////////
 	//VOLUME
-	CCLabelBMFont* labelMusic = CCLabelBMFont::create("Music", "Mia_64.fnt");
-	labelMusic->setPosition(400, 1280-546);
+	CCLabelTTF* labelMusic = CCLabelTTF::create("Nhạc nền", "Marker Felt.ttf", 64);
+	labelMusic->setPosition(ccp(400, 1280-546));
 	this->addChild(labelMusic);
 	sliderMusic=CCControlSlider::create(
 		CCSprite::create("sliderbarBG.png"),
 		CCSprite::create("sliderbar.png"),
-		CCSprite::create("slidernode.png")
-		);
+		CCSprite::create("slidernode.png"));
 	sliderMusic->setMinimumValue(0.0f);
 	sliderMusic->setMaximumValue(1.0f);
 	sliderMusic->setValue(1.0f);
@@ -79,14 +82,14 @@ bool SettingScene::init()
 	sliderMusic->addTargetWithActionForControlEvents(this, cccontrol_selector(SettingScene::volumeMusicCallBack), CCControlEventValueChanged);
 	this->addChild(sliderMusic);
 
-	CCLabelBMFont* labelFX=CCLabelBMFont::create("Sound", "Mia_64.fnt");
-	labelFX->setPosition(400, 1280-802);
+	CCLabelTTF* labelFX = CCLabelTTF::create("Hiệu ứng", "Arial", 64);
+	//CCLabelTTF *labelFX = CCLabelTTF::create("中国", "Arial", 64);
+	labelFX->setPosition(ccp(400, 1280-802));
 	this->addChild(labelFX);
 	sliderFX=CCControlSlider::create(
 		CCSprite::create("sliderbarBG.png"),
 		CCSprite::create("sliderbar.png"),
-		CCSprite::create("slidernode.png")
-		);
+		CCSprite::create("slidernode.png"));
 	sliderFX->setValue(1.0f);
 	sliderFX->setMinimumValue(0.0f);
 	sliderFX->setMaximumValue(1.0f);
