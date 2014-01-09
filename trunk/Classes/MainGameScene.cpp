@@ -32,9 +32,6 @@ bool MainGameScene::init()
 
 	this->setKeypadEnabled(true);
 
-	CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
-	CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
-
 	CCSpriteFrameCache* cache = CCSpriteFrameCache::sharedSpriteFrameCache();
 	cache->addSpriteFramesWithFile("MainGame_1.plist");
 	cache->addSpriteFramesWithFile("MainGame_2.plist");
@@ -50,8 +47,7 @@ bool MainGameScene::init()
 		"pause_1.png",
 		this,
 		menu_selector(MainGameScene::pauseCallback));
-	pCloseItem->setPosition(ccp(origin.x + pCloseItem->getContentSize().width/2,
-		origin.y + visibleSize.height - pCloseItem->getContentSize().height/2));
+	pCloseItem->setPosition(ccp(pCloseItem->getContentSize().width/2, G_DESIGN_HEIGHT - pCloseItem->getContentSize().height/2));
 	CCMenu* pMenu = CCMenu::create(pCloseItem, NULL);
 	pMenu->setPosition(CCPointZero);
 	this->addChild(pMenu, 1);

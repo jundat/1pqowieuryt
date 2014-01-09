@@ -1,6 +1,7 @@
 #include "MenuScene.h"
 #include "SettingScene.h"
 #include "AudioManager.h"
+#include "Global.h"
 
 USING_NS_CC;
 
@@ -22,17 +23,14 @@ bool SettingScene::init()
 
 	this->setKeypadEnabled(true);
 
-    CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
-    CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
-
     /////////////////////////////
 
 	CCSprite* bg = CCSprite::create("bg_stars.png");
-	bg->setPosition(ccp(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
+	bg->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2));
 	this->addChild(bg, 0);
 
 	CCSprite* setting_top = CCSprite::create("setting_top.png");
-	setting_top->setPosition(ccp(visibleSize.width/2 + origin.x, - 110 + visibleSize.height + origin.y));
+	setting_top->setPosition(ccp(G_DESIGN_WIDTH/2, - 110 + G_DESIGN_HEIGHT));
 	this->addChild(setting_top, 0);
 
     CCMenuItemImage *backItem = CCMenuItemImage::create(
@@ -41,8 +39,7 @@ bool SettingScene::init()
                                         this,
                                         menu_selector(SettingScene::menuCallback));
     
-	backItem->setPosition(ccp(origin.x + visibleSize.width/2,
-                                origin.y + 0.75f * backItem->getContentSize().height));
+	backItem->setPosition(ccp(G_DESIGN_WIDTH/2, 0.75f * backItem->getContentSize().height));
 
 
 	CCMenuItem* soundOn = CCMenuItemImage::create("sound_on.png", NULL, NULL);

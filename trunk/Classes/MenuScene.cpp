@@ -27,17 +27,14 @@ bool MenuScene::init()
 
 	this->setKeypadEnabled(true);
 
-    CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
-    CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
-
     /////////////////////////////
 
 	CCSprite* bg = CCSprite::create("bg_stars.png");
-	bg->setPosition(ccp(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
+	bg->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2));
 	this->addChild(bg, 0);
 	
 	CCSprite* menuTop = CCSprite::create("menu_top.png");
-	menuTop->setPosition(ccp(visibleSize.width/2 + origin.x, -50 - menuTop->getContentSize().height/2 + visibleSize.height + origin.y));
+	menuTop->setPosition(ccp(G_DESIGN_WIDTH/2, -50 - menuTop->getContentSize().height/2 + G_DESIGN_HEIGHT));
 	this->addChild(menuTop, 0);
 
     CCMenuItemImage *playItem = CCMenuItemImage::create(
@@ -46,8 +43,7 @@ bool MenuScene::init()
                                         this,
                                         menu_selector(MenuScene::playCallback));
     
-	playItem->setPosition(ccp(origin.x + visibleSize.width/2,
-                                origin.y + visibleSize.height/2));
+	playItem->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2));
 
 	//
 
@@ -57,7 +53,7 @@ bool MenuScene::init()
 		this,
 		menu_selector(MenuScene::scoreCallback));
 
-	scoreItem->setPosition(ccp(origin.x + visibleSize.width/2,
+	scoreItem->setPosition(ccp(G_DESIGN_WIDTH/2,
 		playItem->getPositionY() - playItem->getContentSize().height/2 - scoreItem->getContentSize().height/2 - 10));
 
 	//
@@ -68,7 +64,7 @@ bool MenuScene::init()
 		this,
 		menu_selector(MenuScene::settingCallback));
 
-	settingItem->setPosition(ccp(origin.x + visibleSize.width/2,
+	settingItem->setPosition(ccp(G_DESIGN_WIDTH/2,
 		scoreItem->getPositionY() - scoreItem->getContentSize().height/2 - settingItem->getContentSize().height/2 - 10));
 
 	//
@@ -79,7 +75,7 @@ bool MenuScene::init()
 		this,
 		menu_selector(MenuScene::exitCallback));
 
-	exitItem->setPosition(ccp(origin.x + visibleSize.width/2,
+	exitItem->setPosition(ccp(G_DESIGN_WIDTH/2,
 		settingItem->getPositionY() - settingItem->getContentSize().height/2 - exitItem->getContentSize().height/2 - 10));
 
 	//

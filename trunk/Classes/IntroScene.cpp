@@ -1,5 +1,6 @@
 #include "MenuScene.h"
 #include "IntroScene.h"
+#include "Global.h"
 
 USING_NS_CC;
 
@@ -18,11 +19,8 @@ bool IntroScene::init()
         return false;
     }
 
-	CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
-	CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
-
 	CCSprite* bg = CCSprite::create("welcome.png");
-	bg->setPosition(ccp(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
+	bg->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2));
 	this->addChild(bg, 0);
 	
 	bg->runAction(CCSequence::create(

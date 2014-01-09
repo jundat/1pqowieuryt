@@ -10,9 +10,6 @@ bool EffectLayer::init()
         return false;
     }
     
-    CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
-    CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
-
     return true;
 }
 

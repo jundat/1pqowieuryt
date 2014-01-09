@@ -29,9 +29,6 @@ bool ObjectLayer::init()
 
 	//////////////////////////////////////////////////////////////////////////
 
-    CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
-    CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
-	
 	m_arrEnemies = new CCArray();
 	m_arrPlayerBullets = new CCArray();
 	m_arrItems = new CCArray();
@@ -50,12 +47,12 @@ bool ObjectLayer::init()
 	m_numberBoom = 0;
 
 	m_player = Ship::create();
-	m_player->setPosition(ccp(origin.x + visibleSize.width/2, origin.y + visibleSize.height * 0.1));
+	m_player->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT * 0.1));
 	this->addChild(m_player);
 
 	CCString* s = CCString::createWithFormat("Your best: %d", DataManager::sharedDataManager()->GetCurrenHighScore());
 	CCLabelBMFont* lbHighScore = CCLabelBMFont::create(s->getCString(), "Mia_64.fnt");
-	lbHighScore->setPosition(ccp(origin.x + visibleSize.width/2, origin.y + visibleSize.height/2));
+	lbHighScore->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2));
 	this->addChild(lbHighScore, 10);
 	lbHighScore->runAction(CCSequence::create(
 		CCDelayTime::create(2.0f),
@@ -68,8 +65,7 @@ bool ObjectLayer::init()
 	
 	m_labelScore = CCLabelBMFont::create("0", "Mia_64.fnt");
 	m_labelScore->setScale(48.0f/64);
-	m_labelScore->setPosition(ccp(origin.x + 2 * w,
-		origin.y + visibleSize.height - h/2));
+	m_labelScore->setPosition(ccp(2 * w, G_DESIGN_HEIGHT - h/2));
 	m_labelScore->setAlignment(kCCTextAlignmentLeft);
 
 	this->addChild(m_labelScore, 10);
@@ -78,28 +74,27 @@ bool ObjectLayer::init()
 // 	s = CCString::createWithFormat("Life: %d", lastLife);
 // 	m_labelHp = CCLabelBMFont::create(s->getCString(), "Mia_64.fnt");
 // 	m_labelHp->setScale(48.0f/64);
-// 	m_labelHp->setPosition(ccp(origin.x + m_labelHp->getContentSize().width/2,
-// 		origin.y + visibleSize.height - m_labelHp->getContentSize().height));
+// 	m_labelHp->setPosition(ccp(m_labelHp->getContentSize().width/2, G_DESIGN_HEIGHT - m_labelHp->getContentSize().height));
 // 	this->addChild(m_labelHp, 10);
 
 	m_itemBoom = CCMenuItemImage::create("icon_boom.png", "icon_boom.png", this, menu_selector(ObjectLayer::ActiveBoom));
-	m_itemBoom->setPosition(ccp(origin.x + m_itemBoom->getContentSize().width/2 - visibleSize.width/2, 
-		origin.y + m_itemBoom->getContentSize().height/2 - visibleSize.height/2));
+	m_itemBoom->setPosition(ccp(m_itemBoom->getContentSize().width/2 - G_DESIGN_WIDTH/2, 
+		m_itemBoom->getContentSize().height/2 - G_DESIGN_HEIGHT/2));
 	m_itemBoom->setVisible(false);
 	CCMenu* menu = CCMenu::create(m_itemBoom, NULL);
 	this->addChild(menu);
 
 	m_labelBoom = CCLabelBMFont::create("x0", "Mia_64.fnt");
 	m_labelBoom->setScale(48.0f/64);
-	m_labelBoom->setPosition(ccp(origin.x + m_itemBoom->getContentSize().width + m_labelBoom->getContentSize().width,
-		origin.y + m_itemBoom->getContentSize().height/4 + m_labelBoom->getContentSize().height/4));
+	m_labelBoom->setPosition(ccp(m_itemBoom->getContentSize().width + m_labelBoom->getContentSize().width,
+		m_itemBoom->getContentSize().height/4 + m_labelBoom->getContentSize().height/4));
 	m_labelBoom->setVisible(false);
 	this->addChild(m_labelBoom, 10);
 
 	
 	m_labelDebug = CCLabelBMFont::create("debug", "Mia_64.fnt");
 	m_labelDebug->setScale(32.0f/64);
-	m_labelDebug->setPosition(ccp(origin.x, origin.y + visibleSize.height/2));
+	m_labelDebug->setPosition(ccp(0, G_DESIGN_HEIGHT/2));
 	m_labelDebug->setVisible(false);
 	this->addChild(m_labelDebug, 10);
 
@@ -112,9 +107,9 @@ bool ObjectLayer::init()
 	this->scheduleUpdate();
 
 	//pixel check collision
-	_rt  = CCRenderTexture::create(visibleSize.width, visibleSize.height);
+	_rt  = CCRenderTexture::create(G_DESIGN_WIDTH, G_DESIGN_HEIGHT);
 	_rt->retain();
-	_rt->setPosition(ccp(visibleSize.width/2, visibleSize.height/2));
+	_rt->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2));
 	_rt->setVisible(false);
 
     return true;
@@ -144,20 +139,17 @@ void ObjectLayer::ccTouchEnded( CCTouch *pTouch, CCEvent *pEvent )
 //schedule generate enemy
 void ObjectLayer::ScheduleGenerateEnemy( float dt )
 {
-	CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
-	CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
-
 	m_difficulty = m_killedEnemies;
 
-	float h = visibleSize.height;
-	float w = visibleSize.width;
+	float h = G_DESIGN_HEIGHT;
+	float w = G_DESIGN_WIDTH;
 	
 	Enemy* enemy = Enemy::create(m_difficulty);
 
 	float enemyW = enemy->boundingBox().size.width;
 			
-	float x = (int)(CCRANDOM_0_1() * (visibleSize.width - enemyW));
-	float y = visibleSize.height + enemy->boundingBox().size.height/2;
+	float x = (int)(CCRANDOM_0_1() * (G_DESIGN_WIDTH - enemyW));
+	float y = G_DESIGN_HEIGHT + enemy->boundingBox().size.height/2;
 
 	enemy->setPosition(ccp(x + enemyW/2, y));
 
@@ -211,9 +203,6 @@ void ObjectLayer::update( float delta )
 		ScheduleGenerateEnemy(delta);
 	}
 
-	CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
-	CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
-
 	CCObject* it = NULL;
 
 	//Player's bullets
@@ -223,7 +212,7 @@ void ObjectLayer::update( float delta )
 		if (NULL != bullet)
 		{
 			//out of screen
-			if (bullet->getPositionY() > visibleSize.height)
+			if (bullet->getPositionY() > G_DESIGN_HEIGHT)
 			{
 				this->removeChild(bullet);
 				m_arrPlayerBullets->removeObject(bullet);
@@ -267,7 +256,7 @@ void ObjectLayer::update( float delta )
 				{ CCLOG("----------------- bullet item ");
 					if (m_player->getBulletLevel() < G_MAX_PLAYER_BULLET_LEVEL)
 					{
-						item = Item::create(G_ITEM_UPGRADE_BULLET, -0.3f, ccp(rdw, 3.0f/4*visibleSize.height));
+						item = Item::create(G_ITEM_UPGRADE_BULLET, -0.3f, ccp(rdw, 3.0f/4*G_DESIGN_HEIGHT));
 						this->AddItem(item);
 					}
 				}
@@ -275,14 +264,14 @@ void ObjectLayer::update( float delta )
 				{ CCLOG("----------------- boom item ");
 					if (this->getNumberBoom() < G_MAX_PLAYER_BOOM)
 					{
-						item = Item::create(G_ITEM_BOOM, -0.3f, ccp(rdw, 3.0f/4*visibleSize.height));
+						item = Item::create(G_ITEM_BOOM, -0.3f, ccp(rdw, 3.0f/4*G_DESIGN_HEIGHT));
 						this->AddItem(item);
 					}
 				}
 
 				if (item != NULL)
 				{
-					CCAction* ac = CCJumpTo::create(1.5f, ccp(rdw, -2-item->boundingBox().size.height), visibleSize.height/2, 1);
+					CCAction* ac = CCJumpTo::create(1.5f, ccp(rdw, -2-item->boundingBox().size.height), G_DESIGN_HEIGHT/2, 1);
 					item->runAction(ac);
 				}
 
@@ -319,9 +308,6 @@ void ObjectLayer::update( float delta )
 //check collision every frame
 void ObjectLayer::ScheduleCheckCollision(float dt)
 {
-	CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
-	CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
-
 	CCObject* it1 = NULL;
 	CCRect playerRect = m_player->collisionBox();
 
@@ -428,9 +414,6 @@ void ObjectLayer::ContinueGame()
 // 	CCString* s = CCString::createWithFormat("Life: %d", lastLife);
 // 	m_labelHp->setString(s->getCString());
 
-	CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
-	CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
-
 	CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, 0, true);
 	this->setTouchEnabled(true);
 
@@ -439,7 +422,7 @@ void ObjectLayer::ContinueGame()
 	//reset
 	m_player->setVisible(true);
 	m_player->Restart();
-	m_player->setPosition(ccp(origin.x + visibleSize.width/2, origin.y + visibleSize.height * 0.1));
+	m_player->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT * 0.1));
 	this->schedule(schedule_selector(ObjectLayer::ScheduleCheckCollision), CCDirector::sharedDirector()->getAnimationInterval());
 	this->scheduleUpdate();
 }
@@ -466,15 +449,12 @@ void ObjectLayer::RestartGame()
 	m_arrEnemies->removeAllObjects();
 	m_arrPlayerBullets->removeAllObjects();
 
-	CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
-	CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
-
 	CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, 0, true);
 	this->setTouchEnabled(true);
 	m_isEndGame = false;
 	m_player->setVisible(true);
 	m_player->Restart();
-	m_player->setPosition(ccp(origin.x + visibleSize.width/2, origin.y + visibleSize.height * 0.1));
+	m_player->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT * 0.1));
 	
 	m_labelBoom->setVisible(false);
 	m_itemBoom->setVisible(false);

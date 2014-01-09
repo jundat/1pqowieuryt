@@ -37,7 +37,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	
     pDirector->setOpenGLView(pEGLView);
     pDirector->setAnimationInterval(1.0 / 60);
-	pEGLView->setDesignResolutionSize(G_DESIGN_WIDTH, G_DESIGN_HEIGHT, kResolutionExactFit);
+	pEGLView->setDesignResolutionSize(G_DESIGN_WIDTH, G_DESIGN_HEIGHT, kResolutionShowAll);
 
     CCScene *pScene;
 

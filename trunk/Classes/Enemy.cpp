@@ -28,9 +28,6 @@ bool Enemy::init()
 		return false;
 	}
 
-	CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
-	CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
-
 	//////////////////////////////////////////////////////////////////////////
 	LevelData* ld = LevelLoader::shareLevelLoader()->GetValueLowerThan((int)m_difficulty);
 

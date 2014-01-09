@@ -1,4 +1,5 @@
 #include "BackgroundLayer.h"
+#include "Global.h"
 
 USING_NS_CC;
 
@@ -12,15 +13,12 @@ bool BackgroundLayer::init()
         return false;
     }
     
-    CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
-    CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
-
 	bg1 = CCSprite::create("bg_stars.png");
 	bg2 = CCSprite::create("bg_stars.png");
 	CCSize size = bg1->getContentSize();
 	
-	bg1->setPosition(ccp(visibleSize.width/2, visibleSize.height/2));
-	bg2->setPosition(ccp(visibleSize.width/2, visibleSize.height/2));
+	bg1->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2));
+	bg2->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2));
 
 	this->addChild(bg1);
 	this->addChild(bg2);
@@ -31,8 +29,6 @@ bool BackgroundLayer::init()
 
 void BackgroundLayer::update(float dt) {
 	bg1->setPositionY(bg1->getPositionY() - 120 * dt);
-
-	CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
 	CCSize size = bg1->getContentSize();
 
 	if (bg1->getPositionY() <= - size.height/2)
@@ -40,7 +36,7 @@ void BackgroundLayer::update(float dt) {
 		bg1->setPositionY(bg1->getPositionY() + size.height * 2);
 	}
 
-	if (bg1->getPositionY() <= visibleSize.height/2)
+	if (bg1->getPositionY() <= G_DESIGN_HEIGHT/2)
 	{
 		bg2->setPositionY(bg1->getPositionY() + size.height);
 	} 

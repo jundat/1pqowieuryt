@@ -13,9 +13,6 @@ bool LoseDialog::init()
         return false;
     }
     
-    CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
-    CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
-
 	//////////////////////////////////////////////////////////////////////////
 
 	CCPoint pcenter = ccp(400, G_DESIGN_HEIGHT-783);
@@ -24,7 +21,7 @@ bool LoseDialog::init()
 	float textScale = 0.6f;
 
 	CCSprite* bg = CCSprite::create("dialog.png");
-	bg->setPosition(ccp(origin.x + visibleSize.width/2, origin.y + visibleSize.height/2));
+	bg->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2));
 	this->addChild(bg, -2);
 	
 	if (m_canBeRevived)
@@ -47,7 +44,7 @@ bool LoseDialog::init()
 		okButton->setPosition(pok);
 
 		CCMenu* menu = CCMenu::create(cancelButton, okButton, NULL);
-		menu->setPosition(origin);
+		menu->setPosition(CCPointZero);
 		this->addChild(menu);
 		
 		CCLabelBMFont* cancel = CCLabelBMFont::create("Again", "Mia_64.fnt");
@@ -72,7 +69,7 @@ bool LoseDialog::init()
 		cancelButton->setPosition(pcenter);
 
 		CCMenu* menu = CCMenu::create(cancelButton, NULL);
-		menu->setPosition(origin);
+		menu->setPosition(CCPointZero);
 		this->addChild(menu);
 
 		CCLabelBMFont* cancel = CCLabelBMFont::create("Again", "Mia_64.fnt");
@@ -82,16 +79,16 @@ bool LoseDialog::init()
 	}
 	
 	CCLabelBMFont* lbTitle = CCLabelBMFont::create("You lose !", "Mia_64.fnt");
-	lbTitle->setPosition(ccp(visibleSize.width/2, visibleSize.height/2 + 150));
+	lbTitle->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2 + 150));
 	this->addChild(lbTitle);
 
 	CCLabelBMFont* lbMsg = CCLabelBMFont::create("Score", "Mia_64.fnt");
-	lbMsg->setPosition(ccp(visibleSize.width/2, visibleSize.height/2 + 50));
+	lbMsg->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2 + 50));
 	this->addChild(lbMsg);
 
 	CCString* s = CCString::createWithFormat("%d", m_score);
 	CCLabelBMFont* lbScore = CCLabelBMFont::create(s->getCString(), "Mia_64.fnt");
-	lbScore->setPosition(ccp(visibleSize.width/2, visibleSize.height/2 - 50));
+	lbScore->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2 - 50));
 	this->addChild(lbScore);
 
     return true;

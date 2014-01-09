@@ -27,27 +27,24 @@ bool ScoreScene::init()
 
 	//////////////////////////////////////////////////////////////////////////
 
-	CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
-	CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
-
 	CCSprite* bg = CCSprite::create("bg_stars.png");
-	bg->setPosition(ccp(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
+	bg->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2));
 	this->addChild(bg, 0);
 
 	CCSprite* score_top = CCSprite::create("setting_top.png");
-	score_top->setPosition(ccp(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
+	score_top->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2));
 	this->addChild(score_top, 0);
 
 	//
 
 	m_lbTitle = CCLabelTTF::create("Connecting", "Marker Felt", 64);
 	//m_lbTitle->setScale(0.5f);
-	m_lbTitle->setPosition(ccp(visibleSize.width/2, visibleSize.height/2));
+	m_lbTitle->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2));
 	this->addChild(m_lbTitle);
 
 	m_lbMsg = CCLabelTTF::create("...", "Marker Felt", 64);
 	//m_lbMsg->setScale(0.5f);
-	m_lbMsg->setPosition(ccp(visibleSize.width/2, visibleSize.height/2 - 90));
+	m_lbMsg->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2 - 90));
 	this->addChild(m_lbMsg);
 
 	//
@@ -58,8 +55,7 @@ bool ScoreScene::init()
 		this,
 		menu_selector(ScoreScene::menuCallback));
 
-	backItem->setPosition(ccp(origin.x + visibleSize.width/2,
-		origin.y + backItem->getContentSize().height - 3));
+	backItem->setPosition(ccp(G_DESIGN_WIDTH/2, backItem->getContentSize().height - 3));
 	
 	CCMenu* pMenu = CCMenu::create(backItem, NULL);
 	pMenu->setPosition(CCPointZero);

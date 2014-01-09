@@ -22,9 +22,6 @@ bool Item::init()
 		return false;
 	}
 
-	CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
-	CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
-
 	//////////////////////////////////////////////////////////////////////////
 	this->setVx(0);
 

@@ -11,18 +11,13 @@ bool PauseDialog::init()
 		return false;
 	}
 
-	CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
-	CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
-
-	//////////////////////////////////////////////////////////////////////////
-
 	CCPoint pcenter = ccp(400, G_DESIGN_HEIGHT-783);
 	CCPoint pcancel = ccp(259, G_DESIGN_HEIGHT-783);
 	CCPoint pok = ccp(541, G_DESIGN_HEIGHT-783);
 	float textScale = 0.6f;
 
 	CCSprite* bg = CCSprite::create("dialog.png");
-	bg->setPosition(ccp(origin.x + visibleSize.width/2, origin.y + visibleSize.height/2));
+	bg->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2));
 	this->addChild(bg, -2);
 
 	CCMenuItemImage* cancelButton = CCMenuItemImage::create(
@@ -43,7 +38,7 @@ bool PauseDialog::init()
 	okButton->setPosition(pok);
 
 	CCMenu* menu = CCMenu::create(cancelButton, okButton, NULL);
-	menu->setPosition(origin);
+	menu->setPosition(CCPointZero);
 	this->addChild(menu);
 
 	CCLabelBMFont* cancel = CCLabelBMFont::create("MENU", "Mia_64.fnt");
@@ -57,7 +52,7 @@ bool PauseDialog::init()
 	this->addChild(ok);
 	
 	CCLabelBMFont* msg = CCLabelBMFont::create("PAUSE", "Mia_64.fnt");
-	msg->setPosition(ccp(visibleSize.width/2, visibleSize.height/2 + 100));
+	msg->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2 + 100));
 	this->addChild(msg);
 
 	return true;

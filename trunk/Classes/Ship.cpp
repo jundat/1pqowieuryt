@@ -27,9 +27,6 @@ bool Ship::init()
 	this->setBulletLevel(G_MIN_PLAYER_BULLET_LEVEL);
 	this->m_isArmor = false;
 
-	CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
-	CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
-
 	m_sprite = CCSprite::createWithSpriteFrameName("ship_0.png");
 	m_sprite->setPosition(CCPointZero);
 	this->addChild(m_sprite);
@@ -189,17 +186,13 @@ void Ship::Fire()
 
 void Ship::update( float delta )
 {
-	//limit on screen
-	CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
-	CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
-	
 	float x = getPositionX();
 	float y = getPositionY();
 	float w_2 = collisionBox().size.width/2;
 	float h_2 = collisionBox().size.height/2;
 
-	LIMIT_VALUE(x, origin.x + w_2, origin.x + visibleSize.width - w_2);
-	LIMIT_VALUE(y, origin.y + h_2, origin.y + visibleSize.height - h_2);
+	LIMIT_VALUE(x, w_2, G_DESIGN_WIDTH - w_2);
+	LIMIT_VALUE(y, h_2, G_DESIGN_HEIGHT - h_2);
 	this->setPosition(x, y);
 
 	//armor
@@ -221,26 +214,8 @@ void Ship::HitBullet( int damage )
 		m_hp -= damage;
 		m_hp  = (m_hp > 0) ? m_hp : 0;
 
-// 		if (m_hp > 0)
-// 		{
-// 			//small effect explosion
-// 			//m_EffectLayer->AddExploisionEff(2, CCPointZero);
-// 		}
-// 		else
-		{
-			m_sprite->stopAction(m_acFlying);
-			m_sprite->runAction(m_acExplosion);
-
-// 			CCSize s = getContentSize();
-// 			CCPoint p1 = CCPointZero;
-// 			CCPoint p2 = ccp(-s.width/2, s.height/2);
-// 			CCPoint p3 = ccp(s.width/2, s.height/2);
-// 
-// 			//big effect explosion
-// 			m_EffectLayer->AddExploisionEff(3, p1);
-// 			m_EffectLayer->AddExploisionEff(3, p2);
-// 			m_EffectLayer->AddExploisionEff(3, p3);
-		}
+		m_sprite->stopAction(m_acFlying);
+		m_sprite->runAction(m_acExplosion);
 	}
 }
 
