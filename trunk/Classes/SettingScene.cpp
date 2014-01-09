@@ -19,7 +19,9 @@ bool SettingScene::init()
     {
         return false;
     }
-    
+
+	this->setKeypadEnabled(true);
+
     CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
     CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
 
@@ -135,4 +137,9 @@ void SettingScene::volumeMusicCallBack(CCObject* sender,CCControlEvent pEvent)
 void SettingScene::volumeFXCallBack(CCObject* sender,CCControlEvent pEvent)
 {
 	AudioManager::sharedAudioManager()->SetVolumeFX(sliderFX->getValue());
+}
+
+void SettingScene::keyBackClicked()
+{
+	menuCallback(NULL);
 }

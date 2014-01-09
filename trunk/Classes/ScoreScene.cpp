@@ -23,6 +23,8 @@ bool ScoreScene::init()
         return false;
     }
 
+	this->setKeypadEnabled(true);
+
 	//////////////////////////////////////////////////////////////////////////
 
 	CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
@@ -99,4 +101,9 @@ void ScoreScene::onHttpRequestCompleted(cocos2d::extension::CCHttpClient *sender
 	CCLOG("Content: %s", str.c_str());
 	
 	CCLOG("-----------------END-------------------");
+}
+
+void ScoreScene::keyBackClicked()
+{
+	menuCallback(NULL);
 }

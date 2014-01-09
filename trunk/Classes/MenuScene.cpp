@@ -24,7 +24,9 @@ bool MenuScene::init()
     {
         return false;
     }
-    
+
+	this->setKeypadEnabled(true);
+
     CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
     CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
 
@@ -158,4 +160,9 @@ void MenuScene::settingCallback( CCObject* pSender )
 void MenuScene::exitCallback( CCObject* pSender )
 {
 	CCDirector::sharedDirector()->end();
+}
+
+void MenuScene::keyBackClicked()
+{
+	exitCallback(NULL);
 }

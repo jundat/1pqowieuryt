@@ -21,6 +21,10 @@ public:
 	CREATE_FUNC(MainGameScene);
 	void pauseCallback(CCObject* pSender);
 	void resumeCallback();
+	virtual void keyBackClicked();
+
+	bool m_isShowingPause;
+	bool m_isShowingLose;
 
 public:
 	void showEndGame(int score, int killedEnemies);

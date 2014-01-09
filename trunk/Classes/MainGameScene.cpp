@@ -27,6 +27,11 @@ bool MainGameScene::init()
         return false;
     }
 
+	m_isShowingPause = false;
+	m_isShowingLose = false;
+
+	this->setKeypadEnabled(true);
+
 	CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
 	CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
 
@@ -58,6 +63,13 @@ bool MainGameScene::init()
 
 void MainGameScene::pauseCallback(CCObject* pSender)
 {
+	if (m_isShowingLose || m_isShowingPause)
+	{
+		return;
+	}
+	
+	m_isShowingPause = true;
+
 	m_BackgroundLayer->Pause();
 	m_ObjLayer->Pause();
 	PauseDialog* dialog = PauseDialog::create();
@@ -66,15 +78,19 @@ void MainGameScene::pauseCallback(CCObject* pSender)
 
 void MainGameScene::resumeCallback() 
 {
+	m_isShowingPause = false;
+
 	m_BackgroundLayer->Resume();
 	m_ObjLayer->Resume();
 }
 
 void MainGameScene::showEndGame( int score, int killedEnemies )
-{
+{	
+	m_isShowingLose = true;
+
 	CCDirector::sharedDirector()->getTouchDispatcher()->removeDelegate(this);
 	this->setTouchEnabled(false);
-
+	
 	//check if enough last_life
 	int lastLife = DataManager::sharedDataManager()->GetLastPlayerLife();
 	lastLife--;
@@ -125,6 +141,8 @@ void MainGameScene::showEndGame( int score, int killedEnemies )
 //revived just 1 time for 1 life
 void MainGameScene::okCallback()
 {
+	m_isShowingLose = false;
+
 	CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, 0, true);
 	this->setTouchEnabled(true);
 
@@ -140,9 +158,16 @@ void MainGameScene::okCallback()
 
 void MainGameScene::cancelCallback()
 {
+	m_isShowingLose = false;
+
 	CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, 0, true);
 	this->setTouchEnabled(true);
 
 	DataManager::sharedDataManager()->SetIsJustRevived(false);
 	m_ObjLayer->RestartGame();
+}
+
+void MainGameScene::keyBackClicked()
+{
+	pauseCallback(NULL);
 }

@@ -15,7 +15,8 @@ public:
     CREATE_FUNC(SettingScene);
 
 	CCMenuItemToggle* soundToggle;
-    
+
+	virtual void keyBackClicked();
     void menuCallback(CCObject* pSender);
 	void soundCallback(CCObject* pSender);
 

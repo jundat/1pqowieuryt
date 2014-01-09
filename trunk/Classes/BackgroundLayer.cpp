@@ -30,7 +30,7 @@ bool BackgroundLayer::init()
 }
 
 void BackgroundLayer::update(float dt) {
-	bg1->setPositionY(bg1->getPositionY() - 50 * dt);
+	bg1->setPositionY(bg1->getPositionY() - 120 * dt);
 
 	CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
 	CCSize size = bg1->getContentSize();

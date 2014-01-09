@@ -12,6 +12,7 @@ public:
     static cocos2d::CCScene* scene();
     CREATE_FUNC(MenuScene);
 
+	virtual void keyBackClicked();
     void playCallback(CCObject* pSender);
 	void scoreCallback(CCObject* pSender);
 	void settingCallback(CCObject* pSender);

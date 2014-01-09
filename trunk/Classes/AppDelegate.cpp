@@ -8,6 +8,7 @@
 #include "LevelLoader.h"
 #include "AudioManager.h"
 #include "GameClient.h"
+#include "IntroScene.h"
 #include <time.h>
 
 
@@ -36,11 +37,16 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	
     pDirector->setOpenGLView(pEGLView);
     pDirector->setAnimationInterval(1.0 / 60);
-
 	pEGLView->setDesignResolutionSize(G_DESIGN_WIDTH, G_DESIGN_HEIGHT, kResolutionExactFit);
 
-    CCScene *pScene = MenuScene::scene(); //  MainGameScene::scene(); //
-    pDirector->runWithScene(pScene);
+    CCScene *pScene;
+
+#ifdef WIN32
+	pScene = MenuScene::scene(); //  MenuScene::scene(); //  MainGameScene::scene(); //
+#else
+	pScene = IntroScene::scene(); //  MenuScene::scene(); //  MainGameScene::scene(); //
+#endif
+	pDirector->runWithScene(pScene);
 
 	//////////////////////////////////////////////////////////////////////////
 

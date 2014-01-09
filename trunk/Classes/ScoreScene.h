@@ -17,7 +17,8 @@ public:
 	
 	CCLabelTTF* m_lbTitle;
 	CCLabelTTF* m_lbMsg;
-	
+
+	virtual void keyBackClicked();
 	void menuCallback(CCObject* pSender);
 	void onHttpRequestCompleted(cocos2d::extension::CCHttpClient *sender, cocos2d::extension::CCHttpResponse *response);
 };
