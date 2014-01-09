@@ -35,16 +35,12 @@ bool SettingScene::init()
 
 
 	CCMenuItemImage *backItem = CCMenuItemImage::create(
-		"button.png",
-		"buttonPress.png",
+		"back.png",
+		"back1.png",
 		this,
 		menu_selector(SettingScene::menuCallback));
-
 	backItem->setPosition(ccp(G_DESIGN_WIDTH/2, backItem->getContentSize().height - 3));
 
-	CCLabelBMFont* lbHighScore = CCLabelBMFont::create("BACK", "Mia_64.fnt");
-	lbHighScore->setPosition(ccp(G_DESIGN_WIDTH/2, backItem->getContentSize().height - 3));
-	this->addChild(lbHighScore, 10);
 
 	CCMenuItem* soundOn = CCMenuItemImage::create("sound_on.png", NULL, NULL);
 	CCMenuItem* soundOff = CCMenuItemImage::create("sound_off.png", NULL, NULL);
@@ -68,6 +64,7 @@ bool SettingScene::init()
 	//////////////////////////////////////////////////////////////////////////
 	//VOLUME
 	CCLabelTTF* labelMusic = CCLabelTTF::create("Nhạc nền", "Marker Felt.ttf", 64);
+	labelMusic->setFontFillColor(ccc3(0, 0, 0));
 	labelMusic->setPosition(ccp(400, 1280-546));
 	this->addChild(labelMusic);
 	sliderMusic=CCControlSlider::create(
@@ -82,8 +79,8 @@ bool SettingScene::init()
 	sliderMusic->addTargetWithActionForControlEvents(this, cccontrol_selector(SettingScene::volumeMusicCallBack), CCControlEventValueChanged);
 	this->addChild(sliderMusic);
 
-	CCLabelTTF* labelFX = CCLabelTTF::create("Hiệu ứng", "Arial", 64);
-	//CCLabelTTF *labelFX = CCLabelTTF::create("中国", "Arial", 64);
+	CCLabelTTF* labelFX = CCLabelTTF::create("Nhạc nền", "Marker Felt.ttf", 64);
+	labelFX->setFontFillColor(ccc3(0, 0, 0));
 	labelFX->setPosition(ccp(400, 1280-802));
 	this->addChild(labelFX);
 	sliderFX=CCControlSlider::create(

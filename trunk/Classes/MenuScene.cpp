@@ -37,15 +37,23 @@ bool MenuScene::init()
 	menuTop->setPosition(ccp(G_DESIGN_WIDTH/2, -50 - menuTop->getContentSize().height/2 + G_DESIGN_HEIGHT));
 	this->addChild(menuTop, 0);
 
+
+	//
+	CCString* s = CCString::createWithFormat("Life %d", DataManager::sharedDataManager()->GetLastPlayerLife());
+	CCLabelBMFont* labelLife = CCLabelBMFont::create(s->getCString(), "Mia_64.fnt");
+	labelLife->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2 + 100));
+	this->addChild(labelLife);
+
+	//
+
     CCMenuItemImage *playItem = CCMenuItemImage::create(
                                         "new_button.png",
                                         "new_button_press.png",
                                         this,
                                         menu_selector(MenuScene::playCallback));
     
-	playItem->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2));
+	playItem->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2 - 30));
 
-	//
 
 	CCMenuItemImage *scoreItem = CCMenuItemImage::create(
 		"score_button.png",
@@ -100,9 +108,6 @@ void MenuScene::playCallback(CCObject* pSender)
 
 	if (lastLife > 0)
 	{
-// 		CCScene *pScene = MainGameScene::scene();
-// 		CCDirector::sharedDirector()->replaceScene(pScene);
-
 		CCScene *pScene = CCTransitionFade::create(0.5, MainGameScene::scene());
 		CCDirector::sharedDirector()->replaceScene(pScene);
 
@@ -124,9 +129,7 @@ void MenuScene::playCallback(CCObject* pSender)
 		if (lastLife > 0)
 		{
 			DataManager::sharedDataManager()->SetLastPlayerLife(lastLife);
-			
-// 			CCScene *pScene = MainGameScene::scene();
-// 			CCDirector::sharedDirector()->replaceScene(pScene);
+
 			CCScene *pScene = CCTransitionFade::create(0.5, MainGameScene::scene());
 			CCDirector::sharedDirector()->replaceScene(pScene);
 

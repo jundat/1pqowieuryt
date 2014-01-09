@@ -64,7 +64,7 @@ bool ObjectLayer::init()
 	float h = temp->getContentSize().height;
 	
 	m_labelScore = CCLabelBMFont::create("0", "Mia_64.fnt");
-	m_labelScore->setScale(48.0f/64);
+	//m_labelScore->setScale(48.0f/64);
 	m_labelScore->setPosition(ccp(2 * w, G_DESIGN_HEIGHT - h/2));
 	m_labelScore->setAlignment(kCCTextAlignmentLeft);
 
@@ -85,7 +85,7 @@ bool ObjectLayer::init()
 	this->addChild(menu);
 
 	m_labelBoom = CCLabelBMFont::create("x0", "Mia_64.fnt");
-	m_labelBoom->setScale(48.0f/64);
+	//m_labelBoom->setScale(48.0f/64);
 	m_labelBoom->setPosition(ccp(m_itemBoom->getContentSize().width + m_labelBoom->getContentSize().width,
 		m_itemBoom->getContentSize().height/4 + m_labelBoom->getContentSize().height/4));
 	m_labelBoom->setVisible(false);

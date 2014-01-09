@@ -1,109 +1,47 @@
 #include "LoseDialog.h"
 #include "MainGameScene.h"
+#include "MenuScene.h"
 
 USING_NS_CC;
 
-// on "init" you need to initialize your instance
 bool LoseDialog::init()
 {
-    //////////////////////////////
-    // 1. super init first
     if ( !CCLayer::init() )
     {
         return false;
     }
-    
-	//////////////////////////////////////////////////////////////////////////
 
-	CCPoint pcenter = ccp(400, G_DESIGN_HEIGHT-783);
-	CCPoint pcancel = ccp(259, G_DESIGN_HEIGHT-783);
-	CCPoint pok = ccp(541, G_DESIGN_HEIGHT-783);
-	float textScale = 0.6f;
+	CCPoint pcenter = ccp(400, G_DESIGN_HEIGHT - 760);
+	float textScale = 0.8f;
 
 	CCSprite* bg = CCSprite::create("dialog.png");
 	bg->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2));
 	this->addChild(bg, -2);
-	
-	if (m_canBeRevived)
-	{
-		CCMenuItemImage* cancelButton = CCMenuItemImage::create(
-			"button.png",
-			"buttonPress.png",
-			this,
-			menu_selector(LoseDialog::CancelCallBack));
 
-		cancelButton->setScale(0.6f);
-		cancelButton->setPosition(pcancel);
+	CCMenuItemImage* exitButton = CCMenuItemImage::create(
+		"exit_button.png",
+		"exit_button_press.png",
+		this,
+		menu_selector(LoseDialog::menuCallBack));
 
-		CCMenuItemImage* okButton = CCMenuItemImage::create(
-			"button.png",
-			"buttonPress.png",
-			this,
-			menu_selector(LoseDialog::OkCallBack));
-		okButton->setScale(0.6f);
-		okButton->setPosition(pok);
+	exitButton->setScale(textScale);
+	exitButton->setPosition(pcenter);
 
-		CCMenu* menu = CCMenu::create(cancelButton, okButton, NULL);
-		menu->setPosition(CCPointZero);
-		this->addChild(menu);
-		
-		CCLabelBMFont* cancel = CCLabelBMFont::create("Again", "Mia_64.fnt");
-		cancel->setScale(textScale);
-		cancel->setPosition(pcancel);
-		this->addChild(cancel);
-
-		CCLabelBMFont* ok = CCLabelBMFont::create("Revive", "Mia_64.fnt");
-		ok->setScale(textScale);
-		ok->setPosition(pok);
-		this->addChild(ok);
-	} 
-	else
-	{
-		CCMenuItemImage* cancelButton = CCMenuItemImage::create(
-			"button.png",
-			"buttonPress.png",
-			this,
-			menu_selector(LoseDialog::CancelCallBack));
-
-		cancelButton->setScale(0.6f);
-		cancelButton->setPosition(pcenter);
-
-		CCMenu* menu = CCMenu::create(cancelButton, NULL);
-		menu->setPosition(CCPointZero);
-		this->addChild(menu);
-
-		CCLabelBMFont* cancel = CCLabelBMFont::create("Again", "Mia_64.fnt");
-		cancel->setScale(textScale);
-		cancel->setPosition(pcenter);
-		this->addChild(cancel);
-	}
-	
-	CCLabelBMFont* lbTitle = CCLabelBMFont::create("You lose !", "Mia_64.fnt");
-	lbTitle->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2 + 150));
-	this->addChild(lbTitle);
-
-	CCLabelBMFont* lbMsg = CCLabelBMFont::create("Score", "Mia_64.fnt");
-	lbMsg->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2 + 50));
-	this->addChild(lbMsg);
+	CCMenu* menu = CCMenu::create(exitButton, NULL);
+	menu->setPosition(CCPointZero);
+	this->addChild(menu);
 
 	CCString* s = CCString::createWithFormat("%d", m_score);
 	CCLabelBMFont* lbScore = CCLabelBMFont::create(s->getCString(), "Mia_64.fnt");
-	lbScore->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2 - 50));
+	lbScore->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2 + 30));
 	this->addChild(lbScore);
 
     return true;
 }
 
-void LoseDialog::CancelCallBack( CCObject* pSender )
+void LoseDialog::menuCallBack( CCObject* pSender )
 {
-	MainGameScene* parent = (MainGameScene*) this->getParent();
-	parent->restartCallback();
-	this->removeFromParent();
+	CCScene *pScene = CCTransitionFade::create(0.5, MenuScene::scene());
+	CCDirector::sharedDirector()->replaceScene(pScene);
 }
 
-void LoseDialog::OkCallBack( CCObject* pSender )
-{
-	MainGameScene* parent = (MainGameScene*) this->getParent();
-	parent->reviveCallback();
-	this->removeFromParent();
-}

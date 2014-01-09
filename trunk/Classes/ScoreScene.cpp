@@ -50,16 +50,11 @@ bool ScoreScene::init()
 	//
 
 	CCMenuItemImage *backItem = CCMenuItemImage::create(
-		"button.png",
-		"buttonPress.png",
+		"back.png",
+		"back1.png",
 		this,
 		menu_selector(ScoreScene::menuCallback));
-
 	backItem->setPosition(ccp(G_DESIGN_WIDTH/2, backItem->getContentSize().height - 3));
-	
-	CCLabelBMFont* lbHighScore = CCLabelBMFont::create("BACK", "Mia_64.fnt");
-	lbHighScore->setPosition(ccp(G_DESIGN_WIDTH/2, backItem->getContentSize().height - 3));
-	this->addChild(lbHighScore, 10);
 	
 	CCMenu* pMenu = CCMenu::create(backItem, NULL);
 	pMenu->setPosition(CCPointZero);

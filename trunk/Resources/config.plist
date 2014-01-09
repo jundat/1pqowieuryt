@@ -18,18 +18,18 @@
 		    <string>15.0</string>
 
 	    <key>G_ITEM_BULLET_RANDOM_PERCENT</key> <!-- Tỷ lệ random ra item tăng level đạn -->
-		    <string>0.08</string>
+		    <string>0.07</string>
 	    <key>G_ITEM_ARMOR_RANDOM_PERCENT</key> <!-- Tỷ lệ random ra item giáp (chưa đúng) -->
-		    <string>0.08</string>
+		    <string>0.07</string>
 	    <key>G_ITEM_BOOM_RANDOM_PERCENT</key> <!-- Tỷ lệ random ra item boom (chưa đúng) -->
-		    <string>0.08</string>
+		    <string>0.07</string>
 
 
 	    <key>G_MAX_PLAYER_LIFE</key> <!-- Số mạng khởi tạo ban đầu của người chơi -->
 		    <string>5</string>
 
 	    <key>G_PLAYER_TIME_TO_REVIVE</key> <!-- Thời gian để revive 1 mạng (đơn vị giây)-->
-		    <string>1</string>
+		    <string>10</string>
 
 	    <key>G_MAX_PLAYER_BOOM</key> <!-- Số boom lớn nhất có thể có 1 lúc -->
 		    <string>3</string>

@@ -47,6 +47,7 @@ bool MainGameScene::init()
 		"pause_1.png",
 		this,
 		menu_selector(MainGameScene::pauseCallback));
+	//pCloseItem->setScale(1.5f);
 	pCloseItem->setPosition(ccp(pCloseItem->getContentSize().width/2, G_DESIGN_HEIGHT - pCloseItem->getContentSize().height/2));
 	CCMenu* pMenu = CCMenu::create(pCloseItem, NULL);
 	pMenu->setPosition(CCPointZero);
@@ -81,7 +82,7 @@ void MainGameScene::resumeCallback()
 }
 
 void MainGameScene::showEndGame( int score, int killedEnemies )
-{	
+{
 	m_isShowingLose = true;
 
 	CCDirector::sharedDirector()->getTouchDispatcher()->removeDelegate(this);
@@ -94,44 +95,13 @@ void MainGameScene::showEndGame( int score, int killedEnemies )
 	
 	CCLOG("Last life: %d", lastLife);
 
-	if (lastLife == 0) //end game
-	{
-		time_t curTime = time(NULL);
-		tm* _tm = localtime(&curTime);
-		DataManager::sharedDataManager()->SetLastDeadTimeNow();
-		DataManager::sharedDataManager()->SetIsJustRevived(false);
-		CCLOG("Not Enough Life To Play -> End game");
-		CCScene *pScene = MenuScene::scene();
-		CCDirector::sharedDirector()->replaceScene(pScene);
-	}
-// 	else if (lastLife == 0) //end game
-// 	{
-// 		CCLOG("Enough Life To Play -> Continue");
-// 		bool isJustRevived = DataManager::sharedDataManager()->GetIsJustRevived();
-// 		LoseDialog* lose = LoseDialog::create(! isJustRevived);
-// 		this->addChild(lose);
-// 
-// 		if (isJustRevived == true)
-// 		{
-// 			CCLOG("Can not revived again...");
-// 		}
-// 
-// 		DataManager::sharedDataManager()->SetIsJustRevived(false);
-// 	}
-	else
-	{
-		CCLOG("Enough Life To Play -> Continue");
-		bool isJustRevived = DataManager::sharedDataManager()->GetIsJustRevived();
-		LoseDialog* lose = LoseDialog::create(! isJustRevived, score, killedEnemies);
-		this->addChild(lose);
-
-		if (isJustRevived == true)
-		{
-			CCLOG("Can not revived again...");
-		}
-		
-		DataManager::sharedDataManager()->SetIsJustRevived(false);
-	}
+	time_t curTime = time(NULL);
+	tm* _tm = localtime(&curTime);
+	DataManager::sharedDataManager()->SetLastDeadTimeNow();
+	DataManager::sharedDataManager()->SetIsJustRevived(false);
+	
+	LoseDialog* dialog = LoseDialog::create(score, killedEnemies);
+	this->addChild(dialog);
 }
 
 //revived just 1 time for 1 life
