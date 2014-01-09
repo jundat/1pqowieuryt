@@ -24,9 +24,9 @@ bool ObjectLayer::init()
         return false;
     }
 
-	//////////////////////////////////////////////////////////////////////////
 	CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, 0, true);
 	this->setTouchEnabled(true);
+
 	//////////////////////////////////////////////////////////////////////////
 
     CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
@@ -34,12 +34,10 @@ bool ObjectLayer::init()
 	
 	m_arrEnemies = new CCArray();
 	m_arrPlayerBullets = new CCArray();
-	m_arrEnemyBullets = new CCArray();
 	m_arrItems = new CCArray();
 
 	m_arrEnemies->retain();
 	m_arrPlayerBullets->retain();
-	m_arrEnemyBullets->retain();
 	m_arrItems->retain();
 
 	m_genTimeCounter = 0;
@@ -97,6 +95,15 @@ bool ObjectLayer::init()
 		origin.y + m_itemBoom->getContentSize().height/4 + m_labelBoom->getContentSize().height/4));
 	m_labelBoom->setVisible(false);
 	this->addChild(m_labelBoom, 10);
+
+	
+	m_labelDebug = CCLabelBMFont::create("debug", "Mia_64.fnt");
+	m_labelDebug->setScale(32.0f/64);
+	m_labelDebug->setPosition(ccp(origin.x, origin.y + visibleSize.height/2));
+	m_labelDebug->setVisible(false);
+	this->addChild(m_labelDebug, 10);
+
+
 
 	m_EffectLayer = EffectLayer::create();
 	this->addChild(m_EffectLayer, 10);
@@ -163,16 +170,8 @@ void ObjectLayer::AddBullet(Bullet* bullet)
 {
 	int type = bullet->getBulletType();
 
-	if (type == G_BULLET_PLAYER_ID)
-	{
-		m_arrPlayerBullets->addObject(bullet);
-		this->addChild(bullet);
-	} 
-	else if (type == G_BULLET_ENEMY_ID)
-	{
-		m_arrEnemyBullets->addObject(bullet);
-		this->addChild(bullet);
-	}
+	m_arrPlayerBullets->addObject(bullet);
+	this->addChild(bullet);
 }
 
 void ObjectLayer::AddItem( Item* item )
@@ -212,10 +211,6 @@ void ObjectLayer::update( float delta )
 		ScheduleGenerateEnemy(delta);
 	}
 
-	//CCLOG("HP: \t%d", m_player->getHp());
-	//CCLOG("Score: \t%d", m_score);
-	//CCLOG("Time: \t%f", m_playedTime);
-
 	CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
 	CCPoint origin = CCDirector::sharedDirector()->getVisibleOrigin();
 
@@ -236,21 +231,6 @@ void ObjectLayer::update( float delta )
 		}
 	}
 
-	//Enemy's bullets
-	CCARRAY_FOREACH(m_arrEnemyBullets, it)
-	{
-		Bullet* bullet = dynamic_cast<Bullet*>(it);
-		if (NULL != bullet)
-		{
-			//out of screen
-			if (bullet->getPositionY() < 0)
-			{
-				this->removeChild(bullet);
-				m_arrEnemyBullets->removeObject(bullet);
-			}
-		}
-	}
-	
 	//Items
 	CCARRAY_FOREACH(m_arrItems, it)
 	{
@@ -282,9 +262,9 @@ void ObjectLayer::update( float delta )
 				Item* item = NULL;
 				float rd = CCRANDOM_0_1();
 				float rdw = CCRANDOM_0_1() * (7.0f / 8.0f * G_DESIGN_WIDTH) + G_DESIGN_WIDTH / 8.0f;
-				
+				CCLOG("Random Item: %f", rd);
 				if (rd <= G_ITEM_BULLET_RANDOM_PERCENT)
-				{
+				{ CCLOG("----------------- bullet item ");
 					if (m_player->getBulletLevel() < G_MAX_PLAYER_BULLET_LEVEL)
 					{
 						item = Item::create(G_ITEM_UPGRADE_BULLET, -0.3f, ccp(rdw, 3.0f/4*visibleSize.height));
@@ -292,7 +272,7 @@ void ObjectLayer::update( float delta )
 					}
 				}
 				else if (rd <= G_ITEM_BULLET_RANDOM_PERCENT + G_ITEM_BOOM_RANDOM_PERCENT)
-				{
+				{ CCLOG("----------------- boom item ");
 					if (this->getNumberBoom() < G_MAX_PLAYER_BOOM)
 					{
 						item = Item::create(G_ITEM_BOOM, -0.3f, ccp(rdw, 3.0f/4*visibleSize.height));
@@ -377,32 +357,6 @@ void ObjectLayer::ScheduleCheckCollision(float dt)
 			}
 		}
 	}
-
-	//////////////////////////////////////////////////////////////////////////
-	//Enemy's bullet -----VS------ Player
-// 	CCARRAY_FOREACH(m_arrEnemyBullets, it1)
-// 	{
-// 		Bullet* bullet = dynamic_cast<Bullet*>(it1);
-// 		if (NULL != bullet)
-// 		{
-// 			//pixel check collision	
-// 			CCSprite* sprBullet = CCSprite::createWithTexture(bullet->getSprite()->getTexture());
-// 			CCSprite* sprPlayer = CCSprite::createWithTexture(m_player->getSprite()->getTexture());
-// 			sprBullet->setPosition(bullet->getPosition());
-// 			sprPlayer->setPosition(m_player->getPosition());
-// 
-// 			if (CollisionDetection::GetInstance()->areTheSpritesColliding(sprBullet, sprPlayer, true, _rt))
-// 			//if(bullet->boundingBox().intersectsRect(playerRect))
-// 			{
-// 				this->removeChild(bullet);
-// 				m_arrEnemyBullets->removeObject(bullet);
-// 
-// 				//sound
-// 				AudioManager::sharedAudioManager()->PlayEffect("explosion.wav");
-// 				m_player->HitBullet(bullet->getDamage());
-// 			}
-// 		}
-// 	}
 
 	//////////////////////////////////////////////////////////////////////////
 	//Enemy -----------VS------------- Player
@@ -510,7 +464,6 @@ void ObjectLayer::RestartGame()
 	m_numberBoom = 0;
 
 	m_arrEnemies->removeAllObjects();
-	m_arrEnemyBullets->removeAllObjects();
 	m_arrPlayerBullets->removeAllObjects();
 
 	CCSize visibleSize = CCDirector::sharedDirector()->getVisibleSize();
@@ -525,6 +478,8 @@ void ObjectLayer::RestartGame()
 	
 	m_labelBoom->setVisible(false);
 	m_itemBoom->setVisible(false);
+
+	m_labelScore->setString("0");
 
 	this->schedule(schedule_selector(ObjectLayer::ScheduleCheckCollision), CCDirector::sharedDirector()->getAnimationInterval());
 	this->scheduleUpdate();
@@ -549,18 +504,6 @@ void ObjectLayer::AfterDeadEffectCallback()
 	}
 
 	m_arrEnemies->removeAllObjects();
-
-	//remove all enemy's bullet
-	CCARRAY_FOREACH(m_arrEnemyBullets, it)
-	{
-		Bullet* bullet = dynamic_cast<Bullet*>(it);
-		if (NULL != bullet)
-		{
-			this->removeChild(bullet);
-		}
-	}
-
-	m_arrEnemyBullets->removeAllObjects();
 }
 
 void ObjectLayer::IncreaseBoom()

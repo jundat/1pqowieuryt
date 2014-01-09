@@ -18,11 +18,11 @@
 		    <string>15.0</string>
 
 	    <key>G_ITEM_BULLET_RANDOM_PERCENT</key> <!-- Tỷ lệ random ra item tăng level đạn -->
-		    <string>0.015</string>
+		    <string>0.08</string>
 	    <key>G_ITEM_ARMOR_RANDOM_PERCENT</key> <!-- Tỷ lệ random ra item giáp (chưa đúng) -->
-		    <string>0.015</string>
+		    <string>0.08</string>
 	    <key>G_ITEM_BOOM_RANDOM_PERCENT</key> <!-- Tỷ lệ random ra item boom (chưa đúng) -->
-		    <string>0.015</string>
+		    <string>0.08</string>
 
 
 	    <key>G_MAX_PLAYER_LIFE</key> <!-- Số mạng khởi tạo ban đầu của người chơi -->
@@ -80,10 +80,10 @@
         	<string>200</string>
 
 		<key>G_ENEMY_1_PERCENT</key> <!-- Phần trăm máy bay 1 -->
-		    <string>0.85</string>
+		    <string>0.8</string>
 	    <key>G_ENEMY_2_PERCENT</key> <!-- Phần trăm máy bay 2-->
-		    <string>0.175</string>
+		    <string>0.12</string>
 	    <key>G_ENEMY_3_PERCENT</key> <!-- Phần trăm máy bay 3 -->
-		    <string>0.025</string>
+		    <string>0.08</string>
     </dict>
 </plist>

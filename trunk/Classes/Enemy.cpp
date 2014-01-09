@@ -234,7 +234,7 @@ void Enemy::HitBullet(int damage)
 	}
 	else
 	{
-		m_vy = 0;
+		m_vy = m_vy/2.0f;
 		m_sprite->stopAction(m_acFlying);
 		m_sprite->stopAction(m_acPreExplosion);
 		m_sprite->runAction(m_acExplosion);

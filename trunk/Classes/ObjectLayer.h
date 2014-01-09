@@ -18,7 +18,6 @@ public:
 	~ObjectLayer(){
 		RELEASE(m_arrEnemies);
 		RELEASE(m_arrPlayerBullets);
-		RELEASE(m_arrEnemyBullets);
 		RELEASE(m_arrItems);
 		
 		if (_rt != NULL)
@@ -66,14 +65,13 @@ private:
 	CCLabelBMFont* m_labelHp;
 	CCLabelBMFont* m_labelBoom;
 	CCMenuItemImage* m_itemBoom;
+
+	CCLabelBMFont* m_labelDebug;
 	
 	CCPoint m_lastPoint;
 	
 	CCArray* m_arrEnemies;
-	
 	CCArray* m_arrPlayerBullets;
-	CCArray* m_arrEnemyBullets;
-	
 	CCArray* m_arrItems;
 
 	EffectLayer* m_EffectLayer;
