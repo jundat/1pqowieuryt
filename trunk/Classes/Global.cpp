@@ -49,6 +49,7 @@ float G_PLAYER_TIME_TO_FIRE = 0.4f;
 float G_ENEMY_TIME_TO_FIRE = 2.5f;
 
 float G_DEFAULT_TIME_TO_GENERATE_ENEMY = 1.0f;
+float G_TIME_TO_GENERATE_ITEM = 20;
 
 float G_MIN_ENEMY_VY = -0.05f;
 float G_MAX_ENEMY_VY = -0.5f;

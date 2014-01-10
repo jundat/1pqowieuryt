@@ -81,13 +81,13 @@ bool Enemy::init()
 	switch (m_type)
 	{
 	case 1:
-		NUM_FRAME_EXPLOSION = 3;
+		NUM_FRAME_EXPLOSION = 4;
 		break;
 	case 2:
-		NUM_FRAME_EXPLOSION = 5;
+		NUM_FRAME_EXPLOSION = 6;
 		break;
 	case 3:
-		NUM_FRAME_EXPLOSION = 8;
+		NUM_FRAME_EXPLOSION = 9;
 		break;
 	}
 
@@ -104,7 +104,7 @@ bool Enemy::init()
 		animFrames->addObject(frame);
 	}
 
-	CCAnimation* animation = CCAnimation::createWithSpriteFrames(animFrames, 0.1f);
+	CCAnimation* animation = CCAnimation::createWithSpriteFrames(animFrames, 0.12f);
 
 	m_acExplosion = CCSequence::create(
 		CCAnimate::create(animation),
@@ -145,7 +145,7 @@ bool Enemy::init()
 		break;
 	}
 	
-	CCAnimation* animationPre = CCAnimation::createWithSpriteFrames(animFramesPre, 0.15f);
+	CCAnimation* animationPre = CCAnimation::createWithSpriteFrames(animFramesPre, 0.12f);
 
 	m_acPreExplosion = CCSequence::create(
 		CCAnimate::create(animationPre),

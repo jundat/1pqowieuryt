@@ -13,6 +13,7 @@ public:
     CREATE_FUNC(MenuScene);
 
 	CCMenu* m_menu;
+	CCLabelBMFont* m_labelLife;
 
 	virtual void keyBackClicked();
     void playCallback(CCObject* pSender);
@@ -20,7 +21,7 @@ public:
 	void settingCallback(CCObject* pSender);
 	void exitCallback(CCObject* pSender);
 
-	
+	void onCompletedWaiting();
 	void onShowDialog();
 	void onCloseDialog();
 

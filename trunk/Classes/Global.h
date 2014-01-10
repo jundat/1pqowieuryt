@@ -56,6 +56,7 @@ extern float G_PLAYER_TIME_TO_FIRE;
 extern float G_ENEMY_TIME_TO_FIRE;
 
 extern float G_DEFAULT_TIME_TO_GENERATE_ENEMY;
+extern float G_TIME_TO_GENERATE_ITEM;
 
 extern float G_MIN_ENEMY_VY;
 extern float G_MAX_ENEMY_VY;

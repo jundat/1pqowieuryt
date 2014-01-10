@@ -7,12 +7,11 @@ USING_NS_CC;
 class WaitForLifeDialog : public cocos2d::CCLayer
 {
 public:
-	WaitForLifeDialog(int timeInSeconds):CCLayer(){
+	WaitForLifeDialog(float timeInSeconds):CCLayer(){
 		this->m_waitTime = timeInSeconds;
 	};
-	~WaitForLifeDialog(){};
     virtual bool init();
-	static WaitForLifeDialog* create(int timeInSeconds) {
+	static WaitForLifeDialog* create(float timeInSeconds) {
 		WaitForLifeDialog* dig = new WaitForLifeDialog(timeInSeconds);
 		dig->init();
 		dig->autorelease();
@@ -20,9 +19,11 @@ public:
 	}
 
 private:
-	int m_waitTime;
+	float m_waitTime;
+	CCLabelTTF* m_lbTime;
 
 public:
+	void ScheduleTick(float dt);
 	void exitCallback(CCObject* pSender);
 	void askFriendCallback(CCObject* pSender);
 };

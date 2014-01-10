@@ -19,11 +19,6 @@ public:
 		RELEASE(m_arrEnemies);
 		RELEASE(m_arrPlayerBullets);
 		RELEASE(m_arrItems);
-		
-		if (_rt != NULL)
-		{
-			_rt->release();
-		}
 	};
 
     virtual bool init();
@@ -35,7 +30,6 @@ public:
 	virtual void ccTouchMoved(CCTouch *pTouch, CCEvent *pEvent);
 	virtual void ccTouchEnded(CCTouch *pTouch, CCEvent *pEvent);
 
-	void ScheduleGenerateEnemy(float dt);
 	void AddBullet(Bullet* bullet);
 	void AddItem(Item* item);
 	void IncreaseBoom();
@@ -49,6 +43,8 @@ public:
 	void AfterDeadEffectCallback();
 
 private:
+	void GenerateEnemy(float dt);
+	void ScheduleGenerateItem(float dt);
 	void ScheduleCheckCollision(float dt);
 
 private:
@@ -62,7 +58,6 @@ private:
 	CC_SYNTHESIZE(float, m_genTimeCounter, GenTimeCounter);
 
 	CCLabelBMFont* m_labelScore;
-	//CCLabelBMFont* m_labelHp;
 	CCLabelBMFont* m_labelBoom;
 	CCMenuItemImage* m_itemBoom;
 		
@@ -73,9 +68,6 @@ private:
 	CCArray* m_arrItems;
 
 	EffectLayer* m_EffectLayer;
-
-	//pixel check collision
-	static CCRenderTexture* _rt;
 };
 
 #endif // __GAME_OBJECT_MANAGER_H__

@@ -1,9 +1,10 @@
-#include "MenuScene.h"
+﻿#include "MenuScene.h"
 #include "ScoreScene.h"
 #include "ParseClient.h"
 #include "cocos-ext.h"
 #include "HttpClient.h"
 #include "GameClient.h"
+#include "DataManager.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -32,18 +33,19 @@ bool ScoreScene::init()
 	this->addChild(bg, 0);
 
 	CCSprite* score_top = CCSprite::create("setting_top.png");
-	score_top->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2));
+	score_top->setPosition(ccp(G_DESIGN_WIDTH/2, - 110 + G_DESIGN_HEIGHT));
 	this->addChild(score_top, 0);
 
 	//
 
-	m_lbTitle = CCLabelTTF::create("Connecting", "Marker Felt", 64);
-	//m_lbTitle->setScale(0.5f);
+	CCLabelTTF* m_lbTitle = CCLabelTTF::create("Điểm cao", "Marker Felt.ttf", 64);
+	m_lbTitle->setFontFillColor(ccc3(56, 56, 56));
 	m_lbTitle->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2));
 	this->addChild(m_lbTitle);
 
-	m_lbMsg = CCLabelTTF::create("...", "Marker Felt", 64);
-	//m_lbMsg->setScale(0.5f);
+	CCString* s = CCString::createWithFormat("%d", DataManager::sharedDataManager()->GetHighScore());
+	m_lbMsg = CCLabelTTF::create(s->getCString(), "Marker Felt.ttf", 64);
+	m_lbMsg->setFontFillColor(ccc3(56, 56, 56));
 	m_lbMsg->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2 - 90));
 	this->addChild(m_lbMsg);
 

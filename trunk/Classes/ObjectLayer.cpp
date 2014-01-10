@@ -10,14 +10,8 @@
 
 USING_NS_CC;
 
-//pixel check collision
-CCRenderTexture* ObjectLayer::_rt = NULL;
-
-// on "init" you need to initialize your instance
 bool ObjectLayer::init()
 {
-    //////////////////////////////
-    // 1. super init first
     if ( !CCLayer::init() )
     {
         return false;
@@ -49,32 +43,15 @@ bool ObjectLayer::init()
 	m_player->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT * 0.1));
 	this->addChild(m_player);
 
-// 	CCString* s = CCString::createWithFormat("Your best: %d", DataManager::sharedDataManager()->GetCurrenHighScore());
-// 	CCLabelBMFont* lbHighScore = CCLabelBMFont::create(s->getCString(), "Mia_64.fnt");
-// 	lbHighScore->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2));
-// 	this->addChild(lbHighScore, 10);
-// 	lbHighScore->runAction(CCSequence::create(
-// 		CCDelayTime::create(2.0f),
-// 		CCFadeOut::create(2.0f),
-// 		NULL));
-
 	CCSprite* temp = CCSprite::create("pause_0.png");
 	float w = temp->getContentSize().width;
 	float h = temp->getContentSize().height;
 	
 	m_labelScore = CCLabelBMFont::create("0", "Mia_64.fnt");
-	//m_labelScore->setScale(48.0f/64);
 	m_labelScore->setPosition(ccp(2 * w, G_DESIGN_HEIGHT - h/2));
 	m_labelScore->setAlignment(kCCTextAlignmentLeft);
 
 	this->addChild(m_labelScore, 10);
-
-// 	int lastLife = DataManager::sharedDataManager()->GetLastPlayerLife();
-// 	s = CCString::createWithFormat("Life: %d", lastLife);
-// 	m_labelHp = CCLabelBMFont::create(s->getCString(), "Mia_64.fnt");
-// 	m_labelHp->setScale(48.0f/64);
-// 	m_labelHp->setPosition(ccp(m_labelHp->getContentSize().width/2, G_DESIGN_HEIGHT - m_labelHp->getContentSize().height));
-// 	this->addChild(m_labelHp, 10);
 
 	m_itemBoom = CCMenuItemImage::create("icon_boom.png", "icon_boom.png", this, menu_selector(ObjectLayer::ActiveBoom));
 	m_itemBoom->setPosition(ccp(m_itemBoom->getContentSize().width/2 - G_DESIGN_WIDTH/2, 
@@ -84,7 +61,6 @@ bool ObjectLayer::init()
 	this->addChild(menu);
 
 	m_labelBoom = CCLabelBMFont::create("x0", "Mia_64.fnt");
-	//m_labelBoom->setScale(48.0f/64);
 	m_labelBoom->setPosition(ccp(m_itemBoom->getContentSize().width + m_labelBoom->getContentSize().width,
 		m_itemBoom->getContentSize().height/4 + m_labelBoom->getContentSize().height/4));
 	m_labelBoom->setVisible(false);
@@ -94,14 +70,9 @@ bool ObjectLayer::init()
 	m_EffectLayer = EffectLayer::create();
 	this->addChild(m_EffectLayer, 10);
 
+	this->schedule(schedule_selector(ObjectLayer::ScheduleGenerateItem), G_TIME_TO_GENERATE_ITEM);
 	this->schedule(schedule_selector(ObjectLayer::ScheduleCheckCollision), CCDirector::sharedDirector()->getAnimationInterval());
 	this->scheduleUpdate();
-
-	//pixel check collision
-	_rt  = CCRenderTexture::create(G_DESIGN_WIDTH, G_DESIGN_HEIGHT);
-	_rt->retain();
-	_rt->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2));
-	_rt->setVisible(false);
 
     return true;
 }
@@ -127,8 +98,7 @@ void ObjectLayer::ccTouchEnded( CCTouch *pTouch, CCEvent *pEvent )
 {
 }
 
-//schedule generate enemy
-void ObjectLayer::ScheduleGenerateEnemy( float dt )
+void ObjectLayer::GenerateEnemy( float dt )
 {
 	m_difficulty = m_killedEnemies;
 
@@ -148,7 +118,148 @@ void ObjectLayer::ScheduleGenerateEnemy( float dt )
 	this->addChild(enemy);
 }
 
-//Player or enemy call to add bullet when fire
+void ObjectLayer::ScheduleGenerateItem( float dt )
+{
+	Item* item = NULL;
+	float rd = CCRANDOM_0_1();
+	float rdw = CCRANDOM_0_1() * (7.0f / 8.0f * G_DESIGN_WIDTH) + G_DESIGN_WIDTH / 8.0f;
+
+	if (rd < 0.5f)
+	{
+		if (m_player->getBulletLevel() < G_MAX_PLAYER_BULLET_LEVEL)
+		{
+			item = Item::create(G_ITEM_UPGRADE_BULLET, -0.3f, ccp(rdw, 3.0f/4*G_DESIGN_HEIGHT));
+			this->AddItem(item);
+		}
+		else
+		{
+			if (this->getNumberBoom() < G_MAX_PLAYER_BOOM)
+			{
+				item = Item::create(G_ITEM_BOOM, -0.3f, ccp(rdw, 3.0f/4*G_DESIGN_HEIGHT));
+				this->AddItem(item);
+			}
+		}
+	}
+	else
+	{
+		if (this->getNumberBoom() < G_MAX_PLAYER_BOOM)
+		{
+			item = Item::create(G_ITEM_BOOM, -0.3f, ccp(rdw, 3.0f/4*G_DESIGN_HEIGHT));
+			this->AddItem(item);
+		}
+		else
+		{
+			if (m_player->getBulletLevel() < G_MAX_PLAYER_BULLET_LEVEL)
+			{
+				item = Item::create(G_ITEM_UPGRADE_BULLET, -0.3f, ccp(rdw, 3.0f/4*G_DESIGN_HEIGHT));
+				this->AddItem(item);
+			}
+		}
+	}
+
+
+	if (item != NULL)
+	{
+		CCAction* ac = CCJumpTo::create(1.5f, ccp(rdw, -2-item->boundingBox().size.height), 3.0f * G_DESIGN_HEIGHT/4.0f, 1);
+		item->runAction(ac);
+	}
+}
+
+void ObjectLayer::ScheduleCheckCollision(float dt)
+{
+	CCObject* it1 = NULL;
+	CCRect playerRect = m_player->collisionBox();
+
+	//////////////////////////////////////////////////////////////////////////
+	//player's bullet -----VS------ Enemy
+	CCARRAY_FOREACH(m_arrPlayerBullets, it1)
+	{
+		Bullet* bullet = dynamic_cast<Bullet*>(it1);
+		if (NULL != bullet)
+		{
+			CCRect bulletRect = bullet->boundingBox();
+
+			CCObject* it2 = NULL;
+
+			//foreach all enemy
+			CCARRAY_FOREACH(m_arrEnemies, it2)
+			{
+				Enemy* enemy = dynamic_cast<Enemy*>(it2);
+				if (NULL != enemy)
+				{
+					CCRect enemyRect = enemy->boundingBox();
+
+					if (enemyRect.intersectsRect(bulletRect))
+					{
+						this->removeChild(bullet);
+						m_arrPlayerBullets->removeObject(bullet);
+
+						//sound
+						AudioManager::sharedAudioManager()->PlayEffect("explosion.wav");
+						enemy->HitBullet(bullet->getDamage());
+					}
+				}
+			}
+		}
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	//Enemy -----------VS------------- Player
+	CCARRAY_FOREACH(m_arrEnemies, it1)
+	{
+		Enemy* enemy = dynamic_cast<Enemy*>(it1);
+		if (NULL != enemy)
+		{
+			CCRect enemyRect = enemy->boundingBox();
+
+			if (enemyRect.intersectsRect(playerRect))
+			{
+				//sound
+				AudioManager::sharedAudioManager()->PlayEffect("explosion.wav");
+
+				m_player->HitBullet(1);
+				enemy->HitBullet(1000);
+				m_arrEnemies->removeObject(enemy);
+			}
+		}
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	//Items -----VS------ Player
+	CCARRAY_FOREACH(m_arrItems, it1)
+	{
+		Item* item = dynamic_cast<Item*>(it1);
+		if (NULL != item)
+		{
+			CCRect itemRect = item->boundingBox();
+
+			if (playerRect.intersectsRect(itemRect))
+			{
+				int itemtype = item->getItemType();
+
+				if (itemtype == G_ITEM_UPGRADE_BULLET)
+				{
+					m_player->UpgradeBullet();
+				} 
+				else if (itemtype == G_ITEM_ARMOR)
+				{
+					m_player->EnableArmor();
+				}
+				else if (itemtype == G_ITEM_BOOM)
+				{
+					this->IncreaseBoom();
+				}
+
+				this->removeChild(item);
+				m_arrItems->removeObject(item);
+
+				//sound
+				AudioManager::sharedAudioManager()->PlayEffect("item.wav");
+			}
+		}
+	}
+}
+
 void ObjectLayer::AddBullet(Bullet* bullet)
 {
 	int type = bullet->getBulletType();
@@ -170,16 +281,7 @@ void ObjectLayer::update( float delta )
 		CCDirector::sharedDirector()->getTouchDispatcher()->removeDelegate(this);
 		this->setTouchEnabled(false);
 		this->unschedule(schedule_selector(ObjectLayer::ScheduleCheckCollision));
-		this->unschedule(schedule_selector(ObjectLayer::ScheduleGenerateEnemy));
 		this->unscheduleUpdate();
-		
-// 		CCSequence* sequence = CCSequence::create(
-// 			CCDelayTime::create(2.0f),
-// 			CCCallFunc::create(this, callfunc_selector(ObjectLayer::AfterDeadEffectCallback)),
-// 			NULL
-// 		);
-// 
-// 		this->runAction(sequence);
 
 		m_isEndGame = true;
 	}
@@ -191,7 +293,7 @@ void ObjectLayer::update( float delta )
 	if (m_genTimeCounter >= Enemy::S_GENERATE_TIME)
 	{
 		m_genTimeCounter = 0;
-		ScheduleGenerateEnemy(delta);
+		GenerateEnemy(delta);
 	}
 
 	CCObject* it = NULL;
@@ -239,54 +341,6 @@ void ObjectLayer::update( float delta )
 				m_arrEnemies->removeObject(enemy);
 				m_killedEnemies++;
 
-				//item
-				Item* item = NULL;
-				float rd = CCRANDOM_0_1();
-				float rdw = CCRANDOM_0_1() * (7.0f / 8.0f * G_DESIGN_WIDTH) + G_DESIGN_WIDTH / 8.0f;
-				
-				if(m_killedEnemies % 20 == 0)
-				{
-					if (rd < 0.5f)
-					{
-						if (m_player->getBulletLevel() < G_MAX_PLAYER_BULLET_LEVEL)
-						{
-							item = Item::create(G_ITEM_UPGRADE_BULLET, -0.3f, ccp(rdw, 3.0f/4*G_DESIGN_HEIGHT));
-							this->AddItem(item);
-						}
-						else
-						{
-							if (this->getNumberBoom() < G_MAX_PLAYER_BOOM)
-							{
-								item = Item::create(G_ITEM_BOOM, -0.3f, ccp(rdw, 3.0f/4*G_DESIGN_HEIGHT));
-								this->AddItem(item);
-							}
-						}
-					}
-					else
-					{
-						if (this->getNumberBoom() < G_MAX_PLAYER_BOOM)
-						{
-							item = Item::create(G_ITEM_BOOM, -0.3f, ccp(rdw, 3.0f/4*G_DESIGN_HEIGHT));
-							this->AddItem(item);
-						}
-						else
-						{
-							if (m_player->getBulletLevel() < G_MAX_PLAYER_BULLET_LEVEL)
-							{
-								item = Item::create(G_ITEM_UPGRADE_BULLET, -0.3f, ccp(rdw, 3.0f/4*G_DESIGN_HEIGHT));
-								this->AddItem(item);
-							}
-						}
-					}
-				}
-				
-
-				if (item != NULL)
-				{
-					CCAction* ac = CCJumpTo::create(1.5f, ccp(rdw, -2-item->boundingBox().size.height), 3.0f * G_DESIGN_HEIGHT/4.0f, 1);
-					item->runAction(ac);
-				}
-
 				switch (enemy->getEnemyType())
 				{
 				case 1:
@@ -315,102 +369,6 @@ void ObjectLayer::update( float delta )
 	}
 }
 
-//check collision every frame
-void ObjectLayer::ScheduleCheckCollision(float dt)
-{
-	CCObject* it1 = NULL;
-	CCRect playerRect = m_player->collisionBox();
-
-	//////////////////////////////////////////////////////////////////////////
-	//player's bullet -----VS------ Enemy
-	CCARRAY_FOREACH(m_arrPlayerBullets, it1)
-	{
-		Bullet* bullet = dynamic_cast<Bullet*>(it1);
-		if (NULL != bullet)
-		{
-			CCRect bulletRect = bullet->boundingBox();
-
-			CCObject* it2 = NULL;
-
-			//foreach all enemy
-			CCARRAY_FOREACH(m_arrEnemies, it2)
-			{
-				Enemy* enemy = dynamic_cast<Enemy*>(it2);
-				if (NULL != enemy)
-				{
-					CCRect enemyRect = enemy->boundingBox();
-					
-					if (enemyRect.intersectsRect(bulletRect))
-					{
-						this->removeChild(bullet);
-						m_arrPlayerBullets->removeObject(bullet);
-
-						//sound
-						AudioManager::sharedAudioManager()->PlayEffect("explosion.wav");
-						enemy->HitBullet(bullet->getDamage());
-					}
-				}
-			}
-		}
-	}
-
-	//////////////////////////////////////////////////////////////////////////
-	//Enemy -----------VS------------- Player
-	CCARRAY_FOREACH(m_arrEnemies, it1)
-	{
-		Enemy* enemy = dynamic_cast<Enemy*>(it1);
-		if (NULL != enemy)
-		{
-			CCRect enemyRect = enemy->boundingBox();
-
-			if (enemyRect.intersectsRect(playerRect))
-			{
-				//sound
-				AudioManager::sharedAudioManager()->PlayEffect("explosion.wav");
-				
-				m_player->HitBullet(1);
-				enemy->HitBullet(1000);
-				m_arrEnemies->removeObject(enemy);
-			}
-		}
-	}
-
-	//////////////////////////////////////////////////////////////////////////
-	//Items -----VS------ Player
-	CCARRAY_FOREACH(m_arrItems, it1)
-	{
-		Item* item = dynamic_cast<Item*>(it1);
-		if (NULL != item)
-		{
-			CCRect itemRect = item->boundingBox();
-
-			if (playerRect.intersectsRect(itemRect))
-			{
-				int itemtype = item->getItemType();
-
-				if (itemtype == G_ITEM_UPGRADE_BULLET)
-				{
-					m_player->UpgradeBullet();
-				} 
-				else if (itemtype == G_ITEM_ARMOR)
-				{
-					m_player->EnableArmor();
-				}
-				else if (itemtype == G_ITEM_BOOM)
-				{
-					this->IncreaseBoom();
-				}
-				
-				this->removeChild(item);
-				m_arrItems->removeObject(item);
-
-				//sound
-				AudioManager::sharedAudioManager()->PlayEffect("item.wav");
-			}
-		}
-	}
-}
-
 void ObjectLayer::ContinueGame()
 {
 	//keep:
@@ -419,10 +377,6 @@ void ObjectLayer::ContinueGame()
 	//	player's Position
 	//reset:
 	//	player's HP
-
-// 	int lastLife = DataManager::sharedDataManager()->GetLastPlayerLife();
-// 	CCString* s = CCString::createWithFormat("Life: %d", lastLife);
-// 	m_labelHp->setString(s->getCString());
 
 	CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, 0, true);
 	this->setTouchEnabled(true);
@@ -433,6 +387,7 @@ void ObjectLayer::ContinueGame()
 	m_player->setVisible(true);
 	m_player->Restart();
 	m_player->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT * 0.1));
+	this->schedule(schedule_selector(ObjectLayer::ScheduleGenerateItem), G_TIME_TO_GENERATE_ITEM);
 	this->schedule(schedule_selector(ObjectLayer::ScheduleCheckCollision), CCDirector::sharedDirector()->getAnimationInterval());
 	this->scheduleUpdate();
 }
@@ -445,10 +400,6 @@ void ObjectLayer::RestartGame()
 	//	player's Position
 	//	score
 	//	numberBoom
-
-// 	int lastLife = DataManager::sharedDataManager()->GetLastPlayerLife();
-// 	CCString* s = CCString::createWithFormat("Life: %d", lastLife);
-// 	m_labelHp->setString(s->getCString());
 
 	m_genTimeCounter = 0;
 	m_playedTime = 0;
@@ -490,7 +441,9 @@ void ObjectLayer::RestartGame()
 	m_itemBoom->setVisible(false);
 
 	m_labelScore->setString("0");
+	
 
+	this->schedule(schedule_selector(ObjectLayer::ScheduleGenerateItem), G_TIME_TO_GENERATE_ITEM);
 	this->schedule(schedule_selector(ObjectLayer::ScheduleCheckCollision), CCDirector::sharedDirector()->getAnimationInterval());
 	this->scheduleUpdate();
 }
@@ -501,6 +454,12 @@ void ObjectLayer::AfterDeadEffectCallback()
 
 	MainGameScene* parent = (MainGameScene*) this->getParent();
 	parent->showEndGame(m_score, m_killedEnemies);
+
+	CCDirector::sharedDirector()->getTouchDispatcher()->removeDelegate(this);
+	this->setTouchEnabled(false);
+	this->unschedule(schedule_selector(ObjectLayer::ScheduleGenerateItem));
+	this->unschedule(schedule_selector(ObjectLayer::ScheduleCheckCollision));
+	this->unscheduleUpdate();
 	
 	//remove all enemy
 	CCObject* it;
@@ -562,8 +521,8 @@ void ObjectLayer::Pause()
 {
 	CCDirector::sharedDirector()->getTouchDispatcher()->removeDelegate(this);
 	this->setTouchEnabled(false);
+	this->unschedule(schedule_selector(ObjectLayer::ScheduleGenerateItem));
 	this->unschedule(schedule_selector(ObjectLayer::ScheduleCheckCollision));
-	this->unschedule(schedule_selector(ObjectLayer::ScheduleGenerateEnemy));
 	this->unscheduleUpdate();
 
 	m_player->unscheduleUpdate();
@@ -597,6 +556,7 @@ void ObjectLayer::Resume()
 {
 	CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, 0, true);
 	this->setTouchEnabled(true);
+	this->schedule(schedule_selector(ObjectLayer::ScheduleGenerateItem), G_TIME_TO_GENERATE_ITEM);
 	this->schedule(schedule_selector(ObjectLayer::ScheduleCheckCollision), CCDirector::sharedDirector()->getAnimationInterval());
 	this->scheduleUpdate();
 

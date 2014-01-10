@@ -1,6 +1,8 @@
 ﻿#include "WaitForLifeDialog.h"
 #include "MainGameScene.h"
 #include "MenuScene.h"
+#include "DataManager.h"
+#include <time.h>
 
 USING_NS_CC;
 
@@ -40,25 +42,21 @@ bool WaitForLifeDialog::init()
 	menu->setPosition(CCPointZero);
 	this->addChild(menu);
 
-	CCLabelTTF* labelTitle = CCLabelTTF::create("Không đủ số mạng\nHãy chờ thêm", "Marker Felt.ttf", 64);
+	CCLabelTTF* labelTitle = CCLabelTTF::create("Không đủ số mạng\nHãy chờ thêm", "Marker Felt.ttf", 48);
 	labelTitle->setFontFillColor(ccc3(56, 56, 56));
 	labelTitle->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2 + 120));
 	this->addChild(labelTitle);
 
-// 	CCLabelTTF* lbTitle = CCLabelTTF::create("Không đủ số mạng\nHãy chờ thêm", "Marker Felt", 48);
-// 	lbTitle->setVerticalAlignment(kCCVerticalTextAlignmentCenter);
-// 	lbTitle->setHorizontalAlignment(kCCTextAlignmentCenter);
-// 	lbTitle->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2 + 120));
-// 	lbTitle->setFontFillColor(ccc3(56, 56, 56));
-// 	this->addChild(lbTitle);
+	int mins = (int)m_waitTime/60;
+	int seconds = (int)m_waitTime%60;
 
+	CCString* s = CCString::createWithFormat("%d phút %d giây", mins, seconds);
+	m_lbTime = CCLabelTTF::create(s->getCString(), "Marker Felt", 48);
+	m_lbTime->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2));
+	m_lbTime->setColor(ccc3(56, 56, 56));
+	this->addChild(m_lbTime);
 
-	CCString* s = CCString::createWithFormat("%d s", m_waitTime);
-	CCLabelBMFont* lbScore = CCLabelBMFont::create(s->getCString(), "Mia_64.fnt");
-	lbScore->setAlignment(kCCTextAlignmentCenter);
-	lbScore->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2));
-	lbScore->setColor(ccc3(56, 56, 56));
-	this->addChild(lbScore);
+	this->schedule(schedule_selector(WaitForLifeDialog::ScheduleTick), 1);
 
     return true;
 }
@@ -73,10 +71,33 @@ void WaitForLifeDialog::exitCallback( CCObject* pSender )
 
 void WaitForLifeDialog::askFriendCallback( CCObject* pSender )
 {
+	CCMessageBox("I\'ll give you 5 lifes, ok?", "Info");
+	DataManager::sharedDataManager()->SetLastPlayerLife(5);
+
 	MenuScene* parent = (MenuScene*)this->getParent();
 	parent->setTouchEnabled(true);
 	parent->onCloseDialog();
 	this->removeFromParent();
+}
+
+void WaitForLifeDialog::ScheduleTick( float dt )
+{
+	m_waitTime -= dt;
+
+	if (m_waitTime < 0)
+	{
+		this->unschedule(schedule_selector(WaitForLifeDialog::ScheduleTick));
+		MenuScene* parent = (MenuScene*)this->getParent();
+		parent->onCompletedWaiting();
+	}
+	else
+	{
+		int mins = (int)m_waitTime/60;
+		int seconds = (int)m_waitTime % 60;
+
+		CCString* s = CCString::createWithFormat("%d phút %d giây", mins, seconds);
+		m_lbTime->setString(s->getCString());
+	}
 }
 
 

@@ -20,7 +20,7 @@ DataManager::DataManager()
 }
 
 //Default value = 0
-int DataManager::GetCurrenHighScore()
+int DataManager::GetHighScore()
 {
 	return CCUserDefault::sharedUserDefault()->getIntegerForKey("CURRENT_HIGHSCORE");
 }
@@ -29,7 +29,7 @@ int DataManager::GetCurrenHighScore()
 //Default value = 0
 void DataManager::SetCurrentHighScore(int score)
 {
-	if(score > this->GetCurrenHighScore() ) {
+	if(score > this->GetHighScore() ) {
 		CCUserDefault::sharedUserDefault()->setIntegerForKey("CURRENT_HIGHSCORE", score);
 		CCUserDefault::sharedUserDefault()->flush();
 	}

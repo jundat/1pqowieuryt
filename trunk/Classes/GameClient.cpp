@@ -55,7 +55,7 @@ void GameClient::submitScore()
 {
 	//use MasterKey
 	ParseClient* pc = ParseClient::sharedParseClient();
-	int score = DataManager::sharedDataManager()->GetCurrenHighScore();
+	int score = DataManager::sharedDataManager()->GetHighScore();
 	CCLOG("Call submitScore: %d", score);
 	std::string username = DataManager::sharedDataManager()->GetUsername();
 	std::string password = DataManager::sharedDataManager()->GetPassword();
@@ -128,7 +128,7 @@ void GameClient::logInCompleted( cocos2d::extension::CCHttpClient *sender, cocos
 		int score = s->intValue();
 		CCLOG("score: %d", score);
 
-		if (score != DataManager::sharedDataManager()->GetCurrenHighScore())
+		if (score != DataManager::sharedDataManager()->GetHighScore())
 		{
 			submitScore();
 		}

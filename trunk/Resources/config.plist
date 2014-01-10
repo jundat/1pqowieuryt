@@ -29,7 +29,7 @@
 		    <string>5</string>
 
 	    <key>G_PLAYER_TIME_TO_REVIVE</key> <!-- Thời gian để revive 1 mạng (đơn vị giây)-->
-		    <string>20</string>
+		    <string>120</string>
 
 	    <key>G_MAX_PLAYER_BOOM</key> <!-- Số boom lớn nhất có thể có 1 lúc -->
 		    <string>3</string>
@@ -54,7 +54,8 @@
 
 	    <key>G_DEFAULT_TIME_TO_GENERATE_ENEMY</key> <!-- Thời gian giữa 2 lần sinh ra Enemy -->
 		    <string>1.0</string>
-
+		<key>G_TIME_TO_GENERATE_ITEM</key> <!-- Thời gian giữa 2 lần sinh ra Item -->
+		    <string>15</string>
 
 	    <key>G_MIN_ENEMY_VY</key> <!-- Vận tốc nhỏ nhất của Enemy (số âm, vì bay ngược chiều lại) -->
 		    <string>-0.09</string>
@@ -80,10 +81,10 @@
         	<string>200</string>
 
 		<key>G_ENEMY_1_PERCENT</key> <!-- Phần trăm máy bay 1 -->
-		    <string>0.8</string>
+		    <string>0.85</string>
 	    <key>G_ENEMY_2_PERCENT</key> <!-- Phần trăm máy bay 2-->
-		    <string>0.12</string>
+		    <string>0.1</string>
 	    <key>G_ENEMY_3_PERCENT</key> <!-- Phần trăm máy bay 3 -->
-		    <string>0.08</string>
+		    <string>0.05</string>
     </dict>
 </plist>

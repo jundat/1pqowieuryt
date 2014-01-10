@@ -91,15 +91,15 @@ bool MenuScene::init()
 
 	//
 	CCString* s = CCString::createWithFormat("%d", DataManager::sharedDataManager()->GetLastPlayerLife());
-	CCLabelBMFont* labelLife = CCLabelBMFont::create(s->getCString(), "Mia_64.fnt");
-	labelLife->setColor(ccc3(56, 56, 56));
-	labelLife->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2 + 100));
-	this->addChild(labelLife);
+	m_labelLife = CCLabelBMFont::create(s->getCString(), "Mia_64.fnt");
+	m_labelLife->setColor(ccc3(56, 56, 56));
+	m_labelLife->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2 + 100));
+	this->addChild(m_labelLife);
 
 	//
 
 	//
-	s = CCString::createWithFormat("v%d", 15);
+	s = CCString::createWithFormat("v%d", 16);
 	CCLabelBMFont* labelVersion = CCLabelBMFont::create(s->getCString(), "Mia_64.fnt");
 	labelVersion->setColor(ccc3(56, 56, 56));
 	labelVersion->setScale(0.5f);
@@ -174,7 +174,7 @@ void MenuScene::playCallback(CCObject* pSender)
 		CCDirector::sharedDirector()->replaceScene(pScene);
 
 		CCLOG("LastLife > 0 -> Play");
-	} 
+	}
 	else
 	{
 		//get revive_life
@@ -199,10 +199,7 @@ void MenuScene::playCallback(CCObject* pSender)
 		}
 		else
 		{
-			//CCString* s = CCString::createWithFormat("Bạn không đủ mạng, hãy chờ %d giây!", (int)G_PLAYER_TIME_TO_REVIVE);
-			//CCMessageBox(s->getCString(), "Thông tin");
-
-			WaitForLifeDialog* dialog = WaitForLifeDialog::create((long)G_PLAYER_TIME_TO_REVIVE);
+			WaitForLifeDialog* dialog = WaitForLifeDialog::create((float)(G_PLAYER_TIME_TO_REVIVE - seconds));
 			this->addChild(dialog, 100);
 			this->setTouchEnabled(false);
 			onShowDialog();
@@ -242,5 +239,36 @@ void MenuScene::onShowDialog()
 
 void MenuScene::onCloseDialog()
 {
+	refreshLifeMenu();
+	CCString* s = CCString::createWithFormat("%d", DataManager::sharedDataManager()->GetLastPlayerLife());
+	m_labelLife->setString(s->getCString());
 	m_menu->setEnabled(true);
+}
+
+void MenuScene::onCompletedWaiting()
+{
+	//get revive_life
+	tm* lasttm = DataManager::sharedDataManager()->GetLastDeadTime();
+	time_t lastTime = mktime(lasttm);
+	time_t curTime = time(NULL);
+	double seconds = difftime(curTime, lastTime);
+
+	int lastLife = (int)(seconds / G_PLAYER_TIME_TO_REVIVE);
+	lastLife = (lastLife > G_MAX_PLAYER_LIFE) ? G_MAX_PLAYER_LIFE : lastLife;
+
+	CCLOG("Revive Last life: %d", lastLife);
+
+	if (lastLife > 0)
+	{
+		DataManager::sharedDataManager()->SetLastPlayerLife(lastLife);
+
+		CCScene *pScene = CCTransitionFade::create(0.5, MainGameScene::scene());
+		CCDirector::sharedDirector()->replaceScene(pScene);
+
+		CCLOG("Revive->LastLife > 0 -> Play");
+	}
+	else
+	{
+		CCMessageBox("Your code is failed!", "F**k the coder!");
+	}
 }

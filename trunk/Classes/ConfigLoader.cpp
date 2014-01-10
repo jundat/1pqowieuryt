@@ -41,6 +41,8 @@ ConfigLoader::ConfigLoader(void)
 	G_ENEMY_TIME_TO_FIRE = GetValue(std::string("G_ENEMY_TIME_TO_FIRE"))->floatValue();
 	
 	G_DEFAULT_TIME_TO_GENERATE_ENEMY = GetValue(std::string("G_DEFAULT_TIME_TO_GENERATE_ENEMY"))->floatValue();
+	G_TIME_TO_GENERATE_ITEM = GetValue(std::string("G_TIME_TO_GENERATE_ITEM"))->floatValue();
+	
 	
 	G_MIN_ENEMY_VY = GetValue(std::string("G_MIN_ENEMY_VY"))->floatValue();
 	G_MAX_ENEMY_VY = GetValue(std::string("G_MAX_ENEMY_VY"))->floatValue();
