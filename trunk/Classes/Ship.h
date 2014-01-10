@@ -10,8 +10,11 @@ USING_NS_CC;
 class Ship : public GameObject
 {
 public:
-	Ship():GameObject(){}
-	~Ship();
+	~Ship() {
+		m_acFlying->release();
+		m_acExplosion->release();
+		m_acArmor->release();
+	}
 	virtual bool init();
 	CREATE_FUNC(Ship); //static function: new, init, autorelease, return reference
 
@@ -40,6 +43,7 @@ public:
 	CCRect collisionBox();
 	void Fire();
 	void HitBullet(int damage);
+	void AfterDeadEffectCallback();
 	void Dead();
 	void Restart();
 };

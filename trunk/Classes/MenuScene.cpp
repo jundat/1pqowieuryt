@@ -1,13 +1,64 @@
-#include "MenuScene.h"
+﻿#include "MenuScene.h"
 #include "MainGameScene.h"
 #include "ScoreScene.h"
 #include "SettingScene.h"
 #include "AudioManager.h"
 #include "DataManager.h"
+#include "WaitForLifeDialog.h"
 #include <time.h>
 
 USING_NS_CC;
 USING_NS_CC_EXT;
+
+
+void refreshLifeMenu() 
+{
+	//check if last_player_life > 0
+	int lastLife = DataManager::sharedDataManager()->GetLastPlayerLife();
+	lastLife = (lastLife > G_MAX_PLAYER_LIFE) ? G_MAX_PLAYER_LIFE : lastLife;
+	DataManager::sharedDataManager()->SetLastPlayerLife(lastLife);
+
+	CCLOG("Last life: %d", lastLife);
+
+	if (lastLife > 0)
+	{
+		// 		CCScene *pScene = CCTransitionFade::create(0.5, MainGameScene::scene());
+		// 		CCDirector::sharedDirector()->replaceScene(pScene);
+
+		CCLOG("LastLife > 0 -> Play");
+	} 
+	else
+	{
+		//get revive_life
+		tm* lasttm = DataManager::sharedDataManager()->GetLastDeadTime();
+		time_t lastTime = mktime(lasttm);
+		time_t curTime = time(NULL);
+		double seconds = difftime(curTime, lastTime);
+
+		lastLife = (int)(seconds / G_PLAYER_TIME_TO_REVIVE);
+		lastLife = (lastLife > G_MAX_PLAYER_LIFE) ? G_MAX_PLAYER_LIFE : lastLife;
+
+		CCLOG("Revive Last life: %d", lastLife);
+
+		if (lastLife > 0)
+		{
+			DataManager::sharedDataManager()->SetLastPlayerLife(lastLife);
+
+			// 			CCScene *pScene = CCTransitionFade::create(0.5, MainGameScene::scene());
+			// 			CCDirector::sharedDirector()->replaceScene(pScene);
+
+			CCLOG("Revive->LastLife > 0 -> Play");
+		}
+		else
+		{
+			//CCString* s = CCString::createWithFormat("Bạn không đủ mạng, hãy chờ %d giây!", G_PLAYER_TIME_TO_REVIVE);
+			//CCMessageBox(s->getCString(), "Thông tin");
+			CCLOG("Revive->LastLife < 0 -> Can not play");
+			return;
+		}
+	}
+}
+
 
 CCScene* MenuScene::scene()
 {
@@ -17,7 +68,6 @@ CCScene* MenuScene::scene()
     return scene;
 }
 
-// on "init" you need to initialize your instance
 bool MenuScene::init()
 {
     if ( !CCLayer::init() )
@@ -25,6 +75,8 @@ bool MenuScene::init()
         return false;
     }
 
+	m_isShowDialog = false;
+	refreshLifeMenu();
 	this->setKeypadEnabled(true);
 
     /////////////////////////////
@@ -37,12 +89,22 @@ bool MenuScene::init()
 	menuTop->setPosition(ccp(G_DESIGN_WIDTH/2, -50 - menuTop->getContentSize().height/2 + G_DESIGN_HEIGHT));
 	this->addChild(menuTop, 0);
 
-
 	//
-	CCString* s = CCString::createWithFormat("Life %d", DataManager::sharedDataManager()->GetLastPlayerLife());
+	CCString* s = CCString::createWithFormat("%d", DataManager::sharedDataManager()->GetLastPlayerLife());
 	CCLabelBMFont* labelLife = CCLabelBMFont::create(s->getCString(), "Mia_64.fnt");
+	labelLife->setColor(ccc3(56, 56, 56));
 	labelLife->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2 + 100));
 	this->addChild(labelLife);
+
+	//
+
+	//
+	s = CCString::createWithFormat("v%d", 15);
+	CCLabelBMFont* labelVersion = CCLabelBMFont::create(s->getCString(), "Mia_64.fnt");
+	labelVersion->setColor(ccc3(56, 56, 56));
+	labelVersion->setScale(0.5f);
+	labelVersion->setPosition(ccp(labelVersion->getContentSize().width/4, G_DESIGN_HEIGHT - labelVersion->getContentSize().height/4));
+	this->addChild(labelVersion);
 
 	//
 
@@ -88,9 +150,9 @@ bool MenuScene::init()
 
 	//
 
-    CCMenu* pMenu = CCMenu::create(playItem, scoreItem, settingItem, exitItem, NULL);
-    pMenu->setPosition(CCPointZero);
-    this->addChild(pMenu, 1);
+    m_menu = CCMenu::create(playItem, scoreItem, settingItem, exitItem, NULL);
+    m_menu->setPosition(CCPointZero);
+    this->addChild(m_menu, 1);
 	
 	AudioManager::sharedAudioManager()->PlayBackground("background.ogg");
 
@@ -137,7 +199,14 @@ void MenuScene::playCallback(CCObject* pSender)
 		}
 		else
 		{
-			CCMessageBox("Not enough life, wait for 10s!", "Info");
+			//CCString* s = CCString::createWithFormat("Bạn không đủ mạng, hãy chờ %d giây!", (int)G_PLAYER_TIME_TO_REVIVE);
+			//CCMessageBox(s->getCString(), "Thông tin");
+
+			WaitForLifeDialog* dialog = WaitForLifeDialog::create((long)G_PLAYER_TIME_TO_REVIVE);
+			this->addChild(dialog, 100);
+			this->setTouchEnabled(false);
+			onShowDialog();
+
 			CCLOG("Revive->LastLife < 0 -> Can not play");
 			return;
 		}
@@ -164,4 +233,14 @@ void MenuScene::exitCallback( CCObject* pSender )
 void MenuScene::keyBackClicked()
 {
 	exitCallback(NULL);
+}
+
+void MenuScene::onShowDialog()
+{
+	m_menu->setEnabled(false);
+}
+
+void MenuScene::onCloseDialog()
+{
+	m_menu->setEnabled(true);
 }

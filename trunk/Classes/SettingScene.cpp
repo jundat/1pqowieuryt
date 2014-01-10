@@ -64,7 +64,7 @@ bool SettingScene::init()
 	//////////////////////////////////////////////////////////////////////////
 	//VOLUME
 	CCLabelTTF* labelMusic = CCLabelTTF::create("Nhạc nền", "Marker Felt.ttf", 64);
-	labelMusic->setFontFillColor(ccc3(0, 0, 0));
+	labelMusic->setFontFillColor(ccc3(56, 56, 56));
 	labelMusic->setPosition(ccp(400, 1280-546));
 	this->addChild(labelMusic);
 	sliderMusic=CCControlSlider::create(
@@ -80,7 +80,7 @@ bool SettingScene::init()
 	this->addChild(sliderMusic);
 
 	CCLabelTTF* labelFX = CCLabelTTF::create("Nhạc nền", "Marker Felt.ttf", 64);
-	labelFX->setFontFillColor(ccc3(0, 0, 0));
+	labelFX->setFontFillColor(ccc3(56, 56, 56));
 	labelFX->setPosition(ccp(400, 1280-802));
 	this->addChild(labelFX);
 	sliderFX=CCControlSlider::create(

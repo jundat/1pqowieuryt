@@ -2,7 +2,6 @@
 #define __LOSE_DIALOG_H__
 
 #include "cocos2d.h"
-#include "CCParallaxNodeExtras.h"
 USING_NS_CC;
 
 class LoseDialog : public cocos2d::CCLayer

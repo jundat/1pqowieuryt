@@ -7,7 +7,6 @@
 #include "MainGameScene.h"
 #include "CollisionDetection.h"
 #include "DataManager.h"
-#include "cocos2d.h"
 
 USING_NS_CC;
 
@@ -174,13 +173,13 @@ void ObjectLayer::update( float delta )
 		this->unschedule(schedule_selector(ObjectLayer::ScheduleGenerateEnemy));
 		this->unscheduleUpdate();
 		
-		CCSequence* sequence = CCSequence::create(
-			CCDelayTime::create(1.8f),
-			CCCallFunc::create(this, callfunc_selector(ObjectLayer::AfterDeadEffectCallback)),
-			NULL
-		);
-
-		this->runAction(sequence);
+// 		CCSequence* sequence = CCSequence::create(
+// 			CCDelayTime::create(2.0f),
+// 			CCCallFunc::create(this, callfunc_selector(ObjectLayer::AfterDeadEffectCallback)),
+// 			NULL
+// 		);
+// 
+// 		this->runAction(sequence);
 
 		m_isEndGame = true;
 	}
@@ -238,36 +237,55 @@ void ObjectLayer::update( float delta )
 			if (enemy->getHp() <= 0)
 			{
 				m_arrEnemies->removeObject(enemy);
+				m_killedEnemies++;
 
 				//item
 				Item* item = NULL;
 				float rd = CCRANDOM_0_1();
 				float rdw = CCRANDOM_0_1() * (7.0f / 8.0f * G_DESIGN_WIDTH) + G_DESIGN_WIDTH / 8.0f;
 				
-				if (rd <= G_ITEM_BULLET_RANDOM_PERCENT)
+				if(m_killedEnemies % 20 == 0)
 				{
-					if (m_player->getBulletLevel() < G_MAX_PLAYER_BULLET_LEVEL)
+					if (rd < 0.5f)
 					{
-						item = Item::create(G_ITEM_UPGRADE_BULLET, -0.3f, ccp(rdw, 3.0f/4*G_DESIGN_HEIGHT));
-						this->AddItem(item);
+						if (m_player->getBulletLevel() < G_MAX_PLAYER_BULLET_LEVEL)
+						{
+							item = Item::create(G_ITEM_UPGRADE_BULLET, -0.3f, ccp(rdw, 3.0f/4*G_DESIGN_HEIGHT));
+							this->AddItem(item);
+						}
+						else
+						{
+							if (this->getNumberBoom() < G_MAX_PLAYER_BOOM)
+							{
+								item = Item::create(G_ITEM_BOOM, -0.3f, ccp(rdw, 3.0f/4*G_DESIGN_HEIGHT));
+								this->AddItem(item);
+							}
+						}
+					}
+					else
+					{
+						if (this->getNumberBoom() < G_MAX_PLAYER_BOOM)
+						{
+							item = Item::create(G_ITEM_BOOM, -0.3f, ccp(rdw, 3.0f/4*G_DESIGN_HEIGHT));
+							this->AddItem(item);
+						}
+						else
+						{
+							if (m_player->getBulletLevel() < G_MAX_PLAYER_BULLET_LEVEL)
+							{
+								item = Item::create(G_ITEM_UPGRADE_BULLET, -0.3f, ccp(rdw, 3.0f/4*G_DESIGN_HEIGHT));
+								this->AddItem(item);
+							}
+						}
 					}
 				}
-				else if (rd <= G_ITEM_BULLET_RANDOM_PERCENT + G_ITEM_BOOM_RANDOM_PERCENT)
-				{
-					if (this->getNumberBoom() < G_MAX_PLAYER_BOOM)
-					{
-						item = Item::create(G_ITEM_BOOM, -0.3f, ccp(rdw, 3.0f/4*G_DESIGN_HEIGHT));
-						this->AddItem(item);
-					}
-				}
+				
 
 				if (item != NULL)
 				{
 					CCAction* ac = CCJumpTo::create(1.5f, ccp(rdw, -2-item->boundingBox().size.height), 3.0f * G_DESIGN_HEIGHT/4.0f, 1);
 					item->runAction(ac);
 				}
-
-				m_killedEnemies++;
 
 				switch (enemy->getEnemyType())
 				{

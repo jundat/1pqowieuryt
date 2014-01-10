@@ -8,12 +8,6 @@ USING_NS_CC;
 
 #define ARMOR_TIME_ANIMATION 0.1f //(G_PLAYER_ARMOR_TIME / 2)
 
-Ship::~Ship()
-{
-	m_acFlying->release();
-	m_acExplosion->release();
-	m_acArmor->release();
-}
 
 bool Ship::init()
 {
@@ -65,9 +59,11 @@ bool Ship::init()
 
 	CCAnimation* animationExplosion = CCAnimation::createWithSpriteFrames(animFramesExplosion, 0.2f);
 	CCAnimate* animateExplosion = CCAnimate::create(animationExplosion);
+
 	m_acExplosion = CCSequence::create(
 		animateExplosion,
 		CCBlink::create(1, 3),
+		CCCallFunc::create(this, callfunc_selector(Ship::AfterDeadEffectCallback)),
 		NULL);
 	m_acExplosion->retain();
 
@@ -256,4 +252,10 @@ void Ship::UpgradeBullet()
 	}
 
 	m_timeOutBulletLevel = m_bulletLevel * G_TIMEOUT_BULLET_LEVEL;
+}
+
+void Ship::AfterDeadEffectCallback()
+{
+	ObjectLayer* parent = (ObjectLayer*)this->getParent();
+	parent->AfterDeadEffectCallback();
 }

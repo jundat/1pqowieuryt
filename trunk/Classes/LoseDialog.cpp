@@ -1,4 +1,4 @@
-#include "LoseDialog.h"
+﻿#include "LoseDialog.h"
 #include "MainGameScene.h"
 #include "MenuScene.h"
 
@@ -31,9 +31,15 @@ bool LoseDialog::init()
 	menu->setPosition(CCPointZero);
 	this->addChild(menu);
 
+	CCLabelTTF* labelTitle = CCLabelTTF::create("Điểm", "Marker Felt.ttf", 64);
+	labelTitle->setFontFillColor(ccc3(56, 56, 56));
+	labelTitle->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2 + 120));
+	this->addChild(labelTitle);
+
 	CCString* s = CCString::createWithFormat("%d", m_score);
 	CCLabelBMFont* lbScore = CCLabelBMFont::create(s->getCString(), "Mia_64.fnt");
 	lbScore->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2 + 30));
+	lbScore->setColor(ccc3(56, 56, 56));
 	this->addChild(lbScore);
 
     return true;
