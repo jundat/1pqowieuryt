@@ -41,6 +41,7 @@ private:
 public:
 	virtual void update(float delta);
 	CCRect collisionBox();
+	CCRect bigcollisionBox();
 	void Fire();
 	void HitBullet(int damage);
 	void AfterDeadEffectCallback();

@@ -47,7 +47,7 @@ bool MainGameScene::init()
 		"pause_1.png",
 		this,
 		menu_selector(MainGameScene::pauseCallback));
-	itPause->setPosition(ccp(1.25f * itPause->getContentSize().width/2, G_DESIGN_HEIGHT - 1.25f * itPause->getContentSize().height/2));
+	itPause->setPosition(ccp(1.15f * itPause->getContentSize().width/2, G_DESIGN_HEIGHT - 1.15f * itPause->getContentSize().height/2));
 	CCMenu* pMenu = CCMenu::create(itPause, NULL);
 	pMenu->setPosition(CCPointZero);
 	this->addChild(pMenu, 1);

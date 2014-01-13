@@ -21,7 +21,9 @@ public:
 	void SetEnableBackground(bool b);
 	void SetEnableEffect(bool b);
 
+	float GetVolumeMusic();
 	void SetVolumeMusic(float _value);
+	float GetVolumeFX();
 	void SetVolumeFX(float _value);
 
 	void LoadBackground(const char* path);

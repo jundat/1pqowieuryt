@@ -76,18 +76,21 @@ bool Enemy::init()
 	this->addChild(m_sprite);
 
 	//////////////////////////////////////////////////////////////////////////
-
+	float TIME_ANIMATION;
 	int NUM_FRAME_EXPLOSION = 0;
 	switch (m_type)
 	{
 	case 1:
 		NUM_FRAME_EXPLOSION = 4;
+		TIME_ANIMATION = 0.15f;
 		break;
 	case 2:
 		NUM_FRAME_EXPLOSION = 6;
+		TIME_ANIMATION = 0.15f;
 		break;
 	case 3:
 		NUM_FRAME_EXPLOSION = 9;
+		TIME_ANIMATION = 0.08f;
 		break;
 	}
 
@@ -97,14 +100,14 @@ bool Enemy::init()
 	//explosion ================================
 
 	CCArray* animFrames = CCArray::createWithCapacity(NUM_FRAME_EXPLOSION);
-	for(int i = 0; i < NUM_FRAME_EXPLOSION; i++) 
+	for(int i = 0; i < NUM_FRAME_EXPLOSION; i++)
 	{
 		strSpriteName = CCString::createWithFormat("enemy_%d_%d.png", m_type, i);
 		CCSpriteFrame* frame = cache->spriteFrameByName( strSpriteName->getCString() );
 		animFrames->addObject(frame);
 	}
 
-	CCAnimation* animation = CCAnimation::createWithSpriteFrames(animFrames, 0.12f);
+	CCAnimation* animation = CCAnimation::createWithSpriteFrames(animFrames, TIME_ANIMATION);
 
 	m_acExplosion = CCSequence::create(
 		CCAnimate::create(animation),
@@ -145,7 +148,7 @@ bool Enemy::init()
 		break;
 	}
 	
-	CCAnimation* animationPre = CCAnimation::createWithSpriteFrames(animFramesPre, 0.12f);
+	CCAnimation* animationPre = CCAnimation::createWithSpriteFrames(animFramesPre, 0.15f);
 
 	m_acPreExplosion = CCSequence::create(
 		CCAnimate::create(animationPre),
@@ -231,7 +234,7 @@ void Enemy::HitBullet(int damage)
 	}
 	else
 	{
-		m_vy = m_vy/2.0f;
+		m_vy = 0;
 		m_sprite->stopAction(m_acFlying);
 		m_sprite->stopAction(m_acPreExplosion);
 		m_sprite->runAction(m_acExplosion);

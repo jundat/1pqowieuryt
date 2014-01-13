@@ -86,5 +86,13 @@
 		    <string>0.1</string>
 	    <key>G_ENEMY_3_PERCENT</key> <!-- Phần trăm máy bay 3 -->
 		    <string>0.05</string>
+
+		<key>G_ENEMY_1_SCORE</key> <!-- Điểm cho máy bay 1 -->
+		    <string>1000</string>
+	    <key>G_ENEMY_2_SCORE</key> <!-- Điểm cho máy bay 2-->
+		    <string>6000</string>
+	    <key>G_ENEMY_3_SCORE</key> <!-- Điểm cho máy bay 3 -->
+		    <string>30000</string>
+
     </dict>
 </plist>

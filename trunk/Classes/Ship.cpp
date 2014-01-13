@@ -114,6 +114,17 @@ cocos2d::CCRect Ship::collisionBox()
 	return rect;
 }
 
+cocos2d::CCRect Ship::bigcollisionBox()
+{
+	float tw = 0.5f;
+	float th = 0.5f;
+	CCRect rect = GameObject::boundingBox();
+	rect.origin = ccp(this->getPosition().x - tw * rect.size.width/2, this->getPosition().y - th * rect.size.height/2);
+	rect.size.width = tw * rect.size.width;
+	rect.size.height = th * rect.size.height;
+	return rect;
+}
+
 void Ship::EnableArmor()
 {
 	if (false == m_isArmor)

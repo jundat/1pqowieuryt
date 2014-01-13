@@ -71,9 +71,9 @@ extern float G_HP_IN_DIFFICULTY;			//hp = diff / G_HP_IN_DIFFICULTY
 extern float G_DAMAGE_IN_DIFFICULTY;		//damage = diff / G_DAMAGE_IN_DIFFICULTY
 
 
-extern int G_SCORE_1;		//score for enemy_1
-extern int G_SCORE_2;		//score for enemy_2
-extern int G_SCORE_3;		//score for enemy_3
+extern int G_ENEMY_1_SCORE;		//score for enemy_1
+extern int G_ENEMY_2_SCORE;		//score for enemy_2
+extern int G_ENEMY_3_SCORE;		//score for enemy_3
 
 
 extern float G_ENEMY_1_PERCENT;

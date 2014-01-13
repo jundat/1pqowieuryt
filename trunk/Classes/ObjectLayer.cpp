@@ -48,8 +48,9 @@ bool ObjectLayer::init()
 	float h = temp->getContentSize().height;
 	
 	m_labelScore = CCLabelBMFont::create("0", "Mia_64.fnt");
-	m_labelScore->setPosition(ccp(2 * w, G_DESIGN_HEIGHT - h/2));
+	m_labelScore->setScale(0.8f);
 	m_labelScore->setAlignment(kCCTextAlignmentLeft);
+	m_labelScore->setPosition(ccp(2 * w, G_DESIGN_HEIGHT - h/2));
 
 	this->addChild(m_labelScore, 10);
 
@@ -224,6 +225,8 @@ void ObjectLayer::ScheduleCheckCollision(float dt)
 		}
 	}
 
+	CCRect playerBigRect = m_player->bigcollisionBox();
+
 	//////////////////////////////////////////////////////////////////////////
 	//Items -----VS------ Player
 	CCARRAY_FOREACH(m_arrItems, it1)
@@ -233,7 +236,7 @@ void ObjectLayer::ScheduleCheckCollision(float dt)
 		{
 			CCRect itemRect = item->boundingBox();
 
-			if (playerRect.intersectsRect(itemRect))
+			if (playerBigRect.intersectsRect(itemRect))
 			{
 				int itemtype = item->getItemType();
 
@@ -344,18 +347,19 @@ void ObjectLayer::update( float delta )
 				switch (enemy->getEnemyType())
 				{
 				case 1:
-					m_score += G_SCORE_1;
+					m_score += G_ENEMY_1_SCORE;
 					break;
 				case 2:
-					m_score += G_SCORE_2;
+					m_score += G_ENEMY_2_SCORE;
 					break;
 				case 3:
-					m_score += G_SCORE_3;
+					m_score += G_ENEMY_3_SCORE;
 					break;
 				}
 				
 				CCString* sscore = CCString::createWithFormat("%d", m_score);
 				m_labelScore->setString(sscore->getCString());
+				m_labelScore->setAlignment(kCCTextAlignmentLeft);
 				DataManager::sharedDataManager()->SetCurrentHighScore(m_score);
 			}
 
@@ -441,6 +445,7 @@ void ObjectLayer::RestartGame()
 	m_itemBoom->setVisible(false);
 
 	m_labelScore->setString("0");
+	m_labelScore->setAlignment(kCCTextAlignmentLeft);
 	
 
 	this->schedule(schedule_selector(ObjectLayer::ScheduleGenerateItem), G_TIME_TO_GENERATE_ITEM);

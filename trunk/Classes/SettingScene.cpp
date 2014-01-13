@@ -71,9 +71,9 @@ bool SettingScene::init()
 		CCSprite::create("sliderbarBG.png"),
 		CCSprite::create("sliderbar.png"),
 		CCSprite::create("slidernode.png"));
+	sliderMusic->setValue(AudioManager::sharedAudioManager()->GetVolumeFX());
 	sliderMusic->setMinimumValue(0.0f);
 	sliderMusic->setMaximumValue(1.0f);
-	sliderMusic->setValue(1.0f);
 	sliderMusic->setPosition(400, 1280-649);
 	sliderMusic->setEnabled(true);
 	sliderMusic->addTargetWithActionForControlEvents(this, cccontrol_selector(SettingScene::volumeMusicCallBack), CCControlEventValueChanged);
@@ -87,7 +87,7 @@ bool SettingScene::init()
 		CCSprite::create("sliderbarBG.png"),
 		CCSprite::create("sliderbar.png"),
 		CCSprite::create("slidernode.png"));
-	sliderFX->setValue(1.0f);
+	sliderFX->setValue(AudioManager::sharedAudioManager()->GetVolumeMusic());
 	sliderFX->setMinimumValue(0.0f);
 	sliderFX->setMaximumValue(1.0f);
 	sliderFX->setPosition(400, 1280-905);

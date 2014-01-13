@@ -110,11 +110,21 @@ bool AudioManager::IsPlayingBackground()
 	return SimpleAudioEngine::sharedEngine()->isBackgroundMusicPlaying();
 }
 
+float AudioManager::GetVolumeMusic()
+{
+	return CocosDenshion::SimpleAudioEngine::sharedEngine()->getBackgroundMusicVolume();
+}
+
 void AudioManager::SetVolumeMusic(float _value)
 {
 	CocosDenshion::SimpleAudioEngine::sharedEngine()->setBackgroundMusicVolume(_value);
 	CCUserDefault::sharedUserDefault()->setFloatForKey("SOUND_BACKGROUND_VOLUME", _value);
 	CCUserDefault::sharedUserDefault()->flush();
+}
+
+float AudioManager::GetVolumeFX()
+{
+	return CocosDenshion::SimpleAudioEngine::sharedEngine()->getEffectsVolume();
 }
 
 void AudioManager::SetVolumeFX(float _value)

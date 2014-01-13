@@ -69,6 +69,11 @@ ConfigLoader::ConfigLoader(void)
 	G_ENEMY_1_PERCENT = GetValue(std::string("G_ENEMY_1_PERCENT"))->floatValue();
 	G_ENEMY_2_PERCENT = GetValue(std::string("G_ENEMY_2_PERCENT"))->floatValue();
 	G_ENEMY_3_PERCENT = GetValue(std::string("G_ENEMY_3_PERCENT"))->floatValue();
+
+
+	G_ENEMY_1_SCORE = GetValue(std::string("G_ENEMY_1_SCORE"))->intValue();
+	G_ENEMY_2_SCORE = GetValue(std::string("G_ENEMY_2_SCORE"))->intValue();
+	G_ENEMY_3_SCORE = GetValue(std::string("G_ENEMY_3_SCORE"))->intValue();
 	
 }
 
