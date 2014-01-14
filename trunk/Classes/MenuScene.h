@@ -14,7 +14,7 @@ public:
 
 	CCMenu* m_menu;
 	CCLabelBMFont* m_labelLife;
-
+	
 	virtual void keyBackClicked();
     void playCallback(CCObject* pSender);
 	void scoreCallback(CCObject* pSender);

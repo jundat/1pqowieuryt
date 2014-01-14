@@ -20,7 +20,7 @@ public:
 
 	virtual void keyBackClicked();
 	void menuCallback(CCObject* pSender);
-	void onHttpRequestCompleted(cocos2d::extension::CCHttpClient *sender, cocos2d::extension::CCHttpResponse *response);
+	void onGetLeaderboardCompleted(cocos2d::extension::CCHttpClient *sender, cocos2d::extension::CCHttpResponse *response);
 };
 
 #endif // __SCORE_SCENE_H__

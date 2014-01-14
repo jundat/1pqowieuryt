@@ -29,7 +29,7 @@
 		    <string>5</string>
 
 	    <key>G_PLAYER_TIME_TO_REVIVE</key> <!-- Thời gian để revive 1 mạng (đơn vị giây)-->
-		    <string>120</string>
+		    <string>10</string>
 
 	    <key>G_MAX_PLAYER_BOOM</key> <!-- Số boom lớn nhất có thể có 1 lúc -->
 		    <string>3</string>

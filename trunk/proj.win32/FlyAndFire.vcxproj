@@ -117,6 +117,8 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <TargetMachine>MachineX86</TargetMachine>
+      <ModuleDefinitionFile>
+      </ModuleDefinitionFile>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -134,7 +136,20 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
     <ClCompile Include="..\Classes\CCParallaxNodeExtras.cpp" />
     <ClCompile Include="..\Classes\BackgroundLayer.cpp" />
     <ClCompile Include="..\Classes\GameClient.cpp" />
+    <ClCompile Include="..\Classes\HttpClientTest.cpp" />
     <ClCompile Include="..\Classes\IntroScene.cpp" />
+    <ClCompile Include="..\Classes\jansson\dump.c" />
+    <ClCompile Include="..\Classes\jansson\error.c" />
+    <ClCompile Include="..\Classes\jansson\hashtable.c" />
+    <ClCompile Include="..\Classes\jansson\load.c" />
+    <ClCompile Include="..\Classes\jansson\memory.c" />
+    <ClCompile Include="..\Classes\jansson\pack_unpack.c" />
+    <ClCompile Include="..\Classes\jansson\strbuffer.c" />
+    <ClCompile Include="..\Classes\jansson\strconv.c" />
+    <ClCompile Include="..\Classes\jansson\utf.c" />
+    <ClCompile Include="..\Classes\jansson\value.c" />
+    <ClCompile Include="..\Classes\NDKHelper\NDKCallbackNode.cpp" />
+    <ClCompile Include="..\Classes\NDKHelper\NDKHelper.cpp" />
     <ClCompile Include="..\Classes\ParseClient.cpp" />
     <ClCompile Include="..\Classes\CollisionDetection.cpp" />
     <ClCompile Include="..\Classes\ConfigLoader.cpp" />
@@ -163,7 +178,16 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
     <ClInclude Include="..\Classes\CCParallaxNodeExtras.h" />
     <ClInclude Include="..\Classes\BackgroundLayer.h" />
     <ClInclude Include="..\Classes\GameClient.h" />
+    <ClInclude Include="..\Classes\HttpClientTest.h" />
     <ClInclude Include="..\Classes\IntroScene.h" />
+    <ClInclude Include="..\Classes\jansson\hashtable.h" />
+    <ClInclude Include="..\Classes\jansson\jansson.h" />
+    <ClInclude Include="..\Classes\jansson\jansson_config.h" />
+    <ClInclude Include="..\Classes\jansson\jansson_private.h" />
+    <ClInclude Include="..\Classes\jansson\strbuffer.h" />
+    <ClInclude Include="..\Classes\jansson\utf.h" />
+    <ClInclude Include="..\Classes\NDKHelper\NDKCallbackNode.h" />
+    <ClInclude Include="..\Classes\NDKHelper\NDKHelper.h" />
     <ClInclude Include="..\Classes\ParseClient.h" />
     <ClInclude Include="..\Classes\CollisionDetection.h" />
     <ClInclude Include="..\Classes\ConfigLoader.h" />

@@ -139,3 +139,26 @@ void DataManager::SetPassword(const char* pass )
 	CCUserDefault::sharedUserDefault()->setStringForKey("G_PASSWORD", std::string(pass));
 	CCUserDefault::sharedUserDefault()->flush();
 }
+
+void DataManager::RefreshPlayerLife()
+{
+	int lastLife = DataManager::sharedDataManager()->GetLastPlayerLife();
+	lastLife = (lastLife > G_MAX_PLAYER_LIFE) ? G_MAX_PLAYER_LIFE : lastLife;
+	DataManager::sharedDataManager()->SetLastPlayerLife(lastLife);
+
+	if (lastLife <= 0)
+	{
+		tm* lasttm = DataManager::sharedDataManager()->GetLastDeadTime();
+		time_t lastTime = mktime(lasttm);
+		time_t curTime = time(NULL);
+		double seconds = difftime(curTime, lastTime);
+
+		lastLife = (int)(seconds / G_PLAYER_TIME_TO_REVIVE);
+		lastLife = (lastLife > G_MAX_PLAYER_LIFE) ? G_MAX_PLAYER_LIFE : lastLife;
+
+		if (lastLife > 0)
+		{
+			DataManager::sharedDataManager()->SetLastPlayerLife(lastLife);
+		}
+	}
+}

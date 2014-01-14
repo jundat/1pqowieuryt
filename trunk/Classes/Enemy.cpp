@@ -16,6 +16,25 @@ float Enemy::S_VELOCITY3 = G_MIN_ENEMY_VY;
 float Enemy::S_GENERATE_TIME = G_DEFAULT_TIME_TO_GENERATE_ENEMY;
 
 
+int Enemy::S_NUM_ENEMY_1_1 = 0;
+int Enemy::S_NUM_ENEMY_1_2 = 0;
+int Enemy::S_NUM_ENEMY_1_3 = 0;
+int Enemy::S_NUM_ENEMY_1_4 = 0;
+int Enemy::S_NUM_ENEMY_1_5 = 0;
+int Enemy::S_NUM_ENEMY_1_6 = 0;
+
+int Enemy::S_NUM_ENEMY_2_1 = 0;
+int Enemy::S_NUM_ENEMY_2_2 = 0;
+int Enemy::S_NUM_ENEMY_2_3 = 0;
+int Enemy::S_NUM_ENEMY_2_4 = 0;
+int Enemy::S_NUM_ENEMY_2_5 = 0;
+
+int Enemy::S_NUM_ENEMY_3_1 = 0;
+int Enemy::S_NUM_ENEMY_3_2 = 0;
+int Enemy::S_NUM_ENEMY_3_3 = 0;
+int Enemy::S_NUM_ENEMY_3_4 = 0;
+
+
 Enemy::Enemy(float difficulty) : GameObject()
 {
 	this->setDifficulty(difficulty);
@@ -42,24 +61,49 @@ bool Enemy::init()
 		S_GENERATE_TIME = ld->m_genTime;
 	}
 
+
 	float rd = CCRANDOM_0_1();
 	if (rd <= G_ENEMY_1_PERCENT)
 	{
 		m_type = 1;
 		m_hp = S_HP1;
 		m_vy = S_VELOCITY1;
+		S_NUM_ENEMY_1_1++;
 	}
 	else if (rd <= G_ENEMY_1_PERCENT + G_ENEMY_2_PERCENT)
 	{
 		m_type = 2;
 		m_hp = S_HP2;
 		m_vy = S_VELOCITY2;
+		S_NUM_ENEMY_2_1++;
 	}
 	else
 	{
-		m_type = 3;
-		m_hp = S_HP3;
-		m_vy = S_VELOCITY3;
+		if (S_NUM_ENEMY_3_1 <= 0)
+		{
+			m_type = 3;
+			m_hp = S_HP3;
+			m_vy = S_VELOCITY3;
+			S_NUM_ENEMY_3_1++;
+		}
+		else //////////////////////////////////////////
+		{
+			rd = CCRANDOM_0_1();
+			if (rd <= 0.5f)
+			{
+				m_type = 1;
+				m_hp = S_HP1;
+				m_vy = S_VELOCITY1;
+				S_NUM_ENEMY_1_1++;
+			}
+			else
+			{
+				m_type = 2;
+				m_hp = S_HP2;
+				m_vy = S_VELOCITY2;
+				S_NUM_ENEMY_2_1++;
+			}
+		} //////////////////////////////////////////
 	}
 
 	float dv = CCRANDOM_0_1() * 0.2f - 0.1f;

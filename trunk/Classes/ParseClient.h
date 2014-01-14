@@ -5,6 +5,7 @@
 #include "cocos-ext.h"
 #include "HttpClient.h"
 #include <string>
+#include "jansson/jansson.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;

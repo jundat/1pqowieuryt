@@ -19,6 +19,15 @@ CCScene* ScoreScene::scene()
 
 bool ScoreScene::init()
 {
+	//pre process
+
+	ParseClient* pc = ParseClient::sharedParseClient();
+	CCLOG("Call getLeaderboard");
+	pc->callCloudFunction("getLeaderboard", "{}", httpresponse_selector(ScoreScene::onGetLeaderboardCompleted), "getLeaderboard");
+
+	//////////////////////////////////////////////////////////////////////////
+	
+
     if ( !CCLayer::init() )
     {
         return false;
@@ -62,8 +71,6 @@ bool ScoreScene::init()
 	pMenu->setPosition(CCPointZero);
 	this->addChild(pMenu, 1);
 
-	GameClient::sharedGameClient()->getLeaderboard();
-
     return true;
 }
 
@@ -73,8 +80,10 @@ void ScoreScene::menuCallback(CCObject* pSender)
 	CCDirector::sharedDirector()->replaceScene(pScene);
 }
 
-void ScoreScene::onHttpRequestCompleted(cocos2d::extension::CCHttpClient *sender, cocos2d::extension::CCHttpResponse *response)
+void ScoreScene::onGetLeaderboardCompleted(cocos2d::extension::CCHttpClient *sender, cocos2d::extension::CCHttpResponse *response)
 {
+	m_lbMsg->setString("tada...");
+
 	if (!response)
 	{
 		return;
@@ -91,11 +100,12 @@ void ScoreScene::onHttpRequestCompleted(cocos2d::extension::CCHttpClient *sender
 	}
 	else
 	{
+		std::vector<char> *buffer = response->getResponseData();
+		std::string str(buffer->begin(), buffer->end());
+		CCLOG("Content: %s", str.c_str());
+
 	}
 
-	std::vector<char> *buffer = response->getResponseData();
-	std::string str(buffer->begin(), buffer->end());
-	CCLOG("Content: %s", str.c_str());
 	
 	CCLOG("-----------------END-------------------");
 }

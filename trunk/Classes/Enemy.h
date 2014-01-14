@@ -12,6 +12,20 @@ public:
 	Enemy(float difficulty);
 	~Enemy(){
 		m_acExplosion->release();
+		switch(m_type)
+		{
+		case 1:
+			S_NUM_ENEMY_1--;
+			break;
+
+		case 2:
+			S_NUM_ENEMY_2--;
+			break;
+
+		case 3:
+			S_NUM_ENEMY_3_1--;
+			break;
+		}
 	};
 	virtual bool init();
 	static Enemy* create(float difficulty) {
@@ -36,6 +50,24 @@ public:
 	static float S_VELOCITY2;
 	static float S_VELOCITY3;
 	static float S_GENERATE_TIME;
+
+	static int S_NUM_ENEMY_1_1;
+	static int S_NUM_ENEMY_1_2;
+	static int S_NUM_ENEMY_1_3;
+	static int S_NUM_ENEMY_1_4;
+	static int S_NUM_ENEMY_1_5;
+	static int S_NUM_ENEMY_1_6;
+
+	static int S_NUM_ENEMY_2_1;
+	static int S_NUM_ENEMY_2_2;
+	static int S_NUM_ENEMY_2_3;
+	static int S_NUM_ENEMY_2_4;
+	static int S_NUM_ENEMY_2_5;
+
+	static int S_NUM_ENEMY_3_1;
+	static int S_NUM_ENEMY_3_2;
+	static int S_NUM_ENEMY_3_3;
+	static int S_NUM_ENEMY_3_4;
 
 	CCRepeatForever* m_acFlying;
 	CCSequence* m_acPreExplosion;

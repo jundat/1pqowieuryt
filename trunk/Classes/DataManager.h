@@ -30,6 +30,7 @@ public:
 
 	int		GetLastPlayerLife();
 	void	SetLastPlayerLife(int lastLife);
+	void	RefreshPlayerLife();
 
 	bool	GetIsJustRevived();
 	void	SetIsJustRevived(bool isJustRevived);

@@ -35,7 +35,7 @@ void GameClient::signIn()
 	float rd = CCRANDOM_0_1() * 1000;
 	CCString* pass = CCString::createWithFormat("password_%f", rd);
 	DataManager::sharedDataManager()->SetPassword(pass->getCString()); //////////////////////////////////////////////////////////////////////////
-	CCString* json = CCString::createWithFormat("{\"name\":\"PLAYER\",\"password\":\"%s\"}", pass->getCString());
+	CCString* json = CCString::createWithFormat("{\"name\":\"PhiCong\",\"password\":\"%s\"}", pass->getCString());
 
 	pc->callCloudFunction("signIn", json->getCString(), httpresponse_selector(GameClient::signInCompleted), "signIn");
 }
@@ -98,7 +98,7 @@ void GameClient::signInCompleted( cocos2d::extension::CCHttpClient *sender, coco
 		CCLOG("username: %s", username.c_str());
 		DataManager::sharedDataManager()->SetUsername(username.c_str()); //////////////////////////////////////////////////////////////////////////
 	}
-
+	
 	CCLOG("-----------------END-------------------");
 }
 
@@ -130,6 +130,7 @@ void GameClient::logInCompleted( cocos2d::extension::CCHttpClient *sender, cocos
 
 		if (score != DataManager::sharedDataManager()->GetHighScore())
 		{
+			CCLOG("Score not match..., submit again");
 			submitScore();
 		}
 	}

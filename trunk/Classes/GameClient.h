@@ -39,7 +39,6 @@ private:
 	void submitScoreCompleted(cocos2d::extension::CCHttpClient *sender, cocos2d::extension::CCHttpResponse *response);
 	void getLeaderboardCompleted(cocos2d::extension::CCHttpClient *sender, cocos2d::extension::CCHttpResponse *response);
 
-
 private:
 	GameClient(void);
 	static GameClient* s_instance;

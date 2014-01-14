@@ -101,7 +101,7 @@ void ObjectLayer::ccTouchEnded( CCTouch *pTouch, CCEvent *pEvent )
 
 void ObjectLayer::GenerateEnemy( float dt )
 {
-	m_difficulty = m_killedEnemies;
+	m_difficulty = m_score;// m_killedEnemies;
 
 	float h = G_DESIGN_HEIGHT;
 	float w = G_DESIGN_WIDTH;
