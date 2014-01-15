@@ -8,6 +8,7 @@
 #include "Bullet.h"
 #include "EffectLayer.h"
 #include "Item.h"
+#include "Enemy.h"
 
 USING_NS_CC;
 
@@ -32,6 +33,7 @@ public:
 
 	void AddBullet(Bullet* bullet);
 	void AddItem(Item* item);
+	void AddEmemy(Enemy* enemy);
 	void IncreaseBoom();
 	void ActiveBoom(CCObject* pSender);
 	void ContinueGame();

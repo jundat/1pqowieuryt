@@ -59,7 +59,7 @@ bool MainGameScene::init()
 
 void MainGameScene::pauseCallback(CCObject* pSender)
 {
-	if (m_isShowingLose || m_isShowingPause)
+	if (m_isShowingLose || m_isShowingPause || m_ObjLayer->getIsEndGame())
 	{
 		return;
 	}

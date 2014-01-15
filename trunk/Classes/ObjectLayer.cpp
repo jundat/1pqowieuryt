@@ -119,6 +119,22 @@ void ObjectLayer::GenerateEnemy( float dt )
 	this->addChild(enemy);
 }
 
+void ObjectLayer::AddEmemy( Enemy* enemy )
+{
+	float h = G_DESIGN_HEIGHT;
+	float w = G_DESIGN_WIDTH;
+
+	float enemyW = enemy->boundingBox().size.width;
+
+	float x = (int)(CCRANDOM_0_1() * (G_DESIGN_WIDTH - enemyW));
+	float y = G_DESIGN_HEIGHT + enemy->boundingBox().size.height/2;
+
+	enemy->setPosition(ccp(x + enemyW/2, y));
+
+	m_arrEnemies->addObject(enemy);
+	this->addChild(enemy);
+}
+
 void ObjectLayer::ScheduleGenerateItem( float dt )
 {
 	Item* item = NULL;
