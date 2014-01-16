@@ -56,7 +56,6 @@ LevelLoader::LevelLoader(void)
 	}
 }
 
-
 LevelLoader* LevelLoader::shareLevelLoader()
 {
 	if (s_instance == NULL)

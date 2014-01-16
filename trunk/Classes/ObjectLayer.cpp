@@ -401,6 +401,8 @@ void ObjectLayer::RestartGame()
 	m_score = 0;
 	m_numberBoom = 0;
 
+	m_enemyFactory->Reset();
+
 	//remove all enemy
 	CCObject* it;
 	CCARRAY_FOREACH(m_arrEnemies, it)
@@ -558,6 +560,8 @@ void ObjectLayer::Resume()
 	m_player->scheduleUpdate();
 
 	CCObject* it;
+
+	//enemies
 	CCARRAY_FOREACH(m_arrEnemies, it)
 	{
 		Enemy* enemy = dynamic_cast<Enemy*>(it);

@@ -11,6 +11,7 @@ public:
 	EnemyFactory();
 	CREATE_FUNC(EnemyFactory);
 	virtual void update(float delta, int score);
+	void Reset();
 
 	float m_smallCounter;
 	float m_bigCounter;

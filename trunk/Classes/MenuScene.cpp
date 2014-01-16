@@ -60,7 +60,7 @@ bool MenuScene::init()
 	//
 
 	//
-	s = CCString::createWithFormat("v%d", 17);
+	s = CCString::createWithFormat("v%d", 18);
 	CCLabelBMFont* labelVersion = CCLabelBMFont::create(s->getCString(), "Mia_64.fnt");
 	labelVersion->setColor(ccc3(56, 56, 56));
 	labelVersion->setScale(0.5f);
