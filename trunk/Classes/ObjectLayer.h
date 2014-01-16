@@ -9,6 +9,7 @@
 #include "EffectLayer.h"
 #include "Item.h"
 #include "Enemy.h"
+#include "EnemyFactory.h"
 
 USING_NS_CC;
 
@@ -57,7 +58,6 @@ private:
 	CC_SYNTHESIZE(bool, m_isEndGame, IsEndGame);
 	CC_SYNTHESIZE(Ship*, m_player, Player);
 	CC_SYNTHESIZE(int, m_numberBoom, NumberBoom);
-	CC_SYNTHESIZE(float, m_genTimeCounter, GenTimeCounter);
 
 	CCLabelBMFont* m_labelScore;
 	CCLabelBMFont* m_labelBoom;
@@ -70,6 +70,8 @@ private:
 	CCArray* m_arrItems;
 
 	EffectLayer* m_EffectLayer;
+
+	EnemyFactory* m_enemyFactory;
 };
 
 #endif // __GAME_OBJECT_MANAGER_H__

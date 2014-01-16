@@ -29,9 +29,7 @@ bool ObjectLayer::init()
 	m_arrEnemies->retain();
 	m_arrPlayerBullets->retain();
 	m_arrItems->retain();
-
-	m_genTimeCounter = 0;
-
+	
 	m_isEndGame = false;
 	m_killedEnemies = 0;
 	m_score = 0;
@@ -59,7 +57,7 @@ bool ObjectLayer::init()
 		m_itemBoom->getContentSize().height/2 - G_DESIGN_HEIGHT/2));
 	m_itemBoom->setVisible(false);
 	CCMenu* menu = CCMenu::create(m_itemBoom, NULL);
-	this->addChild(menu);
+	this->addChild(menu, 10);
 
 	m_labelBoom = CCLabelBMFont::create("x0", "Mia_64.fnt");
 	m_labelBoom->setPosition(ccp(m_itemBoom->getContentSize().width + m_labelBoom->getContentSize().width,
@@ -70,6 +68,9 @@ bool ObjectLayer::init()
 	
 	m_EffectLayer = EffectLayer::create();
 	this->addChild(m_EffectLayer, 10);
+
+	m_enemyFactory = EnemyFactory::create();
+	this->addChild(m_enemyFactory);
 
 	this->schedule(schedule_selector(ObjectLayer::ScheduleGenerateItem), G_TIME_TO_GENERATE_ITEM);
 	this->schedule(schedule_selector(ObjectLayer::ScheduleCheckCollision), CCDirector::sharedDirector()->getAnimationInterval());
@@ -97,26 +98,6 @@ void ObjectLayer::ccTouchMoved( CCTouch *pTouch, CCEvent *pEvent )
 
 void ObjectLayer::ccTouchEnded( CCTouch *pTouch, CCEvent *pEvent )
 {
-}
-
-void ObjectLayer::GenerateEnemy( float dt )
-{
-	m_difficulty = m_score;// m_killedEnemies;
-
-	float h = G_DESIGN_HEIGHT;
-	float w = G_DESIGN_WIDTH;
-	
-	Enemy* enemy = Enemy::create(m_difficulty);
-
-	float enemyW = enemy->boundingBox().size.width;
-			
-	float x = (int)(CCRANDOM_0_1() * (G_DESIGN_WIDTH - enemyW));
-	float y = G_DESIGN_HEIGHT + enemy->boundingBox().size.height/2;
-
-	enemy->setPosition(ccp(x + enemyW/2, y));
-
-	m_arrEnemies->addObject(enemy);
-	this->addChild(enemy);
 }
 
 void ObjectLayer::AddEmemy( Enemy* enemy )
@@ -308,12 +289,7 @@ void ObjectLayer::update( float delta )
 	//////////////////////////////////////////////////////////////////////////
 	m_playedTime += delta;
 
-	m_genTimeCounter += delta;
-	if (m_genTimeCounter >= Enemy::S_GENERATE_TIME)
-	{
-		m_genTimeCounter = 0;
-		GenerateEnemy(delta);
-	}
+	m_enemyFactory->update(delta, m_score);
 
 	CCObject* it = NULL;
 
@@ -401,7 +377,6 @@ void ObjectLayer::ContinueGame()
 	CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, 0, true);
 	this->setTouchEnabled(true);
 
-	m_genTimeCounter = 0;
 	m_isEndGame = false;
 	//reset
 	m_player->setVisible(true);
@@ -421,7 +396,6 @@ void ObjectLayer::RestartGame()
 	//	score
 	//	numberBoom
 
-	m_genTimeCounter = 0;
 	m_playedTime = 0;
 	m_killedEnemies = 0;
 	m_score = 0;
@@ -581,7 +555,6 @@ void ObjectLayer::Resume()
 	this->schedule(schedule_selector(ObjectLayer::ScheduleCheckCollision), CCDirector::sharedDirector()->getAnimationInterval());
 	this->scheduleUpdate();
 
-	m_genTimeCounter = 0;
 	m_player->scheduleUpdate();
 
 	CCObject* it;

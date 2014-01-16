@@ -22,10 +22,9 @@ LevelLoader::LevelLoader(void)
 	fileData = fileData.substr(beginIndex + 1); //pos, end
 
 	int score, hp1, hp2, hp3;
-	float velocity1, velocity2, velocity3, genTime;
-	int small1, small2, small3, small4, small5, small6;
-	int med1, med2, med3, med4, med5;
-	int lar1, lar2, lar3, lar4;
+	float velocity1, velocity2, velocity3, smallDelay, bigDelay;
+	int arrEnemy[NUM_ENEMY_TYPE];
+	
 
 	bool isBroken = false;
 	while(isBroken == false)
@@ -46,11 +45,12 @@ LevelLoader::LevelLoader(void)
 
 		fileData = fileData.substr(beginIndex + 1); //pos, end
 
-		sscanf(smallStr.c_str(), "%d,%d,%d,%d,%f,%f,%f,%f,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d\n", &score, &hp1, &hp2, &hp3, &velocity1, &velocity2, &velocity3, &genTime, \
-			&small1, &small2, &small3, &small4, &small5, &small6, \
-			&med1, &med2, &med3, &med4, &med5, \
-			&lar1, &lar2, &lar3, &lar4);
-		LevelData* ld = LevelData::create(score, hp1, hp2, hp3, velocity1, velocity2, velocity3, genTime, small1, small2, small3, small4, small5, small6, med1, med2, med3, med4, med5, lar1, lar2, lar3, lar4);
+		sscanf(smallStr.c_str(), "%d,%d,%d,%d,%f,%f,%f,%f,%f,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d\n", \
+			&score, &hp1, &hp2, &hp3, &velocity1, &velocity2, &velocity3, &smallDelay, &bigDelay, \
+			&arrEnemy[0], &arrEnemy[1], &arrEnemy[2], &arrEnemy[3], &arrEnemy[4], &arrEnemy[5], &arrEnemy[6], &arrEnemy[7], &arrEnemy[8], \
+			&arrEnemy[9], &arrEnemy[10], &arrEnemy[11], &arrEnemy[12], &arrEnemy[13], &arrEnemy[14]);
+
+		LevelData* ld = LevelData::create(score, hp1, hp2, hp3, velocity1, velocity2, velocity3, smallDelay, bigDelay, arrEnemy);
 		CCLOG("%s", ld->ToString());
 		m_dict->setObject(ld, score);
 	}
