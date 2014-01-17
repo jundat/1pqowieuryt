@@ -6,6 +6,9 @@
 
 USING_NS_CC;
 
+int Enemy::S_NUMBER_BIG = 0;
+int Enemy::S_NUMBER_MED = 0;
+
 
 
 Enemy::Enemy(int _type, int _smallType, int _hp, float _vy) : GameObject()
@@ -14,6 +17,28 @@ Enemy::Enemy(int _type, int _smallType, int _hp, float _vy) : GameObject()
 	this->setEnemySmallType(_smallType);
 	this->setHp(_hp);
 	this->setVy(_vy);
+
+	switch(m_type)
+	{
+	case 1:
+		break;
+	case 2:
+		S_NUMBER_MED++;
+		break;
+	case 3:
+		S_NUMBER_BIG++;
+		CCLOG("NEW BIG: %d  >>>>>>>>>>>>>", S_NUMBER_BIG);
+		break;
+	}
+}
+
+Enemy::~Enemy()
+{
+	CCLOG("Destructor in Enemy <<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+
+	m_acFlying->release();
+	m_acExplosion->release();
+	m_acPreExplosion->release();
 }
 
 bool Enemy::init()
@@ -71,7 +96,7 @@ bool Enemy::init()
 
 	m_acExplosion = CCSequence::create(
 		CCAnimate::create(animation),
-		CCCallFunc::create(this, callfunc_selector(Enemy::removeFromParent)),
+		CCCallFunc::create(this, callfunc_selector(Enemy::RemoveFromObjectLayer)),
 		NULL);
 	m_acExplosion->retain();
 
@@ -199,4 +224,10 @@ void Enemy::HitBullet(int damage)
 		m_sprite->stopAction(m_acPreExplosion);
 		m_sprite->runAction(m_acExplosion);
 	}
+}
+
+void Enemy::RemoveFromObjectLayer()
+{
+	ObjectLayer* parent = (ObjectLayer*) this->getParent();
+	parent->RemoveEnemy(this);
 }

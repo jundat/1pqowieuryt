@@ -9,7 +9,7 @@ class GameObject : public CCNode
 {
 public:
 	GameObject():CCNode(){}
-	~GameObject();
+	virtual ~GameObject();
 	virtual bool init();
 	CREATE_FUNC(GameObject);
 	CC_SYNTHESIZE(CCSprite*, m_sprite, Sprite);

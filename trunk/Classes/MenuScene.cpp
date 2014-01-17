@@ -60,7 +60,7 @@ bool MenuScene::init()
 	//
 
 	//
-	s = CCString::createWithFormat("v%d", 18);
+	s = CCString::createWithFormat("v%d", 19);
 	CCLabelBMFont* labelVersion = CCLabelBMFont::create(s->getCString(), "Mia_64.fnt");
 	labelVersion->setColor(ccc3(56, 56, 56));
 	labelVersion->setScale(0.5f);
@@ -173,9 +173,9 @@ void MenuScene::playCallback(CCObject* pSender)
 
 void MenuScene::scoreCallback( CCObject* pSender )
 {
-	//CCScene *pScene = CCTransitionFade::create(0.5, ScoreScene::scene());
+	CCScene *pScene = CCTransitionFade::create(0.5, ScoreScene::scene());
 	//CCScene *pScene = CCTransitionFade::create(0.5, HttpClientTest::scene());
-	//CCDirector::sharedDirector()->replaceScene(pScene);
+	CCDirector::sharedDirector()->replaceScene(pScene);
 }
 
 void MenuScene::settingCallback( CCObject* pSender )

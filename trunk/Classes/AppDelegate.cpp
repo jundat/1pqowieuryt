@@ -39,7 +39,19 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	
     pDirector->setOpenGLView(pEGLView);
     pDirector->setAnimationInterval(1.0 / 60);
-	pEGLView->setDesignResolutionSize(G_DESIGN_WIDTH, G_DESIGN_HEIGHT, kResolutionShowAll);
+	
+	CCSize realSize = pEGLView->getFrameSize();
+	
+	if (realSize.width < 320) //mini device
+	{
+		pEGLView->setDesignResolutionSize(G_DESIGN_WIDTH, G_DESIGN_HEIGHT, kResolutionExactFit);
+	} 
+	else
+	{
+		pEGLView->setDesignResolutionSize(G_DESIGN_WIDTH, G_DESIGN_HEIGHT, kResolutionShowAll);
+	}
+	
+	pDirector->setDisplayStats(true);
 
     CCScene *pScene = MenuScene::scene(); //  MenuScene::scene(); //  MainGameScene::scene(); //
 	pDirector->runWithScene(pScene);

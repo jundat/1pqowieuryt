@@ -74,6 +74,7 @@ void MainGameScene::pauseCallback(CCObject* pSender)
 
 void MainGameScene::resumeCallback() 
 {
+	m_isShowingLose = false;
 	m_isShowingPause = false;
 
 	m_BackgroundLayer->Resume();
@@ -107,6 +108,7 @@ void MainGameScene::showEndGame( int score, int killedEnemies )
 void MainGameScene::reviveCallback()
 {
 	m_isShowingLose = false;
+	m_isShowingPause = false;
 
 	CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, 0, true);
 	this->setTouchEnabled(true);
@@ -124,6 +126,7 @@ void MainGameScene::reviveCallback()
 void MainGameScene::restartCallback()
 {
 	m_isShowingLose = false;
+	m_isShowingPause = false;
 
 	CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, 0, true);
 	this->setTouchEnabled(true);

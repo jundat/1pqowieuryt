@@ -22,6 +22,9 @@ bool ObjectLayer::init()
 
 	//////////////////////////////////////////////////////////////////////////
 
+	Enemy::S_NUMBER_BIG = 0;
+	Enemy::S_NUMBER_MED = 0;
+
 	m_arrEnemies = new CCArray();
 	m_arrPlayerBullets = new CCArray();
 	m_arrItems = new CCArray();
@@ -274,6 +277,24 @@ void ObjectLayer::AddItem( Item* item )
 	this->addChild(item);
 }
 
+void ObjectLayer::RemoveEnemy( Enemy* enemy )
+{
+	switch(enemy->getEnemyType()) 
+	{
+	case 1:
+		break;
+	case 2:
+		Enemy::S_NUMBER_MED--;
+		break;
+	case 3:
+		Enemy::S_NUMBER_BIG--;
+		CCLOG("Remove: %d <<<<<<<<<<<<", Enemy::S_NUMBER_BIG);
+		break;
+	}
+
+	this->removeChild(enemy);
+}
+
 void ObjectLayer::update( float delta )
 {
 	if (m_player->getHp() <= 0 && m_isEndGame == false)
@@ -358,7 +379,7 @@ void ObjectLayer::update( float delta )
 			//out of screen
 			if (enemy->getPositionY() < - enemy->boundingBox().size.height)
 			{
-				this->removeChild(enemy);
+				this->RemoveEnemy(enemy);
 				m_arrEnemies->removeObject(enemy);
 			}
 		}
@@ -410,11 +431,14 @@ void ObjectLayer::RestartGame()
 		Enemy* enemy = dynamic_cast<Enemy*>(it);
 		if (NULL != enemy)
 		{
-			this->removeChild(enemy);
+			this->RemoveEnemy(enemy);
 		}
 	}
 
 	m_arrEnemies->removeAllObjects();
+	
+	Enemy::S_NUMBER_BIG = 0;
+	Enemy::S_NUMBER_MED = 0;
 
 	CCARRAY_FOREACH(m_arrPlayerBullets, it)
 	{
@@ -465,7 +489,7 @@ void ObjectLayer::AfterDeadEffectCallback()
 		Enemy* enemy = dynamic_cast<Enemy*>(it);
 		if (NULL != enemy)
 		{
-			this->removeChild(enemy);
+			this->RemoveEnemy(enemy);
 		}
 	}
 

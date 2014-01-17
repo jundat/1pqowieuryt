@@ -35,6 +35,7 @@ public:
 	void AddBullet(Bullet* bullet);
 	void AddItem(Item* item);
 	void AddEmemy(Enemy* enemy);
+	void RemoveEnemy(Enemy* enemy);
 	void IncreaseBoom();
 	void ActiveBoom(CCObject* pSender);
 	void ContinueGame();

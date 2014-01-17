@@ -6,6 +6,9 @@
 
 USING_NS_CC;
 
+#define MAX_ENEMY_BIG	1
+#define MAX_ENEMY_MED	3
+
 static float getVy(int id) {
 	static float vy[NUM_ENEMY_TYPE] = {
 		-0.35f,
@@ -49,9 +52,9 @@ void EnemyFactory::update( float delta, int score )
 
 		//generate in pack
 
-		int rd = (int)(CCRANDOM_0_1() * NUM_ENEMY_TYPE);
+		int rd = (int)(CCRANDOM_0_1() * NUM_ENEMY_TYPE); //0-14
 
-		for (int i = 0; i < NUM_ENEMY_TYPE; ++i)
+		for (int i = 0; i < NUM_ENEMY_TYPE; ++i) //0-14
 		{
 			int id = rd + i;
 			if (id >= NUM_ENEMY_TYPE)
@@ -64,21 +67,36 @@ void EnemyFactory::update( float delta, int score )
 			
 			if (val > 0)
 			{
-				m_currentLevel.m_arrEnemy[id]--;
-
 				if (id < ENEMY_SMALL_TYPE_1_6)
 				{
 					enemy = Enemy::create(1, id, m_currentLevel.m_hp1, getVy(id));
-				} 
+				}
 				else if (id < ENEMY_SMALL_TYPE_2_5)
 				{
-					enemy = Enemy::create(2, id, m_currentLevel.m_hp2, getVy(id));
+					if (Enemy::S_NUMBER_MED < MAX_ENEMY_MED)
+					{
+						enemy = Enemy::create(2, id, m_currentLevel.m_hp2, getVy(id));
+					}
+					else
+					{
+						continue;
+					}
 				}
 				else
 				{
-					enemy = Enemy::create(3, id, m_currentLevel.m_hp3, getVy(id));
+					if (Enemy::S_NUMBER_BIG < MAX_ENEMY_BIG)
+					{
+						CCLOG("YES");
+						enemy = Enemy::create(3, id, m_currentLevel.m_hp3, getVy(id));
+					}
+					else
+					{
+						CCLOG("NO");
+						continue;
+					}
 				}
 
+				m_currentLevel.m_arrEnemy[id]--;
 				ObjectLayer* parent = (ObjectLayer*) this->getParent();
 				parent->AddEmemy(enemy);
 

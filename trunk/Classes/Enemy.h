@@ -33,17 +33,22 @@ class Enemy : public GameObject
 {
 public:
 	Enemy(int _type, int _smallType, int _hp, float _vy);
-	~Enemy() {
-		m_acFlying->release();
-		m_acExplosion->release();
-		m_acPreExplosion->release();
-	};
+	virtual ~Enemy();
 	virtual bool init();
+
 	static Enemy* create(int _type, int _smallType, int _hp, float _vy) {
 		Enemy* en = new Enemy(_type, _smallType, _hp, _vy);
-		en->init();
-		en->autorelease();
-		return en;
+		if (en && en->init())
+		{
+			en->autorelease();
+			return en;	
+		}
+		else
+		{
+			delete en;
+			en = NULL;
+			return NULL;
+		}
 	}
 	
 	CC_SYNTHESIZE(int, m_type, EnemyType); //1-2-3
@@ -54,6 +59,9 @@ public:
 	CC_SYNTHESIZE(int, m_originHp, OriginHp); //2
 	CC_SYNTHESIZE(int, m_damage, Damage); //3 ~ damage for bullet
 
+	static int S_NUMBER_BIG;
+	static int S_NUMBER_MED;
+
 	CCRepeatForever* m_acFlying;
 	CCSequence* m_acPreExplosion;
 	CCSequence* m_acExplosion;
@@ -63,6 +71,7 @@ public:
 	void Fire();
 	void ScheduleFire(float dt);
 	void HitBullet(int damage);
+	void RemoveFromObjectLayer();
 };
 
 #endif //__ENEMY_H__

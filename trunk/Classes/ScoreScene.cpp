@@ -82,8 +82,6 @@ void ScoreScene::menuCallback(CCObject* pSender)
 
 void ScoreScene::onGetLeaderboardCompleted(cocos2d::extension::CCHttpClient *sender, cocos2d::extension::CCHttpResponse *response)
 {
-	m_lbMsg->setString("tada...");
-
 	if (!response)
 	{
 		return;
@@ -103,7 +101,6 @@ void ScoreScene::onGetLeaderboardCompleted(cocos2d::extension::CCHttpClient *sen
 		std::vector<char> *buffer = response->getResponseData();
 		std::string str(buffer->begin(), buffer->end());
 		CCLOG("Content: %s", str.c_str());
-
 	}
 
 	
