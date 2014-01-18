@@ -14,8 +14,5 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
     UNREFERENCED_PARAMETER(lpCmdLine);
 
     AppDelegate app;
-    // CCEGLView* eglView = CCEGLView::sharedOpenGLView();
-    // eglView->setViewName("Fly And Fire");
-    // eglView->setFrameSize(G_DESIGN_WIDTH, G_DESIGN_HEIGHT);
     return CCApplication::sharedApplication()->run();
 }

@@ -16,8 +16,7 @@ public:
 	
 	virtual CCScene* scene() {
 		CCScene *scene = CCScene::create();
-		HttpClientTest *layer = HttpClientTest::create();
-		scene->addChild(layer);
+		scene->addChild(this);
 		return scene;
 	}
 

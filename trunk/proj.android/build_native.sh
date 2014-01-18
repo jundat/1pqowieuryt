@@ -1,4 +1,4 @@
-APPNAME="FlyAndFire"
+APPNAME="PhiCongButChi"
 
 # options
 

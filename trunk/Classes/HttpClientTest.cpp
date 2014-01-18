@@ -172,8 +172,6 @@ void HttpClientTest::onMenuPostBinaryTestClicked(cocos2d::CCObject *sender)
     m_labelStatusCode->setString("waiting...");
 }
 
-
-
 void HttpClientTest::onMenuPutTestClicked(CCObject *sender)
 {
     // test 1
@@ -277,14 +275,4 @@ void HttpClientTest::onHttpRequestCompleted(CCHttpClient *sender, CCHttpResponse
         printf("%c", (*buffer)[i]);
     }
     printf("\n");
-}
-
-void runHttpClientTest()
-{
-    CCScene *pScene = CCScene::create();
-    HttpClientTest *pLayer = new HttpClientTest();
-    pScene->addChild(pLayer);
-    
-    CCDirector::sharedDirector()->replaceScene(pScene);
-    pLayer->release();
 }

@@ -173,8 +173,9 @@ void MenuScene::playCallback(CCObject* pSender)
 
 void MenuScene::scoreCallback( CCObject* pSender )
 {
-	CCScene *pScene = CCTransitionFade::create(0.5, ScoreScene::scene());
-	//CCScene *pScene = CCTransitionFade::create(0.5, HttpClientTest::scene());
+	ScoreScene* layer = ScoreScene::create();
+	//HttpClientTest* layer = HttpClientTest::create();
+	CCScene *pScene = CCTransitionFade::create(0.5, layer->scene());
 	CCDirector::sharedDirector()->replaceScene(pScene);
 }
 

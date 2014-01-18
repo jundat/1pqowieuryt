@@ -69,23 +69,22 @@ bool Ship::init()
 
 	//3 armor // 5-6
 
-	CCArray* animFramesArmor = CCArray::createWithCapacity(2);
-	for(int i = 5; i <= 6; i++)
-	{
-		strSpriteName = CCString::createWithFormat("ship_%d.png", i);
-		CCSpriteFrame* frame = cache->spriteFrameByName( strSpriteName->getCString() );
-		animFramesArmor->addObject(frame);
-	}
-
-	CCAnimation* animationArmor = CCAnimation::createWithSpriteFrames(animFramesArmor, ARMOR_TIME_ANIMATION);
-	CCAnimate* animateArmor = CCAnimate::create(animationArmor);
-	CCRepeat* repeatArmor = CCRepeat::create(animateArmor, (int)((G_PLAYER_ARMOR_TIME - 3) / (ARMOR_TIME_ANIMATION * 2)));
-	
-	//CCBlink* blinkArmor = CCBlink::create(3, 12);
-	CCCallFunc* callfArmor = CCCallFunc::create(this, callfunc_selector(Ship::DisableArmor));
-
-	m_acArmor = CCSequence::create(repeatArmor, callfArmor, NULL);
-	m_acArmor->retain();
+// 	CCArray* animFramesArmor = CCArray::createWithCapacity(2);
+// 	for(int i = 5; i <= 6; i++)
+// 	{
+// 		strSpriteName = CCString::createWithFormat("ship_%d.png", i);
+// 		CCSpriteFrame* frame = cache->spriteFrameByName( strSpriteName->getCString() );
+// 		animFramesArmor->addObject(frame);
+// 	}
+//
+//	CCAnimation* animationArmor = CCAnimation::createWithSpriteFrames(animFramesArmor, ARMOR_TIME_ANIMATION);
+//	CCAnimate* animateArmor = CCAnimate::create(animationArmor);
+//	CCRepeat* repeatArmor = CCRepeat::create(animateArmor, (int)((G_PLAYER_ARMOR_TIME - 3) / (ARMOR_TIME_ANIMATION * 2)));
+//	
+//	CCCallFunc* callfArmor = CCCallFunc::create(this, callfunc_selector(Ship::DisableArmor));
+//
+//	m_acArmor = CCSequence::create(repeatArmor, callfArmor, NULL);
+//	m_acArmor->retain();
 	
 
 	//animation -------------------
@@ -127,10 +126,10 @@ cocos2d::CCRect Ship::bigcollisionBox()
 
 void Ship::EnableArmor()
 {
-	if (false == m_isArmor)
-	{
-		this->m_isArmor = true;
-		
+//	if (false == m_isArmor)
+//	{
+//		this->m_isArmor = true;
+//		
 // 		CCDelayTime* delay = CCDelayTime::create(G_PLAYER_ARMOR_TIME - 5);
 // 		CCBlink* blink = CCBlink::create(3, 12);
 // 		CCCallFunc* callf = CCCallFunc::create(this, callfunc_selector(Ship::DisableArmor));
@@ -138,14 +137,14 @@ void Ship::EnableArmor()
 // 		
 // 		CCRepeatForever* ac = CCRepeatForever::create(m_acArmor);
 // 		CCSpawn* allac = CCSpawn::createWithTwoActions(seq, ac);
-
-		m_sprite->runAction(m_acArmor);
-	}
+//
+//		m_sprite->runAction(m_acArmor);
+//	}
 }
 
 void Ship::DisableArmor()
 {
-	this->m_isArmor = false;
+//	this->m_isArmor = false;
 }
 
 void Ship::Fire()

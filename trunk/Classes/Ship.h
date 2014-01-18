@@ -13,7 +13,7 @@ public:
 	~Ship() {
 		m_acFlying->release();
 		m_acExplosion->release();
-		m_acArmor->release();
+		//m_acArmor->release();
 	}
 	virtual bool init();
 	CREATE_FUNC(Ship); //static function: new, init, autorelease, return reference
@@ -29,7 +29,7 @@ private:
 
 	CCRepeatForever* m_acFlying; //0-1
 	CCSequence* m_acExplosion; //2-3-4
-	CCSequence* m_acArmor; //5-6
+	//CCSequence* m_acArmor; //5-6
 
 public:
 	void EnableArmor();

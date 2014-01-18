@@ -37,7 +37,7 @@ void GameClient::signIn()
 	DataManager::sharedDataManager()->SetPassword(pass->getCString()); //////////////////////////////////////////////////////////////////////////
 	CCString* json = CCString::createWithFormat("{\"name\":\"PhiCong\",\"password\":\"%s\"}", pass->getCString());
 
-	pc->callCloudFunction("signIn", json->getCString(), httpresponse_selector(GameClient::signInCompleted), "signIn");
+	pc->setParameter("signIn", json->getCString(), httpresponse_selector(GameClient::signInCompleted), "signIn");
 }
 
 void GameClient::logIn()
@@ -48,7 +48,7 @@ void GameClient::logIn()
 	std::string password = DataManager::sharedDataManager()->GetPassword();
 	CCString* json = CCString::createWithFormat("{\"username\":\"%s\",\"password\":\"%s\"}", username.c_str(), password.c_str());
 	CCLOG("Call logIn: %s, %s", username.c_str(), password.c_str());
-	pc->callCloudFunction("logIn", json->getCString(), httpresponse_selector(GameClient::logInCompleted), "logIn");
+	pc->setParameter("logIn", json->getCString(), httpresponse_selector(GameClient::logInCompleted), "logIn");
 }
 
 void GameClient::submitScore()
@@ -61,7 +61,7 @@ void GameClient::submitScore()
 	std::string password = DataManager::sharedDataManager()->GetPassword();
 	CCString* json = CCString::createWithFormat("{\"username\":\"%s\",\"score\":%d}", username.c_str(), score);
 
-	pc->callCloudFunction("submitScore", json->getCString(), httpresponse_selector(GameClient::submitScoreCompleted), "submitScore");
+	pc->setParameter("submitScore", json->getCString(), httpresponse_selector(GameClient::submitScoreCompleted), "submitScore");
 }
 
 void GameClient::getLeaderboard()
@@ -70,7 +70,7 @@ void GameClient::getLeaderboard()
 	ParseClient* pc = ParseClient::sharedParseClient();
 	CCLOG("Call getLeaderboard");
 
-	pc->callCloudFunction("getLeaderboard", "{}", httpresponse_selector(GameClient::getLeaderboardCompleted), "getLeaderboard");
+	pc->setParameter("getLeaderboard", "{}", httpresponse_selector(GameClient::getLeaderboardCompleted), "getLeaderboard");
 }
 
 void GameClient::signInCompleted( cocos2d::extension::CCHttpClient *sender, cocos2d::extension::CCHttpResponse *response )

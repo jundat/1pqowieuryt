@@ -2,14 +2,14 @@
 
 ParseClient* ParseClient::_instance = NULL;
 
-void ParseClient::callCloudFunction(const char* funcName, const char* jsonData, SEL_HttpResponse pSelector, const char* tag)
+void ParseClient::setParameter(const char* funcName, const char* jsonData, SEL_HttpResponse pSelector, const char* tag)
 {
 	CCHttpRequest* request = new CCHttpRequest();
 	request->setHeaders(m_header);
 
-	CCString* s = CCString::createWithFormat("https://api.parse.com/1/functions/%s", funcName);
-	request->setUrl(s->getCString());
-	
+	m_url = CCString::createWithFormat("https://api.parse.com/1/functions/%s", funcName);
+	request->setUrl(m_url->getCString());
+
 	request->setRequestType(m_requestType); //(CCHttpRequest::kHttpPost);
 	request->setResponseCallback(this, pSelector);
 	request->setRequestData(jsonData, strlen(jsonData));
@@ -25,4 +25,9 @@ void ParseClient::callCloudFunction(const char* funcName, const char* jsonData, 
 
 	CCHttpClient::getInstance()->send(request);
 	request->release();
+}
+
+CCString* ParseClient::getUrl( const char* funcName )
+{
+	return CCString::createWithFormat("https://api.parse.com/1/functions/%s", funcName);
 }

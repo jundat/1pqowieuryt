@@ -28,10 +28,6 @@ bool Item::init()
 	if (m_type == G_ITEM_UPGRADE_BULLET)
 	{
 		m_sprite = CCSprite::createWithSpriteFrameName("item_upgrade_bullet.png");
-	} 
-	else if (m_type == G_ITEM_ARMOR)
-	{
-		m_sprite = CCSprite::createWithSpriteFrameName("item_armor.png");
 	}
 	else if (m_type == G_ITEM_BOOM)
 	{

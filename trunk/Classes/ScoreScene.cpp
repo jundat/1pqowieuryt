@@ -9,29 +9,27 @@
 USING_NS_CC;
 USING_NS_CC_EXT;
 
-CCScene* ScoreScene::scene()
-{
-    CCScene *scene = CCScene::create();
-    ScoreScene *layer = ScoreScene::create();
-    scene->addChild(layer);
-    return scene;
-}
 
-bool ScoreScene::init()
+
+ScoreScene::ScoreScene() : m_lbMsg(NULL), m_lbTitle(NULL)
 {
 	//pre process
 
-	ParseClient* pc = ParseClient::sharedParseClient();
 	CCLOG("Call getLeaderboard");
-	pc->callCloudFunction("getLeaderboard", "{}", httpresponse_selector(ScoreScene::onGetLeaderboardCompleted), "getLeaderboard");
+	CCString* url = ParseClient::sharedParseClient()->getUrl("getLeaderboard");
 
-	//////////////////////////////////////////////////////////////////////////
-	
+	CCHttpRequest* request = new CCHttpRequest();
+	request->setHeaders(ParseClient::sharedParseClient()->m_header);
+	request->setUrl(url->getCString());
+	request->setRequestType(CCHttpRequest::kHttpPost);
+	request->setResponseCallback(this, httpresponse_selector(ScoreScene::onGetLeaderboardCompleted));
+	request->setTag("getLeaderboard");
+	CCString* json = CCString::createWithFormat("{}");
+	request->setRequestData(json->getCString(), strlen(json->getCString()));
+	CCHttpClient::getInstance()->send(request);
+	request->release();
 
-    if ( !CCLayer::init() )
-    {
-        return false;
-    }
+	// pres ////////////////////////////////////
 
 	this->setKeypadEnabled(true);
 
@@ -60,18 +58,32 @@ bool ScoreScene::init()
 
 	//
 
+
+	CCMenuItemImage *fbItem = CCMenuItemImage::create(
+		"back.png",
+		"back1.png",
+		this,
+		menu_selector(ScoreScene::fbCallback));
+	fbItem->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2));
+
+
+
+
 	CCMenuItemImage *backItem = CCMenuItemImage::create(
 		"back.png",
 		"back1.png",
 		this,
 		menu_selector(ScoreScene::menuCallback));
 	backItem->setPosition(ccp(G_DESIGN_WIDTH/2, backItem->getContentSize().height - 3));
-	
-	CCMenu* pMenu = CCMenu::create(backItem, NULL);
+
+	CCMenu* pMenu = CCMenu::create(fbItem, backItem, NULL);
 	pMenu->setPosition(CCPointZero);
 	this->addChild(pMenu, 1);
+}
 
-    return true;
+ScoreScene::~ScoreScene()
+{
+	//CCHttpClient::getInstance()->destroyInstance();
 }
 
 void ScoreScene::menuCallback(CCObject* pSender)
@@ -95,12 +107,14 @@ void ScoreScene::onGetLeaderboardCompleted(cocos2d::extension::CCHttpClient *sen
 	if (!response->isSucceed())
 	{
 		CCLog("Request Failed: Error buffer: %s", response->getErrorBuffer());
+		m_lbMsg->setString(response->getErrorBuffer());
 	}
 	else
 	{
 		std::vector<char> *buffer = response->getResponseData();
 		std::string str(buffer->begin(), buffer->end());
 		CCLOG("Content: %s", str.c_str());
+		m_lbMsg->setString(str.c_str());
 	}
 
 	
@@ -110,4 +124,9 @@ void ScoreScene::onGetLeaderboardCompleted(cocos2d::extension::CCHttpClient *sen
 void ScoreScene::keyBackClicked()
 {
 	menuCallback(NULL);
+}
+
+void ScoreScene::fbCallback( CCObject* pSender )
+{
+	
 }
