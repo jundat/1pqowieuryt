@@ -11,8 +11,6 @@
 USING_NS_CC;
 USING_NS_CC_EXT;
 
-
-
 ScoreScene::ScoreScene()
 {
 	
@@ -28,42 +26,26 @@ bool ScoreScene::init()
 
 	GameClient::sharedGameClient()->submitScore();
 
-	CCLOG("Call getLeaderboard");
-
-	CCString* url = ParseClient::sharedParseClient()->getUrl("getLeaderboard");
-
-	CCHttpRequest* request = new CCHttpRequest();
-	request->setHeaders(ParseClient::sharedParseClient()->m_header);
-	request->setUrl(url->getCString());
-	request->setRequestType(CCHttpRequest::kHttpPost);
-	request->setResponseCallback(this, httpresponse_selector(ScoreScene::onGetLeaderboardCompleted));
-	request->setTag("getLeaderboard");
-	CCString* json = CCString::createWithFormat("{}");
-	request->setRequestData(json->getCString(), strlen(json->getCString()));
-	CCHttpClient::getInstance()->send(request);
-	request->release();
-
-	//pre process
-
 	if (!CCLayer::init())
 	{
 		return false;
 	}
 
-	m_isLoader = false;
-
-	m_arrName = new CCArray(LIST_SIZE);
-	m_arrScore = new CCArray(LIST_SIZE);
-	m_arrName->retain();
-	m_arrScore->retain();
-	
-	
 	// pres ////////////////////////////////////
 
 	this->setKeypadEnabled(true);
 
 	//////////////////////////////////////////////////////////////////////////
 
+	m_listSize = 0;
+	m_isLoader = false;
+
+	m_arrName = new CCArray(m_listSize);
+	m_arrScore = new CCArray(m_listSize);
+	m_arrName->retain();
+	m_arrScore->retain();
+
+	
 	CCSprite* bg = CCSprite::create("bg_stars.png");
 	bg->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2));
 	this->addChild(bg, 0);
@@ -100,7 +82,35 @@ bool ScoreScene::init()
 	m_tableView->setVerticalFillOrder(kCCTableViewFillTopDown);
 	this->addChild(m_tableView);
 	m_tableView->reloadData();
+	m_tableView->setTouchEnabled(false);
+
+	m_waiting = CCLabelBMFont::create("Waiting...", "Mia_64.fnt");
+	m_waiting->setColor(ccc3(0, 0, 0));
+	//m_waiting->setScale(0.6f);
+	m_waiting->setAlignment(kCCTextAlignmentCenter); //cocos2d::CCTextAlignment::
+	m_waiting->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2));
+	this->addChild(m_waiting);
 	
+	//pre process ////////////////////////////////////////////////////
+
+	CCLOG("Call getLeaderboard");
+
+	CCString* url = ParseClient::sharedParseClient()->getUrl("getLeaderboard");
+
+	CCHttpRequest* request = new CCHttpRequest();
+	request->setHeaders(ParseClient::sharedParseClient()->m_header);
+	request->setUrl(url->getCString());
+	request->setRequestType(CCHttpRequest::kHttpPost);
+	request->setResponseCallback(this, httpresponse_selector(ScoreScene::onGetLeaderboardCompleted));
+	request->setTag("getLeaderboard");
+	CCString* json = CCString::createWithFormat("{}");
+	request->setRequestData(json->getCString(), strlen(json->getCString()));
+	CCHttpClient::getInstance()->send(request);
+	request->release();
+
+	//pre process
+
+
 	return true;
 }
 
@@ -132,6 +142,8 @@ void ScoreScene::onGetLeaderboardCompleted(cocos2d::extension::CCHttpClient *sen
 		std::string str(buffer->begin(), buffer->end());
 		CCLOG("Content: %s", str.c_str());
 		processData(str);
+		m_waiting->setVisible(false);
+		m_tableView->setTouchEnabled(true);
 	}
 
 	
@@ -167,6 +179,8 @@ void ScoreScene::processData( std::string str )
 			m_arrName->addObject(CCString::create(DataManager::sharedDataManager()->GetUsername()));
 			m_arrScore->addObject(CCString::createWithFormat("%d", DataManager::sharedDataManager()->GetHighScore()));
 			int sizearr = (int)json_array_size(results);
+			m_listSize = sizearr + 1;
+
 			for(int i = 0; i < sizearr; i++)
 			{
 				json_t *user, *username, *name, *score;
@@ -239,16 +253,7 @@ CCTableViewCell* ScoreScene::tableCellAtIndex(CCTableView *table, unsigned int i
 		cell = new CustomTableViewCell();
 		cell->autorelease();
 
-		CCSprite *sprite;
-		if (idx == 2)
-		{
-			sprite = CCSprite::create("tablecell_my.png");
-		}
-		else
-		{
-			sprite = CCSprite::create("tablecell.png");
-		}
-
+		CCSprite *sprite = CCSprite::create("tablecell.png");
 		sprite->setAnchorPoint(CCPointZero);
 		sprite->setPosition(ccp(0, 0));
 		cell->addChild(sprite);
@@ -302,7 +307,7 @@ CCTableViewCell* ScoreScene::tableCellAtIndex(CCTableView *table, unsigned int i
 
 unsigned int ScoreScene::numberOfCellsInTableView(CCTableView *table)
 {
-	return LIST_SIZE;
+	return m_listSize;
 }
 
 

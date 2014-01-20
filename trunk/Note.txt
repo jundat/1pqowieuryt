@@ -10,3 +10,13 @@
 - Game level file
 - File difficulty
 - 
+
+
+-----------------
+PARSE
+
+Không được xóa các user trong list user
+
+Android: Installation error: INSTALL_FAILED_INSUFFICIENT_STORAGE
+It got resolved by having android:installLocation="preferExternal" for <manifest> tag of manifest file
+

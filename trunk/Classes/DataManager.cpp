@@ -120,7 +120,7 @@ void DataManager::SetIsJustRevived(bool isJustRevived)
 
 std::string DataManager::GetName()
 {
-	return CCUserDefault::sharedUserDefault()->getStringForKey("G_NAME", "NULL");
+	return CCUserDefault::sharedUserDefault()->getStringForKey("G_NAME", "PhiCong");
 }
 
 void DataManager::SetName( const char* name )

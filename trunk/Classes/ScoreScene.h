@@ -9,9 +9,6 @@
 USING_NS_CC;
 USING_NS_CC_EXT;
 
-#define LIST_SIZE	11
-
-
 class ScoreScene : public cocos2d::CCLayer, public cocos2d::extension::CCTableViewDataSource, public cocos2d::extension::CCTableViewDelegate
 {
 public:
@@ -47,6 +44,9 @@ public:
 	//end new delegate
 
 private:
+	int m_listSize;
+	CCLabelBMFont* m_waiting;
+
 	CCArray* m_arrName;
 	CCArray* m_arrScore;
 

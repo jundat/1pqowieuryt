@@ -36,10 +36,7 @@ void GameClient::signIn()
 	CCString* pass = CCString::createWithFormat("password_%f", rd);
 	DataManager::sharedDataManager()->SetPassword(pass->getCString()); //////////////////////////////////////////////////////////////////////////
 	CCString* json = CCString::createWithFormat("{\"name\":\"PhiCong\",\"password\":\"%s\"}", pass->getCString());
-	
-	DataManager::sharedDataManager()->SetName("PhiCong");
-
-	pc->setParameter("signIn", json->getCString(), httpresponse_selector(GameClient::signInCompleted), "signIn");
+	pc->callCloudFunction("signIn", json->getCString(), httpresponse_selector(GameClient::signInCompleted), "signIn");
 }
 
 void GameClient::logIn()
@@ -50,7 +47,7 @@ void GameClient::logIn()
 	std::string password = DataManager::sharedDataManager()->GetPassword();
 	CCString* json = CCString::createWithFormat("{\"username\":\"%s\",\"password\":\"%s\"}", username.c_str(), password.c_str());
 	CCLOG("Call logIn: %s, %s", username.c_str(), password.c_str());
-	pc->setParameter("logIn", json->getCString(), httpresponse_selector(GameClient::logInCompleted), "logIn");
+	pc->callCloudFunction("logIn", json->getCString(), httpresponse_selector(GameClient::logInCompleted), "logIn");
 }
 
 void GameClient::submitScore()
@@ -63,7 +60,7 @@ void GameClient::submitScore()
 	std::string password = DataManager::sharedDataManager()->GetPassword();
 	CCString* json = CCString::createWithFormat("{\"username\":\"%s\",\"score\":%d}", username.c_str(), score);
 
-	pc->setParameter("submitScore", json->getCString(), httpresponse_selector(GameClient::submitScoreCompleted), "submitScore");
+	pc->callCloudFunction("submitScore", json->getCString(), httpresponse_selector(GameClient::submitScoreCompleted), "submitScore");
 }
 
 void GameClient::getLeaderboard()
@@ -72,7 +69,7 @@ void GameClient::getLeaderboard()
 	ParseClient* pc = ParseClient::sharedParseClient();
 	CCLOG("Call getLeaderboard");
 
-	pc->setParameter("getLeaderboard", "{}", httpresponse_selector(GameClient::getLeaderboardCompleted), "getLeaderboard");
+	pc->callCloudFunction("getLeaderboard", "{}", httpresponse_selector(GameClient::getLeaderboardCompleted), "getLeaderboard");
 }
 
 void GameClient::signInCompleted( cocos2d::extension::CCHttpClient *sender, cocos2d::extension::CCHttpResponse *response )
@@ -99,7 +96,6 @@ void GameClient::signInCompleted( cocos2d::extension::CCHttpClient *sender, coco
 		std::string username = str.substr(ind1 + 1, ind2 - ind1 - 1);
 		CCLOG("username: %s", username.c_str());
 		DataManager::sharedDataManager()->SetUsername(username.c_str()); //////////////////////////////////////////////////////////////////////////
-		
 	}
 	
 	CCLOG("-----------------END-------------------");
@@ -116,7 +112,8 @@ void GameClient::logInCompleted( cocos2d::extension::CCHttpClient *sender, cocos
 
 	if (!response->isSucceed())
 	{
-		CCLog("Request Failed: %s", response->getErrorBuffer());
+		CCLOG("Request Failed: %s", response->getErrorBuffer());
+		signIn();
 	}
 	else
 	{

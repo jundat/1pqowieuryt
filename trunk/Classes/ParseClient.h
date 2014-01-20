@@ -23,7 +23,7 @@ public:
 	}
 	static CCString* getUrl(const char* funcName);
 
-	void setParameter(const char* funcName, const char* jsonData, SEL_HttpResponse pSelector, const char* tag);
+	void callCloudFunction(const char* funcName, const char* jsonData, SEL_HttpResponse pSelector, const char* tag);
 
 public:
 	CCHttpRequest::HttpRequestType m_requestType;

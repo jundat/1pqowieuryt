@@ -30,7 +30,7 @@ Parse.Cloud.define("signIn",
                         res.success(result);
                     },
                     error: function(user, error) {
-                        res.error('');
+                        res.error(error);
                     }
                 });
             }
@@ -54,7 +54,7 @@ Parse.Cloud.define("logIn",
                 res.success(result);
             },
             error: function(user, error) {
-                res.error('');
+                res.error(error);
             }
         });
     }
@@ -78,7 +78,7 @@ Parse.Cloud.define('submitScore',
                 res.success('|' + score + '|');
             },
             error: function(error) {
-                res.error('');
+                res.error(error);
             }
         });
     }
@@ -106,14 +106,14 @@ Parse.Cloud.define("getLeaderboard",
                         name: results[i].get('name'),
                         score: results[i].get('score')
                     };
-                    
+
 					list.push(user);
 				};
 
 				res.success(list);
 			},
 			error: function(error) {
-				res.error("Can not get Leaderboard");
+				res.error(error);
 			}
 		});
 	}
