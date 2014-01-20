@@ -16,6 +16,8 @@ private:
 public:
 	static DataManager* sharedDataManager();
 
+	std::string	GetName();
+	void	SetName(const char* name);
 	std::string	GetUsername();
 	void	SetUsername(const char* username);
 	std::string	GetPassword();

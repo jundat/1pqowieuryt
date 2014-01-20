@@ -13,7 +13,7 @@ USING_NS_CC_EXT;
 
 
 
-ScoreScene::ScoreScene() : m_lbMsg(NULL), m_lbTitle(NULL)
+ScoreScene::ScoreScene()
 {
 	
 }
@@ -25,20 +25,11 @@ ScoreScene::~ScoreScene()
 
 bool ScoreScene::init()
 {
-	//pre process
 
-	if (!CCLayer::init())
-	{
-		return false;
-	}
-	
-	m_arrName = new CCArray(LIST_SIZE);
-	m_arrScore = new CCArray(LIST_SIZE);
-	m_arrName->retain();
-	m_arrScore->retain();
-
+	GameClient::sharedGameClient()->submitScore();
 
 	CCLOG("Call getLeaderboard");
+
 	CCString* url = ParseClient::sharedParseClient()->getUrl("getLeaderboard");
 
 	CCHttpRequest* request = new CCHttpRequest();
@@ -52,6 +43,21 @@ bool ScoreScene::init()
 	CCHttpClient::getInstance()->send(request);
 	request->release();
 
+	//pre process
+
+	if (!CCLayer::init())
+	{
+		return false;
+	}
+
+	m_isLoader = false;
+
+	m_arrName = new CCArray(LIST_SIZE);
+	m_arrScore = new CCArray(LIST_SIZE);
+	m_arrName->retain();
+	m_arrScore->retain();
+	
+	
 	// pres ////////////////////////////////////
 
 	this->setKeypadEnabled(true);
@@ -67,32 +73,6 @@ bool ScoreScene::init()
 	this->addChild(score_top, 0);
 
 	//
-
-	CCLabelTTF* m_lbTitle = CCLabelTTF::create("Điểm cao", "Marker Felt.ttf", 64);
-	m_lbTitle->setFontFillColor(ccc3(56, 56, 56));
-	m_lbTitle->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2));
-	this->addChild(m_lbTitle);
-
-	CCString* s = CCString::createWithFormat("%d", DataManager::sharedDataManager()->GetHighScore());
-	m_lbMsg = CCLabelTTF::create(s->getCString(), "Marker Felt.ttf", 64);
-	m_lbMsg->setFontFillColor(ccc3(56, 56, 56));
-	m_lbMsg->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2 - 90));
-	this->addChild(m_lbMsg);
-
-	//
-	isclicked = false;
-
-	CCMenuItemImage *fbItem = CCMenuItemImage::create(
-		"back.png",
-		"back1.png",
-		this,
-		menu_selector(ScoreScene::fbCallback));
-	fbItem->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2));
-
-
-	//CCTableViewDataSource* data = CCTableViewDataSource::
-	//CCTableView* tbView = CCTableView::create()
-
 	CCMenuItemImage *backItem = CCMenuItemImage::create(
 		"back.png",
 		"back1.png",
@@ -100,7 +80,7 @@ bool ScoreScene::init()
 		menu_selector(ScoreScene::menuCallback));
 	backItem->setPosition(ccp(400, 1280-1166));
 
-	CCMenu* pMenu = CCMenu::create(fbItem, backItem, NULL);
+	CCMenu* pMenu = CCMenu::create(/*fbItem,*/ backItem, NULL);
 	pMenu->setPosition(CCPointZero);
 	this->addChild(pMenu, 1);
 
@@ -109,7 +89,7 @@ bool ScoreScene::init()
 	m_sprCell = CCSprite::create("tablecell.png");
 	m_sprCell->retain();
 	CCSize cellsize = m_sprCell->getContentSize();
-	CCSize tableSize = CCSizeMake(cellsize.width, cellsize.height * 6.0f);
+	CCSize tableSize = CCSizeMake(cellsize.width, cellsize.height * 5.5f);
 
 	//vertical
 	m_tableView = CCTableView::create(this, tableSize);
@@ -117,7 +97,7 @@ bool ScoreScene::init()
 	m_tableView->setAnchorPoint(CCPointZero);
 	m_tableView->setPosition(ccp(G_DESIGN_WIDTH/2 - tableSize.width/2, G_DESIGN_HEIGHT/2 - tableSize.height/2));
 	m_tableView->setDelegate(this);
-	m_tableView->setVerticalFillOrder(extension::CCTableViewVerticalFillOrder::kCCTableViewFillTopDown);
+	m_tableView->setVerticalFillOrder(kCCTableViewFillTopDown);
 	this->addChild(m_tableView);
 	m_tableView->reloadData();
 	
@@ -144,8 +124,7 @@ void ScoreScene::onGetLeaderboardCompleted(cocos2d::extension::CCHttpClient *sen
 
 	if (!response->isSucceed())
 	{
-		CCLog("Request Failed: Error buffer: %s", response->getErrorBuffer());
-		m_lbMsg->setString(response->getErrorBuffer());
+		CCLOG("Request Failed: Error buffer: %s", response->getErrorBuffer());
 	}
 	else
 	{
@@ -183,7 +162,12 @@ void ScoreScene::processData( std::string str )
 		}
 		else
 		{
-			for(int i = 0; i < json_array_size(results); i++)
+			//add you at first
+
+			m_arrName->addObject(CCString::create(DataManager::sharedDataManager()->GetUsername()));
+			m_arrScore->addObject(CCString::createWithFormat("%d", DataManager::sharedDataManager()->GetHighScore()));
+			int sizearr = (int)json_array_size(results);
+			for(int i = 0; i < sizearr; i++)
 			{
 				json_t *user, *username, *name, *score;
 				user = json_array_get(results, i);				
@@ -191,13 +175,16 @@ void ScoreScene::processData( std::string str )
 				name = json_object_get(user, "name");
 				score = json_object_get(user, "score");
 
-				m_arrName->addObject(CCString::create(json_string_value(name)));
-				m_arrScore->addObject(CCString::createWithFormat("%d", json_integer_value(score)));
+				m_arrName->addObject(CCString::create(json_string_value(username)));
+				m_arrScore->addObject(CCString::createWithFormat("%d", (int)json_integer_value(score)));
 
-				CCLOG("%s: %d", json_string_value(name), json_integer_value(score));
+				CCLOG("%s: %d", json_string_value(name), (int)json_integer_value(score));
 			}
 		}
 	}
+
+	m_isLoader = true;
+	m_tableView->reloadData();
 }
 
 void ScoreScene::keyBackClicked()
@@ -207,8 +194,8 @@ void ScoreScene::keyBackClicked()
 
 void ScoreScene::fbCallback( CCObject* pSender )
 {
-	isclicked = ! isclicked;
-	m_tableView->reloadData();
+// 	m_isLoader = ! m_isLoader;
+// 	m_tableView->reloadData();
 }
 
 //new delegate
@@ -226,37 +213,87 @@ CCSize ScoreScene::tableCellSizeForIndex(CCTableView *table, unsigned int idx)
 
 CCTableViewCell* ScoreScene::tableCellAtIndex(CCTableView *table, unsigned int idx)
 {
-	CCString *string;
-	if (isclicked)
+	CCString *order = CCString::createWithFormat("%d", idx);
+	if (idx == 0)
 	{
-		string = CCString::createWithFormat("%d", idx + 1);
+		order = CCString::create("My");
+	}
+
+	CCString *score;
+	CCString *name;
+
+	if (m_isLoader == false)
+	{
+		score = CCString::create("0");
+		name = CCString::create("Name");
 	}
 	else
 	{
-		string = CCString::createWithFormat("--%d--", idx + 1);
+		score = (CCString*)m_arrScore->objectAtIndex(idx);
+		name = (CCString*)m_arrName->objectAtIndex(idx);
 	}
+
 	
 	CCTableViewCell *cell = table->dequeueCell();
 	if (!cell) {
 		cell = new CustomTableViewCell();
 		cell->autorelease();
-		CCSprite *sprite = CCSprite::create("tablecell.png");
+
+		CCSprite *sprite;
+		if (idx == 2)
+		{
+			sprite = CCSprite::create("tablecell_my.png");
+		}
+		else
+		{
+			sprite = CCSprite::create("tablecell.png");
+		}
+
 		sprite->setAnchorPoint(CCPointZero);
 		sprite->setPosition(ccp(0, 0));
 		cell->addChild(sprite);
 
-		CCLabelBMFont *label = CCLabelBMFont::create(string->getCString(), "Mia_64.fnt");
-		label->setScale(0.6f);
-		label->setAlignment(kCCTextAlignmentLeft); //cocos2d::CCTextAlignment::
-		label->setPosition(ccp(10, m_sprCell->getContentSize().height/2));
-		label->setAnchorPoint(ccp(0.0f, 0.5f));
-		label->setTag(123);
-		cell->addChild(label);
+		CCLabelBMFont *lbOrder = CCLabelBMFont::create(order->getCString(), "Mia_64.fnt");
+		lbOrder->setScale(0.6f);
+		lbOrder->setAlignment(kCCTextAlignmentLeft); //cocos2d::CCTextAlignment::
+		lbOrder->setPosition(ccp(20, m_sprCell->getContentSize().height/2));
+		lbOrder->setAnchorPoint(ccp(0.0f, 0.5f));
+		lbOrder->setTag(100);
+		cell->addChild(lbOrder);
+
+		CCLabelBMFont *lbName = CCLabelBMFont::create(name->getCString(), "Mia_64.fnt");
+		lbName->setScale(0.6f);
+		lbName->setAlignment(kCCTextAlignmentRight); //cocos2d::CCTextAlignment::
+		lbName->setPosition(ccp(m_sprCell->getContentSize().width, m_sprCell->getContentSize().height/2));
+		lbName->setAnchorPoint(ccp(1.0f, 0.5f));
+		lbName->setTag(101);
+		cell->addChild(lbName);
+
+		CCLabelBMFont *lbScore = CCLabelBMFont::create(score->getCString(), "Mia_64.fnt");
+		lbScore->setScale(0.6f);
+		lbScore->setAlignment(kCCTextAlignmentCenter); //cocos2d::CCTextAlignment::
+		lbScore->setPosition(ccp(m_sprCell->getContentSize().width/2, m_sprCell->getContentSize().height/2));
+		lbScore->setAnchorPoint(ccp(0.5f, 0.5f));
+		lbScore->setTag(102);
+		cell->addChild(lbScore);
 	}
 	else
 	{
-		CCLabelBMFont *label = (CCLabelBMFont*)cell->getChildByTag(123);
-		label->setString(string->getCString());
+		CCLabelBMFont *lbOrder = (CCLabelBMFont*)cell->getChildByTag(100);
+		lbOrder->setString(order->getCString());
+		if (idx == 0)
+		{
+			lbOrder->setString("My");
+		}
+		lbOrder->setPosition(ccp(20, m_sprCell->getContentSize().height/2));
+
+		CCLabelBMFont *lbName = (CCLabelBMFont*)cell->getChildByTag(101);
+		lbName->setString(name->getCString());
+		lbName->setPosition(ccp(m_sprCell->getContentSize().width, m_sprCell->getContentSize().height/2));
+
+		CCLabelBMFont *lbScore = (CCLabelBMFont*)cell->getChildByTag(102);
+		lbScore->setString(score->getCString());
+		lbScore->setPosition(ccp(m_sprCell->getContentSize().width/2, m_sprCell->getContentSize().height/2));
 	}
 
 

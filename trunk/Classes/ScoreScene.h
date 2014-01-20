@@ -9,7 +9,7 @@
 USING_NS_CC;
 USING_NS_CC_EXT;
 
-#define LIST_SIZE	10
+#define LIST_SIZE	11
 
 
 class ScoreScene : public cocos2d::CCLayer, public cocos2d::extension::CCTableViewDataSource, public cocos2d::extension::CCTableViewDelegate
@@ -47,16 +47,13 @@ public:
 	//end new delegate
 
 private:
-	CCLabelTTF* m_lbTitle;
-	CCLabelTTF* m_lbMsg;
-	
 	CCArray* m_arrName;
 	CCArray* m_arrScore;
 
 	CCSprite* m_sprCell;
 	CCTableView* m_tableView;
 
-	bool isclicked;
+	bool m_isLoader;
 };
 
 #endif // __SCORE_SCENE_H__

@@ -118,6 +118,17 @@ void DataManager::SetIsJustRevived(bool isJustRevived)
 	CCUserDefault::sharedUserDefault()->flush();
 }
 
+std::string DataManager::GetName()
+{
+	return CCUserDefault::sharedUserDefault()->getStringForKey("G_NAME", "NULL");
+}
+
+void DataManager::SetName( const char* name )
+{
+	CCUserDefault::sharedUserDefault()->setStringForKey("G_NAME", std::string(name));
+	CCUserDefault::sharedUserDefault()->flush();
+}
+
 std::string DataManager::GetUsername()
 {
 	return CCUserDefault::sharedUserDefault()->getStringForKey("G_USERNAME", "NULL");

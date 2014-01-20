@@ -36,6 +36,8 @@ void GameClient::signIn()
 	CCString* pass = CCString::createWithFormat("password_%f", rd);
 	DataManager::sharedDataManager()->SetPassword(pass->getCString()); //////////////////////////////////////////////////////////////////////////
 	CCString* json = CCString::createWithFormat("{\"name\":\"PhiCong\",\"password\":\"%s\"}", pass->getCString());
+	
+	DataManager::sharedDataManager()->SetName("PhiCong");
 
 	pc->setParameter("signIn", json->getCString(), httpresponse_selector(GameClient::signInCompleted), "signIn");
 }
@@ -97,6 +99,7 @@ void GameClient::signInCompleted( cocos2d::extension::CCHttpClient *sender, coco
 		std::string username = str.substr(ind1 + 1, ind2 - ind1 - 1);
 		CCLOG("username: %s", username.c_str());
 		DataManager::sharedDataManager()->SetUsername(username.c_str()); //////////////////////////////////////////////////////////////////////////
+		
 	}
 	
 	CCLOG("-----------------END-------------------");

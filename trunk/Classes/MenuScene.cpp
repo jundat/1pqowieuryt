@@ -27,7 +27,6 @@ bool MenuScene::init()
 	//pre proccess
 
 	DataManager::sharedDataManager()->RefreshPlayerLife();
-	GameClient::sharedGameClient()->submitScore();
 
 	//////////////////////////////////////////////////////////////////////////
 	
