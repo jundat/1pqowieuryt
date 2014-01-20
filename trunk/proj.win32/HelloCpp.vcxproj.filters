@@ -138,6 +138,9 @@
     <ClCompile Include="..\Classes\NDKHelper\NDKHelper.cpp">
       <Filter>Classes\NDKHelper</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\CustomTableViewCell.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -253,6 +256,9 @@
     </ClInclude>
     <ClInclude Include="..\Classes\NDKHelper\NDKHelper.h">
       <Filter>Classes\NDKHelper</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\CustomTableViewCell.h">
+      <Filter>Classes</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

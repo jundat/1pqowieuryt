@@ -97,23 +97,18 @@ Parse.Cloud.define("getLeaderboard",
 		query1.find(
 		{
 			success: function(results) {
-				var list = "@"; //begin
+				var list = [];
 				var LEN = results.length;
 
 				for (var i = 0; i < LEN; i++) {
-					var user = 
-						results[i].get('username') + "|" + 
-						results[i].get('name') + "|" + 
-						results[i].get('score');
-					
-					if (i < LEN - 1) { 
-						user += ";" 
-					};
-
-					list += user;
+					var user = {
+                        username: results[i].get('username'),
+                        name: results[i].get('name'),
+                        score: results[i].get('score')
+                    };
+                    
+					list.push(user);
 				};
-
-				list += "@"; //end
 
 				res.success(list);
 			},
