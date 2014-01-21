@@ -54,6 +54,14 @@ bool ScoreScene::init()
 	score_top->setPosition(ccp(G_DESIGN_WIDTH/2, - 110 + G_DESIGN_HEIGHT));
 	this->addChild(score_top, 0);
 
+
+	CCMenuItemImage *fbItem = CCMenuItemImage::create(
+		"back.png",
+		"back1.png",
+		this,
+		menu_selector(ScoreScene::fbCallback));
+	fbItem->setPosition(ccp(400, 640));
+
 	//
 	CCMenuItemImage *backItem = CCMenuItemImage::create(
 		"back.png",
@@ -62,7 +70,7 @@ bool ScoreScene::init()
 		menu_selector(ScoreScene::menuCallback));
 	backItem->setPosition(ccp(400, 1280-1166));
 
-	CCMenu* pMenu = CCMenu::create(/*fbItem,*/ backItem, NULL);
+	CCMenu* pMenu = CCMenu::create(fbItem, backItem, NULL);
 	pMenu->setPosition(CCPointZero);
 	this->addChild(pMenu, 1);
 
@@ -206,11 +214,41 @@ void ScoreScene::keyBackClicked()
 	menuCallback(NULL);
 }
 
+
+// New Virtual Method //=========================================
+
 void ScoreScene::fbCallback( CCObject* pSender )
 {
-// 	m_isLoader = ! m_isLoader;
-// 	m_tableView->reloadData();
+#ifndef WIN32
+	if (EziSocialObject::sharedObject()->isFacebookSessionActive())
+	{
+		CCMessageBox("Facebook logged in!", "Info");
+	}
+	else
+	{
+		CCLOG("Try to log in");
+		EziSocialObject::sharedObject()->performLoginUsingFacebook(false); // Pass true if you need publish permission also
+	}
+#endif
 }
+
+
+void ScoreScene::fbSessionCallback(int responseCode, const char *responseMessage)
+{
+#ifndef WIN32
+	if (responseCode == EziSocialWrapperNS::RESPONSE_CODE::FB_LOGIN_SUCCESSFUL)
+	{
+		CCMessageBox("Login Successful", "Facebook Login Response");
+	}
+	else // Login failed
+	{
+		CCMessageBox(responseMessage, "Facebook Login Response");
+	}
+#endif
+}
+
+// New Virtual Method //=========================================
+
 
 //new delegate
 

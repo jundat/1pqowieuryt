@@ -140,6 +140,11 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
     <ClCompile Include="..\Classes\EffectLayer.cpp" />
     <ClCompile Include="..\Classes\Enemy.cpp" />
     <ClCompile Include="..\Classes\EnemyFactory.cpp" />
+    <ClCompile Include="..\Classes\ezibyte\EziFacebookFriend.cpp" />
+    <ClCompile Include="..\Classes\ezibyte\EziFacebookUser.cpp" />
+    <ClCompile Include="..\Classes\ezibyte\EziFBIncomingRequest.cpp" />
+    <ClCompile Include="..\Classes\ezibyte\EziFBIncomingRequestManager.cpp" />
+    <ClCompile Include="..\Classes\ezibyte\EziSocialObject.cpp" />
     <ClCompile Include="..\Classes\GameClient.cpp" />
     <ClCompile Include="..\Classes\GameObject.cpp" />
     <ClCompile Include="..\Classes\Global.cpp" />
@@ -184,6 +189,13 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
     <ClInclude Include="..\Classes\EffectLayer.h" />
     <ClInclude Include="..\Classes\Enemy.h" />
     <ClInclude Include="..\Classes\EnemyFactory.h" />
+    <ClInclude Include="..\Classes\ezibyte\EziFacebookFriend.h" />
+    <ClInclude Include="..\Classes\ezibyte\EziFacebookUser.h" />
+    <ClInclude Include="..\Classes\ezibyte\EziFBIncomingRequest.h" />
+    <ClInclude Include="..\Classes\ezibyte\EziFBIncomingRequestManager.h" />
+    <ClInclude Include="..\Classes\ezibyte\EziSocialDefinition.h" />
+    <ClInclude Include="..\Classes\ezibyte\EziSocialDelegate.h" />
+    <ClInclude Include="..\Classes\ezibyte\EziSocialObject.h" />
     <ClInclude Include="..\Classes\GameClient.h" />
     <ClInclude Include="..\Classes\GameObject.h" />
     <ClInclude Include="..\Classes\Global.h" />

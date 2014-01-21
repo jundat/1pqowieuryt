@@ -6,10 +6,22 @@
 #include "HttpClient.h"
 #include "jansson/jansson.h"
 
+#ifndef WIN32
+	#include "EziSocialObject.h"
+	#include "EziSocialDelegate.h"
+#endif
+
 USING_NS_CC;
 USING_NS_CC_EXT;
 
-class ScoreScene : public cocos2d::CCLayer, public cocos2d::extension::CCTableViewDataSource, public cocos2d::extension::CCTableViewDelegate
+class ScoreScene : public cocos2d::CCLayer, 
+
+#ifndef WIN32
+	public EziFacebookDelegate, 
+#endif
+
+	public cocos2d::extension::CCTableViewDataSource, 
+	public cocos2d::extension::CCTableViewDelegate
 {
 public:
 	ScoreScene();
@@ -29,8 +41,18 @@ public:
 	void onGetLeaderboardCompleted(cocos2d::extension::CCHttpClient *sender, cocos2d::extension::CCHttpResponse *response);
 	void processData(std::string str);
 
-	// New Virtual Method
+
+
+	// New Virtual Method //=========================================
 	void fbCallback(CCObject* pSender);
+	
+	// New Virtual Method
+	virtual void fbSessionCallback(int responseCode, const char* responseMessage);
+
+	// New Virtual Method //=========================================
+
+
+
 
 	//new delegate
 

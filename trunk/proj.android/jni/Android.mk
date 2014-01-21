@@ -10,7 +10,6 @@ HELLOCPP_FILES := $(wildcard $(LOCAL_PATH)/hellocpp/*.cpp)
 HELLOCPP_FILES := $(HELLOCPP_FILES:$(LOCAL_PATH)/%=%)
 
 CLASSES_FILES := $(wildcard $(LOCAL_PATH)/../../Classes/*.cpp)
-
 CLASSES_FILES += $(wildcard $(LOCAL_PATH)/../../Classes/jansson/*.c)
 CLASSES_FILES += $(wildcard $(LOCAL_PATH)/../../Classes/NDKHelper/*.cpp)
 
