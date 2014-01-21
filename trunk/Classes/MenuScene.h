@@ -3,9 +3,19 @@
 
 #include "cocos2d.h"
 
+#ifndef WIN32
+#include "EziSocialObject.h"
+#include "EziSocialDelegate.h"
+#endif
+
 USING_NS_CC;
 
 class MenuScene : public cocos2d::CCLayer
+
+#ifndef WIN32
+	,public EziFacebookDelegate
+#endif
+
 {
 public:
     virtual bool init();  
@@ -20,12 +30,23 @@ public:
 	void scoreCallback(CCObject* pSender);
 	void settingCallback(CCObject* pSender);
 	void exitCallback(CCObject* pSender);
+	void fbCallback(CCObject* pSender);
 
 	void onCompletedWaiting();
 	void onShowDialog();
 	void onCloseDialog();
 
 	bool m_isShowDialog;
+
+
+
+	// Facebook //=========================================
+	
+	virtual void fbSessionCallback(int responseCode, const char* responseMessage);
+
+	// Facebook //=========================================
+
+
 };
 
 #endif // __MENU_SCENE_H__

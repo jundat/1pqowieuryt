@@ -13,9 +13,6 @@
     <Filter Include="Classes\NDKHelper">
       <UniqueIdentifier>{b189b430-db9e-4c12-8267-72f4e093cecd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Classes\ezibyte">
-      <UniqueIdentifier>{31d25f98-acc1-4c78-8f05-bd676819f060}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -144,21 +141,6 @@
     <ClCompile Include="..\Classes\CustomTableViewCell.cpp">
       <Filter>Classes</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\ezibyte\EziFacebookFriend.cpp">
-      <Filter>Classes\ezibyte</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\ezibyte\EziFacebookUser.cpp">
-      <Filter>Classes\ezibyte</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\ezibyte\EziFBIncomingRequest.cpp">
-      <Filter>Classes\ezibyte</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\ezibyte\EziFBIncomingRequestManager.cpp">
-      <Filter>Classes\ezibyte</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\ezibyte\EziSocialObject.cpp">
-      <Filter>Classes\ezibyte</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -277,27 +259,6 @@
     </ClInclude>
     <ClInclude Include="..\Classes\CustomTableViewCell.h">
       <Filter>Classes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\ezibyte\EziFacebookFriend.h">
-      <Filter>Classes\ezibyte</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\ezibyte\EziFacebookUser.h">
-      <Filter>Classes\ezibyte</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\ezibyte\EziFBIncomingRequest.h">
-      <Filter>Classes\ezibyte</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\ezibyte\EziFBIncomingRequestManager.h">
-      <Filter>Classes\ezibyte</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\ezibyte\EziSocialDefinition.h">
-      <Filter>Classes\ezibyte</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\ezibyte\EziSocialDelegate.h">
-      <Filter>Classes\ezibyte</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\ezibyte\EziSocialObject.h">
-      <Filter>Classes\ezibyte</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
