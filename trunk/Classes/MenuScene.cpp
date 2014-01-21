@@ -110,18 +110,31 @@ bool MenuScene::init()
 
 	//
 
-	CCMenuItemImage *fbItem = CCMenuItemImage::create(
-		"facebook-icon.png",
-		"facebook-icon.png",
-		this,
-		menu_selector(MenuScene::fbCallback));
-
-	fbItem->setPosition(ccp(exitItem->getPosition().x + exitItem->getContentSize().width/2 + fbItem->getContentSize().width/2 + 10,
+	m_isLoggedIn = false;
+	CCMenuItem* fbLogIn = CCMenuItemImage::create("facebook-icon.png", NULL, NULL);
+	CCMenuItem* fbLogOut = CCMenuItemImage::create("facebook-icon_off.png", NULL, NULL);
+	m_fbItem = CCMenuItemToggle::createWithTarget(this,  menu_selector(MenuScene::fbCallback), fbLogIn, fbLogOut, NULL);
+	m_fbItem->setSelectedIndex(0);
+	m_fbItem->setPosition(ccp(exitItem->getPosition().x + exitItem->getContentSize().width/2 + m_fbItem->getContentSize().width/2 + 10,
 		exitItem->getPosition().y));
+
+#ifndef WIN32
+	if(EziSocialObject::sharedObject()->isFacebookSessionActive()) //logged in state
+	{
+		m_isLoggedIn = true;
+		m_fbItem->setSelectedIndex(1); //log out button 
+	}
+	else //logged out stated
+	{
+		m_isLoggedIn = false;
+		m_fbItem->setSelectedIndex(0); //log in button
+	}
+#endif
+
 	
 	//
 
-    m_menu = CCMenu::create(playItem, scoreItem, settingItem, exitItem, fbItem, NULL);
+    m_menu = CCMenu::create(playItem, scoreItem, settingItem, exitItem, m_fbItem, NULL);
     m_menu->setPosition(CCPointZero);
     this->addChild(m_menu, 1);
 	
@@ -202,31 +215,58 @@ void MenuScene::exitCallback( CCObject* pSender )
 
 void MenuScene::fbCallback( CCObject* pSender )
 {
-	CCLOG("Call to log in facebook");
+	CCLOG("Call to Log In/Out facebook");
 #ifndef WIN32
-	if (EziSocialObject::sharedObject()->isFacebookSessionActive())
+	if (EziSocialObject::sharedObject()->isFacebookSessionActive()) //logged in
 	{
-		CCMessageBox("Facebook logged in!", "Info");
+		CCLOG("Log Out");
+		EziSocialObject::sharedObject()->perfromLogoutFromFacebook();
 	}
 	else
 	{
-		CCLOG("Try to log in");
-		EziSocialObject::sharedObject()->performLoginUsingFacebook(false); // Pass true if you need publish permission also
+		CCLOG("Log In");
+		bool needPublicPermission = false;
+		EziSocialObject::sharedObject()->performLoginUsingFacebook(needPublicPermission); // Pass true if you need publish permission also
 	}
 #endif
 }
 
-
 void MenuScene::fbSessionCallback(int responseCode, const char *responseMessage)
 {
 #ifndef WIN32
-	if (responseCode == EziSocialWrapperNS::RESPONSE_CODE::FB_LOGIN_SUCCESSFUL)
+	switch (responseCode)
 	{
-		CCMessageBox("Login Successful", "Facebook Login Response");
-	}
-	else // Login failed
-	{
-		CCMessageBox(responseMessage, "Facebook Login Response");
+	case EziSocialWrapperNS::RESPONSE_CODE::ERROR_INTERNET_NOT_AVAILABLE:
+		CCLOG("ERROR_INTERNET_NOT_AVAILABLE");
+		break;
+	case EziSocialWrapperNS::RESPONSE_CODE::ERROR_READ_PERMISSION_ERROR:
+		CCLOG("ERROR_READ_PERMISSION_ERROR");
+		break;
+	case EziSocialWrapperNS::RESPONSE_CODE::ERROR_PUBLISH_PERMISSION_ERROR:
+		CCLOG("ERROR_PUBLISH_PERMISSION_ERROR");
+		break;
+	case EziSocialWrapperNS::RESPONSE_CODE::FB_LOGIN_USER_PERMISSION_REVOKED:
+		CCLOG("FB_LOGIN_USER_PERMISSION_REVOKED");
+		break;
+	case EziSocialWrapperNS::RESPONSE_CODE::FB_LOGIN_APP_NOT_ALLOWERD_TO_USE_FB:
+		CCLOG("FB_LOGIN_APP_NOT_ALLOWERD_TO_USE_FB");
+		break;
+	case EziSocialWrapperNS::RESPONSE_CODE::FB_LOGIN_PERMISSION_DENIED:
+		CCLOG("FB_LOGIN_PERMISSION_DENIED");
+		break;
+	case EziSocialWrapperNS::RESPONSE_CODE::FB_LOGIN_SUCCESSFUL: /////////////////// logged in state
+		m_isLoggedIn = true;
+		m_fbItem->setSelectedIndex(1); //log out button
+		CCLOG("FB_LOGIN_SUCCESSFUL");
+		break;
+	case EziSocialWrapperNS::RESPONSE_CODE::FB_LOGIN_FAILED:
+		CCLOG("FB_LOGIN_FAILED");
+		break;
+	case EziSocialWrapperNS::RESPONSE_CODE::FB_LOGOUT_SUCCESSFUL:  /////////////////// logged out state
+		m_isLoggedIn = false;
+		m_fbItem->setSelectedIndex(0); //log in button
+		CCLOG("FB_LOGOUT_SUCCESSFUL");
+		break;
 	}
 #endif
 }

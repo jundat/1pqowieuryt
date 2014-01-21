@@ -3,6 +3,7 @@
 
 #include "cocos2d.h"
 
+
 #ifndef WIN32
 #include "EziSocialObject.h"
 #include "EziSocialDelegate.h"
@@ -22,6 +23,7 @@ public:
     static cocos2d::CCScene* scene();
     CREATE_FUNC(MenuScene);
 
+	CCMenuItemToggle* m_fbItem;
 	CCMenu* m_menu;
 	CCLabelBMFont* m_labelLife;
 	
@@ -41,11 +43,21 @@ public:
 
 
 	// Facebook //=========================================
-	
+	bool m_isLoggedIn;
 	virtual void fbSessionCallback(int responseCode, const char* responseMessage);
 
 	// Facebook //=========================================
-
+	/**
+	 *  Use this method for setting up Facebook delegate or other delegates.
+	 */
+	void onEnterTransitionDidFinish()
+	{
+#ifndef WIN32
+		CCLog("[MenuScene]: Enter Transition Finished.");
+		// Set the delegates to receive responses.
+		EziSocialObject::sharedObject()->setFacebookDelegate(this);
+#endif
+	}
 
 };
 
