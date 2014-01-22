@@ -60,7 +60,7 @@ public:
 
 private:
 	int m_listSize;
-	CCLabelBMFont* m_waiting;
+	CCLabelBMFont* m_lbWaiting;
 	CCLabelTTF* m_lbName;
 
 	CCArray* m_arrName;
@@ -71,7 +71,7 @@ private:
 	CCSprite* m_sprCell;
 	CCTableView* m_tableView;
 
-	bool m_isLoader;
+	bool m_isLoaded;
 
 	//////////////////////////////////////////////////////////////////////////
 	

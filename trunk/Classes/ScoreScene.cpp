@@ -43,7 +43,7 @@ bool ScoreScene::init()
 	//////////////////////////////////////////////////////////////////////////
 
 	m_listSize = 0;
-	m_isLoader = false;
+	m_isLoaded = false;
 
 	m_friendList = NULL;
 
@@ -100,7 +100,7 @@ bool ScoreScene::init()
 
 	if(EziSocialObject::sharedObject()->isFacebookSessionActive()) //logged in state
 	{
-		CCLOG("Is logged in, ------------------------ NO NEED TO LOG IN");
+		//CCLOG("Is logged in, ------------------------ NO NEED TO LOG IN");
 		m_isLoggedIn = true;
 
 		//login button
@@ -151,31 +151,34 @@ bool ScoreScene::init()
 	m_tableView->reloadData();
 	m_tableView->setTouchEnabled(false);
 
-	m_waiting = CCLabelBMFont::create("Waiting...", "Mia_64.fnt");
-	m_waiting->setColor(ccc3(0, 0, 0));
+	m_lbWaiting = CCLabelBMFont::create("Waiting...", "Mia_64.fnt");
+	m_lbWaiting->setColor(ccc3(0, 0, 0));
 	//m_waiting->setScale(0.6f);
-	m_waiting->setAlignment(kCCTextAlignmentCenter); //cocos2d::CCTextAlignment::
-	m_waiting->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2));
-	this->addChild(m_waiting);
+	m_lbWaiting->setAlignment(kCCTextAlignmentCenter); //cocos2d::CCTextAlignment::
+	m_lbWaiting->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2));
+	this->addChild(m_lbWaiting);
 	
 
 
 	//pre process ////////////////////////////////////////////////////
 
-	CCLOG("Call getLeaderboard");
+	if (m_isLoggedIn == false)
+	{
+		//CCLOG("Call getLeaderboard");
 
-	CCString* url = ParseClient::sharedParseClient()->getUrl("getLeaderboard");
+		CCString* url = ParseClient::sharedParseClient()->getUrl("getLeaderboard");
 
-	CCHttpRequest* request = new CCHttpRequest();
-	request->setHeaders(ParseClient::sharedParseClient()->m_header);
-	request->setUrl(url->getCString());
-	request->setRequestType(CCHttpRequest::kHttpPost);
-	request->setResponseCallback(this, httpresponse_selector(ScoreScene::onGetLeaderboardCompleted));
-	request->setTag("getLeaderboard");
-	CCString* json = CCString::createWithFormat("{}");
-	request->setRequestData(json->getCString(), strlen(json->getCString()));
-	CCHttpClient::getInstance()->send(request);
-	request->release();
+		CCHttpRequest* request = new CCHttpRequest();
+		request->setHeaders(ParseClient::sharedParseClient()->m_header);
+		request->setUrl(url->getCString());
+		request->setRequestType(CCHttpRequest::kHttpPost);
+		request->setResponseCallback(this, httpresponse_selector(ScoreScene::onGetLeaderboardCompleted));
+		request->setTag("getLeaderboard");
+		CCString* json = CCString::createWithFormat("{}");
+		request->setRequestData(json->getCString(), strlen(json->getCString()));
+		CCHttpClient::getInstance()->send(request);
+		request->release();
+	}
 
 	//pre process
 
@@ -197,26 +200,26 @@ void ScoreScene::onGetLeaderboardCompleted(cocos2d::extension::CCHttpClient *sen
 	}
 
 	//Show info
-	CCLOG("-----------------BEGIN-------------------");
-	CCLOG("Request: [%s] completed", response->getHttpRequest()->getTag());
-	CCLOG("Status: [%i]", response->getResponseCode());
+	//CCLOG("-----------------BEGIN-------------------");
+	//CCLOG("Request: [%s] completed", response->getHttpRequest()->getTag());
+	//CCLOG("Status: [%i]", response->getResponseCode());
 
 	if (!response->isSucceed())
 	{
-		CCLOG("Request Failed: Error buffer: %s", response->getErrorBuffer());
+		//CCLOG("Request Failed: Error buffer: %s", response->getErrorBuffer());
 	}
 	else
 	{
 		std::vector<char> *buffer = response->getResponseData();
 		std::string str(buffer->begin(), buffer->end());
-		CCLOG("Content: %s", str.c_str());
+		//CCLOG("Content: %s", str.c_str());
 		processData(str);
-		m_waiting->setVisible(false);
+		m_lbWaiting->setVisible(false);
 		m_tableView->setTouchEnabled(true);
 	}
 
 	
-	CCLOG("-----------------END-------------------");
+	//CCLOG("-----------------END-------------------");
 }
 
 void ScoreScene::processData( std::string str )
@@ -232,21 +235,22 @@ void ScoreScene::processData( std::string str )
 
 	if(!root)
 	{
-		CCLOG("Error: on line %d: %s", error.line, error.text);
+		//CCLOG("Error: on line %d: %s", error.line, error.text);
 	}
 	else
 	{
 		results = json_object_get(root, "result");
 		if(!json_is_array(results))
 		{
-			CCLOG("Error: Result is not a array");
+			//CCLOG("Error: Result is not a array");
 		}
 		else
 		{
 			//add you at first
 
-			m_arrName->addObject(CCString::create(DataManager::sharedDataManager()->GetUsername()));
+			m_arrName->addObject(CCString::create(DataManager::sharedDataManager()->GetName()));
 			m_arrScore->addObject(CCString::createWithFormat("%d", DataManager::sharedDataManager()->GetHighScore()));
+
 			int sizearr = (int)json_array_size(results);
 			m_listSize = sizearr + 1;
 
@@ -258,15 +262,15 @@ void ScoreScene::processData( std::string str )
 				name = json_object_get(user, "name");
 				score = json_object_get(user, "score");
 
-				m_arrName->addObject(CCString::create(json_string_value(username)));
+				m_arrName->addObject(CCString::create(json_string_value(name)));
 				m_arrScore->addObject(CCString::createWithFormat("%d", (int)json_integer_value(score)));
 
-				CCLOG("%s: %d", json_string_value(name), (int)json_integer_value(score));
+				//CCLOG("%s: %d", json_string_value(name), (int)json_integer_value(score));
 			}
 		}
 	}
 
-	m_isLoader = true;
+	m_isLoaded = true;
 	m_tableView->reloadData();
 }
 
@@ -277,7 +281,7 @@ void ScoreScene::keyBackClicked()
 
 void ScoreScene::uploadFacebookId( std::string fbID )
 {
-	CCLOG("Call upload facebook id");
+	//CCLOG("Call upload facebook id");
 
 	std::string username = DataManager::sharedDataManager()->GetUsername();
 
@@ -291,7 +295,7 @@ void ScoreScene::uploadFacebookId( std::string fbID )
 	request->setTag("setFacebookID");
 	CCString* json = CCString::createWithFormat("{\"username\":\"%s\",\"fbID\":\"%s\"}", username.c_str(), fbID.c_str());
 	
-	CCLOG("Upload Facebook ID: %s", json->getCString());
+	//CCLOG("Upload Facebook ID: %s", json->getCString());
 
 	request->setRequestData(json->getCString(), strlen(json->getCString()));
 	CCHttpClient::getInstance()->send(request);
@@ -306,26 +310,26 @@ void ScoreScene::onUploadFacebookIdCompleted( cocos2d::extension::CCHttpClient *
 	}
 
 	//Show info
-	CCLOG("-----------------BEGIN-------------------");
-	CCLOG("Request: [%s] completed", response->getHttpRequest()->getTag());
-	CCLOG("Status: [%i]", response->getResponseCode());
+	//CCLOG("-----------------BEGIN-------------------");
+	//CCLOG("Request: [%s] completed", response->getHttpRequest()->getTag());
+	//CCLOG("Status: [%i]", response->getResponseCode());
 
 	if (!response->isSucceed())
 	{
-		CCLOG("Request Failed: Error buffer: %s", response->getErrorBuffer());
+		//CCLOG("Request Failed: Error buffer: %s", response->getErrorBuffer());
 	}
 	else
 	{
 		std::vector<char> *buffer = response->getResponseData();
 		std::string str(buffer->begin(), buffer->end());
-		CCLOG("Content: %s", str.c_str());
+		//CCLOG("Content: %s", str.c_str());
 	}
-	CCLOG("-----------------END-------------------");
+	//CCLOG("-----------------END-------------------");
 }
 
 void ScoreScene::uploadName( std::string name )
 {
-	CCLOG("Call upload name");
+	//CCLOG("Call upload name");
 
 	std::string username = DataManager::sharedDataManager()->GetUsername();
 
@@ -339,7 +343,7 @@ void ScoreScene::uploadName( std::string name )
 	request->setTag("setName");
 	CCString* json = CCString::createWithFormat("{\"username\":\"%s\",\"name\":\"%s\"}", username.c_str(), name.c_str());
 
-	CCLOG("Upload Name: %s", json->getCString());
+	//CCLOG("Upload Name: %s", json->getCString());
 
 	request->setRequestData(json->getCString(), strlen(json->getCString()));
 	CCHttpClient::getInstance()->send(request);
@@ -354,21 +358,21 @@ void ScoreScene::onUploadNameCompleted( cocos2d::extension::CCHttpClient *sender
 	}
 
 	//Show info
-	CCLOG("-----------------BEGIN-------------------");
-	CCLOG("Request: [%s] completed", response->getHttpRequest()->getTag());
-	CCLOG("Status: [%i]", response->getResponseCode());
+	//CCLOG("-----------------BEGIN-------------------");
+	//CCLOG("Request: [%s] completed", response->getHttpRequest()->getTag());
+	//CCLOG("Status: [%i]", response->getResponseCode());
 
 	if (!response->isSucceed())
 	{
-		CCLOG("Request Failed: Error buffer: %s", response->getErrorBuffer());
+		//CCLOG("Request Failed: Error buffer: %s", response->getErrorBuffer());
 	}
 	else
 	{
 		std::vector<char> *buffer = response->getResponseData();
 		std::string str(buffer->begin(), buffer->end());
-		CCLOG("Content: %s", str.c_str());
+		//CCLOG("Content: %s", str.c_str());
 	}
-	CCLOG("-----------------END-------------------");
+	//CCLOG("-----------------END-------------------");
 }
 
 
@@ -376,7 +380,7 @@ void ScoreScene::onUploadNameCompleted( cocos2d::extension::CCHttpClient *sender
 
 void ScoreScene::tableCellTouched(CCTableView* table, CCTableViewCell* cell)
 {
-	CCLOG("cell touched at index: %i", cell->getIdx());
+	//CCLOG("cell touched at index: %i", cell->getIdx());
 }
 
 CCSize ScoreScene::tableCellSizeForIndex(CCTableView *table, unsigned int idx)
@@ -395,7 +399,7 @@ CCTableViewCell* ScoreScene::tableCellAtIndex(CCTableView *table, unsigned int i
 	CCString *score;
 	CCString *name;
 
-	if (m_isLoader == false)
+	if (m_isLoaded == false)
 	{
 		score = CCString::create("0");
 		name = CCString::create("Name");
@@ -425,9 +429,11 @@ CCTableViewCell* ScoreScene::tableCellAtIndex(CCTableView *table, unsigned int i
 		lbOrder->setTag(100);
 		cell->addChild(lbOrder);
 
-		CCLabelBMFont *lbName = CCLabelBMFont::create(name->getCString(), "Mia_64.fnt");
+		CCLabelTTF *lbName = CCLabelTTF::create(name->getCString(), "Marker Felt.ttf", 64);
+		lbName->setFontFillColor(ccc3(0,0,0));
 		lbName->setScale(0.6f);
-		lbName->setAlignment(kCCTextAlignmentRight); //cocos2d::CCTextAlignment::
+		lbName->setHorizontalAlignment(kCCTextAlignmentRight);
+		//lbName->setAlignment(kCCTextAlignmentRight); //cocos2d::CCTextAlignment::
 		lbName->setPosition(ccp(m_sprCell->getContentSize().width, m_sprCell->getContentSize().height/2));
 		lbName->setAnchorPoint(ccp(1.0f, 0.5f));
 		lbName->setTag(101);
@@ -451,7 +457,7 @@ CCTableViewCell* ScoreScene::tableCellAtIndex(CCTableView *table, unsigned int i
 		}
 		lbOrder->setPosition(ccp(20, m_sprCell->getContentSize().height/2));
 
-		CCLabelBMFont *lbName = (CCLabelBMFont*)cell->getChildByTag(101);
+		CCLabelTTF *lbName = (CCLabelTTF*)cell->getChildByTag(101);
 		lbName->setString(name->getCString());
 		lbName->setPosition(ccp(m_sprCell->getContentSize().width, m_sprCell->getContentSize().height/2));
 
@@ -476,16 +482,16 @@ unsigned int ScoreScene::numberOfCellsInTableView(CCTableView *table)
 
 void ScoreScene::fbCallback( CCObject* pSender )
 {
-	CCLOG("Call to Log In/Out facebook");
+	//CCLOG("Call to Log In/Out facebook");
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	if (EziSocialObject::sharedObject()->isFacebookSessionActive()) //logged in
 	{
-		CCLOG("Log Out");
+		//CCLOG("Log Out");
 		EziSocialObject::sharedObject()->perfromLogoutFromFacebook();
 	}
 	else
 	{
-		CCLOG("Log In");
+		//CCLOG("Log In");
 		bool needPublicPermission = false;
 		EziSocialObject::sharedObject()->performLoginUsingFacebook(needPublicPermission); // Pass true if you need publish permission also
 	}
@@ -499,43 +505,44 @@ void ScoreScene::fbSessionCallback(int responseCode, const char *responseMessage
 	switch (responseCode)
 	{
 	case EziSocialWrapperNS::RESPONSE_CODE::ERROR_INTERNET_NOT_AVAILABLE:
-		CCLOG("ERROR_INTERNET_NOT_AVAILABLE");
+		//CCLOG("ERROR_INTERNET_NOT_AVAILABLE");
 		break;
 	case EziSocialWrapperNS::RESPONSE_CODE::ERROR_READ_PERMISSION_ERROR:
-		CCLOG("ERROR_READ_PERMISSION_ERROR");
+		//CCLOG("ERROR_READ_PERMISSION_ERROR");
 		break;
 	case EziSocialWrapperNS::RESPONSE_CODE::ERROR_PUBLISH_PERMISSION_ERROR:
-		CCLOG("ERROR_PUBLISH_PERMISSION_ERROR");
+		//CCLOG("ERROR_PUBLISH_PERMISSION_ERROR");
 		break;
 	case EziSocialWrapperNS::RESPONSE_CODE::FB_LOGIN_USER_PERMISSION_REVOKED:
-		CCLOG("FB_LOGIN_USER_PERMISSION_REVOKED");
+		//CCLOG("FB_LOGIN_USER_PERMISSION_REVOKED");
 		break;
 	case EziSocialWrapperNS::RESPONSE_CODE::FB_LOGIN_APP_NOT_ALLOWERD_TO_USE_FB:
-		CCLOG("FB_LOGIN_APP_NOT_ALLOWERD_TO_USE_FB");
+		//CCLOG("FB_LOGIN_APP_NOT_ALLOWERD_TO_USE_FB");
 		break;
 	case EziSocialWrapperNS::RESPONSE_CODE::FB_LOGIN_PERMISSION_DENIED:
-		CCLOG("FB_LOGIN_PERMISSION_DENIED");
+		//CCLOG("FB_LOGIN_PERMISSION_DENIED");
 		break;
 	case EziSocialWrapperNS::RESPONSE_CODE::FB_LOGIN_SUCCESSFUL: /////////////////// logged in state
 		{
 			//CCMessageBox("Log in success!", "Info");
-			CCLOG("FB_LOGIN_SUCCESSFUL");
+			//CCLOG("FB_LOGIN_SUCCESSFUL");
 
 			m_isLoggedIn = true;
 			m_fbItem->setSelectedIndex(1); //log out button
 
 			//get profile information
 			//bool needsEmail = true;
+//debug
 			EziSocialObject::sharedObject()->fetchFBUserDetails(true); //need email = true
 
 			break;
 		}
 	case EziSocialWrapperNS::RESPONSE_CODE::FB_LOGIN_FAILED:
-		CCLOG("FB_LOGIN_FAILED");
+		//CCLOG("FB_LOGIN_FAILED");
 		break;
 	case EziSocialWrapperNS::RESPONSE_CODE::FB_LOGOUT_SUCCESSFUL:  /////////////////// logged out state
 		{
-			CCLOG("FB_LOGOUT_SUCCESSFUL");
+			//CCLOG("FB_LOGOUT_SUCCESSFUL");
 			//CCMessageBox("Log out success!", "Info");
 
 			m_isLoggedIn = false;
@@ -557,9 +564,9 @@ void ScoreScene::fbUserPhotoCallback(const char *userPhotoPath, const char* fbID
 {
 	//const char* currentUserId = EziSocialObject::sharedObject()->getCurrentFacebookUser()->getProfileID();
 
-	//CCLOG("fbID = %s", fbID);
-	//CCLOG("userPhotoPath = %s", userPhotoPath);
-	//CCLOG("currentUserId = %s", currentUserId);
+	////CCLOG("fbID = %s", fbID);
+	////CCLOG("userPhotoPath = %s", userPhotoPath);
+	////CCLOG("currentUserId = %s", currentUserId);
 
 	if ((strcmp(userPhotoPath, "") != 0)) // && (strcmp(currentUserId, fbID) == 0)
 	{
@@ -581,11 +588,11 @@ void ScoreScene::fbUserDetailCallback( int responseCode, const char* responseMes
 		// You can call method associated with EziFacebookUser and use the user details. For example:-
 		EziFacebookUser* currentUser = EziSocialObject::sharedObject()->getCurrentFacebookUser();
 		std::string fullname = currentUser->getFullName();
-		std::string emailID = currentUser->getEmailID();
-		std::string gender = currentUser->getGender();
+		//std::string emailID = currentUser->getEmailID();
+		//std::string gender = currentUser->getGender();
 		std::string userName = currentUser->getUserName();
 		std::string profileID = currentUser->getProfileID();
-		std::string accessToken = currentUser->getAccessToken();
+		//std::string accessToken = currentUser->getAccessToken();
 
 		DataManager::sharedDataManager()->SetName(fullname.c_str());
 		DataManager::sharedDataManager()->SetProfileID(profileID.c_str());
@@ -593,36 +600,38 @@ void ScoreScene::fbUserDetailCallback( int responseCode, const char* responseMes
 
 		m_lbName->setString(fullname.c_str());
 
-		CCLOG("FullName: %s", fullname.c_str());
-		CCLOG("EmailID: %s", emailID.c_str());
-		CCLOG("Gender: %s", gender.c_str());
-		CCLOG("UserName: %s", userName.c_str());
-		CCLOG("ProfileID: %s", profileID.c_str());
-		CCLOG("AccessToken: %s", accessToken.c_str());
+		//CCLOG("FullName: %s", fullname.c_str());
+		//CCLOG("EmailID: %s", emailID.c_str());
+		//CCLOG("Gender: %s", gender.c_str());
+		//CCLOG("UserName: %s", userName.c_str());
+		//CCLOG("ProfileID: %s", profileID.c_str());
+		//CCLOG("AccessToken: %s", accessToken.c_str());
 
 		//avartar
+//debug
 		EziSocialObject::sharedObject()->getProfilePicForID(this, currentUser->getProfileID(), // Profile ID of current user
 			128.0f, 128.0f, // Size of the image
 			false // force download it from server
 		);
 
+		//facebook id to parse
+//debug
+		uploadFacebookId(profileID);
+		uploadName(fullname);
+
 		//friends
 		//get friends: ALL_FRIENDS, ONLY_INSTALLED, ONLY_NOT_INSTALLED, ONLY_MY_DEVICES
 		//from 0 to NUM_REQUEST_FRIENDS
+//debug 
 		EziSocialObject::sharedObject()->getFriends(EziSocialWrapperNS::FB_FRIEND_SEARCH::ONLY_INSTALLED, 0, NUM_REQUEST_FRIENDS);
 
-		//facebook id to parse
-		uploadFacebookId(profileID);
-		uploadName(fullname);
 	}
-
-	
 }
 
 void ScoreScene::fbFriendsCallback(int responseCode, const char *responseMessage, cocos2d::CCArray *friends)
 {
 	//CCMessageBox(responseMessage, "Friends Callback");
-	CCLOG("Friends callback >>>>>>>>>>>>>>>>>>>>> Friends callback");
+	//CCLOG("Friends callback >>>>>>>>>>>>>>>>>>>>> Friends callback");
 
 	if (m_friendList != NULL)
 	{
@@ -639,6 +648,9 @@ void ScoreScene::fbFriendsCallback(int responseCode, const char *responseMessage
 
 void ScoreScene::getFbFriendsScore()
 {
+	m_isLoaded = false;
+	m_lbWaiting->setVisible(true);
+
 	std::string textToDisplay = "{\"ids\":[";
 	CCObject* it;
 	CCARRAY_FOREACH(m_friendList, it)
@@ -653,11 +665,11 @@ void ScoreScene::getFbFriendsScore()
 
 
 	textToDisplay.append("\"NULL\"]}");
-	CCLOG("JSON: %s", textToDisplay.c_str());
+	//CCLOG("JSON: %s", textToDisplay.c_str());
 
 	//////////////////////////////////////////////////////////////////////////
 	
-	CCLOG("Call get facebook friends score");
+	//CCLOG("Call get facebook friends score");
 
 	CCString* url = ParseClient::sharedParseClient()->getUrl("getFbFriendsScore");
 
