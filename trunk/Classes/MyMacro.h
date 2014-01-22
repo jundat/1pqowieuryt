@@ -9,7 +9,7 @@
 }
 
 
-#define RELEASE(pObj) \
+#define MY_RELEASE(pObj) \
 do\
 {\
 	if((pObj) != NULL) {\

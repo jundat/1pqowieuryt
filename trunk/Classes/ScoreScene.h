@@ -6,10 +6,19 @@
 #include "HttpClient.h"
 #include "jansson/jansson.h"
 
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#include "EziSocialObject.h"
+#include "EziSocialDelegate.h"
+#include "EziFacebookFriend.h"
+#endif
+
 USING_NS_CC;
 USING_NS_CC_EXT;
 
 class ScoreScene : public cocos2d::CCLayer, 
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	public EziFacebookDelegate,
+#endif
 	public cocos2d::extension::CCTableViewDataSource, 
 	public cocos2d::extension::CCTableViewDelegate
 {
@@ -26,13 +35,17 @@ public:
 	}
 
 
+	void fbCallback(CCObject* pSender);
 	virtual void keyBackClicked();
 	void menuCallback(CCObject* pSender);
 	void onGetLeaderboardCompleted(cocos2d::extension::CCHttpClient *sender, cocos2d::extension::CCHttpResponse *response);
 	void processData(std::string str);
 
-
-
+	void uploadFacebookId(std::string fbID);
+	void onUploadFacebookIdCompleted(cocos2d::extension::CCHttpClient *sender, cocos2d::extension::CCHttpResponse *response);
+	
+	void uploadName(std::string name);
+	void onUploadNameCompleted(cocos2d::extension::CCHttpClient *sender, cocos2d::extension::CCHttpResponse *response);
 
 	//new delegate
 
@@ -48,14 +61,41 @@ public:
 private:
 	int m_listSize;
 	CCLabelBMFont* m_waiting;
+	CCLabelTTF* m_lbName;
 
 	CCArray* m_arrName;
 	CCArray* m_arrScore;
+
+	//CCDictionary* m_dictFriends;
 
 	CCSprite* m_sprCell;
 	CCTableView* m_tableView;
 
 	bool m_isLoader;
+
+	//////////////////////////////////////////////////////////////////////////
+	
+	
+
+public:
+
+	// Facebook //=========================================
+	CCSprite* m_userSprite;
+	CCMenuItemToggle* m_fbItem;
+	bool m_isLoggedIn;
+	CCArray* m_friendList;
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	void getFbFriendsScore();
+
+	virtual void fbSessionCallback(int responseCode, const char* responseMessage);
+	virtual void fbUserPhotoCallback(const char *userPhotoPath, const char* fbID);
+	virtual void fbUserDetailCallback(int responseCode, const char* responseMessage, EziFacebookUser* fbUser);
+	virtual void fbFriendsCallback(int responseCode, const char* responseMessage, cocos2d::CCArray* friends);
+
+#endif
+
+	// Facebook //=========================================
 };
 
 #endif // __SCORE_SCENE_H__

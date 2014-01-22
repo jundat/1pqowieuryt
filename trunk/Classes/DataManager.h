@@ -16,6 +16,16 @@ private:
 public:
 	static DataManager* sharedDataManager();
 
+	//facebook
+
+	std::string GetProfileID();
+	void SetProfileID(const char* profileID);
+
+	std::string GetFbUserName();
+	void SetFbUserName(const char* fbusernam);
+
+	//facebook
+
 	std::string	GetName();
 	void	SetName(const char* name);
 	std::string	GetUsername();

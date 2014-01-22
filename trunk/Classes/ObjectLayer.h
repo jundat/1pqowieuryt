@@ -18,9 +18,9 @@ class ObjectLayer : public cocos2d::CCLayer
 public:
 	ObjectLayer(){}
 	~ObjectLayer(){
-		RELEASE(m_arrEnemies);
-		RELEASE(m_arrPlayerBullets);
-		RELEASE(m_arrItems);
+		MY_RELEASE(m_arrEnemies);
+		MY_RELEASE(m_arrPlayerBullets);
+		MY_RELEASE(m_arrItems);
 	};
 
     virtual bool init();

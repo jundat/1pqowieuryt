@@ -120,7 +120,7 @@ void DataManager::SetIsJustRevived(bool isJustRevived)
 
 std::string DataManager::GetName()
 {
-	return CCUserDefault::sharedUserDefault()->getStringForKey("G_NAME", "PhiCong");
+	return CCUserDefault::sharedUserDefault()->getStringForKey("G_NAME", G_DEFAULT_NAME);
 }
 
 void DataManager::SetName( const char* name )
@@ -172,4 +172,26 @@ void DataManager::RefreshPlayerLife()
 			DataManager::sharedDataManager()->SetLastPlayerLife(lastLife);
 		}
 	}
+}
+
+std::string DataManager::GetProfileID()
+{
+	return CCUserDefault::sharedUserDefault()->getStringForKey("G_PROFILE_ID", "NULL");
+}
+
+void DataManager::SetProfileID( const char* profileID )
+{
+	CCUserDefault::sharedUserDefault()->setStringForKey("G_PROFILE_ID", std::string(profileID));
+	CCUserDefault::sharedUserDefault()->flush();
+}
+
+std::string DataManager::GetFbUserName()
+{
+	return CCUserDefault::sharedUserDefault()->getStringForKey("G_FB_USER_NAME", "NULL");
+}
+
+void DataManager::SetFbUserName( const char* fbusernam )
+{
+	CCUserDefault::sharedUserDefault()->setStringForKey("G_FB_USER_NAME", std::string(fbusernam));
+	CCUserDefault::sharedUserDefault()->flush();
 }

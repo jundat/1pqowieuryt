@@ -88,7 +88,7 @@ class LevelLoader
 public:
 	LevelLoader(void);
 	~LevelLoader(void){
-		RELEASE(m_dict);
+		MY_RELEASE(m_dict);
 	}
 
 	static CCString* s_levelFile;

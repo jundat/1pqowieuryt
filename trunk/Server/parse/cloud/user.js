@@ -21,6 +21,7 @@ Parse.Cloud.define("signIn",
                 newUser.set("username", username);
                 newUser.set("password", password);
                 newUser.set("name", name);
+                newUser.set("fbID", ""); //NULL facebook Id
                 newUser.set("score", 0);
                  
                 //Sing up
@@ -59,6 +60,56 @@ Parse.Cloud.define("logIn",
         });
     }
 ); //end Log in
+
+
+//Set fbID
+Parse.Cloud.define("setFacebookID",
+    function(req, res) {
+        Parse.Cloud.useMasterKey('VUwBOXV3DCmZZaS28M1GYgZopdHvwepjPPU3JV6D');
+        var username = req.params.username;
+        var fbID = req.params.fbID;
+         
+        var query = new Parse.Query(Parse.User);
+        query.equalTo('username', username);
+        query.first(
+        {
+            success: function(user) {
+                user.set('fbID', fbID);
+                user.save();
+                res.success('|' + fbID + '|');
+            },
+            error: function(error) {
+                res.error(error);
+            }
+        });
+    }
+); //end set facebook id
+
+
+
+//Set name
+Parse.Cloud.define('setName',
+    function(req, res) {
+        Parse.Cloud.useMasterKey('VUwBOXV3DCmZZaS28M1GYgZopdHvwepjPPU3JV6D');
+        var username = req.params.username;
+        var name = req.params.name;
+        
+        var query = new Parse.Query(Parse.User);
+        query.equalTo('username', username);
+        query.first(
+        {
+            success: function(user) {
+                user.set('name', name);
+                user.save();
+                res.success('|' + name + '|');
+            },
+            error: function(error) {
+                res.error(error);
+            }
+        });
+    }
+); //end set name
+
 
 
 //Submit
@@ -117,4 +168,42 @@ Parse.Cloud.define("getLeaderboard",
 			}
 		});
 	}
+); //end Get Leaderboard
+
+
+//Get Facebook Friends Score
+Parse.Cloud.define("getFbFriendsScore",
+    function(req, res) {
+        var friendids = req.params.ids;
+
+        var query = new Parse.Query(Parse.User);
+        query.containedIn("fbID", friendids);
+        query.select('username');
+        query.select('name');
+        query.select('score');
+        query.descending('score');
+        //query.limit(NUMBER_TOP); //TOP 10
+        query.find(
+        {
+            success: function(results) {
+                var list = [];
+                var LEN = results.length;
+
+                for (var i = 0; i < LEN; i++) {
+                    var user = {
+                        username: results[i].get('username'),
+                        name: results[i].get('name'),
+                        score: results[i].get('score')
+                    };
+
+                    list.push(user);
+                };
+
+                res.success(list);
+            },
+            error: function(error) {
+                res.error(error);
+            }
+        });
+    }
 ); //end Get Leaderboard
