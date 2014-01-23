@@ -36,6 +36,8 @@ bool MenuScene::init()
         return false;
     }
 
+	m_friendList = NULL;
+
 	m_isShowDialog = false;
 	this->setKeypadEnabled(true);
 
@@ -46,20 +48,20 @@ bool MenuScene::init()
 	this->addChild(bg, 0);
 	
 	CCSprite* menuTop = CCSprite::create("menu_top.png");
-	menuTop->setPosition(ccp(G_DESIGN_WIDTH/2, -50 - menuTop->getContentSize().height/2 + G_DESIGN_HEIGHT));
+	menuTop->setPosition(ccp(436, 1280-210));
 	this->addChild(menuTop, 0);
 
 	//
 	CCString* s = CCString::createWithFormat("%d", DataManager::sharedDataManager()->GetLastPlayerLife());
 	m_labelLife = CCLabelBMFont::create(s->getCString(), "Mia_64.fnt");
 	m_labelLife->setColor(ccc3(56, 56, 56));
-	m_labelLife->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2 + 100));
+	m_labelLife->setPosition(ccp(400, 1280-508));
 	this->addChild(m_labelLife);
 
 	//
 
 	//
-	s = CCString::createWithFormat("v%d", 21);
+	s = CCString::createWithFormat("v%d", 22);
 	CCLabelBMFont* labelVersion = CCLabelBMFont::create(s->getCString(), "Mia_64.fnt");
 	labelVersion->setColor(ccc3(56, 56, 56));
 	labelVersion->setScale(0.5f);
@@ -74,7 +76,7 @@ bool MenuScene::init()
                                         this,
                                         menu_selector(MenuScene::playCallback));
     
-	playItem->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2 - 30));
+	playItem->setPosition(ccp(400, 1280-653));
 
 
 	CCMenuItemImage *scoreItem = CCMenuItemImage::create(
@@ -83,8 +85,7 @@ bool MenuScene::init()
 		this,
 		menu_selector(MenuScene::scoreCallback));
 
-	scoreItem->setPosition(ccp(G_DESIGN_WIDTH/2,
-		playItem->getPositionY() - playItem->getContentSize().height/2 - scoreItem->getContentSize().height/2 - 10));
+	scoreItem->setPosition(ccp(400, 1280-813));
 
 	//
 
@@ -94,8 +95,7 @@ bool MenuScene::init()
 		this,
 		menu_selector(MenuScene::settingCallback));
 
-	settingItem->setPosition(ccp(G_DESIGN_WIDTH/2,
-		scoreItem->getPositionY() - scoreItem->getContentSize().height/2 - settingItem->getContentSize().height/2 - 10));
+	settingItem->setPosition(ccp(400, 1280-973));
 
 	//
 
@@ -107,10 +107,28 @@ bool MenuScene::init()
 
 	exitItem->setPosition(ccp(G_DESIGN_WIDTH/2,
 		settingItem->getPositionY() - settingItem->getContentSize().height/2 - exitItem->getContentSize().height/2 - 10));
+	exitItem->setVisible(false);
+	exitItem->setEnabled(false);
 
+	//facebook /////////////////////////////////////
+
+	m_fbItem = CCMenuItemImage::create("connect_facebook.png", "connect_facebook.png", this, menu_selector(MenuScene::fbCallback));
+	m_fbItem->setPosition(ccp(400, 1280-1220));
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	EziSocialObject::sharedObject()->setFacebookDelegate(this);
+
+	if(EziSocialObject::sharedObject()->isFacebookSessionActive()) //logged in state
+	{
+		//login button
+		m_fbItem->setVisible(false);
+	}
+#endif
+
+	//end facebook
 	
 
-    m_menu = CCMenu::create(playItem, scoreItem, settingItem, exitItem, NULL);
+    m_menu = CCMenu::create(playItem, scoreItem, settingItem, exitItem, m_fbItem, NULL);
     m_menu->setPosition(CCPointZero);
     this->addChild(m_menu, 1);
 
@@ -235,3 +253,77 @@ void MenuScene::onCompletedWaiting()
 		CCMessageBox("Your code is failed!", "F**k the coder!");
 	}
 }
+
+//facebook ///////////////////////////////
+
+void MenuScene::fbCallback( CCObject* pSender )
+{
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	bool needPublicPermission = false;
+	EziSocialObject::sharedObject()->performLoginUsingFacebook(needPublicPermission); // Pass true if you need publish permission also
+#endif
+}
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+
+void MenuScene::fbSessionCallback(int responseCode, const char *responseMessage)
+{
+	if (responseCode == EziSocialWrapperNS::RESPONSE_CODE::FB_LOGIN_SUCCESSFUL) /////////////////// logged in state
+	{
+		m_fbItem->setVisible(false); //log out button
+		EziSocialObject::sharedObject()->fetchFBUserDetails(true); //need email = true
+		//EziSocialObject::sharedObject()->getFriends(EziSocialWrapperNS::FB_FRIEND_SEARCH::ONLY_INSTALLED, 0, NUM_REQUEST_FRIENDS);
+	}
+	else
+	{
+		m_fbItem->setVisible(true); //log out button
+	}
+}
+
+void MenuScene::fbUserDetailCallback( int responseCode, const char* responseMessage, EziFacebookUser* fbUser )
+{
+	if (fbUser != NULL)
+	{
+		// Set the current user in EziSocialObject to use it in future. EziSocialObject is immune to CCScene lifecycle. It is singleton class and will live forever.
+		EziSocialObject::sharedObject()->setCurrentFacebookUser(fbUser);
+
+		//save data
+		std::string fullname = fbUser->getFullName();
+		std::string userName = fbUser->getUserName();
+		std::string profileID = fbUser->getProfileID();
+
+		DataManager::sharedDataManager()->SetName(fullname.c_str());
+		DataManager::sharedDataManager()->SetProfileID(profileID.c_str());
+		DataManager::sharedDataManager()->SetFbUserName(userName.c_str());
+		
+		//CCLOG("FullName: %s", fullname.c_str());
+		//CCLOG("EmailID: %s", emailID.c_str());
+		//CCLOG("Gender: %s", gender.c_str());
+		//CCLOG("UserName: %s", userName.c_str());
+		//CCLOG("ProfileID: %s", profileID.c_str());
+		//CCLOG("AccessToken: %s", accessToken.c_str());
+		
+		scoreCallback(NULL);
+	}
+}
+
+void MenuScene::fbFriendsCallback( int responseCode, const char* responseMessage, cocos2d::CCArray* friends )
+{
+	if (responseCode == EziSocialWrapperNS::RESPONSE_CODE::FB_FRIEND_GET_SUCCESS)
+	{
+		if (m_friendList != NULL)
+		{
+			m_friendList->release();
+			m_friendList = NULL;
+		}
+
+		m_friendList = CCArray::createWithArray(friends);
+		m_friendList->retain();
+	}
+}
+
+
+
+#endif
+
+//end facebook ///////////////////////////////

@@ -1,6 +1,13 @@
 #include "DataManager.h"
 #include "Global.h"
 
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#include "EziSocialObject.h"
+#include "EziSocialDelegate.h"
+#include "EziFacebookFriend.h"
+#endif
+
+
 DataManager* DataManager::_instance = 0;
 
 
@@ -32,6 +39,13 @@ void DataManager::SetCurrentHighScore(int score)
 	if(score > this->GetHighScore() ) {
 		CCUserDefault::sharedUserDefault()->setIntegerForKey("CURRENT_HIGHSCORE", score);
 		CCUserDefault::sharedUserDefault()->flush();
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+		if(EziSocialObject::sharedObject()->isFacebookSessionActive()) //logged in state
+		{
+			EziSocialObject::sharedObject()->postScore(score);
+		}
+#endif
 	}
 }
 

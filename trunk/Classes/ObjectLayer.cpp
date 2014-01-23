@@ -373,7 +373,6 @@ void ObjectLayer::update( float delta )
 				CCString* sscore = CCString::createWithFormat("%d", m_score);
 				m_labelScore->setString(sscore->getCString());
 				m_labelScore->setAlignment(kCCTextAlignmentLeft);
-				DataManager::sharedDataManager()->SetCurrentHighScore(m_score);
 			}
 
 			//out of screen
@@ -475,6 +474,9 @@ void ObjectLayer::AfterDeadEffectCallback()
 
 	MainGameScene* parent = (MainGameScene*) this->getParent();
 	parent->showEndGame(m_score, m_killedEnemies);
+	DataManager::sharedDataManager()->SetCurrentHighScore(m_score);
+
+
 
 	CCDirector::sharedDirector()->getTouchDispatcher()->removeDelegate(this);
 	this->setTouchEnabled(false);

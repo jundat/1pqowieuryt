@@ -38,19 +38,13 @@ public:
 	void fbCallback(CCObject* pSender);
 	virtual void keyBackClicked();
 	void menuCallback(CCObject* pSender);
-	void onGetLeaderboardCompleted(cocos2d::extension::CCHttpClient *sender, cocos2d::extension::CCHttpResponse *response);
-	void processData(std::string str);
 
-	void uploadFacebookId(std::string fbID);
-	void onUploadFacebookIdCompleted(cocos2d::extension::CCHttpClient *sender, cocos2d::extension::CCHttpResponse *response);
-	
-	void uploadName(std::string name);
-	void onUploadNameCompleted(cocos2d::extension::CCHttpClient *sender, cocos2d::extension::CCHttpResponse *response);
+	void makeSingleData();
 
 	//new delegate
 
 	virtual void scrollViewDidScroll(cocos2d::extension::CCScrollView* view) {};
-	virtual void scrollViewDidZoom(cocos2d::extension::CCScrollView* view) {}
+	virtual void scrollViewDidZoom(cocos2d::extension::CCScrollView* view) {};
 	virtual void tableCellTouched(cocos2d::extension::CCTableView* table, cocos2d::extension::CCTableViewCell* cell);
 	virtual cocos2d::CCSize tableCellSizeForIndex(cocos2d::extension::CCTableView *table, unsigned int idx);
 	virtual cocos2d::extension::CCTableViewCell* tableCellAtIndex(cocos2d::extension::CCTableView *table, unsigned int idx);
@@ -60,47 +54,31 @@ public:
 
 private:
 	int m_listSize;
+
 	CCLabelBMFont* m_lbWaiting;
 	CCLabelTTF* m_lbName;
+	CCLabelTTF* m_lbScore;
+	CCSprite* m_sprCell;
+	CCTableView* m_tableView;
 
 	CCArray* m_arrName;
 	CCArray* m_arrScore;
 
-	//CCDictionary* m_dictFriends;
-
-	CCSprite* m_sprCell;
-	CCTableView* m_tableView;
-
-	bool m_isLoaded;
-
-	//////////////////////////////////////////////////////////////////////////
-	
-	
-
 public:
-
 	// Facebook //=========================================
 	CCSprite* m_userSprite;
-	CCMenuItemToggle* m_fbItem;
-	bool m_isLoggedIn;
+	CCMenuItem* m_fbItem;
 	CCArray* m_friendList;
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	void getFbFriendsScore();
-
-	//get score call back
 	void callSubmitScore();
 	void callGetHighScores();
 	virtual void fbHighScoresCallback(int responseCode, const char* responseMessage, cocos2d::CCArray* highScores);
 
 	// Facebook Callback methods...
-	//virtual void fbMessageCallback(int responseCode, const char* responseMessage);
-	//virtual void fbAchievementCallback(int responseCode, const char* responseMessage);
-
 	virtual void fbSessionCallback(int responseCode, const char* responseMessage);
 	virtual void fbUserPhotoCallback(const char *userPhotoPath, const char* fbID);
 	virtual void fbUserDetailCallback(int responseCode, const char* responseMessage, EziFacebookUser* fbUser);
-	virtual void fbFriendsCallback(int responseCode, const char* responseMessage, cocos2d::CCArray* friends);
 
 #endif
 
