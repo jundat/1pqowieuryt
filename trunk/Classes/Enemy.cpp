@@ -17,7 +17,7 @@ Enemy::Enemy(int _type, int _smallType, int _hp, float _vy) : GameObject()
 	this->setEnemySmallType(_smallType);
 	this->setHp(_hp);
 	this->setVy(_vy);
-
+	
 	switch(m_type)
 	{
 	case 1:

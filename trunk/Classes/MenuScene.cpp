@@ -115,6 +115,8 @@ bool MenuScene::init()
     this->addChild(m_menu, 1);
 
 	
+	AudioManager::sharedAudioManager()->SetVolumeMusic(0.5f);
+	AudioManager::sharedAudioManager()->SetVolumeFX(0.5f);
 	AudioManager::sharedAudioManager()->PlayBackground("background.ogg");
 
     return true;

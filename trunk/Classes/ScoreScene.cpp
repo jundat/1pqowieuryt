@@ -97,6 +97,7 @@ bool ScoreScene::init()
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 
 	EziSocialObject::sharedObject()->setFacebookDelegate(this);
+	//EziSocialObject::sharedObject()->setAutoCheckIncomingRequestsOnAppLaunch(true);
 
 	if(EziSocialObject::sharedObject()->isFacebookSessionActive()) //logged in state
 	{
@@ -117,6 +118,10 @@ bool ScoreScene::init()
 
 		//get friends
 		EziSocialObject::sharedObject()->getFriends(EziSocialWrapperNS::FB_FRIEND_SEARCH::ALL_FRIENDS, 0, NUM_REQUEST_FRIENDS);
+
+		callSubmitScore();
+		callGetHighScores();
+
 	}
 	else //logged out stated
 	{
@@ -632,17 +637,19 @@ void ScoreScene::fbFriendsCallback(int responseCode, const char *responseMessage
 {
 	//CCMessageBox(responseMessage, "Friends Callback");
 	//CCLOG("Friends callback >>>>>>>>>>>>>>>>>>>>> Friends callback");
-
-	if (m_friendList != NULL)
+	if (responseCode == EziSocialWrapperNS::RESPONSE_CODE::FB_FRIEND_GET_SUCCESS)
 	{
-		m_friendList->release();
-		m_friendList = NULL;
-	}
+		if (m_friendList != NULL)
+		{
+			m_friendList->release();
+			m_friendList = NULL;
+		}
 
-	m_friendList = CCArray::createWithArray(friends);
-	m_friendList->retain();
+		m_friendList = CCArray::createWithArray(friends);
+		m_friendList->retain();
 
-	getFbFriendsScore();
+		getFbFriendsScore();
+	}	
 }
 
 
@@ -683,6 +690,50 @@ void ScoreScene::getFbFriendsScore()
 	CCHttpClient::getInstance()->send(request);
 	request->release();
 }
+
+void ScoreScene::callSubmitScore()
+{
+	CCMessageBox("Call post high score", "Info");
+	EziSocialObject::sharedObject()->postScore(191919);
+}
+
+void ScoreScene::callGetHighScores()
+{
+	CCMessageBox("Call get high score", "Info");
+	EziSocialObject::sharedObject()->getHighScores();
+	//will call back in function: fbHighScoresCallback
+}
+
+void ScoreScene::fbHighScoresCallback( int responseCode, const char* responseMessage, cocos2d::CCArray* highScores )
+{
+	CCMessageBox("HighScore call back", "Info");
+
+	CCObject* it;
+	CCARRAY_FOREACH(highScores, it)
+	{
+		EziFacebookFriend* fbFriend = dynamic_cast<EziFacebookFriend*>(it);
+		if (NULL != fbFriend)
+		{
+			CCLOG("%d => %d", fbFriend->getFBID(), fbFriend->getScore());
+		}
+	}
+}
+
+
+//#pragma mark - Facebook Callback method
+
+// void ScoreScene::fbMessageCallback(int responseCode, const char* responseMessage)
+// {
+// 	CCMessageBox(responseMessage, "Score API Response");
+// }
+// 
+// void ScoreScene::fbAchievementCallback(int responseCode, const char* responseMessage)
+// {
+// 	CCMessageBox(responseMessage, "Achievement Submission Response");
+// }
+
+
+
 
 
 #endif
