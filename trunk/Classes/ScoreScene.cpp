@@ -7,6 +7,7 @@
 #include "DataManager.h"
 #include "CustomTableViewCell.h"
 #include "MyMacro.h"
+#include "AudioManager.h"
 
 
 USING_NS_CC;
@@ -136,11 +137,11 @@ bool ScoreScene::init()
 		m_tableView->reloadData();
 	}
 
-	m_lbWaiting = NULL;
 	m_lbWaiting = CCLabelBMFont::create("...WAITING...", "Mia_64.fnt");
 	m_lbWaiting->setColor(ccc3(0, 0, 0));
 	m_lbWaiting->setAlignment(kCCTextAlignmentCenter);
 	m_lbWaiting->setPosition(ccp(400, 640));
+
 	this->addChild(m_lbWaiting);
 
 	if (_isLoggedIn == false)
@@ -153,6 +154,8 @@ bool ScoreScene::init()
 
 void ScoreScene::menuCallback(CCObject* pSender)
 {
+	PLAY_BUTTON_EFFECT;
+
 	CCScene *pScene = CCTransitionFade::create(0.5, MenuScene::scene());
 	CCDirector::sharedDirector()->replaceScene(pScene);
 }
@@ -223,7 +226,7 @@ CCTableViewCell* ScoreScene::tableCellAtIndex(CCTableView *table, unsigned int i
 		CCLabelBMFont *lbScore = CCLabelBMFont::create(score->getCString(), "Mia_64.fnt");
 		lbScore->setScale(0.6f);
 		lbScore->setAlignment(kCCTextAlignmentCenter); //cocos2d::CCTextAlignment::
-		lbScore->setPosition(ccp(m_sprCell->getContentSize().width/2, m_sprCell->getContentSize().height/2));
+		lbScore->setPosition(ccp(0.25 * m_sprCell->getContentSize().width, m_sprCell->getContentSize().height/2));
 		lbScore->setAnchorPoint(ccp(0.5f, 0.5f));
 		lbScore->setTag(102);
 		cell->addChild(lbScore);
@@ -240,7 +243,7 @@ CCTableViewCell* ScoreScene::tableCellAtIndex(CCTableView *table, unsigned int i
 
 		CCLabelBMFont *lbScore = (CCLabelBMFont*)cell->getChildByTag(102);
 		lbScore->setString(score->getCString());
-		lbScore->setPosition(ccp(m_sprCell->getContentSize().width/2, m_sprCell->getContentSize().height/2));
+		lbScore->setPosition(ccp(0.25 * m_sprCell->getContentSize().width, m_sprCell->getContentSize().height/2));
 	}
 
 
@@ -257,8 +260,11 @@ unsigned int ScoreScene::numberOfCellsInTableView(CCTableView *table)
 
 // Facebook //=========================================
 
+
 void ScoreScene::fbCallback( CCObject* pSender )
 {
+	PLAY_BUTTON_EFFECT;
+
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	m_lbWaiting->setVisible(true);
 	bool needPublicPermission = false;

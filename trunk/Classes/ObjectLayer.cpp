@@ -161,6 +161,8 @@ void ObjectLayer::ScheduleGenerateItem( float dt )
 
 	if (item != NULL)
 	{
+		PLAY_OUT_PORP_EFFECT;
+
 		CCAction* ac = CCJumpTo::create(1.5f, ccp(rdw, -2-item->boundingBox().size.height), 3.0f * G_DESIGN_HEIGHT/4.0f, 1);
 		item->runAction(ac);
 	}
@@ -196,7 +198,21 @@ void ObjectLayer::ScheduleCheckCollision(float dt)
 						m_arrPlayerBullets->removeObject(bullet);
 
 						//sound
-						AudioManager::sharedAudioManager()->PlayEffect("explosion.wav");
+						switch(enemy->getEnemyType())
+						{
+						case 1:
+							PLAY_ENEMY1_DOWN_EFFECT;
+							break;
+
+						case 2:
+							PLAY_ENEMY2_DOWN_EFFECT;
+							break;
+
+						case 3:
+							PLAY_ENEMY3_DOWN_EFFECT;
+							break;
+						}
+
 						enemy->HitBullet(bullet->getDamage());
 					}
 				}
@@ -216,7 +232,7 @@ void ObjectLayer::ScheduleCheckCollision(float dt)
 			if (enemyRect.intersectsRect(playerRect))
 			{
 				//sound
-				AudioManager::sharedAudioManager()->PlayEffect("explosion.wav");
+				PLAY_USE_BOMB_EFFECT;
 
 				m_player->HitBullet(1);
 				enemy->HitBullet(1000);
@@ -242,6 +258,7 @@ void ObjectLayer::ScheduleCheckCollision(float dt)
 
 				if (itemtype == G_ITEM_UPGRADE_BULLET)
 				{
+					PLAY_GET_DOUBLE_LAZER_EFFECT;
 					m_player->UpgradeBullet();
 				} 
 				else if (itemtype == G_ITEM_ARMOR)
@@ -250,14 +267,12 @@ void ObjectLayer::ScheduleCheckCollision(float dt)
 				}
 				else if (itemtype == G_ITEM_BOOM)
 				{
+					PLAY_GET_BOMB_EFFECT;
 					this->IncreaseBoom();
 				}
 
 				this->removeChild(item);
 				m_arrItems->removeObject(item);
-
-				//sound
-				AudioManager::sharedAudioManager()->PlayEffect("item.wav");
 			}
 		}
 	}
@@ -512,6 +527,8 @@ void ObjectLayer::IncreaseBoom()
 
 void ObjectLayer::ActiveBoom(CCObject* pSender)
 {
+	PLAY_USE_BOMB_EFFECT;
+
 	if (m_numberBoom > 0)
 	{
 		m_numberBoom--;
@@ -527,7 +544,6 @@ void ObjectLayer::ActiveBoom(CCObject* pSender)
 
 		//explosion all enemies
 		CCObject* it;
-
 		CCARRAY_FOREACH(m_arrEnemies, it)
 		{
 			Enemy* enemy = dynamic_cast<Enemy*>(it);

@@ -1,6 +1,7 @@
 #include "PauseDialog.h"
 #include "MainGameScene.h"
 #include "MenuScene.h"
+#include "AudioManager.h"
 
 USING_NS_CC;
 
@@ -49,12 +50,16 @@ bool PauseDialog::init()
 
 void PauseDialog::menuCallback( CCObject* pSender )
 {
+	PLAY_BUTTON_EFFECT;
+
 	CCScene *pScene = CCTransitionFade::create(0.5, MenuScene::scene());
 	CCDirector::sharedDirector()->replaceScene(pScene);
 }
 
 void PauseDialog::resumeCallBack( CCObject* pSender )
 {
+	PLAY_BUTTON_EFFECT;
+
 	MainGameScene* parent = (MainGameScene*) this->getParent();
 	parent->resumeCallback();
 	this->removeFromParent();
@@ -62,6 +67,8 @@ void PauseDialog::resumeCallBack( CCObject* pSender )
 
 void PauseDialog::restartCallBack( CCObject* pSender )
 {
+	PLAY_BUTTON_EFFECT;
+
 	MainGameScene* parent = (MainGameScene*) this->getParent();
 	parent->restartCallback();
 	this->removeFromParent();

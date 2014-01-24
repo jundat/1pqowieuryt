@@ -53,7 +53,9 @@ bool MainGameScene::init()
 	this->addChild(pMenu, 1);
 	
 	//////////////////////////////////////////////////////////////////////////
-	
+
+	PLAY_BACKGROUND_MUSIC;
+
     return true;
 }
 
@@ -92,13 +94,15 @@ void MainGameScene::showEndGame( int score, int killedEnemies )
 	int lastLife = DataManager::sharedDataManager()->GetLastPlayerLife();
 	lastLife--;
 	DataManager::sharedDataManager()->SetLastPlayerLife(lastLife);
-	
+
 	CCLOG("Last life: %d", lastLife);
 
 	time_t curTime = time(NULL);
 	tm* _tm = localtime(&curTime);
 	DataManager::sharedDataManager()->SetLastDeadTimeNow();
 	DataManager::sharedDataManager()->SetIsJustRevived(false);
+	
+	AudioManager::sharedAudioManager()->PlayEffect("game_over.wav");
 	
 	LoseDialog* dialog = LoseDialog::create(score, killedEnemies);
 	this->addChild(dialog);

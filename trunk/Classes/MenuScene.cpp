@@ -61,7 +61,7 @@ bool MenuScene::init()
 	//
 
 	//
-	s = CCString::createWithFormat("v%d", 22);
+	s = CCString::createWithFormat("v%d", 23);
 	CCLabelBMFont* labelVersion = CCLabelBMFont::create(s->getCString(), "Mia_64.fnt");
 	labelVersion->setColor(ccc3(56, 56, 56));
 	labelVersion->setScale(0.5f);
@@ -132,16 +132,15 @@ bool MenuScene::init()
     m_menu->setPosition(CCPointZero);
     this->addChild(m_menu, 1);
 
-	
-	AudioManager::sharedAudioManager()->SetVolumeMusic(0.5f);
-	AudioManager::sharedAudioManager()->SetVolumeFX(0.5f);
-	AudioManager::sharedAudioManager()->PlayBackground("background.ogg");
+	STOP_BACKGROUND_MUSIC;
 
     return true;
 }
 
 void MenuScene::playCallback(CCObject* pSender)
 {
+	PLAY_BUTTON_EFFECT;
+
 	//check if last_player_life > 0
 	int lastLife = DataManager::sharedDataManager()->GetLastPlayerLife();
 	lastLife = (lastLife > G_MAX_PLAYER_LIFE) ? G_MAX_PLAYER_LIFE : lastLife;
@@ -193,18 +192,24 @@ void MenuScene::playCallback(CCObject* pSender)
 
 void MenuScene::scoreCallback( CCObject* pSender )
 {
+	PLAY_BUTTON_EFFECT;
+
 	CCScene *pScene = CCTransitionFade::create(0.5, ScoreScene::scene());
 	CCDirector::sharedDirector()->replaceScene(pScene);
 }
 
 void MenuScene::settingCallback( CCObject* pSender )
 {
+	PLAY_BUTTON_EFFECT;
+
 	CCScene *pScene = CCTransitionFade::create(0.5, SettingScene::scene());
 	CCDirector::sharedDirector()->replaceScene(pScene);
 }
 
 void MenuScene::exitCallback( CCObject* pSender )
 {
+	PLAY_BUTTON_EFFECT;
+
 	CCDirector::sharedDirector()->end();
 }
 
@@ -258,6 +263,8 @@ void MenuScene::onCompletedWaiting()
 
 void MenuScene::fbCallback( CCObject* pSender )
 {
+	PLAY_BUTTON_EFFECT;
+
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	bool needPublicPermission = false;
 	EziSocialObject::sharedObject()->performLoginUsingFacebook(needPublicPermission); // Pass true if you need publish permission also

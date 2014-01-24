@@ -1,6 +1,7 @@
 ﻿#include "LoseDialog.h"
 #include "MainGameScene.h"
 #include "MenuScene.h"
+#include "AudioManager.h"
 
 USING_NS_CC;
 
@@ -47,6 +48,8 @@ bool LoseDialog::init()
 
 void LoseDialog::menuCallBack( CCObject* pSender )
 {
+	PLAY_BUTTON_EFFECT;
+
 	CCScene *pScene = CCTransitionFade::create(0.5, MenuScene::scene());
 	CCDirector::sharedDirector()->replaceScene(pScene);
 }

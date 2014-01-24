@@ -121,27 +121,25 @@ bool SettingScene::init()
 
 void SettingScene::menuCallback(CCObject* pSender)
 {
+	PLAY_BUTTON_EFFECT;
+
 	CCScene *pScene = CCTransitionFade::create(0.5, MenuScene::scene());
 	CCDirector::sharedDirector()->replaceScene(pScene);
 }
 
 void SettingScene::soundCallback( CCObject* pSender )
 {
+	PLAY_BUTTON_EFFECT;
+
 	if(AudioManager::sharedAudioManager()->IsEnableBackground())
 	{
 		AudioManager::sharedAudioManager()->SetEnableBackground(false);
 		AudioManager::sharedAudioManager()->SetEnableEffect(false);
-
-		//
-		AudioManager::sharedAudioManager()->StopBackground();
 	}
 	else
 	{
 		AudioManager::sharedAudioManager()->SetEnableBackground(true);
 		AudioManager::sharedAudioManager()->SetEnableEffect(true);
-
-		//
-		AudioManager::sharedAudioManager()->PlayBackground("background.ogg");
 	}
 }
 
@@ -162,6 +160,8 @@ void SettingScene::keyBackClicked()
 
 void SettingScene::fbCallback( CCObject* pSender )
 {
+	PLAY_BUTTON_EFFECT;
+
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	EziSocialObject::sharedObject()->perfromLogoutFromFacebook();
 #endif

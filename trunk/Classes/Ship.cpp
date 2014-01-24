@@ -3,6 +3,8 @@
 #include "ObjectLayer.h"
 #include "Global.h"
 #include "MyMacro.h"
+#include "AudioManager.h"
+
 
 USING_NS_CC;
 
@@ -149,6 +151,8 @@ void Ship::DisableArmor()
 
 void Ship::Fire()
 {
+	PLAY_BULLET_EFFECT;
+
 	CCSize s = getContentSize();
 	s.width = s.width/2;
 	ObjectLayer* parent = (ObjectLayer*)this->getParent();
@@ -166,10 +170,10 @@ void Ship::Fire()
 		break;
 
 	case 2:
-		bullet1 = Bullet::create(G_BULLET_PLAYER_ID, G_PLAYER_BULLET_VY, this->getDamage(), ccpAdd(this->getPosition(), ccp(-s.width/4, 0)), m_bulletLevel);
+		bullet1 = Bullet::create(G_BULLET_PLAYER_ID, G_PLAYER_BULLET_VY, this->getDamage(), ccpAdd(this->getPosition(), ccp(-s.width * 0.3f, 0)), m_bulletLevel);
 		parent->AddBullet(bullet1);
 
-		bullet2 = Bullet::create(G_BULLET_PLAYER_ID, G_PLAYER_BULLET_VY, this->getDamage(), ccpAdd(this->getPosition(), ccp(s.width/4, 0)), m_bulletLevel);
+		bullet2 = Bullet::create(G_BULLET_PLAYER_ID, G_PLAYER_BULLET_VY, this->getDamage(), ccpAdd(this->getPosition(), ccp(s.width * 0.3f, 0)), m_bulletLevel);
 		parent->AddBullet(bullet2);
 		break;
 
