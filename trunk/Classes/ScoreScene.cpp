@@ -28,10 +28,7 @@ ScoreScene::ScoreScene()
 
 ScoreScene::~ScoreScene()
 {
-	//CCHttpClient::getInstance()->destroyInstance();
-	//MY_RELEASE(m_dictFriends);
-	MY_RELEASE(m_arrName);
-	MY_RELEASE(m_arrScore);
+	//MY_RELEASE(m_arrHighScores);
 }
 
 bool ScoreScene::init()
@@ -48,12 +45,7 @@ bool ScoreScene::init()
 	m_listSize = 0;
 
 	m_friendList = NULL;
-	m_arrName = new CCArray(m_listSize);
-	m_arrScore = new CCArray(m_listSize);
-	m_arrPhoto = new CCArray(m_listSize);
-	m_arrName->retain();
-	m_arrScore->retain();
-	m_arrPhoto->retain();
+	m_arrHighScores = NULL;
 
 	CCSprite* bg = CCSprite::create("bg_stars.png");
 	bg->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2));
@@ -107,7 +99,7 @@ bool ScoreScene::init()
 
 		//get avatar
 		EziSocialObject::sharedObject()->getProfilePicForID(this, DataManager::sharedDataManager()->GetProfileID().c_str(), // Profile ID of current user
-			128.0f, 128.0f, // Size of the image
+			G_AVATAR_SIZE, G_AVATAR_SIZE, // Size of the image
 			false // force download it from server
 			);
 
@@ -139,13 +131,6 @@ bool ScoreScene::init()
 	m_tableView->setVerticalFillOrder(kCCTableViewFillTopDown);
 	this->addChild(m_tableView);
 
-
-	if (_isLoggedIn == false)
-	{
-		makeSingleData();
-		m_tableView->reloadData();
-	}
-
 	m_lbWaiting = CCLabelTTF::create("...WAITING...", "Marker Felt.ttf", 64);
 	m_lbWaiting->setColor(ccc3(0, 0, 0));
 	m_lbWaiting->setHorizontalAlignment(kCCTextAlignmentCenter);
@@ -175,20 +160,6 @@ void ScoreScene::keyBackClicked()
 	menuCallback(NULL);
 }
 
-void ScoreScene::makeSingleData()
-{
-	m_arrName->removeAllObjects();
-	m_arrScore->removeAllObjects();
-	m_arrPhoto->removeAllObjects();
-
-	m_listSize = 1;
-	
-	m_arrName->addObject(CCString::create(DataManager::sharedDataManager()->GetName()));
-	m_arrScore->addObject(CCString::createWithFormat("%d", DataManager::sharedDataManager()->GetHighScore()));
-	m_arrPhoto->addObject(CCString::create("fb-profile.png"));
-}
-
-
 //new delegate
 
 void ScoreScene::tableCellTouched(CCTableView* table, CCTableViewCell* cell)
@@ -203,41 +174,78 @@ CCSize ScoreScene::tableCellSizeForIndex(CCTableView *table, unsigned int idx)
 
 CCTableViewCell* ScoreScene::tableCellAtIndex(CCTableView *table, unsigned int idx)
 {
+	bool isMyScore = false;
 	CCString *order = CCString::createWithFormat("%d", idx + 1);
-	CCString *score = (CCString*)m_arrScore->objectAtIndex(idx);
-	CCString *name = (CCString*)m_arrName->objectAtIndex(idx);
-//	CCString *photo = (CCString*)m_arrPhoto->objectAtIndex(idx);
-	
-	CCTableViewCell *cell = table->dequeueCell();
+	CCString *score = CCString::create("0");
+	CCString *name = CCString::create(G_DEFAULT_NAME);
+	CCString *photo = CCString::create("fb-profile.png");
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	if(m_arrHighScores == NULL)
+	{
+		CCMessageBox("m_arrHighScores == NULL", "Error");
+	}
+	else
+	{
+		EziFacebookFriend* fbFriend = dynamic_cast<EziFacebookFriend*>(m_arrHighScores->objectAtIndex(idx));
+		score = CCString::createWithFormat("%d", (int)fbFriend->getScore());
+		name  = CCString::createWithFormat("%s", fbFriend->getName());
+
+		if (strlen(fbFriend->getPhotoPath()) > 1)
+		{
+			CCLOG("Photopath != \"\"\n%s", fbFriend->getPhotoPath());
+			photo  = CCString::createWithFormat("%s", fbFriend->getPhotoPath());
+		}
+
+		if(fbFriend->getFBID() == DataManager::sharedDataManager()->GetProfileID())
+		{
+			isMyScore = true;
+		}
+	}
+#endif
+
+	CCTableViewCell *cell = table->cellAtIndex(idx);// table->dequeueCell();
 	if (!cell) {
 		cell = new CustomTableViewCell();
 		cell->autorelease();
-
-// 		CCSprite *avatar = CCSprite::create(photo->getCString());
-// 		avatar->setPosition(ccp(0, 0));
-// 		cell->addChild(avatar);
-
-		CCSprite *sprite = CCSprite::create("tablecell.png");
+		
+		CCSprite *sprite;
+		if (isMyScore)
+		{
+			sprite = CCSprite::create("tablecell_my.png");
+		}
+		else
+		{
+			sprite = CCSprite::create("tablecell.png");
+		}
+		
 		sprite->setAnchorPoint(CCPointZero);
 		sprite->setPosition(ccp(0, 0));
+		sprite->setTag(1);
 		cell->addChild(sprite);
+
+		CCSprite *avatar = CCSprite::create(photo->getCString());
+		avatar->setScale(0.75f);
+		avatar->setPosition(ccp(50, m_sprCell->getContentSize().height/2));
+		avatar->setTag(2);
+		cell->addChild(avatar);
 
 		CCLabelBMFont *lbOrder = CCLabelBMFont::create(order->getCString(), "Mia_64.fnt");
 		lbOrder->setScale(0.6f);
+		lbOrder->setColor(ccc3(255, 255, 255));
 		lbOrder->setAlignment(kCCTextAlignmentLeft); //cocos2d::CCTextAlignment::
 		lbOrder->setPosition(ccp(20, m_sprCell->getContentSize().height/2));
 		lbOrder->setAnchorPoint(ccp(0.0f, 0.5f));
-		lbOrder->setTag(100);
+		lbOrder->setTag(3);
 		cell->addChild(lbOrder);
 
 		CCLabelTTF *lbName = CCLabelTTF::create(name->getCString(), "Marker Felt.ttf", 64);
 		lbName->setFontFillColor(ccc3(0,0,0));
 		lbName->setScale(0.6f);
 		lbName->setHorizontalAlignment(kCCTextAlignmentRight);
-		//lbName->setAlignment(kCCTextAlignmentRight); //cocos2d::CCTextAlignment::
 		lbName->setPosition(ccp(m_sprCell->getContentSize().width, m_sprCell->getContentSize().height/2));
 		lbName->setAnchorPoint(ccp(1.0f, 0.5f));
-		lbName->setTag(101);
+		lbName->setTag(4);
 		cell->addChild(lbName);
 
 		CCLabelBMFont *lbScore = CCLabelBMFont::create(score->getCString(), "Mia_64.fnt");
@@ -245,20 +253,33 @@ CCTableViewCell* ScoreScene::tableCellAtIndex(CCTableView *table, unsigned int i
 		lbScore->setAlignment(kCCTextAlignmentCenter); //cocos2d::CCTextAlignment::
 		lbScore->setPosition(ccp(0.25 * m_sprCell->getContentSize().width, m_sprCell->getContentSize().height/2));
 		lbScore->setAnchorPoint(ccp(0.5f, 0.5f));
-		lbScore->setTag(102);
+		lbScore->setTag(5);
 		cell->addChild(lbScore);
 	}
 	else
 	{
-		CCLabelBMFont *lbOrder = (CCLabelBMFont*)cell->getChildByTag(100);
+		CCSprite *sprite = (CCSprite*)cell->getChildByTag(1);
+		if (isMyScore)
+		{
+			sprite = CCSprite::create("tablecell_my.png");
+		}
+		else
+		{
+			sprite = CCSprite::create("tablecell.png");
+		}
+
+		CCSprite *avatar = (CCSprite*)cell->getChildByTag(2);
+		avatar = CCSprite::create(photo->getCString());
+
+		CCLabelBMFont *lbOrder = (CCLabelBMFont*)cell->getChildByTag(3);
 		lbOrder->setString(order->getCString());
 		lbOrder->setPosition(ccp(20, m_sprCell->getContentSize().height/2));
 
-		CCLabelTTF *lbName = (CCLabelTTF*)cell->getChildByTag(101);
+		CCLabelTTF *lbName = (CCLabelTTF*)cell->getChildByTag(4);
 		lbName->setString(name->getCString());
 		lbName->setPosition(ccp(m_sprCell->getContentSize().width, m_sprCell->getContentSize().height/2));
 
-		CCLabelBMFont *lbScore = (CCLabelBMFont*)cell->getChildByTag(102);
+		CCLabelBMFont *lbScore = (CCLabelBMFont*)cell->getChildByTag(5);
 		lbScore->setString(score->getCString());
 		lbScore->setPosition(ccp(0.25 * m_sprCell->getContentSize().width, m_sprCell->getContentSize().height/2));
 	}
@@ -314,12 +335,42 @@ void ScoreScene::fbSessionCallback(int responseCode, const char *responseMessage
 
 void ScoreScene::fbUserPhotoCallback(const char *userPhotoPath, const char* fbID)
 {
+	CCLOG("Gotten avatar for %s", fbID);
+	std::string sid = std::string(fbID);
+
 	if ((strcmp(userPhotoPath, "") != 0))
 	{
-		CCSprite* userPhoto = CCSprite::create(userPhotoPath);
-		userPhoto->setPosition(ccp(m_userSprite->getContentSize().width/2, m_userSprite->getContentSize().height/2));
-		userPhoto->setScale(m_userSprite->getContentSize().width/userPhoto->getContentSize().width);
-		m_userSprite->addChild(userPhoto);
+		if(sid == DataManager::sharedDataManager()->GetProfileID())
+		{
+			CCLOG("Gotten avatar for user");
+
+			CCSprite* userPhoto = CCSprite::create(userPhotoPath);
+			userPhoto->setPosition(ccp(m_userSprite->getContentSize().width/2, m_userSprite->getContentSize().height/2));
+			userPhoto->setScale(m_userSprite->getContentSize().width/userPhoto->getContentSize().width);
+			m_userSprite->addChild(userPhoto);
+		}
+		
+		if (m_arrHighScores != NULL)
+		{
+			CCLOG("Gotten avatar for friends");
+
+			CCObject* it;
+			CCARRAY_FOREACH(m_arrHighScores, it)
+			{
+				EziFacebookFriend* fbFriend = dynamic_cast<EziFacebookFriend*>(it);
+				if (NULL != fbFriend)
+				{
+					CCLOG("%s => %s", sid.c_str(), userPhotoPath);
+					if(fbFriend->getFBID() == sid)
+					{
+						fbFriend->setPhotoPath(userPhotoPath);
+						CCLOG("Set photo path ok --- ");
+					}
+				}
+			}
+
+			m_tableView->reloadData();
+		}
 	}
 }
 
@@ -342,7 +393,7 @@ void ScoreScene::fbUserDetailCallback( int responseCode, const char* responseMes
 		m_lbName->setString(fullname.c_str());
 
 		EziSocialObject::sharedObject()->getProfilePicForID(this, currentUser->getProfileID(), // Profile ID of current user
-			128.0f, 128.0f, // Size of the image
+			G_AVATAR_SIZE, G_AVATAR_SIZE, // Size of the image
 			false // force download it from server
 		);
 
@@ -362,14 +413,19 @@ void ScoreScene::callGetHighScores()
 
 void ScoreScene::fbHighScoresCallback( int responseCode, const char* responseMessage, cocos2d::CCArray* highScores )
 {
-	m_arrName->removeAllObjects();
-	m_arrScore->removeAllObjects();
-	m_arrPhoto->removeAllObjects();
+	if (m_arrHighScores != NULL)
+	{
+		m_arrHighScores->release();
+		m_arrHighScores = NULL;
+	}
 
-	m_listSize = highScores->count();
+	m_arrHighScores = CCArray::createWithArray(highScores);
+	m_arrHighScores->retain();
+
+	m_listSize = m_arrHighScores->count();
 
 	CCObject* it;
-	CCARRAY_FOREACH(highScores, it)
+	CCARRAY_FOREACH(m_arrHighScores, it)
 	{
 		EziFacebookFriend* fbFriend = dynamic_cast<EziFacebookFriend*>(it);
 		if (NULL != fbFriend)
@@ -381,16 +437,22 @@ void ScoreScene::fbHighScoresCallback( int responseCode, const char* responseMes
 			{
 				fbFriend->setScore(DataManager::sharedDataManager()->GetHighScore());
 			}
+			
+			CCLOG("Get avatar for %s", profileID.c_str());
+			//get avatar
+			EziSocialObject::sharedObject()->getProfilePicForID(this, profileID.c_str(), // Profile ID of current user
+				G_FRIEND_AVATAR_SIZE, G_FRIEND_AVATAR_SIZE, // Size of the image
+				false // force download it from server
+				);
 
-			CCLOG("%s => %d, %s", fbFriend->getFBID(), (int)fbFriend->getScore(), fbFriend->getPhotoPath());
-			m_arrName->addObject(CCString::createWithFormat("%s", fbFriend->getName()));
-			m_arrScore->addObject(CCString::createWithFormat("%d", (int)fbFriend->getScore()));
-			m_arrPhoto->addObject(CCString::createWithFormat("%s", fbFriend->getPhotoPath()));
+			CCLOG("%s => %d", fbFriend->getFBID(), (int)fbFriend->getScore());
 		}
 	}
 
-	m_lbWaiting->setVisible(false);
+	MySortHighScore();
+
 	m_tableView->reloadData();
+	m_lbWaiting->setVisible(false);
 }
 
 

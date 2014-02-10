@@ -12,6 +12,8 @@
 #include "EziFacebookFriend.h"
 #endif
 
+#include <algorithm>
+
 USING_NS_CC;
 USING_NS_CC_EXT;
 
@@ -39,7 +41,23 @@ public:
 	virtual void keyBackClicked();
 	void menuCallback(CCObject* pSender);
 
-	void makeSingleData();
+	static int MyMoreScoreFunction(const CCObject* p1, const CCObject* p2)
+	{
+		#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+			EziFacebookFriend* f1 = (EziFacebookFriend*)(p1);
+			EziFacebookFriend* f2 = (EziFacebookFriend*)(p2);
+
+			return (f1->getScore() > f2->getScore());
+		#else
+			return true;
+		#endif
+	}
+
+	void MySortHighScore()
+	{
+		std::sort(m_arrHighScores->data->arr, 
+			m_arrHighScores->data->arr + m_arrHighScores->data->num, MyMoreScoreFunction);
+	}
 
 	//new delegate
 
@@ -61,9 +79,7 @@ private:
 	CCSprite* m_sprCell;
 	CCTableView* m_tableView;
 
-	CCArray* m_arrName;
-	CCArray* m_arrScore;
-	CCArray* m_arrPhoto; //
+	CCArray* m_arrHighScores;
 
 public:
 	// Facebook //=========================================
