@@ -36,8 +36,6 @@ bool MenuScene::init()
         return false;
     }
 
-	m_friendList = NULL;
-
 	m_isShowDialog = false;
 	this->setKeypadEnabled(true);
 
@@ -89,46 +87,22 @@ bool MenuScene::init()
 
 	//
 
-	CCMenuItemImage *settingItem = CCMenuItemImage::create(
-		"setting_button.png",
-		"setting_button_press.png",
-		this,
-		menu_selector(MenuScene::settingCallback));
+	CCMenuItem* soundOn = CCMenuItemImage::create("sound_on.png", NULL, NULL);
+	CCMenuItem* soundOff = CCMenuItemImage::create("sound_off.png", NULL, NULL);
+	CCMenuItemToggle* soundToggle = CCMenuItemToggle::createWithTarget(this,  menu_selector(MenuScene::soundCallback), soundOn, soundOff, NULL);
 
-	settingItem->setPosition(ccp(400, 1280-973));
-
-	//
-
-	CCMenuItemImage *exitItem = CCMenuItemImage::create(
-		"exit_button.png",
-		"exit_button_press.png",
-		this,
-		menu_selector(MenuScene::exitCallback));
-
-	exitItem->setPosition(ccp(G_DESIGN_WIDTH/2,
-		settingItem->getPositionY() - settingItem->getContentSize().height/2 - exitItem->getContentSize().height/2 - 10));
-	exitItem->setVisible(false);
-	exitItem->setEnabled(false);
-
-	//facebook /////////////////////////////////////
-
-	m_fbItem = CCMenuItemImage::create("connect_facebook.png", "connect_facebook.png", this, menu_selector(MenuScene::fbCallback));
-	m_fbItem->setPosition(ccp(400, 1280-1220));
-
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	EziSocialObject::sharedObject()->setFacebookDelegate(this);
-
-	if(EziSocialObject::sharedObject()->isFacebookSessionActive()) //logged in state
+	if(AudioManager::sharedAudioManager()->IsEnableBackground())
 	{
-		//login button
-		m_fbItem->setVisible(false);
+		soundToggle->setSelectedIndex(0);
 	}
-#endif
+	else
+	{
+		soundToggle->setSelectedIndex(1);
+	}
 
-	//end facebook
-	
+	soundToggle->setPosition(ccp(10 + soundOff->getContentSize().width/2, 10 + soundOff->getContentSize().height/2));
 
-    m_menu = CCMenu::create(playItem, scoreItem, settingItem, exitItem, m_fbItem, NULL);
+    m_menu = CCMenu::create(playItem, scoreItem, soundToggle, NULL);
     m_menu->setPosition(CCPointZero);
     this->addChild(m_menu, 1);
 
@@ -198,24 +172,10 @@ void MenuScene::scoreCallback( CCObject* pSender )
 	CCDirector::sharedDirector()->replaceScene(pScene);
 }
 
-void MenuScene::settingCallback( CCObject* pSender )
-{
-	PLAY_BUTTON_EFFECT;
-
-	CCScene *pScene = CCTransitionFade::create(0.5, SettingScene::scene());
-	CCDirector::sharedDirector()->replaceScene(pScene);
-}
-
-void MenuScene::exitCallback( CCObject* pSender )
-{
-	PLAY_BUTTON_EFFECT;
-
-	CCDirector::sharedDirector()->end();
-}
-
 void MenuScene::keyBackClicked()
 {
-	exitCallback(NULL);
+	PLAY_BUTTON_EFFECT;
+	CCDirector::sharedDirector()->end();
 }
 
 void MenuScene::onShowDialog()
@@ -259,78 +219,19 @@ void MenuScene::onCompletedWaiting()
 	}
 }
 
-//facebook ///////////////////////////////
-
-void MenuScene::fbCallback( CCObject* pSender )
+void MenuScene::soundCallback( CCObject* pSender )
 {
-	PLAY_BUTTON_EFFECT;
-
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	bool needPublicPermission = true;
-	EziSocialObject::sharedObject()->performLoginUsingFacebook(needPublicPermission); // Pass true if you need publish permission also
-#endif
-}
-
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-
-void MenuScene::fbSessionCallback(int responseCode, const char *responseMessage)
-{
-	if (responseCode == EziSocialWrapperNS::RESPONSE_CODE::FB_LOGIN_SUCCESSFUL) /////////////////// logged in state
+	if(AudioManager::sharedAudioManager()->IsEnableBackground())
 	{
-		m_fbItem->setVisible(false); //log out button
-		EziSocialObject::sharedObject()->fetchFBUserDetails(true); //need email = true
-		//EziSocialObject::sharedObject()->getFriends(EziSocialWrapperNS::FB_FRIEND_SEARCH::ONLY_INSTALLED, 0, NUM_REQUEST_FRIENDS);
+		AudioManager::sharedAudioManager()->SetEnableBackground(false);
+		AudioManager::sharedAudioManager()->SetEnableEffect(false);
+
+		//
+		AudioManager::sharedAudioManager()->StopBackground();
 	}
 	else
 	{
-		m_fbItem->setVisible(true); //log out button
+		AudioManager::sharedAudioManager()->SetEnableBackground(true);
+		AudioManager::sharedAudioManager()->SetEnableEffect(true);
 	}
 }
-
-void MenuScene::fbUserDetailCallback( int responseCode, const char* responseMessage, EziFacebookUser* fbUser )
-{
-	if (fbUser != NULL)
-	{
-		// Set the current user in EziSocialObject to use it in future. EziSocialObject is immune to CCScene lifecycle. It is singleton class and will live forever.
-		EziSocialObject::sharedObject()->setCurrentFacebookUser(fbUser);
-
-		//save data
-		std::string fullname = fbUser->getFullName();
-		std::string userName = fbUser->getUserName();
-		std::string profileID = fbUser->getProfileID();
-
-		DataManager::sharedDataManager()->SetName(fullname.c_str());
-		DataManager::sharedDataManager()->SetProfileID(profileID.c_str());
-		DataManager::sharedDataManager()->SetFbUserName(userName.c_str());
-		
-		//CCLOG("FullName: %s", fullname.c_str());
-		//CCLOG("EmailID: %s", emailID.c_str());
-		//CCLOG("Gender: %s", gender.c_str());
-		//CCLOG("UserName: %s", userName.c_str());
-		//CCLOG("ProfileID: %s", profileID.c_str());
-		//CCLOG("AccessToken: %s", accessToken.c_str());
-		
-		scoreCallback(NULL);
-	}
-}
-
-void MenuScene::fbFriendsCallback( int responseCode, const char* responseMessage, cocos2d::CCArray* friends )
-{
-	if (responseCode == EziSocialWrapperNS::RESPONSE_CODE::FB_FRIEND_GET_SUCCESS)
-	{
-		if (m_friendList != NULL)
-		{
-			m_friendList->release();
-			m_friendList = NULL;
-		}
-
-		m_friendList = CCArray::createWithArray(friends);
-		m_friendList->retain();
-	}
-}
-
-
-
-#endif
-
-//end facebook ///////////////////////////////
