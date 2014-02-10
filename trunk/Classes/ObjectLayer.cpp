@@ -489,10 +489,7 @@ void ObjectLayer::AfterDeadEffectCallback()
 
 	MainGameScene* parent = (MainGameScene*) this->getParent();
 	parent->showEndGame(m_score, m_killedEnemies);
-	DataManager::sharedDataManager()->SetCurrentHighScore(m_score);
-
-
-
+	
 	CCDirector::sharedDirector()->getTouchDispatcher()->removeDelegate(this);
 	this->setTouchEnabled(false);
 	this->unschedule(schedule_selector(ObjectLayer::ScheduleGenerateItem));

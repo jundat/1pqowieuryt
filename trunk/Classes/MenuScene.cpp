@@ -61,7 +61,7 @@ bool MenuScene::init()
 	//
 
 	//
-	s = CCString::createWithFormat("v%d", 23);
+	s = CCString::createWithFormat("v%d", 24);
 	CCLabelBMFont* labelVersion = CCLabelBMFont::create(s->getCString(), "Mia_64.fnt");
 	labelVersion->setColor(ccc3(56, 56, 56));
 	labelVersion->setScale(0.5f);
@@ -266,7 +266,7 @@ void MenuScene::fbCallback( CCObject* pSender )
 	PLAY_BUTTON_EFFECT;
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	bool needPublicPermission = false;
+	bool needPublicPermission = true;
 	EziSocialObject::sharedObject()->performLoginUsingFacebook(needPublicPermission); // Pass true if you need publish permission also
 #endif
 }

@@ -55,7 +55,7 @@ public:
 private:
 	int m_listSize;
 
-	CCLabelBMFont* m_lbWaiting;
+	CCLabelTTF* m_lbWaiting;
 	CCLabelTTF* m_lbName;
 	CCLabelTTF* m_lbScore;
 	CCSprite* m_sprCell;
@@ -63,6 +63,7 @@ private:
 
 	CCArray* m_arrName;
 	CCArray* m_arrScore;
+	CCArray* m_arrPhoto; //
 
 public:
 	// Facebook //=========================================

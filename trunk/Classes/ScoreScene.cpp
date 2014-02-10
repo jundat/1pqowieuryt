@@ -16,7 +16,14 @@ USING_NS_CC_EXT;
 
 ScoreScene::ScoreScene()
 {
-	
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	if(EziSocialObject::sharedObject()->isFacebookSessionActive()) //logged in state
+	{
+		EziSocialObject::sharedObject()->postScore(DataManager::sharedDataManager()->GetHighScore());
+	}
+#endif
+
 }
 
 ScoreScene::~ScoreScene()
@@ -43,8 +50,10 @@ bool ScoreScene::init()
 	m_friendList = NULL;
 	m_arrName = new CCArray(m_listSize);
 	m_arrScore = new CCArray(m_listSize);
+	m_arrPhoto = new CCArray(m_listSize);
 	m_arrName->retain();
 	m_arrScore->retain();
+	m_arrPhoto->retain();
 
 	CCSprite* bg = CCSprite::create("bg_stars.png");
 	bg->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2));
@@ -137,9 +146,10 @@ bool ScoreScene::init()
 		m_tableView->reloadData();
 	}
 
-	m_lbWaiting = CCLabelBMFont::create("...WAITING...", "Mia_64.fnt");
+	m_lbWaiting = CCLabelTTF::create("...WAITING...", "Marker Felt.ttf", 64);
 	m_lbWaiting->setColor(ccc3(0, 0, 0));
-	m_lbWaiting->setAlignment(kCCTextAlignmentCenter);
+	m_lbWaiting->setHorizontalAlignment(kCCTextAlignmentCenter);
+	m_lbWaiting->setVerticalAlignment(kCCVerticalTextAlignmentCenter);
 	m_lbWaiting->setPosition(ccp(400, 640));
 
 	this->addChild(m_lbWaiting);
@@ -169,11 +179,13 @@ void ScoreScene::makeSingleData()
 {
 	m_arrName->removeAllObjects();
 	m_arrScore->removeAllObjects();
+	m_arrPhoto->removeAllObjects();
 
 	m_listSize = 1;
 	
 	m_arrName->addObject(CCString::create(DataManager::sharedDataManager()->GetName()));
 	m_arrScore->addObject(CCString::createWithFormat("%d", DataManager::sharedDataManager()->GetHighScore()));
+	m_arrPhoto->addObject(CCString::create("fb-profile.png"));
 }
 
 
@@ -194,11 +206,16 @@ CCTableViewCell* ScoreScene::tableCellAtIndex(CCTableView *table, unsigned int i
 	CCString *order = CCString::createWithFormat("%d", idx + 1);
 	CCString *score = (CCString*)m_arrScore->objectAtIndex(idx);
 	CCString *name = (CCString*)m_arrName->objectAtIndex(idx);
+//	CCString *photo = (CCString*)m_arrPhoto->objectAtIndex(idx);
 	
 	CCTableViewCell *cell = table->dequeueCell();
 	if (!cell) {
 		cell = new CustomTableViewCell();
 		cell->autorelease();
+
+// 		CCSprite *avatar = CCSprite::create(photo->getCString());
+// 		avatar->setPosition(ccp(0, 0));
+// 		cell->addChild(avatar);
 
 		CCSprite *sprite = CCSprite::create("tablecell.png");
 		sprite->setAnchorPoint(CCPointZero);
@@ -267,7 +284,7 @@ void ScoreScene::fbCallback( CCObject* pSender )
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	m_lbWaiting->setVisible(true);
-	bool needPublicPermission = false;
+	bool needPublicPermission = true;
 	EziSocialObject::sharedObject()->performLoginUsingFacebook(needPublicPermission); // Pass true if you need publish permission also
 #endif
 }
@@ -279,6 +296,14 @@ void ScoreScene::fbSessionCallback(int responseCode, const char *responseMessage
 	if (responseCode == EziSocialWrapperNS::RESPONSE_CODE::FB_LOGIN_SUCCESSFUL)
 	{
 		m_fbItem->setVisible(false);
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+		if(EziSocialObject::sharedObject()->isFacebookSessionActive()) //logged in state
+		{
+			EziSocialObject::sharedObject()->postScore(DataManager::sharedDataManager()->GetHighScore());
+		}
+#endif
+
 		EziSocialObject::sharedObject()->fetchFBUserDetails(true); //need email = true
 	}
 	else
@@ -339,6 +364,7 @@ void ScoreScene::fbHighScoresCallback( int responseCode, const char* responseMes
 {
 	m_arrName->removeAllObjects();
 	m_arrScore->removeAllObjects();
+	m_arrPhoto->removeAllObjects();
 
 	m_listSize = highScores->count();
 
@@ -348,9 +374,18 @@ void ScoreScene::fbHighScoresCallback( int responseCode, const char* responseMes
 		EziFacebookFriend* fbFriend = dynamic_cast<EziFacebookFriend*>(it);
 		if (NULL != fbFriend)
 		{
-			CCLOG("%s => %d", fbFriend->getFBID(), (int)fbFriend->getScore());
+			std::string profileID = fbFriend->getFBID();
+			std::string myProfileID = DataManager::sharedDataManager()->GetProfileID();
+
+			if(profileID == myProfileID)
+			{
+				fbFriend->setScore(DataManager::sharedDataManager()->GetHighScore());
+			}
+
+			CCLOG("%s => %d, %s", fbFriend->getFBID(), (int)fbFriend->getScore(), fbFriend->getPhotoPath());
 			m_arrName->addObject(CCString::createWithFormat("%s", fbFriend->getName()));
 			m_arrScore->addObject(CCString::createWithFormat("%d", (int)fbFriend->getScore()));
+			m_arrPhoto->addObject(CCString::createWithFormat("%s", fbFriend->getPhotoPath()));
 		}
 	}
 

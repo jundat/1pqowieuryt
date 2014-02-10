@@ -87,6 +87,10 @@ void MainGameScene::showEndGame( int score, int killedEnemies )
 {
 	m_isShowingLose = true;
 
+	//save highscore
+	DataManager::sharedDataManager()->SetCurrentHighScore(score);
+
+
 	CCDirector::sharedDirector()->getTouchDispatcher()->removeDelegate(this);
 	this->setTouchEnabled(false);
 	
