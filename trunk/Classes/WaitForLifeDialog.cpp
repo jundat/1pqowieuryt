@@ -71,14 +71,49 @@ void WaitForLifeDialog::exitCallback( CCObject* pSender )
 
 void WaitForLifeDialog::askFriendCallback( CCObject* pSender )
 {
-	CCMessageBox("I\'ll give you 5 lifes, ok?", "Info");
-	DataManager::sharedDataManager()->SetLastPlayerLife(5);
+	//post to the wall
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 
-	MenuScene* parent = (MenuScene*)this->getParent();
-	parent->setTouchEnabled(true);
-	parent->onCloseDialog();
-	this->removeFromParent();
+// heading,
+// caption,
+// message,
+// description,
+// badgeIconURL,
+// deepLinkURL
+
+	EziSocialObject::sharedObject()->postMessageOnWall("Phi Công Bút Chì Android Game",
+		"Please save me !!!",
+		"I lost my life, can you play to save me, plz...",
+		"I lost my life, can you play to save me, plz...",
+		"https://dl.dropboxusercontent.com/u/41829250/FlyAndFire/icon.png",
+		"https://dl.dropboxusercontent.com/u/41829250/FlyAndFire/PhiCongButChi_25.apk");
+#endif
 }
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+
+void WaitForLifeDialog::fbMessageCallback(int responseCode, const char* responseMessage)
+{
+	if(responseCode == EziSocialWrapperNS::RESPONSE_CODE::FB_NORMAL_MESSAGE_PUBLISHED)
+	{
+		CCLOG("Message published successfully!");
+		DataManager::sharedDataManager()->SetLastPlayerLife(5);
+
+		//stop timer
+		this->unschedule(schedule_selector(WaitForLifeDialog::ScheduleTick));
+
+		MenuScene* parent = (MenuScene*)this->getParent();
+		parent->setTouchEnabled(true);
+		parent->onCloseDialog();
+		this->removeFromParent();
+	}
+	else
+	{
+		CCLOG("Message published failed!");
+	}
+}
+
+#endif
 
 void WaitForLifeDialog::ScheduleTick( float dt )
 {
