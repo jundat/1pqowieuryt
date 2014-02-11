@@ -56,7 +56,15 @@ bool ScoreScene::init()
 	this->addChild(score_top, 0);
 
 	//facebook avatar
-	m_userSprite = CCSprite::create("fb-profile.png");
+	if(DataManager::sharedDataManager()->GetPhotoPath() != "NULL")
+	{
+		m_userSprite = CCSprite::create(DataManager::sharedDataManager()->GetPhotoPath().c_str());
+	}
+	else
+	{
+		m_userSprite = CCSprite::create("fb-profile.png");
+	}
+
 	m_userSprite->setPosition(ccp(114, 1280-280));
 	this->addChild(m_userSprite);
 
@@ -142,12 +150,6 @@ bool ScoreScene::init()
 	if (_isLoggedIn == false)
 	{
 		m_lbWaiting->setVisible(false);
-
-		#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-				m_lbWaiting->setVisible(true);
-				bool needPublicPermission = true;
-				EziSocialObject::sharedObject()->performLoginUsingFacebook(needPublicPermission); // Pass true if you need publish permission also
-		#endif
 	}
 
 	return true;
@@ -349,6 +351,9 @@ void ScoreScene::fbUserPhotoCallback(const char *userPhotoPath, const char* fbID
 		if(sid == DataManager::sharedDataManager()->GetProfileID())
 		{
 			CCLOG("Gotten avatar for user");
+
+			//save 
+			DataManager::sharedDataManager()->SetPhotoPath(userPhotoPath);
 
 			CCSprite* userPhoto = CCSprite::create(userPhotoPath);
 			userPhoto->setPosition(ccp(m_userSprite->getContentSize().width/2, m_userSprite->getContentSize().height/2));

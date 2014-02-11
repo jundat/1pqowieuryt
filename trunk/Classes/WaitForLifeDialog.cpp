@@ -72,7 +72,7 @@ void WaitForLifeDialog::exitCallback( CCObject* pSender )
 void WaitForLifeDialog::askFriendCallback( CCObject* pSender )
 {
 	//post to the wall
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+//#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 
 // heading,
 // caption,
@@ -81,13 +81,23 @@ void WaitForLifeDialog::askFriendCallback( CCObject* pSender )
 // badgeIconURL,
 // deepLinkURL
 
-	EziSocialObject::sharedObject()->postMessageOnWall("Phi Công Bút Chì Android Game",
-		"Please save me !!!",
-		"I lost my life, can you play to save me, plz...",
-		"I lost my life, can you play to save me, plz...",
-		"https://dl.dropboxusercontent.com/u/41829250/FlyAndFire/icon.png",
-		"https://dl.dropboxusercontent.com/u/41829250/FlyAndFire/PhiCongButChi_25.apk");
-#endif
+// 	EziSocialObject::sharedObject()->postMessageOnWall("Game",
+// 		"Please save me !!!",
+// 		"I lost my life, can you play to save me, plz...",
+// 		"I lost my life, can you play to save me, plz...",
+// 		"http://www.cocos2d-x.org/attachments/709/cocos2dx_portrait.png",
+// 		"http://www.cocos2d-x.org/"
+//#else
+	DataManager::sharedDataManager()->SetLastPlayerLife(5);
+
+	//stop timer
+	this->unschedule(schedule_selector(WaitForLifeDialog::ScheduleTick));
+
+	MenuScene* parent = (MenuScene*)this->getParent();
+	parent->setTouchEnabled(true);
+	parent->onCloseDialog();
+	this->removeFromParent();
+//#endif
 }
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)

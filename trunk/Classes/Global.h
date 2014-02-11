@@ -4,7 +4,7 @@
 #include <string>
 
 //////////////////////////////////////////////////////////////////////////
-#define G_DEFAULT_NAME			"PhiCong"
+#define G_DEFAULT_NAME			"Phi Công"
 #define G_AVATAR_SIZE			128
 #define G_FRIEND_AVATAR_SIZE	128
 

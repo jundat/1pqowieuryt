@@ -18,6 +18,9 @@ public:
 
 	//facebook
 
+	std::string GetPhotoPath();
+	void SetPhotoPath(const char* path);
+
 	std::string GetProfileID();
 	void SetProfileID(const char* profileID);
 

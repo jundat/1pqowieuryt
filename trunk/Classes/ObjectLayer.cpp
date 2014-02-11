@@ -123,6 +123,8 @@ void ObjectLayer::ScheduleGenerateItem( float dt )
 {
 	Item* item = NULL;
 	float rd = CCRANDOM_0_1();
+	CCLOG("Random Item: %f", rd);
+
 	float rdw = CCRANDOM_0_1() * (7.0f / 8.0f * G_DESIGN_WIDTH) + G_DESIGN_WIDTH / 8.0f;
 
 	if (rd < 0.5f)
@@ -524,6 +526,11 @@ void ObjectLayer::IncreaseBoom()
 
 void ObjectLayer::ActiveBoom(CCObject* pSender)
 {
+	if (m_isEndGame)
+	{
+		return;
+	}
+
 	PLAY_USE_BOMB_EFFECT;
 
 	if (m_numberBoom > 0)

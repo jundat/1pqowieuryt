@@ -28,7 +28,7 @@ bool BackgroundLayer::init()
 }
 
 void BackgroundLayer::update(float dt) {
-	bg1->setPositionY(bg1->getPositionY() - 120 * dt);
+	bg1->setPositionY(bg1->getPositionY() - 160 * dt);
 	CCSize size = bg1->getContentSize();
 
 	if (bg1->getPositionY() <= - size.height/2)

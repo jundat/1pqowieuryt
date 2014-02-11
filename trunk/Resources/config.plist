@@ -12,10 +12,10 @@
 		    <string>1</string>
 	    <key>G_MIN_PLAYER_BULLET_LEVEL</key> <!-- Level đạn thấp nhất, hiện tại là 1 làn đạn -->
 		    <string>1</string>
-	    <key>G_MAX_PLAYER_BULLET_LEVEL</key> <!-- Level đạn cao nhất, hiện tại là 3 làn đạn, và chưa hỗ trợ cao hơn -->
+	    <key>G_MAX_PLAYER_BULLET_LEVEL</key> <!-- Level đạn cao nhất, hiện tại là 2 làn đạn, và chưa hỗ trợ cao hơn -->
 		    <string>2</string>
 	    <key>G_TIMEOUT_BULLET_LEVEL</key> <!-- Thời gian timeout để giảm số làn đạn, đơn vị sencond -->
-		    <string>15.0</string>
+		    <string>20.0</string>
 
 	    <key>G_ITEM_BULLET_RANDOM_PERCENT</key> <!-- Tỷ lệ random ra item tăng level đạn -->
 		    <string>0.07</string>
@@ -55,7 +55,7 @@
 	    <key>G_DEFAULT_TIME_TO_GENERATE_ENEMY</key> <!-- Thời gian giữa 2 lần sinh ra Enemy -->
 		    <string>1.0</string>
 		<key>G_TIME_TO_GENERATE_ITEM</key> <!-- Thời gian giữa 2 lần sinh ra Item -->
-		    <string>15</string>
+		    <string>30</string>
 
 	    <key>G_MIN_ENEMY_VY</key> <!-- Vận tốc nhỏ nhất của Enemy (số âm, vì bay ngược chiều lại) -->
 		    <string>-0.09</string>

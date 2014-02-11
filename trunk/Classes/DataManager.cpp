@@ -122,7 +122,7 @@ void DataManager::SetIsJustRevived(bool isJustRevived)
 
 std::string DataManager::GetName()
 {
-	return CCUserDefault::sharedUserDefault()->getStringForKey("G_NAME", G_DEFAULT_NAME);
+	return CCUserDefault::sharedUserDefault()->getStringForKey("G_NAME", std::string(G_DEFAULT_NAME));
 }
 
 void DataManager::SetName( const char* name )
@@ -133,7 +133,7 @@ void DataManager::SetName( const char* name )
 
 std::string DataManager::GetUsername()
 {
-	return CCUserDefault::sharedUserDefault()->getStringForKey("G_USERNAME", "NULL");
+	return CCUserDefault::sharedUserDefault()->getStringForKey("G_USERNAME", std::string("NULL"));
 }
 
 void DataManager::SetUsername(const char* username)
@@ -144,7 +144,7 @@ void DataManager::SetUsername(const char* username)
 
 std::string DataManager::GetPassword()
 {
-	return CCUserDefault::sharedUserDefault()->getStringForKey("G_PASSWORD", "NULL");
+	return CCUserDefault::sharedUserDefault()->getStringForKey("G_PASSWORD", std::string("NULL"));
 }
 
 void DataManager::SetPassword(const char* pass )
@@ -178,7 +178,7 @@ void DataManager::RefreshPlayerLife()
 
 std::string DataManager::GetProfileID()
 {
-	return CCUserDefault::sharedUserDefault()->getStringForKey("G_PROFILE_ID", "NULL");
+	return CCUserDefault::sharedUserDefault()->getStringForKey("G_PROFILE_ID", std::string("NULL"));
 }
 
 void DataManager::SetProfileID( const char* profileID )
@@ -189,11 +189,22 @@ void DataManager::SetProfileID( const char* profileID )
 
 std::string DataManager::GetFbUserName()
 {
-	return CCUserDefault::sharedUserDefault()->getStringForKey("G_FB_USER_NAME", "NULL");
+	return CCUserDefault::sharedUserDefault()->getStringForKey("G_FB_USER_NAME", std::string("NULL"));
 }
 
 void DataManager::SetFbUserName( const char* fbusernam )
 {
 	CCUserDefault::sharedUserDefault()->setStringForKey("G_FB_USER_NAME", std::string(fbusernam));
+	CCUserDefault::sharedUserDefault()->flush();
+}
+
+std::string DataManager::GetPhotoPath()
+{
+	return CCUserDefault::sharedUserDefault()->getStringForKey("G_PHOTO_PATH", std::string("NULL"));
+}
+
+void DataManager::SetPhotoPath( const char* path )
+{
+	CCUserDefault::sharedUserDefault()->setStringForKey("G_PHOTO_PATH", std::string(path));
 	CCUserDefault::sharedUserDefault()->flush();
 }
