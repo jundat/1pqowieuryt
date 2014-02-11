@@ -7,7 +7,6 @@
 #include "ConfigLoader.h"
 #include "LevelLoader.h"
 #include "AudioManager.h"
-#include "GameClient.h"
 #include "IntroScene.h"
 #include <time.h>
 
@@ -27,7 +26,6 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	
 	ConfigLoader::shareConfigLoader();
 	LevelLoader::shareLevelLoader();
-	GameClient::sharedGameClient()->startGame();
 
     CCDirector* pDirector = CCDirector::sharedDirector();
     CCEGLView* pEGLView = CCEGLView::sharedOpenGLView();

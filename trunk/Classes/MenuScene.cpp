@@ -6,9 +6,6 @@
 #include "DataManager.h"
 #include "WaitForLifeDialog.h"
 #include <time.h>
-#include "NDKHelper/NDKHelper.h"
-#include "GameClient.h"
-#include "HttpClientTest.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;

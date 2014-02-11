@@ -5,7 +5,6 @@
 #include "Enemy.h"
 #include "EffectLayer.h"
 #include "MainGameScene.h"
-#include "CollisionDetection.h"
 #include "DataManager.h"
 
 USING_NS_CC;

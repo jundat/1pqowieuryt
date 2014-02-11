@@ -1,13 +1,11 @@
 ﻿#include "MenuScene.h"
 #include "ScoreScene.h"
-#include "ParseClient.h"
 #include "cocos-ext.h"
-#include "HttpClient.h"
-#include "GameClient.h"
 #include "DataManager.h"
 #include "CustomTableViewCell.h"
 #include "MyMacro.h"
 #include "AudioManager.h"
+#include "Global.h"
 
 
 USING_NS_CC;

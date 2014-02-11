@@ -7,12 +7,6 @@
     <Filter Include="Classes">
       <UniqueIdentifier>{bb6c862e-70e9-49d9-81b7-3829a6f50471}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Classes\jansson">
-      <UniqueIdentifier>{a09bc790-e775-49f3-a9a5-0f568546a888}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Classes\NDKHelper">
-      <UniqueIdentifier>{b189b430-db9e-4c12-8267-72f4e093cecd}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -33,9 +27,6 @@
     <ClCompile Include="..\Classes\CCParallaxNodeExtras.cpp">
       <Filter>Classes</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\CollisionDetection.cpp">
-      <Filter>Classes</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\ConfigLoader.cpp">
       <Filter>Classes</Filter>
     </ClCompile>
@@ -51,16 +42,10 @@
     <ClCompile Include="..\Classes\EnemyFactory.cpp">
       <Filter>Classes</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\GameClient.cpp">
-      <Filter>Classes</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\GameObject.cpp">
       <Filter>Classes</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\Global.cpp">
-      <Filter>Classes</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\HttpClientTest.cpp">
       <Filter>Classes</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\IntroScene.cpp">
@@ -84,9 +69,6 @@
     <ClCompile Include="..\Classes\ObjectLayer.cpp">
       <Filter>Classes</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\ParseClient.cpp">
-      <Filter>Classes</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\PauseDialog.cpp">
       <Filter>Classes</Filter>
     </ClCompile>
@@ -101,42 +83,6 @@
     </ClCompile>
     <ClCompile Include="..\Classes\WaitForLifeDialog.cpp">
       <Filter>Classes</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\jansson\dump.c">
-      <Filter>Classes\jansson</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\jansson\error.c">
-      <Filter>Classes\jansson</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\jansson\hashtable.c">
-      <Filter>Classes\jansson</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\jansson\load.c">
-      <Filter>Classes\jansson</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\jansson\memory.c">
-      <Filter>Classes\jansson</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\jansson\pack_unpack.c">
-      <Filter>Classes\jansson</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\jansson\strbuffer.c">
-      <Filter>Classes\jansson</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\jansson\strconv.c">
-      <Filter>Classes\jansson</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\jansson\utf.c">
-      <Filter>Classes\jansson</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\jansson\value.c">
-      <Filter>Classes\jansson</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\NDKHelper\NDKCallbackNode.cpp">
-      <Filter>Classes\NDKHelper</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\NDKHelper\NDKHelper.cpp">
-      <Filter>Classes\NDKHelper</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\CustomTableViewCell.cpp">
       <Filter>Classes</Filter>
@@ -161,9 +107,6 @@
     <ClInclude Include="..\Classes\CCParallaxNodeExtras.h">
       <Filter>Classes</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\CollisionDetection.h">
-      <Filter>Classes</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\ConfigLoader.h">
       <Filter>Classes</Filter>
     </ClInclude>
@@ -179,16 +122,10 @@
     <ClInclude Include="..\Classes\EnemyFactory.h">
       <Filter>Classes</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\GameClient.h">
-      <Filter>Classes</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\GameObject.h">
       <Filter>Classes</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\Global.h">
-      <Filter>Classes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\HttpClientTest.h">
       <Filter>Classes</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\IntroScene.h">
@@ -215,9 +152,6 @@
     <ClInclude Include="..\Classes\ObjectLayer.h">
       <Filter>Classes</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\ParseClient.h">
-      <Filter>Classes</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\PauseDialog.h">
       <Filter>Classes</Filter>
     </ClInclude>
@@ -232,30 +166,6 @@
     </ClInclude>
     <ClInclude Include="..\Classes\WaitForLifeDialog.h">
       <Filter>Classes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\jansson\hashtable.h">
-      <Filter>Classes\jansson</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\jansson\jansson.h">
-      <Filter>Classes\jansson</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\jansson\jansson_config.h">
-      <Filter>Classes\jansson</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\jansson\jansson_private.h">
-      <Filter>Classes\jansson</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\jansson\strbuffer.h">
-      <Filter>Classes\jansson</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\jansson\utf.h">
-      <Filter>Classes\jansson</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\NDKHelper\NDKCallbackNode.h">
-      <Filter>Classes\NDKHelper</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\NDKHelper\NDKHelper.h">
-      <Filter>Classes\NDKHelper</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\CustomTableViewCell.h">
       <Filter>Classes</Filter>

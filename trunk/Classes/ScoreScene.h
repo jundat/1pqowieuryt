@@ -3,8 +3,6 @@
 
 #include "cocos2d.h"
 #include "cocos-ext.h"
-#include "HttpClient.h"
-#include "jansson/jansson.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #include "EziSocialObject.h"
