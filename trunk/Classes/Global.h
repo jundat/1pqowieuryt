@@ -1,10 +1,10 @@
-#ifndef __GLOBAL_H__
+﻿#ifndef __GLOBAL_H__
 #define __GLOBAL_H__
 
 #include <string>
 
 //////////////////////////////////////////////////////////////////////////
-#define G_DEFAULT_NAME			"Phi C�ng"
+#define G_DEFAULT_NAME			"Việt Nam"
 #define G_AVATAR_SIZE			128
 #define G_FRIEND_AVATAR_SIZE	128
 

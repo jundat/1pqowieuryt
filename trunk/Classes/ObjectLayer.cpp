@@ -556,6 +556,9 @@ void ObjectLayer::ActiveBoom(CCObject* pSender)
 				enemy->HitBullet(1000);
 			}
 		}
+
+		//pause a little before next wave
+		m_enemyFactory->update(-3.0f, m_score);
 	}
 }
 

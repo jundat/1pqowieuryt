@@ -48,7 +48,16 @@ bool MainGameScene::init()
 		this,
 		menu_selector(MainGameScene::pauseCallback));
 	itPause->setPosition(ccp(1.15f * itPause->getContentSize().width/2, G_DESIGN_HEIGHT - 1.15f * itPause->getContentSize().height/2));
-	CCMenu* pMenu = CCMenu::create(itPause, NULL);
+
+	//cheat
+	CCMenuItemImage *itCheat = CCMenuItemImage::create(
+		"pause_0.png",
+		"pause_1.png",
+		this,
+		menu_selector(MainGameScene::cheatCallback));
+	itCheat->setPosition(ccp(G_DESIGN_WIDTH - 1.15f * itCheat->getContentSize().width/2, G_DESIGN_HEIGHT - 1.15f * itCheat->getContentSize().height/2));
+
+	CCMenu* pMenu = CCMenu::create(itPause, itCheat, NULL);
 	pMenu->setPosition(CCPointZero);
 	this->addChild(pMenu, 1);
 	
@@ -146,4 +155,9 @@ void MainGameScene::restartCallback()
 void MainGameScene::keyBackClicked()
 {
 	pauseCallback(NULL);
+}
+
+void MainGameScene::cheatCallback( CCObject* pSender )
+{
+	m_ObjLayer->setScore(m_ObjLayer->getScore() + 100000);
 }

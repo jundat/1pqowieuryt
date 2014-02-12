@@ -14,7 +14,6 @@ public:
 	void Reset();
 
 	float m_smallCounter;
-	float m_bigCounter;
 
 	LevelData m_currentLevel;
 	LevelData m_savedLevel;

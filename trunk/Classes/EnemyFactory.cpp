@@ -36,7 +36,6 @@ static float getVy(int id) {
 EnemyFactory::EnemyFactory()
 {
 	m_smallCounter = 0;
-	m_bigCounter = 0;
 
 	m_currentLevel = (*LevelLoader::shareLevelLoader()->GetValueLowerThan(0)).Clone();
 	m_savedLevel = m_currentLevel.Clone();
@@ -135,7 +134,6 @@ void EnemyFactory::update( float delta, int score )
 void EnemyFactory::Reset()
 {
 	m_smallCounter = 0;
-	m_bigCounter = 0;
 
 	m_currentLevel = (*LevelLoader::shareLevelLoader()->GetValueLowerThan(0)).Clone();
 	m_savedLevel = m_currentLevel.Clone();

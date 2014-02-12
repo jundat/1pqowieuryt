@@ -23,6 +23,9 @@ public:
 	void resumeCallback();
 	virtual void keyBackClicked();
 
+	//cheat
+	void cheatCallback(CCObject* pSender);
+
 	bool m_isShowingPause;
 	bool m_isShowingLose;
 
