@@ -67,17 +67,15 @@ bool ScoreScene::init()
 	this->addChild(m_userSprite);
 
 	std::string name = DataManager::sharedDataManager()->GetName();
-	m_lbName = CCLabelTTF::create(name.c_str(), "Marker Felt.ttf", 50);
+	m_lbName = CCLabelTTF::create(name.c_str(), "Marker Felt.ttf", 52);
 	m_lbName->setFontFillColor(ccc3(0, 0, 0));
-	m_lbName->setColor(ccc3(0, 0, 0));
-	m_lbName->setPosition(ccp(400, 1280-248));
+	m_lbName->setPosition(ccp(400, 1280-250)); //248
 	this->addChild(m_lbName);
 
 	CCString* score = CCString::createWithFormat("%d", DataManager::sharedDataManager()->GetHighScore());
-	m_lbScore = CCLabelTTF::create(score->getCString(), "Marker Felt.ttf", 50);
+	m_lbScore = CCLabelTTF::create(score->getCString(), "Marker Felt.ttf", 48);
 	m_lbScore->setFontFillColor(ccc3(0, 0, 0));
-	m_lbScore->setColor(ccc3(0, 0, 0));
-	m_lbScore->setPosition(ccp(400, 1280-320));
+	m_lbScore->setPosition(ccp(400, 1280-320)); //320
 	this->addChild(m_lbScore);
 
 	//
@@ -236,27 +234,25 @@ CCTableViewCell* ScoreScene::tableCellAtIndex(CCTableView *table, unsigned int i
 		avatar->setTag(2);
 		cell->addChild(avatar);
 
-		CCLabelBMFont *lbOrder = CCLabelBMFont::create(order->getCString(), "Mia_64.fnt");
-		lbOrder->setScale(0.6f);
-		lbOrder->setColor(ccc3(255, 255, 255));
-		lbOrder->setAlignment(kCCTextAlignmentLeft); //cocos2d::CCTextAlignment::
-		lbOrder->setPosition(ccp(20, m_sprCell->getContentSize().height/2));
-		lbOrder->setAnchorPoint(ccp(0.0f, 0.5f));
-		lbOrder->setTag(3);
-		cell->addChild(lbOrder);
+// 		CCLabelTTF *lbOrder = CCLabelTTF::create(order->getCString(), "Marker Felt.ttf", 42);
+// 		lbOrder->setFontFillColor(ccc3(0, 0, 0));
+// 		lbOrder->setHorizontalAlignment(kCCTextAlignmentLeft); //cocos2d::CCTextAlignment::
+// 		lbOrder->setPosition(ccp(20, m_sprCell->getContentSize().height/2));
+// 		lbOrder->setAnchorPoint(ccp(0.0f, 0.5f));
+// 		lbOrder->setTag(3);
+// 		cell->addChild(lbOrder);
 
-		CCLabelTTF *lbName = CCLabelTTF::create(name->getCString(), "Marker Felt.ttf", 64);
+		CCLabelTTF *lbName = CCLabelTTF::create(name->getCString(), "Marker Felt.ttf", 42);
 		lbName->setFontFillColor(ccc3(0,0,0));
-		lbName->setScale(0.6f);
 		lbName->setHorizontalAlignment(kCCTextAlignmentRight);
 		lbName->setPosition(ccp(m_sprCell->getContentSize().width, m_sprCell->getContentSize().height/2));
 		lbName->setAnchorPoint(ccp(1.0f, 0.5f));
 		lbName->setTag(4);
 		cell->addChild(lbName);
 
-		CCLabelBMFont *lbScore = CCLabelBMFont::create(score->getCString(), "Mia_64.fnt");
-		lbScore->setScale(0.6f);
-		lbScore->setAlignment(kCCTextAlignmentCenter); //cocos2d::CCTextAlignment::
+		CCLabelTTF *lbScore = CCLabelTTF::create(score->getCString(), "Marker Felt.ttf", 42);
+		lbScore->setFontFillColor(ccc3(0, 0, 0));
+		lbScore->setHorizontalAlignment(kCCTextAlignmentCenter); //cocos2d::CCTextAlignment::
 		lbScore->setPosition(ccp(0.25 * m_sprCell->getContentSize().width, m_sprCell->getContentSize().height/2));
 		lbScore->setAnchorPoint(ccp(0.5f, 0.5f));
 		lbScore->setTag(5);
@@ -277,15 +273,15 @@ CCTableViewCell* ScoreScene::tableCellAtIndex(CCTableView *table, unsigned int i
 		CCSprite *avatar = (CCSprite*)cell->getChildByTag(2);
 		avatar = CCSprite::create(photo->getCString());
 
-		CCLabelBMFont *lbOrder = (CCLabelBMFont*)cell->getChildByTag(3);
-		lbOrder->setString(order->getCString());
-		lbOrder->setPosition(ccp(20, m_sprCell->getContentSize().height/2));
+// 		CCLabelTTF *lbOrder = (CCLabelTTF*)cell->getChildByTag(3);
+// 		lbOrder->setString(order->getCString());
+// 		lbOrder->setPosition(ccp(20, m_sprCell->getContentSize().height/2));
 
 		CCLabelTTF *lbName = (CCLabelTTF*)cell->getChildByTag(4);
 		lbName->setString(name->getCString());
 		lbName->setPosition(ccp(m_sprCell->getContentSize().width, m_sprCell->getContentSize().height/2));
 
-		CCLabelBMFont *lbScore = (CCLabelBMFont*)cell->getChildByTag(5);
+		CCLabelTTF *lbScore = (CCLabelTTF*)cell->getChildByTag(5);
 		lbScore->setString(score->getCString());
 		lbScore->setPosition(ccp(0.25 * m_sprCell->getContentSize().width, m_sprCell->getContentSize().height/2));
 	}

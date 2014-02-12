@@ -47,9 +47,9 @@ bool ObjectLayer::init()
 	float w = temp->getContentSize().width;
 	float h = temp->getContentSize().height;
 	
-	m_labelScore = CCLabelBMFont::create("0", "Mia_64.fnt");
-	m_labelScore->setScale(0.8f);
-	m_labelScore->setAlignment(kCCTextAlignmentLeft);
+	m_labelScore = CCLabelTTF::create("0", "Marker Felt.ttf", 52);
+	m_labelScore->setFontFillColor(ccc3(0, 0, 0));
+	m_labelScore->setHorizontalAlignment(kCCTextAlignmentLeft);
 	m_labelScore->setPosition(ccp(2 * w, G_DESIGN_HEIGHT - h/2));
 
 	this->addChild(m_labelScore, 10);
@@ -61,7 +61,8 @@ bool ObjectLayer::init()
 	CCMenu* menu = CCMenu::create(m_itemBoom, NULL);
 	this->addChild(menu, 10);
 
-	m_labelBoom = CCLabelBMFont::create("x0", "Mia_64.fnt");
+	m_labelBoom = CCLabelTTF::create("x0", "Marker Felt.ttf", 64);
+	m_labelBoom->setFontFillColor(ccc3(0, 0, 0));	
 	m_labelBoom->setPosition(ccp(m_itemBoom->getContentSize().width + m_labelBoom->getContentSize().width,
 		m_itemBoom->getContentSize().height/4 + m_labelBoom->getContentSize().height/4));
 	m_labelBoom->setVisible(false);
@@ -388,7 +389,7 @@ void ObjectLayer::update( float delta )
 				
 				CCString* sscore = CCString::createWithFormat("%d", m_score);
 				m_labelScore->setString(sscore->getCString());
-				m_labelScore->setAlignment(kCCTextAlignmentLeft);
+				m_labelScore->setHorizontalAlignment(kCCTextAlignmentLeft);
 			}
 
 			//out of screen
@@ -476,7 +477,7 @@ void ObjectLayer::RestartGame()
 	m_itemBoom->setVisible(false);
 
 	m_labelScore->setString("0");
-	m_labelScore->setAlignment(kCCTextAlignmentLeft);
+	m_labelScore->setHorizontalAlignment(kCCTextAlignmentLeft);
 	
 
 	this->schedule(schedule_selector(ObjectLayer::ScheduleGenerateItem), G_TIME_TO_GENERATE_ITEM);

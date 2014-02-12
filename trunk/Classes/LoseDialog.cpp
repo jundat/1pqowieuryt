@@ -38,7 +38,7 @@ bool LoseDialog::init()
 	this->addChild(labelTitle);
 
 	CCString* s = CCString::createWithFormat("%d", m_score);
-	CCLabelBMFont* lbScore = CCLabelBMFont::create(s->getCString(), "Mia_64.fnt");
+	CCLabelTTF* lbScore = CCLabelTTF::create(s->getCString(), "Marker Felt.ttf", 64);
 	lbScore->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2 + 30));
 	lbScore->setColor(ccc3(56, 56, 56));
 	this->addChild(lbScore);

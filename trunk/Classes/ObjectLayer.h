@@ -60,8 +60,8 @@ private:
 	CC_SYNTHESIZE(Ship*, m_player, Player);
 	CC_SYNTHESIZE(int, m_numberBoom, NumberBoom);
 
-	CCLabelBMFont* m_labelScore;
-	CCLabelBMFont* m_labelBoom;
+	CCLabelTTF* m_labelScore;
+	CCLabelTTF* m_labelBoom;
 	CCMenuItemImage* m_itemBoom;
 		
 	CCPoint m_lastPoint;

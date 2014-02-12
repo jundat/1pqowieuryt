@@ -23,7 +23,7 @@ public:
     CREATE_FUNC(MenuScene);
 
 	CCMenu* m_menu;
-	CCLabelBMFont* m_labelLife;
+	CCLabelTTF* m_labelLife;
 	
 	virtual void keyBackClicked();
     void playCallback(CCObject* pSender);

@@ -35,6 +35,7 @@ bool Bullet::init()
 		m_sprite = CCSprite::createWithSpriteFrameName("bullet2.png");
 	}
 
+	m_sprite->setScale(2.0f);
 	this->addChild(m_sprite);
 
 	//////////////////////////////////////////////////////////////////////////

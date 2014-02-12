@@ -50,7 +50,7 @@ bool MenuScene::init()
 
 	//
 	CCString* s = CCString::createWithFormat("%d", DataManager::sharedDataManager()->GetLastPlayerLife());
-	m_labelLife = CCLabelBMFont::create(s->getCString(), "Mia_64.fnt");
+	m_labelLife = CCLabelTTF::create(s->getCString(), "Marker Felt.ttf", 64);
 	m_labelLife->setColor(ccc3(56, 56, 56));
 	m_labelLife->setPosition(ccp(400, 1280-508));
 	this->addChild(m_labelLife);
@@ -58,10 +58,9 @@ bool MenuScene::init()
 	//
 
 	//
-	s = CCString::createWithFormat("v%d", 27);
-	CCLabelBMFont* labelVersion = CCLabelBMFont::create(s->getCString(), "Mia_64.fnt");
+	s = CCString::createWithFormat("v%d", 28);
+	CCLabelTTF* labelVersion = CCLabelTTF::create(s->getCString(), "Marker Felt.ttf", 32);
 	labelVersion->setColor(ccc3(56, 56, 56));
-	labelVersion->setScale(0.5f);
 	labelVersion->setPosition(ccp(labelVersion->getContentSize().width/4, G_DESIGN_HEIGHT - labelVersion->getContentSize().height/4));
 	this->addChild(labelVersion);
 
@@ -95,7 +94,6 @@ bool MenuScene::init()
 	settingItem->setPosition(ccp(400, 1280-973));
 
 	//
-
 	CCMenuItemImage *exitItem = CCMenuItemImage::create(
 		"exit_button.png",
 		"exit_button_press.png",
