@@ -1,7 +1,6 @@
 ﻿#include "MenuScene.h"
 #include "MainGameScene.h"
 #include "ScoreScene.h"
-#include "SettingScene.h"
 #include "AudioManager.h"
 #include "DataManager.h"
 #include "WaitForLifeDialog.h"
@@ -49,7 +48,7 @@ bool MenuScene::init()
 	initLifeIcon();	
 
 	//
-	CCString* s = CCString::createWithFormat("v%d", 29);
+	CCString* s = CCString::createWithFormat("v%d", 30);
 	CCLabelTTF* labelVersion = CCLabelTTF::create(s->getCString(), "Roboto-Medium.ttf", 32);
 	labelVersion->setColor(ccc3(56, 56, 56));
 	labelVersion->setPosition(ccp(labelVersion->getContentSize().width/4, G_DESIGN_HEIGHT - labelVersion->getContentSize().height/4));
@@ -62,7 +61,7 @@ bool MenuScene::init()
                                         this,
                                         menu_selector(MenuScene::playCallback));
     
-	playItem->setPosition(ccp(400, 1280-653));
+	playItem->setPosition(ccp(400, 1280-653-100));
 
 
 	CCMenuItemImage *scoreItem = CCMenuItemImage::create(
@@ -71,7 +70,7 @@ bool MenuScene::init()
 		this,
 		menu_selector(MenuScene::scoreCallback));
 
-	scoreItem->setPosition(ccp(400, 1280-813));
+	scoreItem->setPosition(ccp(400, 1280-813-100));
 
 	//
 
@@ -103,7 +102,7 @@ void MenuScene::initLifeIcon()
 {
 	float w = CCSprite::create("oil.png")->getContentSize().width;
 	float x = (800 - w * 5)/2 + w/2;
-	float y = 1280 - 500;
+	float y = 1280 - 500 - 100;
 
 	m_arrSprLife = new CCArray();
 	m_arrSprLife->retain();

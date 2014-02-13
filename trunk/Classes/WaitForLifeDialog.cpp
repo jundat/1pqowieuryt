@@ -71,33 +71,36 @@ void WaitForLifeDialog::exitCallback( CCObject* pSender )
 
 void WaitForLifeDialog::askFriendCallback( CCObject* pSender )
 {
-	//post to the wall
-//#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 
-// heading,
-// caption,
-// message,
-// description,
-// badgeIconURL,
-// deepLinkURL
+// 	EziSocialObject::sharedObject()->sendRequestToFriends(
+// 		EziSocialWrapperNS::FB_REQUEST::TYPE, //EziSocialWrapperNS::FB_REQUEST::TYPErequestType,
+// 		"Giúp mình với!", //const char* message,
+// 		NULL, //cocos2d::CCArray *selectedFriendIDs,
+// 		NULL, //cocos2d::CCDictionary *dataDictionary, 
+// 		"Phi Công Bút Chì" //const char* customTitle
+// 		);
 
-// 	EziSocialObject::sharedObject()->postMessageOnWall("Game",
-// 		"Please save me !!!",
-// 		"I lost my life, can you play to save me, plz...",
-// 		"I lost my life, can you play to save me, plz...",
-// 		"http://www.cocos2d-x.org/attachments/709/cocos2dx_portrait.png",
-// 		"http://www.cocos2d-x.org/"
-//#else
-	DataManager::sharedDataManager()->SetLastPlayerLife(5);
+	//invite friends
+	EziSocialObject::sharedObject()->sendRequestToFriends(
+		EziSocialWrapperNS::FB_REQUEST::REQUEST_INVITE,
+		"Cứu với, đang hết mạng nè!", 
+		NULL,
+		NULL, 
+		"Phi Công Bút Chì");
 
-	//stop timer
-	this->unschedule(schedule_selector(WaitForLifeDialog::ScheduleTick));
+	//send challenge
+// 	EziSocialObject::sharedObject()->sendRequestToFriends(
+// 		EziSocialWrapperNS::FB_REQUEST::REQUEST_CHALLENGE,
+// 		"I have score 900 points in EziSocialDemo. Can you beat me?",
+// 		NULL,
+// 		NULL, 
+// 		"");
 
-	MenuScene* parent = (MenuScene*)this->getParent();
-	parent->setTouchEnabled(true);
-	parent->onCloseDialog();
-	this->removeFromParent();
-//#endif
+	//send gift
+	
+
+#endif
 }
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
@@ -122,6 +125,38 @@ void WaitForLifeDialog::fbMessageCallback(int responseCode, const char* response
 		CCLOG("Message published failed!");
 	}
 }
+
+
+void WaitForLifeDialog::fbSendRequestCallback( int responseCode, const char* responseMessage, cocos2d::CCArray* friendsGotRequests )
+{
+// 	FB_REQUEST_SENDING_ERROR - In case if there is any error while sending the request
+// 	FB_REQUEST_SENDING_CANCELLED – In case, user decides not to send the request.
+// 	FB_REQUEST_SENT - If sending request is success
+
+	if (EziSocialWrapperNS::RESPONSE_CODE::FB_REQUEST_SENT == responseCode)
+	{
+		int numFriends = friendsGotRequests->count();
+
+		CCLOG("Request sent successfully to %d friends", numFriends);
+		CCMessageBox("Infor", "Request sent successfully");
+
+		numFriends = (numFriends > G_MAX_PLAYER_LIFE) ? G_MAX_PLAYER_LIFE : numFriends;
+		DataManager::sharedDataManager()->SetLastPlayerLife(numFriends);
+		
+		//stop timer
+		this->unschedule(schedule_selector(WaitForLifeDialog::ScheduleTick));
+
+		MenuScene* parent = (MenuScene*)this->getParent();
+		parent->setTouchEnabled(true);
+		parent->onCloseDialog();
+		this->removeFromParent();
+	}
+	else
+	{
+		CCMessageBox("Infor", "Request sent failed");
+	}
+}
+
 
 #endif
 

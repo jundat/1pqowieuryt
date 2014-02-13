@@ -55,6 +55,8 @@ public:
 	}
 
 	// Facebook Delegate Methods
+
+	virtual void fbSendRequestCallback(int responseCode, const char* responseMessage, cocos2d::CCArray* friendsGotRequests);
 	virtual void fbMessageCallback(int responseCode, const char* responseMessage);
 #endif
 
