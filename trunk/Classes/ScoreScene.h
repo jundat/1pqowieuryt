@@ -35,7 +35,11 @@ public:
 	}
 
 
-	void fbCallback(CCObject* pSender);
+	CCMenuItemImage *m_fbLogOutItem;
+	void fbLogOutCallback(CCObject* pSender);
+
+	void fbLogInCallback(CCObject* pSender);
+
 	virtual void keyBackClicked();
 	void menuCallback(CCObject* pSender);
 
@@ -71,6 +75,7 @@ public:
 private:
 	int m_listSize;
 
+	CCLabelTTF* m_lbInvite;
 	CCLabelTTF* m_lbWaiting;
 	CCLabelTTF* m_lbName;
 	CCLabelTTF* m_lbScore;
@@ -82,7 +87,7 @@ private:
 public:
 	// Facebook //=========================================
 	CCSprite* m_userSprite;
-	CCMenuItem* m_fbItem;
+	CCMenuItem* m_fbLogInItem;
 	CCArray* m_friendList;
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
