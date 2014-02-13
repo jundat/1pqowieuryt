@@ -175,11 +175,12 @@ bool ScoreScene::init()
 		m_tableView->setVisible(false);
 		m_lbWaiting->setVisible(false);
 
-		#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-			m_lbWaiting->setVisible(true);
-			bool needPublicPermission = true;
-			EziSocialObject::sharedObject()->performLoginUsingFacebook(needPublicPermission); // Pass true if you need publish permission also
-		#endif
+		//not auto log in
+// 		#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+// 			m_lbWaiting->setVisible(true);
+// 			bool needPublicPermission = true;
+// 			EziSocialObject::sharedObject()->performLoginUsingFacebook(needPublicPermission); // Pass true if you need publish permission also
+// 		#endif
 	}
 
 	return true;
