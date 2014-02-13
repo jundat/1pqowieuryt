@@ -39,15 +39,22 @@ bool ObjectLayer::init()
 	m_difficulty = 0;
 	m_numberBoom = 0;
 
+	m_sprLazer = CCSprite::create("lazer.png");
+	m_sprLazer->setVisible(false);
+	this->addChild(m_sprLazer, 1);
+
+
 	m_player = Ship::create();
 	m_player->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT * 0.1));
-	this->addChild(m_player);
+	this->addChild(m_player, 2);
+
+
 
 	CCSprite* temp = CCSprite::create("pause_0.png");
 	float w = temp->getContentSize().width;
 	float h = temp->getContentSize().height;
 	
-	m_labelScore = CCLabelTTF::create("0", "Marker Felt.ttf", 52);
+	m_labelScore = CCLabelTTF::create("0", "Roboto-Medium.ttf", 52);
 	m_labelScore->setFontFillColor(ccc3(0, 0, 0));
 	m_labelScore->setHorizontalAlignment(kCCTextAlignmentLeft);
 	m_labelScore->setPosition(ccp(2 * w, G_DESIGN_HEIGHT - h/2));
@@ -61,19 +68,17 @@ bool ObjectLayer::init()
 	CCMenu* menu = CCMenu::create(m_itemBoom, NULL);
 	this->addChild(menu, 10);
 
-	m_labelBoom = CCLabelTTF::create("x0", "Marker Felt.ttf", 64);
-	m_labelBoom->setFontFillColor(ccc3(0, 0, 0));	
+	m_labelBoom = CCLabelTTF::create("x0", "Roboto-Medium.ttf", 52);
 	m_labelBoom->setPosition(ccp(m_itemBoom->getContentSize().width + m_labelBoom->getContentSize().width,
 		m_itemBoom->getContentSize().height/4 + m_labelBoom->getContentSize().height/4));
 	m_labelBoom->setVisible(false);
 	this->addChild(m_labelBoom, 10);
 
-	
 	m_EffectLayer = EffectLayer::create();
 	this->addChild(m_EffectLayer, 10);
 
 	m_enemyFactory = EnemyFactory::create();
-	this->addChild(m_enemyFactory);
+	this->addChild(m_enemyFactory, 2);
 
 	this->schedule(schedule_selector(ObjectLayer::ScheduleGenerateItem), G_TIME_TO_GENERATE_ITEM);
 	this->schedule(schedule_selector(ObjectLayer::ScheduleCheckCollision), CCDirector::sharedDirector()->getAnimationInterval());
@@ -262,7 +267,7 @@ void ObjectLayer::ScheduleCheckCollision(float dt)
 				{
 					PLAY_GET_DOUBLE_LAZER_EFFECT;
 					m_player->UpgradeBullet();
-				} 
+				}
 				else if (itemtype == G_ITEM_ARMOR)
 				{
 					m_player->EnableArmor();
@@ -278,14 +283,41 @@ void ObjectLayer::ScheduleCheckCollision(float dt)
 			}
 		}
 	}
+
+	//Lazer
+	if (m_sprLazer->isVisible())
+	{
+		CCRect lazerRect = m_sprLazer->boundingBox();
+		
+		CCARRAY_FOREACH(m_arrEnemies, it1)
+		{
+			Enemy* enemy = dynamic_cast<Enemy*>(it1);
+			if (NULL != enemy)
+			{
+				CCRect enemyRect = enemy->boundingBox();
+
+				if (enemyRect.intersectsRect(lazerRect))
+				{
+					//sound
+					//PLAY_USE_BOMB_EFFECT;
+
+					enemy->HitBullet(1000);
+					m_arrEnemies->removeObject(enemy);
+				}
+			}
+		}
+	}
 }
 
 void ObjectLayer::AddBullet(Bullet* bullet)
 {
-	int type = bullet->getBulletType();
+	if (m_sprLazer->isVisible() == false) //not lazer
+	{
+		int type = bullet->getBulletType();
 
-	m_arrPlayerBullets->addObject(bullet);
-	this->addChild(bullet);
+		m_arrPlayerBullets->addObject(bullet);
+		this->addChild(bullet);
+	}
 }
 
 void ObjectLayer::AddItem( Item* item )
@@ -400,6 +432,15 @@ void ObjectLayer::update( float delta )
 			}
 		}
 	}
+
+	//Lazer
+	if (m_sprLazer->isVisible())
+	{
+		m_sprLazer->setScaleY((G_DESIGN_HEIGHT - m_player->getPositionY()) / m_sprLazer->getContentSize().height);
+		m_sprLazer->setScaleX(2.0f);
+		m_sprLazer->setAnchorPoint(ccp(0.5f, 0.0f));
+		m_sprLazer->setPosition(m_player->getPosition());
+	}
 }
 
 void ObjectLayer::ContinueGame()
@@ -487,6 +528,9 @@ void ObjectLayer::RestartGame()
 
 void ObjectLayer::AfterDeadEffectCallback()
 {
+	//Lazer
+	m_sprLazer->setVisible(false);
+
 	m_player->Dead();
 
 	MainGameScene* parent = (MainGameScene*) this->getParent();
@@ -546,21 +590,20 @@ void ObjectLayer::ActiveBoom(CCObject* pSender)
 			m_itemBoom->setVisible(false);
 		}
 
-		//explosion all enemies
-		CCObject* it;
-		CCARRAY_FOREACH(m_arrEnemies, it)
-		{
-			Enemy* enemy = dynamic_cast<Enemy*>(it);
+		m_sprLazer->setScaleY((G_DESIGN_HEIGHT - m_player->getPositionY()) / m_sprLazer->getContentSize().height);
+		m_sprLazer->setScaleX(2.0f);
+		m_sprLazer->setAnchorPoint(ccp(0.5f, 0.0f));
+		m_sprLazer->setPosition(m_player->getPosition());
+		m_sprLazer->setVisible(true);
 
-			if (NULL != enemy)
-			{
-				enemy->HitBullet(1000);
-			}
-		}
-
-		//pause a little before next wave
-		m_enemyFactory->update(-3.0f, m_score);
+		this->schedule(schedule_selector(ObjectLayer::ScheduleStopLazer), G_PLAYER_LAZER_TIME);
 	}
+}
+
+void ObjectLayer::ScheduleStopLazer( float dt )
+{
+	this->unschedule(schedule_selector(ObjectLayer::ScheduleStopLazer));
+	m_sprLazer->setVisible(false);
 }
 
 void ObjectLayer::Pause()

@@ -42,7 +42,7 @@ bool WaitForLifeDialog::init()
 	menu->setPosition(CCPointZero);
 	this->addChild(menu);
 
-	CCLabelTTF* labelTitle = CCLabelTTF::create("Không đủ số mạng\nHãy chờ thêm", "Marker Felt.ttf", 48);
+	CCLabelTTF* labelTitle = CCLabelTTF::create("Không đủ số mạng\nHãy chờ thêm", "Roboto-Medium.ttf", 48);
 	labelTitle->setFontFillColor(ccc3(56, 56, 56));
 	labelTitle->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2 + 120));
 	this->addChild(labelTitle);
@@ -51,7 +51,7 @@ bool WaitForLifeDialog::init()
 	int seconds = (int)m_waitTime%60;
 
 	CCString* s = CCString::createWithFormat("%d phút %d giây", mins, seconds);
-	m_lbTime = CCLabelTTF::create(s->getCString(), "Marker Felt", 48);
+	m_lbTime = CCLabelTTF::create(s->getCString(), "Roboto-Medium", 48);
 	m_lbTime->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2));
 	m_lbTime->setColor(ccc3(56, 56, 56));
 	this->addChild(m_lbTime);

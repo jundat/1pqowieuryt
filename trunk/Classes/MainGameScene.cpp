@@ -59,7 +59,7 @@ bool MainGameScene::init()
 
 	CCMenu* pMenu = CCMenu::create(itPause, itCheat, NULL);
 	pMenu->setPosition(CCPointZero);
-	this->addChild(pMenu, 1);
+	this->addChild(pMenu);
 	
 	//////////////////////////////////////////////////////////////////////////
 

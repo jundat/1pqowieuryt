@@ -44,7 +44,8 @@ int G_MAX_PLAYER_BOOM = 3;
 
 int G_MIN_ENEMY_HP = 1;
 int G_MIN_ENEMY_DAM = 1;
-float G_PLAYER_ARMOR_TIME = 10.0f;
+float G_PLAYER_LAZER_TIME = 0.0f;
+float G_PLAYER_ARMOR_TIME = 0.0f;
 float G_PLAYER_BULLET_VY = 1.0f;
 
 float G_PLAYER_TIME_TO_FIRE = 0.4f;

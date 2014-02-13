@@ -60,10 +60,13 @@ private:
 	CC_SYNTHESIZE(Ship*, m_player, Player);
 	CC_SYNTHESIZE(int, m_numberBoom, NumberBoom);
 
+	void ScheduleStopLazer(float dt);
 	CCLabelTTF* m_labelScore;
 	CCLabelTTF* m_labelBoom;
 	CCMenuItemImage* m_itemBoom;
-		
+	CCSprite* m_sprLazer;
+
+	
 	CCPoint m_lastPoint;
 	
 	CCArray* m_arrEnemies;

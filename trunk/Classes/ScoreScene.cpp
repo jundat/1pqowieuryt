@@ -67,13 +67,13 @@ bool ScoreScene::init()
 	this->addChild(m_userSprite);
 
 	std::string name = DataManager::sharedDataManager()->GetName();
-	m_lbName = CCLabelTTF::create(name.c_str(), "Marker Felt.ttf", 52);
+	m_lbName = CCLabelTTF::create(name.c_str(), "Roboto-Medium.ttf", 52);
 	m_lbName->setFontFillColor(ccc3(0, 0, 0));
 	m_lbName->setPosition(ccp(400, 1280-250)); //248
 	this->addChild(m_lbName);
 
 	CCString* score = CCString::createWithFormat("%d", DataManager::sharedDataManager()->GetHighScore());
-	m_lbScore = CCLabelTTF::create(score->getCString(), "Marker Felt.ttf", 48);
+	m_lbScore = CCLabelTTF::create(score->getCString(), "Roboto-Medium.ttf", 48);
 	m_lbScore->setFontFillColor(ccc3(0, 0, 0));
 	m_lbScore->setPosition(ccp(400, 1280-320)); //320
 	this->addChild(m_lbScore);
@@ -135,7 +135,7 @@ bool ScoreScene::init()
 	m_tableView->setVerticalFillOrder(kCCTableViewFillTopDown);
 	this->addChild(m_tableView);
 
-	m_lbWaiting = CCLabelTTF::create("...WAITING...", "Marker Felt.ttf", 64);
+	m_lbWaiting = CCLabelTTF::create("...WAITING...", "Roboto-Medium.ttf", 64);
 	m_lbWaiting->setColor(ccc3(0, 0, 0));
 	m_lbWaiting->setHorizontalAlignment(kCCTextAlignmentCenter);
 	m_lbWaiting->setVerticalAlignment(kCCVerticalTextAlignmentCenter);
@@ -234,7 +234,7 @@ CCTableViewCell* ScoreScene::tableCellAtIndex(CCTableView *table, unsigned int i
 		avatar->setTag(2);
 		cell->addChild(avatar);
 
-// 		CCLabelTTF *lbOrder = CCLabelTTF::create(order->getCString(), "Marker Felt.ttf", 42);
+// 		CCLabelTTF *lbOrder = CCLabelTTF::create(order->getCString(), "Roboto-Medium.ttf", 42);
 // 		lbOrder->setFontFillColor(ccc3(0, 0, 0));
 // 		lbOrder->setHorizontalAlignment(kCCTextAlignmentLeft); //cocos2d::CCTextAlignment::
 // 		lbOrder->setPosition(ccp(20, m_sprCell->getContentSize().height/2));
@@ -242,7 +242,7 @@ CCTableViewCell* ScoreScene::tableCellAtIndex(CCTableView *table, unsigned int i
 // 		lbOrder->setTag(3);
 // 		cell->addChild(lbOrder);
 
-		CCLabelTTF *lbName = CCLabelTTF::create(name->getCString(), "Marker Felt.ttf", 42);
+		CCLabelTTF *lbName = CCLabelTTF::create(name->getCString(), "Roboto-Medium.ttf", 42);
 		lbName->setFontFillColor(ccc3(0,0,0));
 		lbName->setHorizontalAlignment(kCCTextAlignmentRight);
 		lbName->setPosition(ccp(m_sprCell->getContentSize().width, m_sprCell->getContentSize().height/2));
@@ -250,7 +250,7 @@ CCTableViewCell* ScoreScene::tableCellAtIndex(CCTableView *table, unsigned int i
 		lbName->setTag(4);
 		cell->addChild(lbName);
 
-		CCLabelTTF *lbScore = CCLabelTTF::create(score->getCString(), "Marker Felt.ttf", 42);
+		CCLabelTTF *lbScore = CCLabelTTF::create(score->getCString(), "Roboto-Medium.ttf", 42);
 		lbScore->setFontFillColor(ccc3(0, 0, 0));
 		lbScore->setHorizontalAlignment(kCCTextAlignmentCenter); //cocos2d::CCTextAlignment::
 		lbScore->setPosition(ccp(0.25 * m_sprCell->getContentSize().width, m_sprCell->getContentSize().height/2));

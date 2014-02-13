@@ -2,6 +2,7 @@
 #define __MENU_SCENE_H__
 
 #include "cocos2d.h"
+#include "MyMacro.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #include "EziSocialObject.h"
@@ -18,12 +19,20 @@ class MenuScene : public cocos2d::CCLayer
 #endif
 {
 public:
+	~MenuScene() 
+	{
+		MY_RELEASE(m_arrSprLife);
+	}
+
     virtual bool init();  
     static cocos2d::CCScene* scene();
     CREATE_FUNC(MenuScene);
 
 	CCMenu* m_menu;
-	CCLabelTTF* m_labelLife;
+
+	void initLifeIcon();
+	void playStartAnimation(int lastLife);
+	void gotoMainGame();
 	
 	virtual void keyBackClicked();
     void playCallback(CCObject* pSender);
@@ -38,6 +47,9 @@ public:
 	void onCloseDialog();
 
 	bool m_isShowDialog;
+
+	//life animation
+	CCArray* m_arrSprLife;
 
 	//facebook /////////////////////////////////
 

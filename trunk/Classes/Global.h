@@ -52,6 +52,7 @@ extern int G_MAX_PLAYER_BOOM;
 
 extern int G_MIN_ENEMY_HP;
 extern int G_MIN_ENEMY_DAM;
+extern float G_PLAYER_LAZER_TIME;
 extern float G_PLAYER_ARMOR_TIME;
 extern float G_PLAYER_BULLET_VY;
 

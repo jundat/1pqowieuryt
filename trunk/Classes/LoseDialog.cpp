@@ -32,13 +32,13 @@ bool LoseDialog::init()
 	menu->setPosition(CCPointZero);
 	this->addChild(menu);
 
-	CCLabelTTF* labelTitle = CCLabelTTF::create("Điểm", "Marker Felt.ttf", 64);
+	CCLabelTTF* labelTitle = CCLabelTTF::create("Điểm", "Roboto-Medium.ttf", 64);
 	labelTitle->setFontFillColor(ccc3(56, 56, 56));
 	labelTitle->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2 + 120));
 	this->addChild(labelTitle);
 
 	CCString* s = CCString::createWithFormat("%d", m_score);
-	CCLabelTTF* lbScore = CCLabelTTF::create(s->getCString(), "Marker Felt.ttf", 64);
+	CCLabelTTF* lbScore = CCLabelTTF::create(s->getCString(), "Roboto-Medium.ttf", 64);
 	lbScore->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2 + 30));
 	lbScore->setColor(ccc3(56, 56, 56));
 	this->addChild(lbScore);

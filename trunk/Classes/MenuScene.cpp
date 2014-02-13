@@ -48,24 +48,16 @@ bool MenuScene::init()
 	menuTop->setPosition(ccp(436, 1280-210));
 	this->addChild(menuTop, 0);
 
-	//
-	CCString* s = CCString::createWithFormat("%d", DataManager::sharedDataManager()->GetLastPlayerLife());
-	m_labelLife = CCLabelTTF::create(s->getCString(), "Marker Felt.ttf", 64);
-	m_labelLife->setColor(ccc3(56, 56, 56));
-	m_labelLife->setPosition(ccp(400, 1280-508));
-	this->addChild(m_labelLife);
+	initLifeIcon();	
 
 	//
-
-	//
-	s = CCString::createWithFormat("v%d", 28);
-	CCLabelTTF* labelVersion = CCLabelTTF::create(s->getCString(), "Marker Felt.ttf", 32);
+	CCString* s = CCString::createWithFormat("v%d", 29);
+	CCLabelTTF* labelVersion = CCLabelTTF::create(s->getCString(), "Roboto-Medium.ttf", 32);
 	labelVersion->setColor(ccc3(56, 56, 56));
 	labelVersion->setPosition(ccp(labelVersion->getContentSize().width/4, G_DESIGN_HEIGHT - labelVersion->getContentSize().height/4));
 	this->addChild(labelVersion);
 
 	//
-
     CCMenuItemImage *playItem = CCMenuItemImage::create(
                                         "new_button.png",
                                         "new_button_press.png",
@@ -132,6 +124,54 @@ bool MenuScene::init()
     return true;
 }
 
+void MenuScene::initLifeIcon()
+{
+	float w = CCSprite::create("oil.png")->getContentSize().width;
+	float x = (800 - w * 5)/2 + w/2;
+	float y = 1280 - 500;
+
+	m_arrSprLife = new CCArray();
+	m_arrSprLife->retain();
+
+	//life icon
+	for (int i = 0; i < G_MAX_PLAYER_LIFE; ++i)
+	{
+		CCSprite* _sprBlur = CCSprite::create("oil.png");
+		_sprBlur->setOpacity(50);
+		_sprBlur->setPosition(ccp(x + i * w, y));
+		this->addChild(_sprBlur);
+	}
+
+	int life = DataManager::sharedDataManager()->GetLastPlayerLife();
+	for (int i = 0; i < life; ++i)
+	{
+		CCSprite* _spr = CCSprite::create("oil.png");
+		_spr->setPosition(ccp(x + i * w, y));
+		this->addChild(_spr);
+
+		m_arrSprLife->addObject(_spr);
+	}
+}
+
+void MenuScene::playStartAnimation(int lastLife)
+{
+	CCSprite* spr = (CCSprite*)m_arrSprLife->objectAtIndex(lastLife - 1);
+	CCSequence* seq = CCSequence::create(
+		CCSpawn::createWithTwoActions(
+			CCScaleTo::create(0.5f, 0.0f, 0.0f),
+			CCFadeOut::create(0.5f)
+		),
+		CCCallFunc::create(this, callfunc_selector(MenuScene::gotoMainGame)),
+		NULL);
+	spr->runAction(seq);
+}
+
+void MenuScene::gotoMainGame()
+{
+	CCScene *pScene = CCTransitionFade::create(0.5, MainGameScene::scene());
+	CCDirector::sharedDirector()->replaceScene(pScene);
+}
+
 void MenuScene::playCallback(CCObject* pSender)
 {
 	PLAY_BUTTON_EFFECT;
@@ -145,8 +185,7 @@ void MenuScene::playCallback(CCObject* pSender)
 
 	if (lastLife > 0)
 	{
-		CCScene *pScene = CCTransitionFade::create(0.5, MainGameScene::scene());
-		CCDirector::sharedDirector()->replaceScene(pScene);
+		playStartAnimation(lastLife);
 
 		CCLOG("LastLife > 0 -> Play");
 	}
@@ -221,8 +260,9 @@ void MenuScene::onShowDialog()
 void MenuScene::onCloseDialog()
 {
 	DataManager::sharedDataManager()->RefreshPlayerLife();
-	CCString* s = CCString::createWithFormat("%d", DataManager::sharedDataManager()->GetLastPlayerLife());
-	m_labelLife->setString(s->getCString());
+	//CCString* s = CCString::createWithFormat("%d", DataManager::sharedDataManager()->GetLastPlayerLife());
+	//m_labelLife->setString(s->getCString());
+	initLifeIcon();
 	m_menu->setEnabled(true);
 }
 
@@ -274,7 +314,6 @@ void MenuScene::fbSessionCallback(int responseCode, const char *responseMessage)
 	{
 		m_fbItem->setVisible(false); //log out button
 		EziSocialObject::sharedObject()->fetchFBUserDetails(true); //need email = true
-		//EziSocialObject::sharedObject()->getFriends(EziSocialWrapperNS::FB_FRIEND_SEARCH::ONLY_INSTALLED, 0, NUM_REQUEST_FRIENDS);
 	}
 	else
 	{
@@ -298,13 +337,6 @@ void MenuScene::fbUserDetailCallback( int responseCode, const char* responseMess
 		DataManager::sharedDataManager()->SetProfileID(profileID.c_str());
 		DataManager::sharedDataManager()->SetFbUserName(userName.c_str());
 		
-		//CCLOG("FullName: %s", fullname.c_str());
-		//CCLOG("EmailID: %s", emailID.c_str());
-		//CCLOG("Gender: %s", gender.c_str());
-		//CCLOG("UserName: %s", userName.c_str());
-		//CCLOG("ProfileID: %s", profileID.c_str());
-		//CCLOG("AccessToken: %s", accessToken.c_str());
-		
 		scoreCallback(NULL);
 	}
 }
@@ -323,8 +355,6 @@ void MenuScene::fbFriendsCallback( int responseCode, const char* responseMessage
 		m_friendList->retain();
 	}
 }
-
-
 
 #endif
 

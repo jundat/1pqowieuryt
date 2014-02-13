@@ -34,6 +34,7 @@ ConfigLoader::ConfigLoader(void)
 
 	G_MIN_ENEMY_HP = GetValue(std::string("G_MIN_ENEMY_HP"))->intValue();
 	G_MIN_ENEMY_DAM = GetValue(std::string("G_MIN_ENEMY_DAM"))->intValue();
+	G_PLAYER_LAZER_TIME = GetValue(std::string("G_PLAYER_LAZER_TIME"))->floatValue();
 	G_PLAYER_ARMOR_TIME = GetValue(std::string("G_PLAYER_ARMOR_TIME"))->floatValue();
 	G_PLAYER_BULLET_VY = GetValue(std::string("G_PLAYER_BULLET_VY"))->floatValue();
 

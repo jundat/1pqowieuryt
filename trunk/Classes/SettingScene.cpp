@@ -82,7 +82,7 @@ bool SettingScene::init()
 
 	//////////////////////////////////////////////////////////////////////////
 	//VOLUME
-	CCLabelTTF* labelMusic = CCLabelTTF::create("Nhạc nền", "Marker Felt.ttf", 64);
+	CCLabelTTF* labelMusic = CCLabelTTF::create("Nhạc nền", "Roboto-Medium.ttf", 64);
 	labelMusic->setFontFillColor(ccc3(56, 56, 56));
 	labelMusic->setPosition(ccp(400, 1280-478));
 	this->addChild(labelMusic);
@@ -98,7 +98,7 @@ bool SettingScene::init()
 	sliderMusic->addTargetWithActionForControlEvents(this, cccontrol_selector(SettingScene::volumeMusicCallBack), CCControlEventValueChanged);
 	this->addChild(sliderMusic);
 
-	CCLabelTTF* labelFX = CCLabelTTF::create("Hiệu ứng", "Marker Felt.ttf", 64);
+	CCLabelTTF* labelFX = CCLabelTTF::create("Hiệu ứng", "Roboto-Medium.ttf", 64);
 	labelFX->setFontFillColor(ccc3(56, 56, 56));
 	labelFX->setPosition(ccp(400, 1280-703));
 	this->addChild(labelFX);

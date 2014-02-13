@@ -40,6 +40,11 @@
 	    <key>G_MIN_ENEMY_DAM</key> <!-- Damage thấp nhất của Enemy, mặc định lúc mới vào game -->
 		    <string>1</string>
 
+
+
+	    <key>G_PLAYER_LAZER_TIME</key> <!-- Thời gian lazer active -->
+		    <string>3.0</string>
+
 	    <key>G_PLAYER_ARMOR_TIME</key> <!-- Thời gian để giáp bảo vệ cho player -->
 		    <string>10.0</string>
 	    <key>G_PLAYER_BULLET_VY</key> <!-- Tốc độ đạn của Player -->
