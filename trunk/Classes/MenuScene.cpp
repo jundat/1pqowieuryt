@@ -37,14 +37,10 @@ bool MenuScene::init()
 
     /////////////////////////////
 
-	CCSprite* bg = CCSprite::create("bg_stars.png");
+	CCSprite* bg = CCSprite::create("bg_menu.png");
 	bg->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2));
 	this->addChild(bg, 0);
 	
-	CCSprite* menuTop = CCSprite::create("menu_top.png");
-	menuTop->setPosition(ccp(436, 1280-210));
-	this->addChild(menuTop, 0);
-
 	initLifeIcon();	
 
 	//
@@ -61,7 +57,7 @@ bool MenuScene::init()
                                         this,
                                         menu_selector(MenuScene::playCallback));
     
-	playItem->setPosition(ccp(400, 1280-653-100));
+	playItem->setPosition(ccp(397, 1280-795));
 
 
 	CCMenuItemImage *scoreItem = CCMenuItemImage::create(
@@ -70,7 +66,7 @@ bool MenuScene::init()
 		this,
 		menu_selector(MenuScene::scoreCallback));
 
-	scoreItem->setPosition(ccp(400, 1280-813-100));
+	scoreItem->setPosition(ccp(377, 1280-1175));
 
 	//
 
@@ -87,7 +83,7 @@ bool MenuScene::init()
 		soundToggle->setSelectedIndex(1);
 	}
 
-	soundToggle->setPosition(ccp(10 + soundOff->getContentSize().width/2, 10 + soundOff->getContentSize().height/2));
+	soundToggle->setPosition(ccp(121, 1280-1176));
 
     m_menu = CCMenu::create(playItem, scoreItem, soundToggle, NULL);
     m_menu->setPosition(CCPointZero);
@@ -111,7 +107,7 @@ void MenuScene::initLifeIcon()
 {
 	float w = CCSprite::create("oil.png")->getContentSize().width;
 	float x = (800 - w * 5)/2 + w/2;
-	float y = 1280 - 500 - 100;
+	float y = 1280 - 461;
 
 	m_arrSprLife = new CCArray();
 	m_arrSprLife->retain();
@@ -157,7 +153,9 @@ void MenuScene::gotoMainGame()
 
 void MenuScene::playCallback(CCObject* pSender)
 {
-	PLAY_BUTTON_EFFECT;
+	//PLAY_BUTTON_EFFECT;
+	//PLAY_USE_BOMB_EFFECT;
+	PLAY_ENEMY1_DOWN_EFFECT;
 
 	//check if last_player_life > 0
 	int lastLife = DataManager::sharedDataManager()->GetLastPlayerLife();
