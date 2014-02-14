@@ -11,6 +11,14 @@
 #include <time.h>
 
 
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#include "EziSocialObject.h"
+#include "EziSocialDelegate.h"
+#include "EziFacebookFriend.h"
+#endif
+
+
+
 USING_NS_CC;
 using namespace CocosDenshion;
 
@@ -58,6 +66,10 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
     CCScene *pScene = MenuScene::scene(); //  MenuScene::scene(); //  MainGameScene::scene(); //
 	pDirector->runWithScene(pScene);
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	EziSocialObject::sharedObject()->setAutoCheckIncomingRequestsOnAppLaunch(true);
+#endif
 
     return true;
 }

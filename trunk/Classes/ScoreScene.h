@@ -8,6 +8,8 @@
 #include "EziSocialObject.h"
 #include "EziSocialDelegate.h"
 #include "EziFacebookFriend.h"
+#include "EziFBIncomingRequestManager.h"
+#include "EziFBIncomingRequest.h"
 #endif
 
 #include <algorithm>
@@ -105,6 +107,8 @@ public:
 
 	virtual void fbSendRequestCallback(int responseCode, const char* responseMessage, cocos2d::CCArray* friendsGotRequests);
 
+	//check incomming request
+	void fbIncomingRequestCallback(int responseCode, const char* responseMessage, int totalIncomingRequests);
 #endif
 
 	// Facebook //=========================================

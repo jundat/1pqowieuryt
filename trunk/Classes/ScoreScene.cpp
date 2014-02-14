@@ -124,6 +124,11 @@ bool ScoreScene::init()
 	{
 		callSubmitScore();
 
+		//check incoming request
+		EziSocialObject::sharedObject()->checkIncomingRequest();
+
+
+
 		_isLoggedIn = true;
 		m_fbLogInItem->setVisible(false);
 		m_lbInvite->setVisible(false);
@@ -308,16 +313,12 @@ CCTableViewCell* ScoreScene::tableCellAtIndex(CCTableView *table, unsigned int i
 			itIn->setPosition(ccp(m_sprCell->getContentSize().width - itIn->getContentSize().width, m_sprCell->getContentSize().height/2));
 			itIn->setAnchorPoint(ccp(1.0f, 0.5f));
 			itIn->setTag(1000 + idx);
-			//cell->addChild(itIn);
+			itIn->setOpacity(50);
 
 			CCMenuItemImage* itOut = CCMenuItemImage::create("mail_out.png", "mail_out.png", this, menu_selector(ScoreScene::mailOutCallback));
 			itOut->setPosition(ccp(m_sprCell->getContentSize().width, m_sprCell->getContentSize().height/2));
 			itOut->setAnchorPoint(ccp(1.0f, 0.5f));
-			itOut->setTag(2000 + idx);
-			
-			itOut->setOpacity(50);
-			
-			//cell->addChild(itOut);
+			itOut->setTag(2000 + idx);			
 
 			CCMenu* cell_menu = CCMenu::create(itIn, itOut, NULL);
 			cell_menu->setPosition(CCPointZero);
@@ -363,6 +364,7 @@ unsigned int ScoreScene::numberOfCellsInTableView(CCTableView *table)
 }
 
 
+
 void ScoreScene::mailInCallback( CCObject* pSender )
 {
 	int tag = ((CCMenuItemImage*)pSender)->getTag();
@@ -374,7 +376,6 @@ void ScoreScene::mailInCallback( CCObject* pSender )
 	CCTableViewCell* cell = m_tableView->cellAtIndex(idx);
 	std::string fbID = ((CustomTableViewCell*)cell)->fbID;
 }
-
 
 void ScoreScene::mailOutCallback( CCObject* pSender )
 {
@@ -397,7 +398,9 @@ void ScoreScene::mailOutCallback( CCObject* pSender )
 	giftDictionary->setObject(CCString::create("1"), "LIFE"); //number of gift, name of gift
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	
+
+	EziSocialObject::sharedObject()->isFacebookSessionActive();
+
 	EziSocialObject::sharedObject()->sendRequestToFriends(
 		EziSocialWrapperNS::FB_REQUEST::REQUEST_GIFT,
 		"Cho mày 1 mạng nè!", 
@@ -615,7 +618,78 @@ void ScoreScene::fbSendRequestCallback( int responseCode, const char* responseMe
 	}
 }
 
+void ScoreScene::fbIncomingRequestCallback(int responseCode, const char* responseMessage, int totalIncomingRequests)
+{
+	//CCString* message = CCString::createWithFormat("Total new incoming requests = %d", totalIncomingRequests);
 
+	int pendingRequest = EziFBIncomingRequestManager::sharedManager()->getPendingRequestCount();
+	CCString* message = CCString::createWithFormat("Total new requests = %d\n Total pending requests = %d", totalIncomingRequests, pendingRequest);
+	CCMessageBox(message->getCString(), "fbIncomingRequestCallback");
+
+	CCDictionary* _selectedRequestItems = CCDictionary::create();
+	_selectedRequestItems->retain();
+
+	CCArray* _fbMessagesList = EziFBIncomingRequestManager::sharedManager()->getAllRequests();
+	_fbMessagesList->retain();
+
+	int totalRequest = _fbMessagesList->count();
+	bool anyChanges = false;
+
+	for (int i=0; i<totalRequest; i++)
+	{
+		EziFBIncomingRequest* message = (EziFBIncomingRequest*)_fbMessagesList->objectAtIndex(i);
+		if (_selectedRequestItems->objectForKey(message->getRequestID()) == NULL)
+		{
+			anyChanges = true;
+			_selectedRequestItems->setObject(message, message->getRequestID());
+
+			EziSocialWrapperNS::FB_REQUEST::TYPE requestType = message->getRequestType();
+			switch (requestType)
+			{
+			case EziSocialWrapperNS::FB_REQUEST::REQUEST_INVITE:
+				CCLOG("invite");
+				break;
+
+			case EziSocialWrapperNS::FB_REQUEST::REQUEST_GIFT:
+				CCLOG("gift");
+				break;
+
+			case EziSocialWrapperNS::FB_REQUEST::REQUEST_CHALLENGE:
+				CCLOG("challenge");
+				break;
+
+			default:
+				CCLOG("invite");
+				break;
+			}
+		}
+	}
+
+// 	const char* getReceiverID();
+// 	const char* getRequestID();
+// 	const char* getMessage();
+// 	bool isConsumed();
+// 	bool isDataFetchedFromServer();
+// 	CCDictionary* getDataDictionary();
+// 	EziFacebookFriend* getSender();
+// 	EziSocialWrapperNS::FB_REQUEST::TYPE getRequestType();
+
+// 	//get request list
+// 	EziFBIncomingRequestManager::sharedManager()->getAllRequests();
+// 
+// 
+// 	//check is consumed
+// 	//incomingRequest->isConsumed();
+// 
+// 	// To get completed requests array
+// 	EziFBIncomingRequestManager::sharedManager()->getCompletedRequest();
+// 
+// 	// To get pending requests (not consumed) requests array
+// 	EziFBIncomingRequestManager::sharedManager()->getPendingRequests();
+// 
+// 	//clear used request
+// 	EziFBIncomingRequestManager::sharedManager()->clearCompletedRequestList();
+}
 
 
 #endif
