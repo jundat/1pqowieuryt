@@ -93,6 +93,15 @@ bool MenuScene::init()
     m_menu->setPosition(CCPointZero);
     this->addChild(m_menu, 1);
 
+	//check if life = 0 to show
+
+	int life = DataManager::sharedDataManager()->GetLastPlayerLife();
+	CCLOG("MenuScene: Last life = %d", life);
+	if (life <= 0)
+	{
+		initTimer();
+	}
+
 	STOP_BACKGROUND_MUSIC;
 
     return true;
@@ -270,4 +279,67 @@ void MenuScene::soundCallback( CCObject* pSender )
 		AudioManager::sharedAudioManager()->SetEnableBackground(true);
 		AudioManager::sharedAudioManager()->SetEnableEffect(true);
 	}
+}
+
+void MenuScene::ScheduleTick( float dt )
+{
+	CCLOG("Timer tick()");
+
+	//m_waitTime -= dt;
+
+	tm* lasttm = DataManager::sharedDataManager()->GetLastDeadTime();
+	time_t lastTime = mktime(lasttm);
+	time_t curTime = time(NULL);
+	double _secondsElapsed = difftime(curTime, lastTime);
+
+	m_waitTime = (float)(G_PLAYER_TIME_TO_REVIVE - _secondsElapsed);
+
+
+	if (m_waitTime < 0)
+	{
+		this->unschedule(schedule_selector(MenuScene::ScheduleTick));
+		
+		//complete
+		//invisiable timer
+		//refresh life
+
+		m_lbTime->setVisible(false);
+
+		DataManager::sharedDataManager()->RefreshPlayerLife();
+
+		initLifeIcon();
+	}
+	else
+	{
+		int mins = (int)m_waitTime/60;
+		int seconds = (int)m_waitTime % 60;
+
+		CCString* s = CCString::createWithFormat("%d:%d", mins, seconds);
+		m_lbTime->setString(s->getCString());
+	}
+}
+
+void MenuScene::initTimer()
+{
+	CCLOG("Initing... timer! ...");
+
+	//get revive_life
+	tm* lasttm = DataManager::sharedDataManager()->GetLastDeadTime();
+	time_t lastTime = mktime(lasttm);
+	time_t curTime = time(NULL);
+	double _secondsElapsed = difftime(curTime, lastTime);
+
+	m_waitTime = (float)(G_PLAYER_TIME_TO_REVIVE - _secondsElapsed);
+	if (m_waitTime <= 0) return;
+	
+	int mins = (int)m_waitTime/60;
+	int seconds = (int)m_waitTime%60;
+
+	CCString* s = CCString::createWithFormat("%d:%d", mins, seconds);
+	m_lbTime = CCLabelTTF::create(s->getCString(), "Roboto-Medium", 48);
+	m_lbTime->setPosition(ccp(400, 1280-482-30));
+	m_lbTime->setColor(ccc3(56, 56, 56));
+	this->addChild(m_lbTime);
+
+	this->schedule(schedule_selector(MenuScene::ScheduleTick), 1);
 }

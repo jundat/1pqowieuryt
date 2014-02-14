@@ -50,7 +50,7 @@ bool WaitForLifeDialog::init()
 	int mins = (int)m_waitTime/60;
 	int seconds = (int)m_waitTime%60;
 
-	CCString* s = CCString::createWithFormat("%d phút %d giây", mins, seconds);
+	CCString* s = CCString::createWithFormat("%d:%d", mins, seconds);
 	m_lbTime = CCLabelTTF::create(s->getCString(), "Roboto-Medium", 48);
 	m_lbTime->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2));
 	m_lbTime->setColor(ccc3(56, 56, 56));
@@ -162,7 +162,15 @@ void WaitForLifeDialog::fbSendRequestCallback( int responseCode, const char* res
 
 void WaitForLifeDialog::ScheduleTick( float dt )
 {
-	m_waitTime -= dt;
+
+	tm* lasttm = DataManager::sharedDataManager()->GetLastDeadTime();
+	time_t lastTime = mktime(lasttm);
+	time_t curTime = time(NULL);
+	double _secondsElapsed = difftime(curTime, lastTime);
+
+	m_waitTime = (float)(G_PLAYER_TIME_TO_REVIVE - _secondsElapsed);
+
+	//m_waitTime -= dt;
 
 	if (m_waitTime < 0)
 	{
@@ -175,7 +183,7 @@ void WaitForLifeDialog::ScheduleTick( float dt )
 		int mins = (int)m_waitTime/60;
 		int seconds = (int)m_waitTime % 60;
 
-		CCString* s = CCString::createWithFormat("%d phút %d giây", mins, seconds);
+		CCString* s = CCString::createWithFormat("%d:%d", mins, seconds);
 		m_lbTime->setString(s->getCString());
 	}
 }

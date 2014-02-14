@@ -38,6 +38,13 @@ public:
 	//life animation
 	CCArray* m_arrSprLife;
 
+
+	//timer
+	float m_waitTime;
+	CCLabelTTF* m_lbTime;
+
+	void initTimer();
+	void ScheduleTick(float dt);
 };
 
 #endif // __MENU_SCENE_H__
