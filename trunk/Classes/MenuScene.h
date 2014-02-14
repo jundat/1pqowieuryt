@@ -17,7 +17,8 @@ public:
     virtual bool init();  
     static cocos2d::CCScene* scene();
     CREATE_FUNC(MenuScene);
-
+	
+	CCMenuItemImage *m_playItem;
 	CCMenu* m_menu;
 
 	void initLifeIcon();

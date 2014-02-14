@@ -51,13 +51,13 @@ bool MenuScene::init()
 	this->addChild(labelVersion);
 
 	//
-    CCMenuItemImage *playItem = CCMenuItemImage::create(
+    m_playItem = CCMenuItemImage::create(
                                         "new_button.png",
                                         "new_button_press.png",
                                         this,
                                         menu_selector(MenuScene::playCallback));
     
-	playItem->setPosition(ccp(397, 1280-795));
+	m_playItem->setPosition(ccp(400, 1280-813));
 
 
 	CCMenuItemImage *scoreItem = CCMenuItemImage::create(
@@ -85,7 +85,7 @@ bool MenuScene::init()
 
 	soundToggle->setPosition(ccp(121, 1280-1176));
 
-    m_menu = CCMenu::create(playItem, scoreItem, soundToggle, NULL);
+    m_menu = CCMenu::create(m_playItem, scoreItem, soundToggle, NULL);
     m_menu->setPosition(CCPointZero);
     this->addChild(m_menu, 1);
 
@@ -107,7 +107,7 @@ void MenuScene::initLifeIcon()
 {
 	float w = CCSprite::create("oil.png")->getContentSize().width;
 	float x = (800 - w * 5)/2 + w/2;
-	float y = 1280 - 461;
+	float y = 1280 - 445;
 
 	m_arrSprLife = new CCArray();
 	m_arrSprLife->retain();
@@ -136,9 +136,11 @@ void MenuScene::playStartAnimation(int lastLife)
 {
 	CCSprite* spr = (CCSprite*)m_arrSprLife->objectAtIndex(lastLife - 1);
 	CCSequence* seq = CCSequence::create(
-		CCSpawn::createWithTwoActions(
-			CCScaleTo::create(0.5f, 0.0f, 0.0f),
-			CCFadeOut::create(0.5f)
+		CCSpawn::create(
+			//CCScaleTo::create(0.5f, 0.0f, 0.0f),
+			//CCFadeOut::create(0.5f)
+			CCMoveTo::create(0.5f, ccp(spr->getPositionX(), 1280 + 200)),
+			NULL
 		),
 		CCCallFunc::create(this, callfunc_selector(MenuScene::gotoMainGame)),
 		NULL);
@@ -167,6 +169,8 @@ void MenuScene::playCallback(CCObject* pSender)
 	if (lastLife > 0)
 	{
 		playStartAnimation(lastLife);
+
+		m_playItem->selected();
 
 		CCLOG("LastLife > 0 -> Play");
 	}
@@ -312,7 +316,7 @@ void MenuScene::ScheduleTick( float dt )
 		int mins = (int)m_waitTime/60;
 		int seconds = (int)m_waitTime % 60;
 
-		CCString* s = CCString::createWithFormat("%d:%d", mins, seconds);
+		CCString* s = CCString::createWithFormat("0%d:%d", mins, seconds);
 		m_lbTime->setString(s->getCString());
 	}
 }
@@ -333,9 +337,9 @@ void MenuScene::initTimer()
 	int mins = (int)m_waitTime/60;
 	int seconds = (int)m_waitTime%60;
 
-	CCString* s = CCString::createWithFormat("%d:%d", mins, seconds);
+	CCString* s = CCString::createWithFormat("0%d:%d", mins, seconds);
 	m_lbTime = CCLabelTTF::create(s->getCString(), "Roboto-Medium", 48);
-	m_lbTime->setPosition(ccp(400, 1280-482-30));
+	m_lbTime->setPosition(ccp(400, 1280-531));
 	m_lbTime->setColor(ccc3(56, 56, 56));
 	this->addChild(m_lbTime);
 
