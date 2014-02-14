@@ -73,13 +73,17 @@ bool ScoreScene::init()
 	std::string name = DataManager::sharedDataManager()->GetName();
 	m_lbName = CCLabelTTF::create(name.c_str(), "Roboto-Medium.ttf", 52);
 	m_lbName->setFontFillColor(ccc3(0, 0, 0));
-	m_lbName->setPosition(ccp(400, 1280-250)); //248
+	m_lbName->setPosition(ccp(180, 1280-244)); //(ccp(400, 1280-250)); //248
+	//m_lbName->setHorizontalAlignment(kCCTextAlignmentLeft);
+	m_lbName->setAnchorPoint(ccp(0.0f, 0.5f));
 	this->addChild(m_lbName);
 
 	CCString* score = CCString::createWithFormat("%d", DataManager::sharedDataManager()->GetHighScore());
 	m_lbScore = CCLabelTTF::create(score->getCString(), "Roboto-Medium.ttf", 48);
 	m_lbScore->setFontFillColor(ccc3(0, 0, 0));
-	m_lbScore->setPosition(ccp(400, 1280-320)); //320
+	m_lbScore->setPosition(ccp(178, 1280-316)); //ccp(400, 1280-320)); //320
+	//m_lbScore->setHorizontalAlignment(kCCTextAlignmentLeft);
+	m_lbScore->setAnchorPoint(ccp(0.0f, 0.5f));
 	this->addChild(m_lbScore);
 
 	//
@@ -279,7 +283,7 @@ CCTableViewCell* ScoreScene::tableCellAtIndex(CCTableView *table, unsigned int i
 
 		CCLabelTTF *lbName = CCLabelTTF::create(name->getCString(), "Roboto-Medium.ttf", 42);
 		lbName->setFontFillColor(ccc3(0,0,0));
-		lbName->setHorizontalAlignment(kCCTextAlignmentRight);
+		//lbName->setHorizontalAlignment(kCCTextAlignmentRight);
 		lbName->setPosition(ccp(m_sprCell->getContentSize().width, m_sprCell->getContentSize().height/2));
 		lbName->setAnchorPoint(ccp(1.0f, 0.5f));
 		lbName->setTag(4);
@@ -287,9 +291,9 @@ CCTableViewCell* ScoreScene::tableCellAtIndex(CCTableView *table, unsigned int i
 
 		CCLabelTTF *lbScore = CCLabelTTF::create(score->getCString(), "Roboto-Medium.ttf", 42);
 		lbScore->setFontFillColor(ccc3(0, 0, 0));
-		lbScore->setHorizontalAlignment(kCCTextAlignmentCenter); //cocos2d::CCTextAlignment::
-		lbScore->setPosition(ccp(0.25 * m_sprCell->getContentSize().width, m_sprCell->getContentSize().height/2));
-		lbScore->setAnchorPoint(ccp(0.5f, 0.5f));
+		//lbScore->setHorizontalAlignment(kCCTextAlignmentLeft); //cocos2d::CCTextAlignment::
+		lbScore->setPosition(ccp(0.75f * G_FRIEND_AVATAR_SIZE + 20, m_sprCell->getContentSize().height/2)); //0.25 * m_sprCell->getContentSize().width, m_sprCell->getContentSize().height/2));
+		lbScore->setAnchorPoint(ccp(0.0f, 0.5f));
 		lbScore->setTag(5);
 		cell->addChild(lbScore);
 	}
@@ -441,15 +445,15 @@ void ScoreScene::fbUserDetailCallback( int responseCode, const char* responseMes
 
 		//save data
 		EziFacebookUser* currentUser = EziSocialObject::sharedObject()->getCurrentFacebookUser();
-		std::string fullname = fbUser->getFullName();
+		std::string firstname = fbUser->getFullName(); //getFirstName //getFullName
 		std::string userName = currentUser->getUserName();
 		std::string profileID = currentUser->getProfileID();
 
-		DataManager::sharedDataManager()->SetName(fullname.c_str());
+		DataManager::sharedDataManager()->SetName(firstname.c_str());
 		DataManager::sharedDataManager()->SetProfileID(profileID.c_str());
 		DataManager::sharedDataManager()->SetFbUserName(userName.c_str());
 
-		m_lbName->setString(fullname.c_str());
+		m_lbName->setString(firstname.c_str());
 
 		EziSocialObject::sharedObject()->getProfilePicForID(this, currentUser->getProfileID(), // Profile ID of current user
 			G_AVATAR_SIZE, G_AVATAR_SIZE, // Size of the image

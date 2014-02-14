@@ -37,6 +37,7 @@ public:
 
 	//life animation
 	CCArray* m_arrSprLife;
+
 };
 
 #endif // __MENU_SCENE_H__
