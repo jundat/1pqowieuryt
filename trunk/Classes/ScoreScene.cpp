@@ -222,6 +222,7 @@ CCTableViewCell* ScoreScene::tableCellAtIndex(CCTableView *table, unsigned int i
 	CCString *score = CCString::create("0");
 	CCString *name = CCString::create(G_DEFAULT_NAME);
 	CCString *photo = CCString::create("fb-profile.png");
+	std::string friendId;
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	if(m_arrHighScores == NULL)
@@ -233,6 +234,8 @@ CCTableViewCell* ScoreScene::tableCellAtIndex(CCTableView *table, unsigned int i
 		EziFacebookFriend* fbFriend = dynamic_cast<EziFacebookFriend*>(m_arrHighScores->objectAtIndex(idx));
 		score = CCString::createWithFormat("%d", (int)fbFriend->getScore());
 		name  = CCString::createWithFormat("%s", fbFriend->getName());
+		
+		friendId = std::string(fbFriend->getFBID());
 
 		if (strlen(fbFriend->getPhotoPath()) > 1)
 		{
@@ -251,6 +254,8 @@ CCTableViewCell* ScoreScene::tableCellAtIndex(CCTableView *table, unsigned int i
 	if (!cell) {
 		cell = new CustomTableViewCell();
 		cell->autorelease();
+
+		((CustomTableViewCell*)cell)->fbID = friendId;
 		
 		CCSprite *sprite;
 		if (isMyScore)
@@ -283,19 +288,41 @@ CCTableViewCell* ScoreScene::tableCellAtIndex(CCTableView *table, unsigned int i
 
 		CCLabelTTF *lbName = CCLabelTTF::create(name->getCString(), "Roboto-Medium.ttf", 42);
 		lbName->setFontFillColor(ccc3(0,0,0));
-		//lbName->setHorizontalAlignment(kCCTextAlignmentRight);
-		lbName->setPosition(ccp(m_sprCell->getContentSize().width, m_sprCell->getContentSize().height/2));
-		lbName->setAnchorPoint(ccp(1.0f, 0.5f));
+		lbName->setPosition(ccp(0.75f * G_FRIEND_AVATAR_SIZE + 20, m_sprCell->getContentSize().height * 3/4));
+		//(ccp(m_sprCell->getContentSize().width, m_sprCell->getContentSize().height/2));
+		lbName->setAnchorPoint(ccp(0.0f, 0.5f));
 		lbName->setTag(4);
 		cell->addChild(lbName);
 
 		CCLabelTTF *lbScore = CCLabelTTF::create(score->getCString(), "Roboto-Medium.ttf", 42);
 		lbScore->setFontFillColor(ccc3(0, 0, 0));
-		//lbScore->setHorizontalAlignment(kCCTextAlignmentLeft); //cocos2d::CCTextAlignment::
-		lbScore->setPosition(ccp(0.75f * G_FRIEND_AVATAR_SIZE + 20, m_sprCell->getContentSize().height/2)); //0.25 * m_sprCell->getContentSize().width, m_sprCell->getContentSize().height/2));
+		lbScore->setPosition(ccp(0.75f * G_FRIEND_AVATAR_SIZE + 20, m_sprCell->getContentSize().height * 3/8)); //0.25 * m_sprCell->getContentSize().width, m_sprCell->getContentSize().height/2));
 		lbScore->setAnchorPoint(ccp(0.0f, 0.5f));
 		lbScore->setTag(5);
 		cell->addChild(lbScore);
+
+		if (isMyScore == false)
+		{
+			//button send and receive life
+			CCMenuItemImage* itIn = CCMenuItemImage::create("mail_in.png", "mail_in.png", this, menu_selector(ScoreScene::mailInCallback));
+			itIn->setPosition(ccp(m_sprCell->getContentSize().width - itIn->getContentSize().width, m_sprCell->getContentSize().height/2));
+			itIn->setAnchorPoint(ccp(1.0f, 0.5f));
+			itIn->setTag(1000 + idx);
+			//cell->addChild(itIn);
+
+			CCMenuItemImage* itOut = CCMenuItemImage::create("mail_out.png", "mail_out.png", this, menu_selector(ScoreScene::mailOutCallback));
+			itOut->setPosition(ccp(m_sprCell->getContentSize().width, m_sprCell->getContentSize().height/2));
+			itOut->setAnchorPoint(ccp(1.0f, 0.5f));
+			itOut->setTag(2000 + idx);
+			
+			itOut->setOpacity(50);
+			
+			//cell->addChild(itOut);
+
+			CCMenu* cell_menu = CCMenu::create(itIn, itOut, NULL);
+			cell_menu->setPosition(CCPointZero);
+			cell->addChild(cell_menu);
+		}
 	}
 	else
 	{
@@ -318,13 +345,14 @@ CCTableViewCell* ScoreScene::tableCellAtIndex(CCTableView *table, unsigned int i
 
 		CCLabelTTF *lbName = (CCLabelTTF*)cell->getChildByTag(4);
 		lbName->setString(name->getCString());
-		lbName->setPosition(ccp(m_sprCell->getContentSize().width, m_sprCell->getContentSize().height/2));
+		//lbName->setPosition(ccp(m_sprCell->getContentSize().width, m_sprCell->getContentSize().height/2));
+		//lbName->setPosition(ccp(0.75f * G_FRIEND_AVATAR_SIZE + 20, m_sprCell->getContentSize().height/2));
 
 		CCLabelTTF *lbScore = (CCLabelTTF*)cell->getChildByTag(5);
 		lbScore->setString(score->getCString());
-		lbScore->setPosition(ccp(0.25 * m_sprCell->getContentSize().width, m_sprCell->getContentSize().height/2));
+		//lbScore->setPosition(ccp(0.25 * m_sprCell->getContentSize().width, m_sprCell->getContentSize().height/2));
+		//lbScore->setPosition(ccp(0.75f * G_FRIEND_AVATAR_SIZE + 20, m_sprCell->getContentSize().height/2)); //0.25 * m_sprCell->getContentSize().width, m_sprCell->getContentSize().height/2));
 	}
-
 
 	return cell;
 }
@@ -333,6 +361,54 @@ unsigned int ScoreScene::numberOfCellsInTableView(CCTableView *table)
 {
 	return m_listSize;
 }
+
+
+void ScoreScene::mailInCallback( CCObject* pSender )
+{
+	int tag = ((CCMenuItemImage*)pSender)->getTag();
+	CCLOG("In tag = %d", tag);
+	CCString* s = CCString::createWithFormat("In tag %d", tag);
+	//CCMessageBox(s->getCString(), "Mail in");
+
+	int idx = tag - 1000;
+	CCTableViewCell* cell = m_tableView->cellAtIndex(idx);
+	std::string fbID = ((CustomTableViewCell*)cell)->fbID;
+}
+
+
+void ScoreScene::mailOutCallback( CCObject* pSender )
+{
+	int tag = ((CCMenuItemImage*)pSender)->getTag();
+	CCLOG("Out tag = %d", tag);
+	CCString* s = CCString::createWithFormat("Out tag %d", tag);
+	//CCMessageBox(s->getCString(), "Mail out");
+
+	int idx = tag - 2000;
+	CCTableViewCell* cell = m_tableView->cellAtIndex(idx);
+	std::string fbID = ((CustomTableViewCell*)cell)->fbID;
+	
+	CCLOG("Out facebookID = %s", fbID.c_str());
+
+	s = CCString::createWithFormat("%s", fbID.c_str());
+	CCArray* arrFriends = new CCArray();
+	arrFriends->addObject(s);
+
+	CCDictionary *giftDictionary = CCDictionary::create();
+	giftDictionary->setObject(CCString::create("1"), "LIFE"); //number of gift, name of gift
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	
+	EziSocialObject::sharedObject()->sendRequestToFriends(
+		EziSocialWrapperNS::FB_REQUEST::REQUEST_GIFT,
+		"Cho mày 1 mạng nè!", 
+		arrFriends,
+		giftDictionary, 
+		"Phi Công Bút Chì");
+
+#endif
+}
+
+
 
 //end new delegate
 
@@ -518,6 +594,27 @@ void ScoreScene::fbHighScoresCallback( int responseCode, const char* responseMes
 	m_tableView->reloadData();
 	m_lbWaiting->setVisible(false);
 }
+
+void ScoreScene::fbSendRequestCallback( int responseCode, const char* responseMessage, cocos2d::CCArray* friendsGotRequests )
+{
+	// 	FB_REQUEST_SENDING_ERROR - In case if there is any error while sending the request
+	// 	FB_REQUEST_SENDING_CANCELLED – In case, user decides not to send the request.
+	// 	FB_REQUEST_SENT - If sending request is success
+	
+	if (EziSocialWrapperNS::RESPONSE_CODE::FB_REQUEST_SENT == responseCode)
+	{
+		int numFriends = friendsGotRequests->count();
+
+		CCLOG("Request sent successfully to %d friends", numFriends);
+		CCMessageBox("Infor", "Request sent successfully");
+	}
+	else
+	{
+		CCLOG("Request sent failed");
+		CCMessageBox("Infor", "Request sent failed");
+	}
+}
+
 
 
 

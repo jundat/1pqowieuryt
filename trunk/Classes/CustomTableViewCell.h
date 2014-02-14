@@ -7,6 +7,8 @@
 class CustomTableViewCell : public cocos2d::extension::CCTableViewCell
 {
 public:
+	std::string fbID;
+
 	virtual void draw();
 };
 
