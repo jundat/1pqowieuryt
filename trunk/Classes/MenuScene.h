@@ -29,6 +29,8 @@ public:
     void playCallback(CCObject* pSender);
 	void scoreCallback(CCObject* pSender);
 	void soundCallback(CCObject* pSender);
+	void giftCallback(CCObject* pSender);
+	
 
 	void onCompletedWaiting();
 	void onShowDialog();

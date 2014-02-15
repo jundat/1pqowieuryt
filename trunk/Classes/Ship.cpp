@@ -25,6 +25,7 @@ bool Ship::init()
 
 	m_sprite = CCSprite::createWithSpriteFrameName("ship_0.png");
 	m_sprite->setPosition(CCPointZero);
+	m_sprite->setScale(1.15f);
 	this->addChild(m_sprite);
 
 	//animation -------------------

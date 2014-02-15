@@ -1,5 +1,5 @@
-#ifndef __SCORE_SCENE_H__
-#define __SCORE_SCENE_H__
+#ifndef __RECEIVE_GIFT_SCENE_H__
+#define __RECEIVE_GIFT_SCENE_H__
 
 #include "cocos2d.h"
 #include "cocos-ext.h"
@@ -17,7 +17,7 @@
 USING_NS_CC;
 USING_NS_CC_EXT;
 
-class ScoreScene : public cocos2d::CCLayer, 
+class ReceiveGiftScene : public cocos2d::CCLayer, 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	public EziFacebookDelegate,
 #endif
@@ -26,11 +26,11 @@ class ScoreScene : public cocos2d::CCLayer,
 {
 public:
 	virtual bool init();
-	CREATE_FUNC(ScoreScene);
+	CREATE_FUNC(ReceiveGiftScene);
 
 	static CCScene* scene() {
 		CCScene *scene = CCScene::create();
-		scene->addChild(ScoreScene::create());
+		scene->addChild(ReceiveGiftScene::create());
 		return scene;
 	}
 
@@ -87,6 +87,7 @@ private:
 
 	CCArray* m_arrHighScores;
 
+
 public:
 	// Facebook //=========================================
 	CCSprite* m_userSprite;
@@ -112,4 +113,4 @@ public:
 	// Facebook //=========================================
 };
 
-#endif // __SCORE_SCENE_H__
+#endif // __RECEIVE_GIFT_SCENE_H__

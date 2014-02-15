@@ -71,9 +71,27 @@ void WaitForLifeDialog::exitCallback( CCObject* pSender )
 
 void WaitForLifeDialog::askFriendCallback( CCObject* pSender )
 {
-	DataManager::sharedDataManager()->SetLastPlayerLife(5);
+// 	DataManager::sharedDataManager()->SetLastPlayerLife(5);
+// 	this->unschedule(schedule_selector(WaitForLifeDialog::ScheduleTick));
+// 
+// 	MenuScene* parent = (MenuScene*)this->getParent();
+// 	parent->setTouchEnabled(true);
+// 	parent->onCloseDialog();
+// 	this->removeFromParent();
 
-	//stop timer
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+
+	//invite friends
+	EziSocialObject::sharedObject()->sendRequestToFriends(
+		EziSocialWrapperNS::FB_REQUEST::REQUEST_INVITE,
+		"Cứu với, đang hết mạng nè!", 
+		NULL,
+		NULL,
+		"Phi Công Bút Chì");
+
+#else
+
+	DataManager::sharedDataManager()->SetLastPlayerLife(5);
 	this->unschedule(schedule_selector(WaitForLifeDialog::ScheduleTick));
 
 	MenuScene* parent = (MenuScene*)this->getParent();
@@ -81,47 +99,7 @@ void WaitForLifeDialog::askFriendCallback( CCObject* pSender )
 	parent->onCloseDialog();
 	this->removeFromParent();
 
-// #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-
-// // 	EziSocialObject::sharedObject()->sendRequestToFriends(
-// // 		EziSocialWrapperNS::FB_REQUEST::TYPE, //EziSocialWrapperNS::FB_REQUEST::TYPErequestType,
-// // 		"Giúp mình với!", //const char* message,
-// // 		NULL, //cocos2d::CCArray *selectedFriendIDs,
-// // 		NULL, //cocos2d::CCDictionary *dataDictionary, 
-// // 		"Phi Công Bút Chì" //const char* customTitle
-// // 		);
-// 
-// 	//invite friends
-// 	EziSocialObject::sharedObject()->sendRequestToFriends(
-// 		EziSocialWrapperNS::FB_REQUEST::REQUEST_INVITE,
-// 		"Cứu với, đang hết mạng nè!", 
-// 		NULL,
-// 		NULL, 
-// 		"Phi Công Bút Chì");
-// 
-// 	//send challenge
-// // 	EziSocialObject::sharedObject()->sendRequestToFriends(
-// // 		EziSocialWrapperNS::FB_REQUEST::REQUEST_CHALLENGE,
-// // 		"I have score 900 points in EziSocialDemo. Can you beat me?",
-// // 		NULL,
-// // 		NULL, 
-// // 		"");
-// 
-// 	//send gift
-// 
-// #else
-// 
-// 	DataManager::sharedDataManager()->SetLastPlayerLife(5);
-// 
-// 	//stop timer
-// 	this->unschedule(schedule_selector(WaitForLifeDialog::ScheduleTick));
-// 
-// 	MenuScene* parent = (MenuScene*)this->getParent();
-// 	parent->setTouchEnabled(true);
-// 	parent->onCloseDialog();
-// 	this->removeFromParent();
-// 
-// #endif
+#endif
 }
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
@@ -132,8 +110,6 @@ void WaitForLifeDialog::fbMessageCallback(int responseCode, const char* response
 	{
 		CCLOG("Message published successfully!");
 		DataManager::sharedDataManager()->SetLastPlayerLife(5);
-
-		//stop timer
 		this->unschedule(schedule_selector(WaitForLifeDialog::ScheduleTick));
 
 		MenuScene* parent = (MenuScene*)this->getParent();
@@ -163,8 +139,6 @@ void WaitForLifeDialog::fbSendRequestCallback( int responseCode, const char* res
 
 		numFriends = (numFriends > G_MAX_PLAYER_LIFE) ? G_MAX_PLAYER_LIFE : numFriends;
 		DataManager::sharedDataManager()->SetLastPlayerLife(numFriends);
-		
-		//stop timer
 		this->unschedule(schedule_selector(WaitForLifeDialog::ScheduleTick));
 
 		MenuScene* parent = (MenuScene*)this->getParent();

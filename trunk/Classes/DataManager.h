@@ -53,6 +53,9 @@ public:
 	int		GetValueFromKey(char* key);
 	void	SetValueFromKey(char* key, int val);
 
+	int		GetGiftFromFriend(const char* fbID);
+	void	IncreaseGiftFromFriend(const char* fbID);
+	void	DecreaseGiftFromFriend(const char* fbID);
 	
 	
 	~DataManager(void);

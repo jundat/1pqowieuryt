@@ -7,11 +7,11 @@
 		<key>bullet1.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1014,0},{9,20}}</string>
+			<string>{{454,1013},{9,20}}</string>
 			<key>offset</key>
 			<string>{0,0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0,0},{9,20}}</string>
 			<key>sourceSize</key>
@@ -20,11 +20,11 @@
 		<key>bullet2.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{1014,21},{9,20}}</string>
+			<string>{{475,1013},{9,20}}</string>
 			<key>offset</key>
 			<string>{0,0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
 			<string>{{0,0},{9,20}}</string>
 			<key>sourceSize</key>
@@ -33,124 +33,85 @@
 		<key>enemy_1_0.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{626,949},{84,61}}</string>
+			<string>{{774,912},{96,68}}</string>
 			<key>offset</key>
-			<string>{1,-1}</string>
+			<string>{0,0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
-			<string>{{1,6},{84,61}}</string>
+			<string>{{0,0},{96,68}}</string>
 			<key>sourceSize</key>
-			<string>{85,70}</string>
+			<string>{96,68}</string>
 		</dict>
 		<key>enemy_1_1.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{540,949},{85,67}}</string>
+			<string>{{774,684},{96,68}}</string>
 			<key>offset</key>
-			<string>{0,1}</string>
+			<string>{0,0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
-			<string>{{0,3},{85,67}}</string>
+			<string>{{0,0},{96,68}}</string>
 			<key>sourceSize</key>
-			<string>{85,74}</string>
+			<string>{96,68}</string>
 		</dict>
 		<key>enemy_1_2.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{454,949},{85,71}}</string>
+			<string>{{774,781},{96,68}}</string>
 			<key>offset</key>
-			<string>{0,-1}</string>
+			<string>{0,0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
-			<string>{{0,3},{85,71}}</string>
+			<string>{{0,0},{96,68}}</string>
 			<key>sourceSize</key>
-			<string>{85,74}</string>
+			<string>{96,68}</string>
 		</dict>
 		<key>enemy_1_3.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{334,920},{92,87}}</string>
+			<string>{{843,820},{92,87}}</string>
 			<key>offset</key>
 			<string>{-3,0}</string>
 			<key>rotated</key>
-			<true/>
+			<false/>
 			<key>sourceColorRect</key>
 			<string>{{5,3},{92,87}}</string>
 			<key>sourceSize</key>
 			<string>{108,93}</string>
 		</dict>
-		<key>enemy_2_0.png</key>
-		<dict>
-			<key>frame</key>
-			<string>{{334,433},{119,151}}</string>
-			<key>offset</key>
-			<string>{-1,2}</string>
-			<key>rotated</key>
-			<false/>
-			<key>sourceColorRect</key>
-			<string>{{0,2},{119,151}}</string>
-			<key>sourceSize</key>
-			<string>{120,158}</string>
-		</dict>
-		<key>enemy_2_1.png</key>
-		<dict>
-			<key>frame</key>
-			<string>{{196,433},{124,154}}</string>
-			<key>offset</key>
-			<string>{1,-1}</string>
-			<key>rotated</key>
-			<false/>
-			<key>sourceColorRect</key>
-			<string>{{1,2},{124,154}}</string>
-			<key>sourceSize</key>
-			<string>{125,156}</string>
-		</dict>
-		<key>enemy_2_2.png</key>
-		<dict>
-			<key>frame</key>
-			<string>{{334,613},{119,156}}</string>
-			<key>offset</key>
-			<string>{-1,-1}</string>
-			<key>rotated</key>
-			<false/>
-			<key>sourceColorRect</key>
-			<string>{{0,2},{119,156}}</string>
-			<key>sourceSize</key>
-			<string>{120,158}</string>
-		</dict>
 		<key>enemy_2_3.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{334,770},{118,149}}</string>
+			<string>{{0,321},{126,139}}</string>
 			<key>offset</key>
-			<string>{0,1}</string>
+			<string>{0,0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
-			<string>{{1,4},{118,149}}</string>
+			<string>{{0,0},{126,139}}</string>
 			<key>sourceSize</key>
-			<string>{120,158}</string>
+			<string>{127,139}</string>
 		</dict>
 		<key>enemy_2_4.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{841,433},{119,157}}</string>
+			<string>{{843,321},{127,139}}</string>
 			<key>offset</key>
-			<string>{-1,0}</string>
+			<string>{0,0}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
-			<string>{{0,1},{119,157}}</string>
+			<string>{{0,0},{127,139}}</string>
 			<key>sourceSize</key>
-			<string>{120,158}</string>
+			<string>{127,139}</string>
 		</dict>
 		<key>enemy_2_5.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{841,0},{135,172}}</string>
+			<string>{{843,684},{135,172}}</string>
 			<key>offset</key>
 			<string>{0,-3}</string>
 			<key>rotated</key>
@@ -160,44 +121,109 @@
 			<key>sourceSize</key>
 			<string>{144,189}</string>
 		</dict>
-		<key>enemy_3_5.png</key>
+		<key>enemy_3_0.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{454,613},{375,335}}</string>
+			<string>{{228,684},{291,221}}</string>
 			<key>offset</key>
-			<string>{1,2}</string>
+			<string>{0,4}</string>
+			<key>rotated</key>
+			<true/>
+			<key>sourceColorRect</key>
+			<string>{{0,3},{291,221}}</string>
+			<key>sourceSize</key>
+			<string>{291,234}</string>
+		</dict>
+		<key>enemy_3_1.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{228,321},{291,221}}</string>
+			<key>offset</key>
+			<string>{0,4}</string>
+			<key>rotated</key>
+			<true/>
+			<key>sourceColorRect</key>
+			<string>{{0,3},{291,221}}</string>
+			<key>sourceSize</key>
+			<string>{291,234}</string>
+		</dict>
+		<key>enemy_3_2.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{454,0},{291,227}}</string>
+			<key>offset</key>
+			<string>{0,1}</string>
 			<key>rotated</key>
 			<false/>
 			<key>sourceColorRect</key>
-			<string>{{2,0},{375,335}}</string>
+			<string>{{0,3},{291,227}}</string>
 			<key>sourceSize</key>
-			<string>{377,338}</string>
+			<string>{291,234}</string>
+		</dict>
+		<key>enemy_3_3.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{454,228},{291,227}}</string>
+			<key>offset</key>
+			<string>{0,1}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0,3},{291,227}}</string>
+			<key>sourceSize</key>
+			<string>{291,234}</string>
+		</dict>
+		<key>enemy_3_4.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{454,456},{291,227}}</string>
+			<key>offset</key>
+			<string>{0,1}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0,3},{291,227}}</string>
+			<key>sourceSize</key>
+			<string>{291,234}</string>
+		</dict>
+		<key>enemy_3_5.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{454,684},{291,227}}</string>
+			<key>offset</key>
+			<string>{0,1}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0,3},{291,227}}</string>
+			<key>sourceSize</key>
+			<string>{291,234}</string>
 		</dict>
 		<key>enemy_3_6.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{0,613},{375,333}}</string>
+			<string>{{0,684},{291,227}}</string>
 			<key>offset</key>
-			<string>{0,3}</string>
+			<string>{0,1}</string>
 			<key>rotated</key>
 			<true/>
 			<key>sourceColorRect</key>
-			<string>{{1,0},{375,333}}</string>
+			<string>{{0,3},{291,227}}</string>
 			<key>sourceSize</key>
-			<string>{377,338}</string>
+			<string>{291,234}</string>
 		</dict>
 		<key>enemy_3_7.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{454,274},{376,338}}</string>
+			<string>{{746,0},{285,230}}</string>
 			<key>offset</key>
-			<string>{1,0}</string>
+			<string>{-3,2}</string>
 			<key>rotated</key>
-			<false/>
+			<true/>
 			<key>sourceColorRect</key>
-			<string>{{1,0},{376,338}}</string>
+			<string>{{0,0},{285,230}}</string>
 			<key>sourceSize</key>
-			<string>{377,338}</string>
+			<string>{291,234}</string>
 		</dict>
 		<key>enemy_3_8.png</key>
 		<dict>
@@ -212,23 +238,10 @@
 			<key>sourceSize</key>
 			<string>{453,406}</string>
 		</dict>
-		<key>explosion_2.png</key>
-		<dict>
-			<key>frame</key>
-			<string>{{454,0},{386,273}}</string>
-			<key>offset</key>
-			<string>{0,0}</string>
-			<key>rotated</key>
-			<false/>
-			<key>sourceColorRect</key>
-			<string>{{0,0},{386,273}}</string>
-			<key>sourceSize</key>
-			<string>{386,273}</string>
-		</dict>
 		<key>item_boom.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{841,136},{100,171}}</string>
+			<string>{{454,912},{100,171}}</string>
 			<key>offset</key>
 			<string>{0,0}</string>
 			<key>rotated</key>
@@ -241,7 +254,7 @@
 		<key>item_upgrade_bullet.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{0,321},{100,147}}</string>
+			<string>{{626,912},{100,147}}</string>
 			<key>offset</key>
 			<string>{0,0}</string>
 			<key>rotated</key>
@@ -254,54 +267,28 @@
 		<key>ship_0.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{841,778},{167,195}}</string>
+			<string>{{0,456},{145,157}}</string>
 			<key>offset</key>
-			<string>{-2,-26}</string>
+			<string>{0,-1}</string>
 			<key>rotated</key>
 			<false/>
 			<key>sourceColorRect</key>
-			<string>{{11,53},{167,195}}</string>
+			<string>{{2,3},{145,157}}</string>
 			<key>sourceSize</key>
-			<string>{192,248}</string>
+			<string>{148,160}</string>
 		</dict>
-		<key>ship_1.png</key>
+		<key>ship_4.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{0,433},{166,195}}</string>
+			<string>{{843,456},{145,160}}</string>
 			<key>offset</key>
-			<string>{-1,-26}</string>
+			<string>{0,0}</string>
 			<key>rotated</key>
 			<true/>
 			<key>sourceColorRect</key>
-			<string>{{12,53},{166,195}}</string>
+			<string>{{2,0},{145,160}}</string>
 			<key>sourceSize</key>
-			<string>{192,248}</string>
-		</dict>
-		<key>ship_2.png</key>
-		<dict>
-			<key>frame</key>
-			<string>{{841,237},{168,195}}</string>
-			<key>offset</key>
-			<string>{-1,-26}</string>
-			<key>rotated</key>
-			<false/>
-			<key>sourceColorRect</key>
-			<string>{{11,53},{168,195}}</string>
-			<key>sourceSize</key>
-			<string>{192,248}</string>
-		</dict>
-		<key>ship_3.png</key>
-		<dict>
-			<key>frame</key>
-			<string>{{830,613},{164,193}}</string>
-			<key>offset</key>
-			<string>{-2,-27}</string>
-			<key>rotated</key>
-			<true/>
-			<key>sourceColorRect</key>
-			<string>{{12,55},{164,193}}</string>
-			<key>sourceSize</key>
-			<string>{192,248}</string>
+			<string>{148,160}</string>
 		</dict>
 	</dict>
 	<key>metadata</key>

@@ -56,6 +56,7 @@ bool Enemy::init()
 
 	CCString* s = CCString::createWithFormat("enemy_%d_0.png", m_type);
 	m_sprite = CCSprite::createWithSpriteFrameName(s->getCString());
+	m_sprite->setScale(1.15f);
 
 	m_sprite->setPosition(CCPointZero);
 	this->addChild(m_sprite);

@@ -50,14 +50,14 @@ bool MainGameScene::init()
 	itPause->setPosition(ccp(1.15f * itPause->getContentSize().width/2, G_DESIGN_HEIGHT - 1.15f * itPause->getContentSize().height/2));
 
 	//cheat
-	CCMenuItemImage *itCheat = CCMenuItemImage::create(
-		"pause_0.png",
-		"pause_1.png",
-		this,
-		menu_selector(MainGameScene::cheatCallback));
-	itCheat->setPosition(ccp(G_DESIGN_WIDTH - 1.15f * itCheat->getContentSize().width/2, G_DESIGN_HEIGHT - 1.15f * itCheat->getContentSize().height/2));
+// 	CCMenuItemImage *itCheat = CCMenuItemImage::create(
+// 		"pause_0.png",
+// 		"pause_1.png",
+// 		this,
+// 		menu_selector(MainGameScene::cheatCallback));
+// 	itCheat->setPosition(ccp(G_DESIGN_WIDTH - 1.15f * itCheat->getContentSize().width/2, G_DESIGN_HEIGHT - 1.15f * itCheat->getContentSize().height/2));
 
-	CCMenu* pMenu = CCMenu::create(itPause, itCheat, NULL);
+	CCMenu* pMenu = CCMenu::create(itPause, /*itCheat, */ NULL);
 	pMenu->setPosition(CCPointZero);
 	this->addChild(pMenu);
 	

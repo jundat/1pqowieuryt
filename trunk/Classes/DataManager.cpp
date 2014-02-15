@@ -206,3 +206,35 @@ void DataManager::SetPhotoPath( const char* path )
 	CCUserDefault::sharedUserDefault()->setStringForKey("G_PHOTO_PATH", std::string(path));
 	CCUserDefault::sharedUserDefault()->flush();
 }
+
+int DataManager::GetGiftFromFriend(const char* fbID )
+{
+	CCString* s = CCString::createWithFormat("GIFT_FROM_%s", fbID);
+	return CCUserDefault::sharedUserDefault()->getIntegerForKey(s->getCString(), 0);
+}
+
+void DataManager::IncreaseGiftFromFriend(const char* fbID)
+{
+	CCString* s = CCString::createWithFormat("GIFT_FROM_%s", fbID);
+
+	CCUserDefault::sharedUserDefault()->setIntegerForKey(
+		s->getCString(),
+		DataManager::sharedDataManager()->GetGiftFromFriend(fbID) + 1
+	);
+
+	CCUserDefault::sharedUserDefault()->flush();
+}
+
+void DataManager::DecreaseGiftFromFriend( const char* fbID )
+{
+	CCString* s = CCString::createWithFormat("GIFT_FROM_%s", fbID);
+	int gift = DataManager::sharedDataManager()->GetGiftFromFriend(fbID) - 1;
+	gift = (gift < 0) ? 0: gift;
+
+	CCUserDefault::sharedUserDefault()->setIntegerForKey(
+		s->getCString(), 
+		gift
+	);
+
+	CCUserDefault::sharedUserDefault()->flush();
+}
