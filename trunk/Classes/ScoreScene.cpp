@@ -27,6 +27,9 @@ bool ScoreScene::init()
 	m_friendList = NULL;
 	m_arrHighScores = NULL;
 
+	m_arrLbTimer = new CCArray();
+	m_arrLbTimer->retain();
+
 	CCSprite* bg = CCSprite::create("bg_friend.png");
 	bg->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2));
 	this->addChild(bg);
@@ -378,7 +381,7 @@ CCTableViewCell* ScoreScene::tableCellAtIndex(CCTableView *table, unsigned int i
 				itBoom->setPosition(ccp(600, m_sprCell->getContentSize().height/2));
 				itBoom->setTag(1000 + idx);
 				itBoom->setOpacity(50);
-
+				
 				CCMenuItemImage* itSendLife = CCMenuItemImage::create("oil.png", "oil.png", this, menu_selector(ScoreScene::mailOutCallback));
 				itSendLife->setRotation(180);
 				itSendLife->setPosition(ccp(725, m_sprCell->getContentSize().height/2));
@@ -387,6 +390,16 @@ CCTableViewCell* ScoreScene::tableCellAtIndex(CCTableView *table, unsigned int i
 				CCMenu* cell_menu = CCMenu::create(itBoom, itSendLife, NULL);
 				cell_menu->setPosition(CCPointZero);
 				cell->addChild(cell_menu);
+
+				//610
+				CCLabelTTF* lbTimer = CCLabelTTF::create("00:00", "Roboto-Medium.ttf", 32);
+				lbTimer->setFontFillColor(ccc3(0, 0, 0));
+				lbTimer->setAnchorPoint(ccp(0.5f, 0.5f));
+				lbTimer->setPosition(ccp(600, m_sprCell->getContentSize().height/2));
+				lbTimer->setTag(3000 + idx);
+				cell->addChild(lbTimer);
+
+				m_arrLbTimer->addObject(lbTimer);
 			}
 		}
 		else
@@ -555,6 +568,11 @@ void ScoreScene::refreshView()
 		m_tableXephang->setVisible(false);
 		m_tableQuatang->setVisible(false);
 	}
+}
+
+void ScoreScene::scheduleTimer( float dt )
+{
+
 }
 
 
@@ -749,9 +767,10 @@ void ScoreScene::fbHighScoresCallback( int responseCode, const char* responseMes
 
 	MySortHighScore();
 
+	m_lbWaiting->setVisible(false);
+
 	m_tableXephang->reloadData();
 	m_tableQuatang->reloadData();
-	m_lbWaiting->setVisible(false);
 }
 
 void ScoreScene::fbSendRequestCallback( int responseCode, const char* responseMessage, cocos2d::CCArray* friendsGotRequests )

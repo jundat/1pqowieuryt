@@ -57,7 +57,6 @@ public:
 	void	IncreaseGiftFromFriend(const char* fbID);
 	void	DecreaseGiftFromFriend(const char* fbID);
 	
-	
 	~DataManager(void);
 };
 #endif

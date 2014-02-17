@@ -85,6 +85,8 @@ public:
 	bool m_isXepHangView;
 	void refreshView();
 
+	void scheduleTimer(float dt);
+
 	//end new delegate
 
 private:
@@ -96,10 +98,14 @@ private:
 	CCLabelTTF* m_lbName;
 	CCLabelTTF* m_lbScore;
 	CCSprite* m_sprCell;
+
+
 	CCTableView* m_tableXephang;
 	CCTableView* m_tableQuatang;
 
 	CCArray* m_arrHighScores;
+
+	CCArray* m_arrLbTimer;
 
 public:
 	// Facebook //=========================================
