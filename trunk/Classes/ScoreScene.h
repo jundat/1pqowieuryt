@@ -82,6 +82,9 @@ public:
 	void mailInCallback(CCObject* pSender);
 	void mailOutCallback(CCObject* pSender);
 
+	bool m_isXepHangView;
+	void refreshView();
+
 	//end new delegate
 
 private:
@@ -93,6 +96,7 @@ private:
 	CCLabelTTF* m_lbScore;
 	CCSprite* m_sprCell;
 	CCTableView* m_tableXephang;
+	CCTableView* m_tableQuatang;
 
 	CCArray* m_arrHighScores;
 

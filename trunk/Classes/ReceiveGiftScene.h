@@ -83,7 +83,7 @@ private:
 	CCLabelTTF* m_lbName;
 	CCLabelTTF* m_lbScore;
 	CCSprite* m_sprCell;
-	CCTableView* m_tableView;
+	CCTableView* m_tableQuatang;
 
 	CCArray* m_arrHighScores;
 

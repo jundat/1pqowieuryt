@@ -146,13 +146,13 @@ bool ReceiveGiftScene::init()
 	CCSize tableSize = CCSizeMake(768, 731); //CCSizeMake(cellsize.width, cellsize.height * 6.0f);
 
 	//vertical
-	m_tableView = CCTableView::create(this, tableSize);
-	m_tableView->setDirection(kCCScrollViewDirectionVertical);
-	m_tableView->setAnchorPoint(CCPointZero);
-	m_tableView->setPosition(ccp(400 - tableSize.width/2, 1280-742 - tableSize.height/2));
-	m_tableView->setDelegate(this);
-	m_tableView->setVerticalFillOrder(kCCTableViewFillTopDown);
-	this->addChild(m_tableView);
+	m_tableQuatang = CCTableView::create(this, tableSize);
+	m_tableQuatang->setDirection(kCCScrollViewDirectionVertical);
+	m_tableQuatang->setAnchorPoint(CCPointZero);
+	m_tableQuatang->setPosition(ccp(400 - tableSize.width/2, 1280-742 - tableSize.height/2));
+	m_tableQuatang->setDelegate(this);
+	m_tableQuatang->setVerticalFillOrder(kCCTableViewFillTopDown);
+	this->addChild(m_tableQuatang);
 
 	m_lbWaiting = CCLabelTTF::create("...WAITING...", "Roboto-Medium.ttf", 64);
 	m_lbWaiting->setColor(ccc3(0, 0, 0));
@@ -164,7 +164,7 @@ bool ReceiveGiftScene::init()
 
 	if (_isLoggedIn == false)
 	{
-		m_tableView->setVisible(false);
+		m_tableQuatang->setVisible(false);
 		m_lbWaiting->setVisible(false);
 	}
 
@@ -206,7 +206,7 @@ void ReceiveGiftScene::tableCellTouched(CCTableView* table, CCTableViewCell* cel
 		DataManager::sharedDataManager()->DecreaseGiftFromFriend(customCell->fbID.c_str());
 
 		//refresh
-		m_tableView->reloadData();
+		m_tableQuatang->reloadData();
 	} 
 	else
 	{
@@ -246,7 +246,6 @@ CCTableViewCell* ReceiveGiftScene::tableCellAtIndex(CCTableView *table, unsigned
 
 		if (strlen(fbFriend->getPhotoPath()) > 1)
 		{
-			//CCLOG("Photopath != \"\"\n%s", fbFriend->getPhotoPath());
 			photo  = CCString::createWithFormat("%s", fbFriend->getPhotoPath());
 		}
 
@@ -286,18 +285,9 @@ CCTableViewCell* ReceiveGiftScene::tableCellAtIndex(CCTableView *table, unsigned
 		avatar->setTag(2);
 		cell->addChild(avatar);
 
-// 		CCLabelTTF *lbOrder = CCLabelTTF::create(order->getCString(), "Roboto-Medium.ttf", 42);
-// 		lbOrder->setFontFillColor(ccc3(0, 0, 0));
-// 		lbOrder->setHorizontalAlignment(kCCTextAlignmentLeft); //cocos2d::CCTextAlignment::
-// 		lbOrder->setPosition(ccp(20, m_sprCell->getContentSize().height/2));
-// 		lbOrder->setAnchorPoint(ccp(0.0f, 0.5f));
-// 		lbOrder->setTag(3);
-// 		cell->addChild(lbOrder);
-
 		CCLabelTTF *lbName = CCLabelTTF::create(name->getCString(), "Roboto-Medium.ttf", 42);
 		lbName->setFontFillColor(ccc3(0,0,0));
 		lbName->setPosition(ccp(0.75f * G_FRIEND_AVATAR_SIZE + 20, m_sprCell->getContentSize().height * 3/4));
-		//(ccp(m_sprCell->getContentSize().width, m_sprCell->getContentSize().height/2));
 		lbName->setAnchorPoint(ccp(0.0f, 0.5f));
 		lbName->setTag(4);
 		cell->addChild(lbName);
@@ -324,19 +314,11 @@ CCTableViewCell* ReceiveGiftScene::tableCellAtIndex(CCTableView *table, unsigned
 		CCSprite *avatar = (CCSprite*)cell->getChildByTag(2);
 		avatar = CCSprite::create(photo->getCString());
 
-// 		CCLabelTTF *lbOrder = (CCLabelTTF*)cell->getChildByTag(3);
-// 		lbOrder->setString(order->getCString());
-// 		lbOrder->setPosition(ccp(20, m_sprCell->getContentSize().height/2));
-
 		CCLabelTTF *lbName = (CCLabelTTF*)cell->getChildByTag(4);
 		lbName->setString(name->getCString());
-		//lbName->setPosition(ccp(m_sprCell->getContentSize().width, m_sprCell->getContentSize().height/2));
-		//lbName->setPosition(ccp(0.75f * G_FRIEND_AVATAR_SIZE + 20, m_sprCell->getContentSize().height/2));
-
+		
 		CCLabelTTF *lbScore = (CCLabelTTF*)cell->getChildByTag(5);
 		lbScore->setString(gift->getCString());
-		//lbScore->setPosition(ccp(0.25 * m_sprCell->getContentSize().width, m_sprCell->getContentSize().height/2));
-		//lbScore->setPosition(ccp(0.75f * G_FRIEND_AVATAR_SIZE + 20, m_sprCell->getContentSize().height/2)); //0.25 * m_sprCell->getContentSize().width, m_sprCell->getContentSize().height/2));
 	}
 
 	return cell;
@@ -357,7 +339,7 @@ void ReceiveGiftScene::mailInCallback( CCObject* pSender )
 	//CCMessageBox(s->getCString(), "Mail in");
 
 	int idx = tag - 1000;
-	CCTableViewCell* cell = m_tableView->cellAtIndex(idx);
+	CCTableViewCell* cell = m_tableQuatang->cellAtIndex(idx);
 	std::string fbID = ((CustomTableViewCell*)cell)->fbID;
 }
 
@@ -369,7 +351,7 @@ void ReceiveGiftScene::mailOutCallback( CCObject* pSender )
 	//CCMessageBox(s->getCString(), "Mail out");
 
 	int idx = tag - 2000;
-	CCTableViewCell* cell = m_tableView->cellAtIndex(idx);
+	CCTableViewCell* cell = m_tableQuatang->cellAtIndex(idx);
 	std::string fbID = ((CustomTableViewCell*)cell)->fbID;
 	
 	CCLOG("Out facebookID = %s", fbID.c_str());
@@ -450,7 +432,7 @@ void ReceiveGiftScene::fbSessionCallback(int responseCode, const char *responseM
 	else
 	{
 		m_lbWaiting->setVisible(false);
-		m_tableView->setVisible(false);
+		m_tableQuatang->setVisible(false);
 
 		m_fbLogInItem->setVisible(true);
 		m_lbInvite->setVisible(true);
@@ -497,8 +479,8 @@ void ReceiveGiftScene::fbUserPhotoCallback(const char *userPhotoPath, const char
 				}
 			}
 
-			m_tableView->setVisible(true);
-			m_tableView->reloadData();
+			m_tableQuatang->setVisible(true);
+			m_tableQuatang->reloadData();
 		}
 	}
 }
@@ -580,8 +562,8 @@ void ReceiveGiftScene::fbHighScoresCallback( int responseCode, const char* respo
 
 	MySortHighScore();
 
-	m_tableView->setVisible(true);
-	m_tableView->reloadData();
+	m_tableQuatang->setVisible(true);
+	m_tableQuatang->reloadData();
 	m_lbWaiting->setVisible(false);
 }
 
@@ -646,9 +628,7 @@ void ReceiveGiftScene::fbIncomingRequestCallback(int responseCode, const char* r
 		}
 	}
 	
-
-	m_tableView->setVisible(true);
-	m_tableView->reloadData();
+	m_tableQuatang->reloadData();
 }
 
 #endif
