@@ -34,6 +34,15 @@ public:
 		return scene;
 	}
 
+	//Xephang
+	CCMenuItemToggle* m_xephangToggle;
+	CCMenuItemToggle* m_quatangToggle;
+	void xephangCallback(CCObject* pSender);
+	void quatangCallback(CCObject* pSender);
+	
+
+
+	//
 
 	CCMenuItemImage *m_fbLogOutItem;
 	void fbLogOutCallback(CCObject* pSender);
@@ -83,13 +92,13 @@ private:
 	CCLabelTTF* m_lbName;
 	CCLabelTTF* m_lbScore;
 	CCSprite* m_sprCell;
-	CCTableView* m_tableView;
+	CCTableView* m_tableXephang;
 
 	CCArray* m_arrHighScores;
 
 public:
 	// Facebook //=========================================
-	CCSprite* m_userSprite;
+	CCSprite* m_userAvatar;
 	CCMenuItem* m_fbLogInItem;
 	CCArray* m_friendList;
 

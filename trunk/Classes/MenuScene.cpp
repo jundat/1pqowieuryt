@@ -39,7 +39,8 @@ bool MenuScene::init()
     /////////////////////////////
 
 	CCSprite* bg = CCSprite::create("bg_menu.png");
-	bg->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2));
+	bg->setAnchorPoint(ccp(0.0f, 0.0f));
+	bg->setPosition(ccp(0, 0));
 	this->addChild(bg, 0);
 	
 	initLifeIcon();	

@@ -27,46 +27,55 @@ bool ScoreScene::init()
 	m_friendList = NULL;
 	m_arrHighScores = NULL;
 
-	CCSprite* bg = CCSprite::create("bg_stars.png");
+	CCSprite* bg = CCSprite::create("bg_friend.png");
 	bg->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2));
 	this->addChild(bg);
 
-	CCSprite* bg_table = CCSprite::create("bg_table.png");
-	bg_table->setPosition(ccp(400, 1280-662));
-	this->addChild(bg_table);
-
-	CCSprite* score_top = CCSprite::create("setting_top.png");
-	score_top->setPosition(ccp(400, 1280-100));
-	this->addChild(score_top);
+	CCSprite* table_top = CCSprite::create("table_top.png");
+	table_top->setPosition(ccp(400, 1280-202));
+	this->addChild(table_top);
 
 	//facebook avatar
 	if(DataManager::sharedDataManager()->GetPhotoPath() != "NULL")
 	{
-		m_userSprite = CCSprite::create(DataManager::sharedDataManager()->GetPhotoPath().c_str());
+		m_userAvatar = CCSprite::create(DataManager::sharedDataManager()->GetPhotoPath().c_str());
 	}
 	else
 	{
-		m_userSprite = CCSprite::create("fb-profile.png");
+		m_userAvatar = CCSprite::create("fb-profile.png");
 	}
 
-	m_userSprite->setPosition(ccp(88, 1280-276));
-	this->addChild(m_userSprite);
+	m_userAvatar->setPosition(ccp(93, 1280-202));
+	this->addChild(m_userAvatar);
 
 	std::string name = DataManager::sharedDataManager()->GetName();
 	m_lbName = CCLabelTTF::create(name.c_str(), "Roboto-Medium.ttf", 52);
 	m_lbName->setFontFillColor(ccc3(0, 0, 0));
-	m_lbName->setPosition(ccp(180, 1280-244)); //(ccp(400, 1280-250)); //248
-	//m_lbName->setHorizontalAlignment(kCCTextAlignmentLeft);
+	m_lbName->setPosition(ccp(174, 1280-173));
 	m_lbName->setAnchorPoint(ccp(0.0f, 0.5f));
 	this->addChild(m_lbName);
 
 	CCString* score = CCString::createWithFormat("%d", DataManager::sharedDataManager()->GetHighScore());
 	m_lbScore = CCLabelTTF::create(score->getCString(), "Roboto-Medium.ttf", 48);
 	m_lbScore->setFontFillColor(ccc3(0, 0, 0));
-	m_lbScore->setPosition(ccp(178, 1280-316)); //ccp(400, 1280-320)); //320
-	//m_lbScore->setHorizontalAlignment(kCCTextAlignmentLeft);
+	m_lbScore->setPosition(ccp(174, 1280-239));
 	m_lbScore->setAnchorPoint(ccp(0.0f, 0.5f));
 	this->addChild(m_lbScore);
+
+	//Xep hang
+
+	CCMenuItem* xephangOn = CCMenuItemImage::create("xephang.png", NULL, NULL);
+	CCMenuItem* xephangOff = CCMenuItemImage::create("xephang1.png", NULL, NULL);
+	m_xephangToggle = CCMenuItemToggle::createWithTarget(this,  menu_selector(ScoreScene::xephangCallback), xephangOn, xephangOff, NULL);
+	m_xephangToggle->setSelectedIndex(0);
+	m_xephangToggle->setPosition(ccp(202, 1280-351));
+
+	CCMenuItem* quatangOn = CCMenuItemImage::create("quatang.png", NULL, NULL);
+	CCMenuItem* quatangOff = CCMenuItemImage::create("quatang1.png", NULL, NULL);
+	m_quatangToggle = CCMenuItemToggle::createWithTarget(this,  menu_selector(ScoreScene::quatangCallback), quatangOn, quatangOff, NULL);
+	m_quatangToggle->setSelectedIndex(1);
+	m_quatangToggle->setPosition(ccp(600, 1280-351));
+	
 
 	//
 	CCMenuItemImage *backItem = CCMenuItemImage::create(
@@ -74,7 +83,7 @@ bool ScoreScene::init()
 		"back1.png",
 		this,
 		menu_selector(ScoreScene::menuCallback));
-	backItem->setPosition(ccp(178, 1280-1209));
+	backItem->setPosition(ccp(92, 1280-1201));
 
 	//
 	m_fbLogOutItem = CCMenuItemImage::create(
@@ -82,7 +91,7 @@ bool ScoreScene::init()
 		"disconnect_facebook.png",
 		this,
 		menu_selector(ScoreScene::fbLogOutCallback));
-	m_fbLogOutItem->setPosition(ccp(639, 1280-1209));
+	m_fbLogOutItem->setPosition(ccp(611, 1280-1205));
 	this->addChild(m_fbLogOutItem);
 
 	//
@@ -92,11 +101,11 @@ bool ScoreScene::init()
 		"connect_facebook.png", 
 		this,  
 		menu_selector(ScoreScene::fbLogInCallback));
-	m_fbLogInItem->setPosition(ccp(400, 1280-838));
+	m_fbLogInItem->setPosition(ccp(400, 1280-805));
 
-	m_lbInvite = CCLabelTTF::create("Connect Facebook\nfor more fun", "Roboto-Medium.ttf", 48);
+	m_lbInvite = CCLabelTTF::create("Liên kết Facebook\nthêm niềm vui", "Roboto-Medium.ttf", 48);
 	m_lbInvite->setFontFillColor(ccc3(0, 0, 0));
-	m_lbInvite->setPosition(ccp(400, 1280-703)); //320
+	m_lbInvite->setPosition(ccp(400, 1280-672)); //320
 	this->addChild(m_lbInvite, 1); //samw menu
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
@@ -134,24 +143,33 @@ bool ScoreScene::init()
 	}
 #endif
 
-	CCMenu* pMenu = CCMenu::create(backItem, m_fbLogInItem, m_fbLogOutItem, NULL);
+	CCMenu* pMenu = CCMenu::create(backItem, m_fbLogInItem, m_fbLogOutItem, m_xephangToggle, m_quatangToggle, NULL);
 	pMenu->setPosition(CCPointZero);
 	this->addChild(pMenu, 1);
 
-	//table view
-	m_sprCell = CCSprite::create("tablecell.png");
+	
+	//SEPERATE ///////////////////////////////////
+
+	
+	//table view XepHang //////////////////////////////////////
+
+	m_sprCell = CCSprite::create("table_cell_xephang.png");
 	m_sprCell->retain();
 	CCSize cellsize = m_sprCell->getContentSize();
-	CCSize tableSize = CCSizeMake(768, 731); //CCSizeMake(cellsize.width, cellsize.height * 6.0f);
+	CCSize tableSize = CCSizeMake(783, 718); //CCSizeMake(cellsize.width, cellsize.height * 6.0f);
 
 	//vertical
-	m_tableView = CCTableView::create(this, tableSize);
-	m_tableView->setDirection(kCCScrollViewDirectionVertical);
-	m_tableView->setAnchorPoint(CCPointZero);
-	m_tableView->setPosition(ccp(400 - tableSize.width/2, 1280-742 - tableSize.height/2));
-	m_tableView->setDelegate(this);
-	m_tableView->setVerticalFillOrder(kCCTableViewFillTopDown);
-	this->addChild(m_tableView);
+	m_tableXephang = CCTableView::create(this, tableSize);
+	m_tableXephang->setDirection(kCCScrollViewDirectionVertical);
+	m_tableXephang->setAnchorPoint(CCPointZero);
+	m_tableXephang->setPosition(ccp(400 - tableSize.width/2, 1280-768 - tableSize.height/2));
+	m_tableXephang->setDelegate(this);
+	m_tableXephang->setVerticalFillOrder(kCCTableViewFillTopDown);
+	this->addChild(m_tableXephang);
+
+	
+	//////////////////////////////////////////////////////////////////////////
+	
 
 	m_lbWaiting = CCLabelTTF::create("...WAITING...", "Roboto-Medium.ttf", 64);
 	m_lbWaiting->setColor(ccc3(0, 0, 0));
@@ -163,7 +181,7 @@ bool ScoreScene::init()
 
 	if (_isLoggedIn == false)
 	{
-		m_tableView->setVisible(false);
+		m_tableXephang->setVisible(false);
 		m_lbWaiting->setVisible(false);
 	}
 
@@ -182,6 +200,22 @@ void ScoreScene::keyBackClicked()
 {
 	menuCallback(NULL);
 }
+
+
+
+void ScoreScene::xephangCallback( CCObject* pSender )
+{
+	m_xephangToggle->setSelectedIndex(0);
+	m_quatangToggle->setSelectedIndex(1);
+}
+
+void ScoreScene::quatangCallback( CCObject* pSender )
+{
+	m_xephangToggle->setSelectedIndex(1);
+	m_quatangToggle->setSelectedIndex(0);
+}
+
+
 
 //new delegate
 
@@ -237,15 +271,7 @@ CCTableViewCell* ScoreScene::tableCellAtIndex(CCTableView *table, unsigned int i
 
 		((CustomTableViewCell*)cell)->fbID = friendId;
 		
-		CCSprite *sprite;
-		if (isMyScore)
-		{
-			sprite = CCSprite::create("tablecell_my.png");
-		}
-		else
-		{
-			sprite = CCSprite::create("tablecell.png");
-		}
+		CCSprite *sprite = CCSprite::create("tablecell.png");
 		
 		sprite->setAnchorPoint(CCPointZero);
 		sprite->setPosition(ccp(0, 0));
@@ -284,7 +310,7 @@ CCTableViewCell* ScoreScene::tableCellAtIndex(CCTableView *table, unsigned int i
 		if (isMyScore == false)
 		{
 			//button send and receive life
-			CCMenuItemImage* itIn = CCMenuItemImage::create("mail_in.png", "mail_in.png", this, menu_selector(ScoreScene::mailInCallback));
+			CCMenuItemImage* itIn = CCMenuItemImage::create("boomgift.png", "boomgift1.png", this, menu_selector(ScoreScene::mailInCallback));
 			itIn->setPosition(ccp(m_sprCell->getContentSize().width - itIn->getContentSize().width, m_sprCell->getContentSize().height/2));
 			itIn->setAnchorPoint(ccp(1.0f, 0.5f));
 			itIn->setTag(1000 + idx);
@@ -302,16 +328,6 @@ CCTableViewCell* ScoreScene::tableCellAtIndex(CCTableView *table, unsigned int i
 	}
 	else
 	{
-		CCSprite *sprite = (CCSprite*)cell->getChildByTag(1);
-		if (isMyScore)
-		{
-			sprite = CCSprite::create("tablecell_my.png");
-		}
-		else
-		{
-			sprite = CCSprite::create("tablecell.png");
-		}
-
 		CCSprite *avatar = (CCSprite*)cell->getChildByTag(2);
 		avatar = CCSprite::create(photo->getCString());
 
@@ -321,13 +337,9 @@ CCTableViewCell* ScoreScene::tableCellAtIndex(CCTableView *table, unsigned int i
 
 		CCLabelTTF *lbName = (CCLabelTTF*)cell->getChildByTag(4);
 		lbName->setString(name->getCString());
-		//lbName->setPosition(ccp(m_sprCell->getContentSize().width, m_sprCell->getContentSize().height/2));
-		//lbName->setPosition(ccp(0.75f * G_FRIEND_AVATAR_SIZE + 20, m_sprCell->getContentSize().height/2));
 
 		CCLabelTTF *lbScore = (CCLabelTTF*)cell->getChildByTag(5);
 		lbScore->setString(score->getCString());
-		//lbScore->setPosition(ccp(0.25 * m_sprCell->getContentSize().width, m_sprCell->getContentSize().height/2));
-		//lbScore->setPosition(ccp(0.75f * G_FRIEND_AVATAR_SIZE + 20, m_sprCell->getContentSize().height/2)); //0.25 * m_sprCell->getContentSize().width, m_sprCell->getContentSize().height/2));
 	}
 
 	return cell;
@@ -348,7 +360,7 @@ void ScoreScene::mailInCallback( CCObject* pSender )
 	//CCMessageBox(s->getCString(), "Mail in");
 
 	int idx = tag - 1000;
-	CCTableViewCell* cell = m_tableView->cellAtIndex(idx);
+	CCTableViewCell* cell = m_tableXephang->cellAtIndex(idx);
 	std::string fbID = ((CustomTableViewCell*)cell)->fbID;
 }
 
@@ -369,7 +381,7 @@ void ScoreScene::mailOutCallback( CCObject* pSender )
 	//CCMessageBox(s->getCString(), "Mail out");
 
 	int idx = tag - 2000;
-	CCTableViewCell* cell = m_tableView->cellAtIndex(idx);
+	CCTableViewCell* cell = m_tableXephang->cellAtIndex(idx);
 	std::string fbID = ((CustomTableViewCell*)cell)->fbID;
 	
 	CCLOG("Out facebookID = %s", fbID.c_str());
@@ -450,7 +462,7 @@ void ScoreScene::fbSessionCallback(int responseCode, const char *responseMessage
 	else
 	{
 		m_lbWaiting->setVisible(false);
-		m_tableView->setVisible(false);
+		m_tableXephang->setVisible(false);
 
 		m_fbLogInItem->setVisible(true);
 		m_lbInvite->setVisible(true);
@@ -473,9 +485,9 @@ void ScoreScene::fbUserPhotoCallback(const char *userPhotoPath, const char* fbID
 			DataManager::sharedDataManager()->SetPhotoPath(userPhotoPath);
 
 			CCSprite* userPhoto = CCSprite::create(userPhotoPath);
-			userPhoto->setPosition(ccp(m_userSprite->getContentSize().width/2, m_userSprite->getContentSize().height/2));
-			userPhoto->setScale(m_userSprite->getContentSize().width/userPhoto->getContentSize().width);
-			m_userSprite->addChild(userPhoto);
+			userPhoto->setPosition(ccp(m_userAvatar->getContentSize().width/2, m_userAvatar->getContentSize().height/2));
+			userPhoto->setScale(m_userAvatar->getContentSize().width/userPhoto->getContentSize().width);
+			m_userAvatar->addChild(userPhoto);
 		}
 		
 		if (m_arrHighScores != NULL)
@@ -497,8 +509,8 @@ void ScoreScene::fbUserPhotoCallback(const char *userPhotoPath, const char* fbID
 				}
 			}
 
-			m_tableView->setVisible(true);
-			m_tableView->reloadData();
+			m_tableXephang->setVisible(true);
+			m_tableXephang->reloadData();
 		}
 	}
 }
@@ -580,8 +592,8 @@ void ScoreScene::fbHighScoresCallback( int responseCode, const char* responseMes
 
 	MySortHighScore();
 
-	m_tableView->setVisible(true);
-	m_tableView->reloadData();
+	m_tableXephang->setVisible(true);
+	m_tableXephang->reloadData();
 	m_lbWaiting->setVisible(false);
 }
 
@@ -612,8 +624,6 @@ void ScoreScene::fbIncomingRequestCallback(int responseCode, const char* respons
 {
 	
 }
-
-
 #endif
 
 // Facebook //=========================================

@@ -308,25 +308,6 @@ CCTableViewCell* ReceiveGiftScene::tableCellAtIndex(CCTableView *table, unsigned
 		lbScore->setAnchorPoint(ccp(0.0f, 0.5f));
 		lbScore->setTag(5);
 		cell->addChild(lbScore);
-
-// 		if (isMyScore == false)
-// 		{
-// 			//button send and receive life
-// 			CCMenuItemImage* itIn = CCMenuItemImage::create("mail_in.png", "mail_in.png", this, menu_selector(ReceiveGiftScene::mailInCallback));
-// 			itIn->setPosition(ccp(m_sprCell->getContentSize().width - itIn->getContentSize().width, m_sprCell->getContentSize().height/2));
-// 			itIn->setAnchorPoint(ccp(1.0f, 0.5f));
-// 			itIn->setTag(1000 + idx);
-// //			itIn->setOpacity(50);
-// 
-// // 			CCMenuItemImage* itOut = CCMenuItemImage::create("mail_out.png", "mail_out.png", this, menu_selector(ReceiveGiftScene::mailOutCallback));
-// // 			itOut->setPosition(ccp(m_sprCell->getContentSize().width, m_sprCell->getContentSize().height/2));
-// // 			itOut->setAnchorPoint(ccp(1.0f, 0.5f));
-// // 			itOut->setTag(2000 + idx);
-// 
-// 			CCMenu* cell_menu = CCMenu::create(itIn, /*itOut,*/ NULL);
-// 			cell_menu->setPosition(CCPointZero);
-// 			cell->addChild(cell_menu);
-// 		}
 	}
 	else
 	{
