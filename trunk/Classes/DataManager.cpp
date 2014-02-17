@@ -78,6 +78,13 @@ void DataManager::SetLastDeadTime( tm* time )
 	CCUserDefault::sharedUserDefault()->flush();
 }
 
+void DataManager::SetLastDeadTimeNow()
+{
+	time_t curTime = time(NULL);
+	tm* _tm = localtime(&curTime);
+	DataManager::sharedDataManager()->SetLastDeadTime(_tm);
+}
+
 int DataManager::GetLastPlayerLife()
 {
 	//check if first time run
@@ -96,15 +103,11 @@ int DataManager::GetLastPlayerLife()
 
 void DataManager::SetLastPlayerLife( int lastLife )
 {
+	lastLife = (lastLife < 0) ? 0 : lastLife;
+	lastLife = (lastLife > G_MAX_PLAYER_LIFE) ? G_MAX_PLAYER_LIFE : lastLife;
+
 	CCUserDefault::sharedUserDefault()->setIntegerForKey("G_LAST_PLAYER_LIFE", lastLife);
 	CCUserDefault::sharedUserDefault()->flush();
-}
-
-void DataManager::SetLastDeadTimeNow()
-{
-	time_t curTime = time(NULL);
-	tm* _tm = localtime(&curTime);
-	DataManager::sharedDataManager()->SetLastDeadTime(_tm);
 }
 
 bool DataManager::GetIsJustRevived()
@@ -154,23 +157,17 @@ void DataManager::SetPassword(const char* pass )
 void DataManager::RefreshPlayerLife()
 {
 	int lastLife = DataManager::sharedDataManager()->GetLastPlayerLife();
-	lastLife = (lastLife > G_MAX_PLAYER_LIFE) ? G_MAX_PLAYER_LIFE : lastLife;
-	DataManager::sharedDataManager()->SetLastPlayerLife(lastLife);
-
-	if (lastLife <= 0)
+	if (lastLife < G_MAX_PLAYER_LIFE)
 	{
 		tm* lasttm = DataManager::sharedDataManager()->GetLastDeadTime();
 		time_t lastTime = mktime(lasttm);
 		time_t curTime = time(NULL);
 		double seconds = difftime(curTime, lastTime);
 
-		lastLife = (int)(seconds / G_PLAYER_TIME_TO_REVIVE);
-		lastLife = (lastLife > G_MAX_PLAYER_LIFE) ? G_MAX_PLAYER_LIFE : lastLife;
+		int add_lastLife = (int)((int)seconds / (int)G_PLAYER_TIME_TO_REVIVE);
+		lastLife += add_lastLife;
 
-		if (lastLife > 0)
-		{
-			DataManager::sharedDataManager()->SetLastPlayerLife(lastLife);
-		}
+		DataManager::sharedDataManager()->SetLastPlayerLife(lastLife);
 	}
 }
 

@@ -22,6 +22,7 @@ public:
 	CCMenu* m_menu;
 
 	void initLifeIcon();
+	void refreshLifeIcon();
 	void playStartAnimation(int lastLife);
 	void gotoMainGame();
 	
@@ -43,7 +44,7 @@ public:
 
 
 	//timer
-	float m_waitTime;
+	int m_waitTime;
 	CCLabelTTF* m_lbTime;
 
 	void initTimer();

@@ -75,7 +75,6 @@ bool MenuScene::init()
 		menu_selector(MenuScene::giftCallback));
 	giftItem->setPosition(ccp(600, 1280-1175));
 
-
 	//
 
 	CCMenuItem* soundOn = CCMenuItemImage::create("sound_on.png", NULL, NULL);
@@ -100,7 +99,7 @@ bool MenuScene::init()
 
 	int life = DataManager::sharedDataManager()->GetLastPlayerLife();
 	CCLOG("MenuScene: Last life = %d", life);
-	if (life <= 0)
+	if (life < G_MAX_PLAYER_LIFE) //start counter when not full of life
 	{
 		initTimer();
 	}
@@ -126,16 +125,38 @@ void MenuScene::initLifeIcon()
 		_sprBlur->setOpacity(50);
 		_sprBlur->setPosition(ccp(x + i * w, y));
 		this->addChild(_sprBlur);
+
+		CCSprite* _spr = CCSprite::create("oil.png");
+		_spr->setPosition(ccp(x + i * w, y));
+		_spr->setVisible(false);
+		this->addChild(_spr);
+
+		m_arrSprLife->addObject(_spr);
 	}
 
 	int life = DataManager::sharedDataManager()->GetLastPlayerLife();
 	for (int i = 0; i < life; ++i)
 	{
-		CCSprite* _spr = CCSprite::create("oil.png");
-		_spr->setPosition(ccp(x + i * w, y));
-		this->addChild(_spr);
+		CCSprite* _spr = (CCSprite*) m_arrSprLife->objectAtIndex(i);
+		_spr->setVisible(true);
+	}
+}
 
-		m_arrSprLife->addObject(_spr);
+void MenuScene::refreshLifeIcon()
+{
+	for (int i = 0; i < G_MAX_PLAYER_LIFE; ++i)
+	{
+		CCSprite* _spr = (CCSprite*) m_arrSprLife->objectAtIndex(i);
+		_spr->setVisible(false);
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////
+
+	int life = DataManager::sharedDataManager()->GetLastPlayerLife();
+	for (int i = 0; i < life; ++i)
+	{
+		CCSprite* _spr = (CCSprite*) m_arrSprLife->objectAtIndex(i);
+		_spr->setVisible(true);
 	}
 }
 
@@ -162,57 +183,24 @@ void MenuScene::gotoMainGame()
 
 void MenuScene::playCallback(CCObject* pSender)
 {
-	//PLAY_BUTTON_EFFECT;
-	//PLAY_USE_BOMB_EFFECT;
 	PLAY_ENEMY1_DOWN_EFFECT;
 
 	//check if last_player_life > 0
 	int lastLife = DataManager::sharedDataManager()->GetLastPlayerLife();
-	lastLife = (lastLife > G_MAX_PLAYER_LIFE) ? G_MAX_PLAYER_LIFE : lastLife;
-	DataManager::sharedDataManager()->SetLastPlayerLife(lastLife);
 
-	CCLOG("Last life: %d", lastLife);
+	CCLOG("GOTO PLAY: Lastlife: %d", lastLife);
 
 	if (lastLife > 0)
 	{
 		playStartAnimation(lastLife);
-
 		m_playItem->selected();
-
-		CCLOG("LastLife > 0 -> Play");
 	}
 	else
 	{
-		//get revive_life
-		tm* lasttm = DataManager::sharedDataManager()->GetLastDeadTime();
-		time_t lastTime = mktime(lasttm);
-		time_t curTime = time(NULL);
-		double seconds = difftime(curTime, lastTime);
-
-		lastLife = (int)(seconds / G_PLAYER_TIME_TO_REVIVE);
-		lastLife = (lastLife > G_MAX_PLAYER_LIFE) ? G_MAX_PLAYER_LIFE : lastLife;
-
-		CCLOG("Revive Last life: %d", lastLife);
-
-		if (lastLife > 0)
-		{
-			DataManager::sharedDataManager()->SetLastPlayerLife(lastLife);
-
-			CCScene *pScene = CCTransitionFade::create(0.5, MainGameScene::scene());
-			CCDirector::sharedDirector()->replaceScene(pScene);
-
-			CCLOG("Revive->LastLife > 0 -> Play");
-		}
-		else
-		{
-			WaitForLifeDialog* dialog = WaitForLifeDialog::create((float)(G_PLAYER_TIME_TO_REVIVE - seconds));
-			this->addChild(dialog, 100);
-			this->setTouchEnabled(false);
-			onShowDialog();
-
-			CCLOG("Revive->LastLife < 0 -> Can not play");
-			return;
-		}
+		WaitForLifeDialog* dialog = WaitForLifeDialog::create((float)G_PLAYER_TIME_TO_REVIVE);
+		this->addChild(dialog, 100);
+		this->setTouchEnabled(false);
+		onShowDialog();
 	}
 }
 
@@ -293,58 +281,76 @@ void MenuScene::soundCallback( CCObject* pSender )
 void MenuScene::ScheduleTick( float dt )
 {
 	CCLOG("Timer tick()");
-
-	//m_waitTime -= dt;
-
+	
 	tm* lasttm = DataManager::sharedDataManager()->GetLastDeadTime();
-	time_t lastTime = mktime(lasttm);
-	time_t curTime = time(NULL);
-	double _secondsElapsed = difftime(curTime, lastTime);
+	int diff = (int)difftime(time(NULL), mktime(lasttm));
 
-	m_waitTime = (float)(G_PLAYER_TIME_TO_REVIVE - _secondsElapsed);
+	m_waitTime = 1000 * G_PLAYER_TIME_TO_REVIVE - diff;
+	m_waitTime %= G_PLAYER_TIME_TO_REVIVE;
 
+	int mins = m_waitTime / 60;
+	int seconds = m_waitTime % 60;
 
-	if (m_waitTime < 0)
+	if (seconds == 0)
 	{
-		this->unschedule(schedule_selector(MenuScene::ScheduleTick));
-		
-		//complete
-		//invisiable timer
-		//refresh life
-
-		m_lbTime->setVisible(false);
-
 		DataManager::sharedDataManager()->RefreshPlayerLife();
+		refreshLifeIcon();
 
-		initLifeIcon();
+		int life = DataManager::sharedDataManager()->GetLastPlayerLife();
+		CCLOG("REFRESH LIFE ICON, Life = %d", life);
+		if (life >= G_MAX_PLAYER_LIFE)
+		{
+			this->unschedule(schedule_selector(MenuScene::ScheduleTick));
+			m_lbTime->setVisible(false);
+			return;
+		}		
+	}	
+
+	CCString* s;
+	if (seconds >= 10)
+	{
+		s = CCString::createWithFormat("0%d:%d", mins, seconds);
 	}
 	else
 	{
-		int mins = (int)m_waitTime/60;
-		int seconds = (int)m_waitTime % 60;
-
-		CCString* s = CCString::createWithFormat("0%d:%d", mins, seconds);
-		m_lbTime->setString(s->getCString());
+		s = CCString::createWithFormat("0%d:0%d", mins, seconds);
 	}
+
+	m_lbTime->setString(s->getCString());
 }
 
 void MenuScene::initTimer()
 {
 	CCLOG("Initing... timer! ...");
 
-	//get revive_life
+	int life = DataManager::sharedDataManager()->GetLastPlayerLife();
 	tm* lasttm = DataManager::sharedDataManager()->GetLastDeadTime();
-	time_t lastTime = mktime(lasttm);
-	time_t curTime = time(NULL);
-	double _secondsElapsed = difftime(curTime, lastTime);
+	int diff = (int)difftime(time(NULL), mktime(lasttm));
 
-	m_waitTime = (float)(G_PLAYER_TIME_TO_REVIVE - _secondsElapsed);
-	if (m_waitTime <= 0) return;
+	m_waitTime = 1000 * G_PLAYER_TIME_TO_REVIVE - diff;
+	m_waitTime %= G_PLAYER_TIME_TO_REVIVE;
+
+
+	if (m_waitTime < 0)
+	{
+		CCMessageBox("FULL TIME", "FULL TIME");
+		DataManager::sharedDataManager()->SetLastPlayerLife(G_MAX_PLAYER_LIFE);
+		return;
+	}
 	
-	int mins = (int)m_waitTime/60;
-	int seconds = (int)m_waitTime%60;
+	int mins = m_waitTime / 60;
+	int seconds = m_waitTime % 60;
 
-	CCString* s = CCString::createWithFormat("0%d:%d", mins, seconds);
+	CCString* s;
+	if (seconds >= 10)
+	{
+		s = CCString::createWithFormat("0%d:%d", mins, seconds);
+	} 
+	else
+	{
+		s = CCString::createWithFormat("0%d:0%d", mins, seconds);
+	}
+	
 	m_lbTime = CCLabelTTF::create(s->getCString(), "Roboto-Medium", 48);
 	m_lbTime->setPosition(ccp(400, 1280-531));
 	m_lbTime->setColor(ccc3(56, 56, 56));

@@ -102,6 +102,9 @@ void MainGameScene::showEndGame( int score, int killedEnemies )
 
 	CCDirector::sharedDirector()->getTouchDispatcher()->removeDelegate(this);
 	this->setTouchEnabled(false);
+
+	//refresh life, if lastLife = 4, and when playing, lastLife increase to 5
+	DataManager::sharedDataManager()->RefreshPlayerLife();
 	
 	//check if enough last_life
 	int lastLife = DataManager::sharedDataManager()->GetLastPlayerLife();
@@ -110,11 +113,15 @@ void MainGameScene::showEndGame( int score, int killedEnemies )
 
 	CCLOG("Last life: %d", lastLife);
 
-	time_t curTime = time(NULL);
-	tm* _tm = localtime(&curTime);
-	DataManager::sharedDataManager()->SetLastDeadTimeNow();
+	//if life = G_MAX_PLAYER_LIFE = 4
+	//start counter
+	if (lastLife == G_MAX_PLAYER_LIFE - 1)
+	{
+		CCLOG("SET LAST DEAD TIME VALUE");
+		DataManager::sharedDataManager()->SetLastDeadTimeNow();
+	}
+
 	DataManager::sharedDataManager()->SetIsJustRevived(false);
-	
 	AudioManager::sharedAudioManager()->PlayEffect("game_over.wav");
 	
 	LoseDialog* dialog = LoseDialog::create(score, killedEnemies);

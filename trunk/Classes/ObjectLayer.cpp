@@ -79,6 +79,8 @@ bool ObjectLayer::init()
 
 	m_enemyFactory = EnemyFactory::create();
 	this->addChild(m_enemyFactory, 2);
+	m_enemyFactory->update(-2.0f, m_score); //pause 2s before start generate enemies
+
 
 	this->schedule(schedule_selector(ObjectLayer::ScheduleGenerateItem), G_TIME_TO_GENERATE_ITEM);
 	this->schedule(schedule_selector(ObjectLayer::ScheduleCheckCollision), CCDirector::sharedDirector()->getAnimationInterval());

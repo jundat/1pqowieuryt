@@ -63,7 +63,7 @@ ConfigLoader::ConfigLoader(void)
 	G_ITEM_ARMOR_RANDOM_PERCENT = GetValue(std::string("G_ITEM_ARMOR_RANDOM_PERCENT"))->floatValue();
 	G_ITEM_BOOM_RANDOM_PERCENT = GetValue(std::string("G_ITEM_BOOM_RANDOM_PERCENT"))->floatValue();
 
-	G_PLAYER_TIME_TO_REVIVE = GetValue(std::string("G_PLAYER_TIME_TO_REVIVE"))->floatValue();
+	G_PLAYER_TIME_TO_REVIVE = GetValue(std::string("G_PLAYER_TIME_TO_REVIVE"))->intValue();
 	G_MAX_PLAYER_LIFE = GetValue(std::string("G_MAX_PLAYER_LIFE"))->floatValue();
 
 
