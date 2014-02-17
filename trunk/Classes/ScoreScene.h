@@ -88,6 +88,7 @@ public:
 	//end new delegate
 
 private:
+	bool m_isLoggedIn;
 	int m_listSize;
 
 	CCLabelTTF* m_lbInvite;

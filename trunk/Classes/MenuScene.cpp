@@ -5,7 +5,6 @@
 #include "DataManager.h"
 #include "WaitForLifeDialog.h"
 #include <time.h>
-#include "ReceiveGiftScene.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -46,7 +45,7 @@ bool MenuScene::init()
 	initLifeIcon();	
 
 	//
-	CCString* s = CCString::createWithFormat("v%d", 34);
+	CCString* s = CCString::createWithFormat("v%d", 35);
 	CCLabelTTF* labelVersion = CCLabelTTF::create(s->getCString(), "Roboto-Medium.ttf", 32);
 	labelVersion->setColor(ccc3(56, 56, 56));
 	labelVersion->setPosition(ccp(labelVersion->getContentSize().width/4, G_DESIGN_HEIGHT - labelVersion->getContentSize().height/4));
@@ -68,14 +67,7 @@ bool MenuScene::init()
 		menu_selector(MenuScene::scoreCallback));
 	scoreItem->setPosition(ccp(377, 1280-1175));
 
-	//test
-	CCMenuItemImage *giftItem = CCMenuItemImage::create(
-		"gift.png",
-		"gift.png",
-		this,
-		menu_selector(MenuScene::giftCallback));
-	giftItem->setPosition(ccp(600, 1280-1175));
-
+	
 	//
 
 	CCMenuItem* soundOn = CCMenuItemImage::create("sound_on.png", NULL, NULL);
@@ -92,7 +84,7 @@ bool MenuScene::init()
 	soundToggle->setPosition(ccp(121, 1280-1176));
 
 
-    m_menu = CCMenu::create(m_playItem, scoreItem, soundToggle, giftItem, NULL);
+    m_menu = CCMenu::create(m_playItem, scoreItem, soundToggle, NULL);
     m_menu->setPosition(CCPointZero);
     this->addChild(m_menu, 1);
 
@@ -358,12 +350,4 @@ void MenuScene::initTimer()
 	this->addChild(m_lbTime);
 
 	this->schedule(schedule_selector(MenuScene::ScheduleTick), 1);
-}
-
-void MenuScene::giftCallback( CCObject* pSender )
-{
-	PLAY_BUTTON_EFFECT;
-
-	CCScene *pScene = CCTransitionFade::create(0.5, ReceiveGiftScene::scene());
-	CCDirector::sharedDirector()->replaceScene(pScene);
 }
