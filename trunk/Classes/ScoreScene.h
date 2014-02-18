@@ -79,8 +79,8 @@ public:
 	virtual cocos2d::extension::CCTableViewCell* tableCellAtIndex(cocos2d::extension::CCTableView *table, unsigned int idx);
 	virtual unsigned int numberOfCellsInTableView(cocos2d::extension::CCTableView *table);
 
-	void mailInCallback(CCObject* pSender);
-	void mailOutCallback(CCObject* pSender);
+	void getBoomCallback(CCObject* pSender);
+	void sendLifeCallback(CCObject* pSender);
 
 	bool m_isXepHangView;
 	void refreshView();
@@ -104,8 +104,6 @@ private:
 	CCTableView* m_tableQuatang;
 
 	CCArray* m_arrHighScores;
-
-	CCArray* m_arrLbTimer;
 
 public:
 	// Facebook //=========================================

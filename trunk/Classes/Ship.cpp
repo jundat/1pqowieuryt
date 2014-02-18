@@ -43,7 +43,7 @@ bool Ship::init()
 		animFramesFlying->addObject(frame);
 	}
 
-	CCAnimation* animationFlying = CCAnimation::createWithSpriteFrames(animFramesFlying, 0.2f);
+	CCAnimation* animationFlying = CCAnimation::createWithSpriteFrames(animFramesFlying, 0.25f);
 	CCAnimate* animateFlying = CCAnimate::create(animationFlying);
 	m_acFlying = CCRepeatForever::create(animateFlying);
 	m_acFlying->retain();

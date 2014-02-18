@@ -63,6 +63,11 @@ public:
 	tm*		GetTimeBoomFriend(const char* fbId);
 	void	SetTimeBoomFriend(const char* fbId, tm* time);
 	void	SetTimeBoomFriendNow(const char* fbId);
+
+	int		GetBoom();
+	void	SetBoom(int boom);
+	void	IncreaseBoom();
+	void	DecreaseBoom();
 	
 	~DataManager(void);
 };

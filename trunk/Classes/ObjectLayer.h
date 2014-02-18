@@ -58,7 +58,6 @@ private:
 	CC_SYNTHESIZE(float, m_difficulty, Difficulty);
 	CC_SYNTHESIZE(bool, m_isEndGame, IsEndGame);
 	CC_SYNTHESIZE(Ship*, m_player, Player);
-	CC_SYNTHESIZE(int, m_numberBoom, NumberBoom);
 
 	void ScheduleStopLazer(float dt);
 	CCLabelTTF* m_labelScore;

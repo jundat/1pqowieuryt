@@ -135,7 +135,6 @@ void WaitForLifeDialog::fbSendRequestCallback( int responseCode, const char* res
 		int numFriends = friendsGotRequests->count();
 
 		CCLOG("Request sent successfully to %d friends", numFriends);
-		CCMessageBox("Infor", "Request sent successfully");
 
 		numFriends = (numFriends > G_MAX_PLAYER_LIFE) ? G_MAX_PLAYER_LIFE : numFriends;
 		DataManager::sharedDataManager()->SetLastPlayerLife(numFriends);
@@ -148,7 +147,7 @@ void WaitForLifeDialog::fbSendRequestCallback( int responseCode, const char* res
 	}
 	else
 	{
-		CCMessageBox("Infor", "Request sent failed");
+		CCLOG("Error, Request sent failed!");
 	}
 }
 

@@ -1,6 +1,6 @@
 #include "DataManager.h"
 #include "Global.h"
-
+#include "MyMacro.h"
 
 
 DataManager* DataManager::_instance = 0;
@@ -293,4 +293,32 @@ void DataManager::SetTimeBoomFriendNow( const char* fbId )
 	tm* _tm = localtime(&curTime);
 
 	DataManager::sharedDataManager()->SetTimeBoomFriend(fbId, _tm);
+}
+
+int DataManager::GetBoom()
+{
+	return CCUserDefault::sharedUserDefault()->getIntegerForKey("BOOM", G_DEFAULT_BOOM);
+}
+
+void DataManager::SetBoom( int boom )
+{
+	LIMIT_VALUE(boom, 0, G_MAX_BOOM);
+	CCUserDefault::sharedUserDefault()->setIntegerForKey("BOOM", boom);
+	CCUserDefault::sharedUserDefault()->flush();
+}
+
+void DataManager::IncreaseBoom()
+{
+	CCUserDefault::sharedUserDefault()->setIntegerForKey("BOOM", 
+		DataManager::sharedDataManager()->GetBoom() + 1);
+
+	CCUserDefault::sharedUserDefault()->flush();
+}
+
+void DataManager::DecreaseBoom()
+{
+	CCUserDefault::sharedUserDefault()->setIntegerForKey("BOOM", 
+		DataManager::sharedDataManager()->GetBoom() - 1);
+
+	CCUserDefault::sharedUserDefault()->flush();
 }

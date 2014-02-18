@@ -75,7 +75,10 @@ ConfigLoader::ConfigLoader(void)
 	G_ENEMY_1_SCORE = GetValue(std::string("G_ENEMY_1_SCORE"))->intValue();
 	G_ENEMY_2_SCORE = GetValue(std::string("G_ENEMY_2_SCORE"))->intValue();
 	G_ENEMY_3_SCORE = GetValue(std::string("G_ENEMY_3_SCORE"))->intValue();
-	
+
+
+	G_DEFAULT_BOOM = GetValue(std::string("G_DEFAULT_BOOM"))->intValue();
+	G_MAX_BOOM = GetValue(std::string("G_MAX_BOOM"))->intValue();
 }
 
 

@@ -85,4 +85,9 @@ extern float G_ENEMY_2_PERCENT;
 extern float G_ENEMY_3_PERCENT;
 
 
+extern int G_DEFAULT_BOOM;
+extern int G_MAX_BOOM;
+
+
+
 #endif //__GLOBAL_H__

@@ -10,11 +10,20 @@ class CustomTableViewCell : public cocos2d::extension::CCTableViewCell
 public:
 	std::string fbID;
 	
-	int boomWaitTime;
-
 	tm* lastBoomTime;
 
 	CCLabelTTF* lbTimer;
+	CCLabelTTF* lbGetBoom;
+	CCMenuItemImage* itBoom;
+
+	CustomTableViewCell()
+	{
+		lastBoomTime = NULL;
+
+		lbTimer = NULL;
+		lbGetBoom = NULL;
+		itBoom = NULL;
+	}
 
 	virtual void draw();
 };

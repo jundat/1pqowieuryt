@@ -37,11 +37,23 @@ bool ObjectLayer::init()
 	m_score = 0;
 	m_playedTime = 0;
 	m_difficulty = 0;
-	m_numberBoom = 0;
 
-	m_sprLazer = CCSprite::create("lazer.png");
+	m_sprLazer = CCSprite::createWithSpriteFrameName("lazer.png");
 	m_sprLazer->setVisible(false);
 	this->addChild(m_sprLazer, 1);
+
+	CCSpriteFrameCache* cache = CCSpriteFrameCache::sharedSpriteFrameCache();
+	CCArray* animFramesFlying = CCArray::createWithCapacity(2);
+	
+	animFramesFlying->addObject(cache->spriteFrameByName("lazer.png"));
+	animFramesFlying->addObject(cache->spriteFrameByName("lazer1.png"));
+
+	CCAnimation* animationFlying = CCAnimation::createWithSpriteFrames(animFramesFlying, 0.1f);
+	CCAnimate* animateFlying = CCAnimate::create(animationFlying);
+	CCRepeatForever* actionLazer = CCRepeatForever::create(animateFlying);
+	actionLazer->retain();
+	m_sprLazer->runAction(actionLazer);
+
 
 
 	m_player = Ship::create();
@@ -64,15 +76,22 @@ bool ObjectLayer::init()
 	m_itemBoom = CCMenuItemImage::create("icon_boom.png", "icon_boom.png", this, menu_selector(ObjectLayer::ActiveBoom));
 	m_itemBoom->setPosition(ccp(m_itemBoom->getContentSize().width/2 - G_DESIGN_WIDTH/2, 
 		m_itemBoom->getContentSize().height/2 - G_DESIGN_HEIGHT/2));
-	m_itemBoom->setVisible(false);
+	
 	CCMenu* menu = CCMenu::create(m_itemBoom, NULL);
 	this->addChild(menu, 10);
 
-	m_labelBoom = CCLabelTTF::create("x0", "Roboto-Medium.ttf", 52);
+	CCString* sBoom = CCString::createWithFormat("x%d", DataManager::sharedDataManager()->GetBoom());
+	m_labelBoom = CCLabelTTF::create(sBoom->getCString(), "Roboto-Medium.ttf", 52);
+	m_labelBoom->setFontFillColor(ccc3(0, 0, 0));
 	m_labelBoom->setPosition(ccp(m_itemBoom->getContentSize().width + m_labelBoom->getContentSize().width,
 		m_itemBoom->getContentSize().height/4 + m_labelBoom->getContentSize().height/4));
-	m_labelBoom->setVisible(false);
 	this->addChild(m_labelBoom, 10);
+
+	if (DataManager::sharedDataManager()->GetBoom() <= 0)
+	{
+		m_itemBoom->setVisible(false);
+		m_labelBoom->setVisible(false);
+	}
 
 	m_EffectLayer = EffectLayer::create();
 	this->addChild(m_EffectLayer, 10);
@@ -134,37 +153,15 @@ void ObjectLayer::ScheduleGenerateItem( float dt )
 
 	float rdw = CCRANDOM_0_1() * (7.0f / 8.0f * G_DESIGN_WIDTH) + G_DESIGN_WIDTH / 8.0f;
 
-	if (rd < 0.5f)
+	if (rd < 0.667f) // 2/3
 	{
-		if (m_player->getBulletLevel() < G_MAX_PLAYER_BULLET_LEVEL)
-		{
-			item = Item::create(G_ITEM_UPGRADE_BULLET, -0.3f, ccp(rdw, 3.0f/4*G_DESIGN_HEIGHT));
-			this->AddItem(item);
-		}
-		else
-		{
-			if (this->getNumberBoom() < G_MAX_PLAYER_BOOM)
-			{
-				item = Item::create(G_ITEM_BOOM, -0.3f, ccp(rdw, 3.0f/4*G_DESIGN_HEIGHT));
-				this->AddItem(item);
-			}
-		}
+		item = Item::create(G_ITEM_UPGRADE_BULLET, -0.3f, ccp(rdw, 3.0f/4*G_DESIGN_HEIGHT));
+		this->AddItem(item);
 	}
 	else
 	{
-		if (this->getNumberBoom() < G_MAX_PLAYER_BOOM)
-		{
-			item = Item::create(G_ITEM_BOOM, -0.3f, ccp(rdw, 3.0f/4*G_DESIGN_HEIGHT));
-			this->AddItem(item);
-		}
-		else
-		{
-			if (m_player->getBulletLevel() < G_MAX_PLAYER_BULLET_LEVEL)
-			{
-				item = Item::create(G_ITEM_UPGRADE_BULLET, -0.3f, ccp(rdw, 3.0f/4*G_DESIGN_HEIGHT));
-				this->AddItem(item);
-			}
-		}
+		item = Item::create(G_ITEM_BOOM, -0.3f, ccp(rdw, 3.0f/4*G_DESIGN_HEIGHT));
+		this->AddItem(item);
 	}
 
 
@@ -438,8 +435,8 @@ void ObjectLayer::update( float delta )
 	//Lazer
 	if (m_sprLazer->isVisible())
 	{
-		m_sprLazer->setScaleY((G_DESIGN_HEIGHT - m_player->getPositionY()) / m_sprLazer->getContentSize().height);
-		m_sprLazer->setScaleX(2.0f);
+		m_sprLazer->setScaleY(G_DESIGN_HEIGHT / m_sprLazer->getContentSize().height);
+		m_sprLazer->setScaleX(1.5f);
 		m_sprLazer->setAnchorPoint(ccp(0.5f, 0.0f));
 		m_sprLazer->setPosition(m_player->getPosition());
 	}
@@ -479,7 +476,6 @@ void ObjectLayer::RestartGame()
 	m_playedTime = 0;
 	m_killedEnemies = 0;
 	m_score = 0;
-	m_numberBoom = 0;
 
 	m_enemyFactory->Reset();
 
@@ -560,10 +556,9 @@ void ObjectLayer::AfterDeadEffectCallback()
 
 void ObjectLayer::IncreaseBoom()
 {
-	m_numberBoom++;
-	m_numberBoom = (m_numberBoom < G_MAX_PLAYER_BOOM) ? m_numberBoom : G_MAX_PLAYER_BOOM;
+	DataManager::sharedDataManager()->IncreaseBoom();
 
-	CCString* s = CCString::createWithFormat("x%d", m_numberBoom);
+	CCString* s = CCString::createWithFormat("x%d", DataManager::sharedDataManager()->GetBoom());
 	m_labelBoom->setString(s->getCString());
 
 	m_labelBoom->setVisible(true);
@@ -579,9 +574,12 @@ void ObjectLayer::ActiveBoom(CCObject* pSender)
 
 	PLAY_USE_BOMB_EFFECT;
 
+	int m_numberBoom = DataManager::sharedDataManager()->GetBoom();
+
 	if (m_numberBoom > 0)
 	{
 		m_numberBoom--;
+		DataManager::sharedDataManager()->DecreaseBoom();
 
 		CCString* s = CCString::createWithFormat("x%d", m_numberBoom);
 		m_labelBoom->setString(s->getCString());
@@ -592,8 +590,8 @@ void ObjectLayer::ActiveBoom(CCObject* pSender)
 			m_itemBoom->setVisible(false);
 		}
 
-		m_sprLazer->setScaleY((G_DESIGN_HEIGHT - m_player->getPositionY()) / m_sprLazer->getContentSize().height);
-		m_sprLazer->setScaleX(2.0f);
+		m_sprLazer->setScaleY(G_DESIGN_HEIGHT / m_sprLazer->getContentSize().height);
+		m_sprLazer->setScaleX(1.5f);
 		m_sprLazer->setAnchorPoint(ccp(0.5f, 0.0f));
 		m_sprLazer->setPosition(m_player->getPosition());
 		m_sprLazer->setVisible(true);

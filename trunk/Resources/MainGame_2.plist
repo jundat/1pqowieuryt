@@ -4,31 +4,31 @@
 <dict>
 	<key>frames</key>
 	<dict>
-		<key>ship_2.png</key>
-		<dict>
-			<key>frame</key>
-			<string>{{0,0},{145,157}}</string>
-			<key>offset</key>
-			<string>{0,-1}</string>
-			<key>rotated</key>
-			<false/>
-			<key>sourceColorRect</key>
-			<string>{{2,3},{145,157}}</string>
-			<key>sourceSize</key>
-			<string>{148,160}</string>
-		</dict>
 		<key>ship_3.png</key>
 		<dict>
 			<key>frame</key>
-			<string>{{0,158},{145,157}}</string>
+			<string>{{0,0},{151,187}}</string>
 			<key>offset</key>
-			<string>{0,-1}</string>
+			<string>{0,0}</string>
 			<key>rotated</key>
 			<false/>
 			<key>sourceColorRect</key>
-			<string>{{2,3},{145,157}}</string>
+			<string>{{0,0},{151,187}}</string>
 			<key>sourceSize</key>
-			<string>{148,160}</string>
+			<string>{151,187}</string>
+		</dict>
+		<key>ship_4.png</key>
+		<dict>
+			<key>frame</key>
+			<string>{{0,188},{151,187}}</string>
+			<key>offset</key>
+			<string>{0,0}</string>
+			<key>rotated</key>
+			<false/>
+			<key>sourceColorRect</key>
+			<string>{{0,0},{151,187}}</string>
+			<key>sourceSize</key>
+			<string>{151,187}</string>
 		</dict>
 	</dict>
 	<key>metadata</key>

@@ -242,15 +242,11 @@ void MenuScene::onCompletedWaiting()
 	if (lastLife > 0)
 	{
 		DataManager::sharedDataManager()->SetLastPlayerLife(lastLife);
-
-// 		CCScene *pScene = CCTransitionFade::create(0.5, MainGameScene::scene());
-// 		CCDirector::sharedDirector()->replaceScene(pScene);
-
 		initLifeIcon();
 	}
 	else
 	{
-		CCMessageBox("Your code is failed!", "F**k the coder!");
+		CCLOG("Your code is failed!, F**k the coder!");
 	}
 }
 
@@ -326,7 +322,6 @@ void MenuScene::initTimer()
 
 	if (m_waitTime < 0)
 	{
-		CCMessageBox("FULL TIME", "FULL TIME");
 		DataManager::sharedDataManager()->SetLastPlayerLife(G_MAX_PLAYER_LIFE);
 		return;
 	}

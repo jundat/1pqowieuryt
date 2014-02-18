@@ -74,3 +74,7 @@ int G_ENEMY_3_SCORE = 30000;		//score for enemy_3
 float G_ENEMY_1_PERCENT = 0.8f;
 float G_ENEMY_2_PERCENT = 0.15f;
 float G_ENEMY_3_PERCENT = 0.05f;
+
+
+int G_DEFAULT_BOOM;
+int G_MAX_BOOM;
