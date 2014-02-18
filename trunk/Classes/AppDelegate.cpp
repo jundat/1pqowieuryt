@@ -31,8 +31,24 @@ AppDelegate::~AppDelegate()
 }
 
 bool AppDelegate::applicationDidFinishLaunching() {
+
 	ConfigLoader::shareConfigLoader();
 	LevelLoader::shareLevelLoader();
+
+
+	//check if first time install
+	DataManager* DM = DataManager::sharedDataManager();
+	int isInstall = DM->GetValueFromKey("IS_INSTALL");
+	if (isInstall == 0)
+	{
+		//first install
+		DM->SetValueFromKey("IS_INSTALL", 1);
+
+		//save some value
+		DM->SetLastPlayerLife(G_MAX_PLAYER_LIFE);
+		DM->SetBoom(G_DEFAULT_BOOM);
+	}	
+
 
     CCDirector* pDirector = CCDirector::sharedDirector();
     CCEGLView* pEGLView = CCEGLView::sharedOpenGLView();

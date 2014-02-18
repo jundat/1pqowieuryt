@@ -436,7 +436,7 @@ void ObjectLayer::update( float delta )
 	if (m_sprLazer->isVisible())
 	{
 		m_sprLazer->setScaleY(G_DESIGN_HEIGHT / m_sprLazer->getContentSize().height);
-		m_sprLazer->setScaleX(1.5f);
+		//m_sprLazer->setScaleX(1.5f);
 		m_sprLazer->setAnchorPoint(ccp(0.5f, 0.0f));
 		m_sprLazer->setPosition(m_player->getPosition());
 	}
@@ -591,7 +591,7 @@ void ObjectLayer::ActiveBoom(CCObject* pSender)
 		}
 
 		m_sprLazer->setScaleY(G_DESIGN_HEIGHT / m_sprLazer->getContentSize().height);
-		m_sprLazer->setScaleX(1.5f);
+		//m_sprLazer->setScaleX(1.5f);
 		m_sprLazer->setAnchorPoint(ccp(0.5f, 0.0f));
 		m_sprLazer->setPosition(m_player->getPosition());
 		m_sprLazer->setVisible(true);

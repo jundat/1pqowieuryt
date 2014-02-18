@@ -41,7 +41,7 @@ void DataManager::SetCurrentHighScore(int score)
 //Default value = 0
 int	DataManager::GetValueFromKey(char* key)
 {
-	return CCUserDefault::sharedUserDefault()->getIntegerForKey(key);
+	return CCUserDefault::sharedUserDefault()->getIntegerForKey(key, 0);
 }
 
 
@@ -56,14 +56,20 @@ void DataManager::SetValueFromKey(char* key, int val)
 tm* DataManager::GetLastDeadTime()
 {
 	tm* _tm = new tm();
-	_tm->tm_hour = CCUserDefault::sharedUserDefault()->getIntegerForKey("G_LAST_DEAD_TIME_HOUR");
-	_tm->tm_min = CCUserDefault::sharedUserDefault()->getIntegerForKey("G_LAST_DEAD_TIME_MIN");
-	_tm->tm_sec = CCUserDefault::sharedUserDefault()->getIntegerForKey("G_LAST_DEAD_TIME_SEC");
-	_tm->tm_mday = CCUserDefault::sharedUserDefault()->getIntegerForKey("G_LAST_DEAD_TIME_MDAY");
-	_tm->tm_mon = CCUserDefault::sharedUserDefault()->getIntegerForKey("G_LAST_DEAD_TIME_MON");
-	_tm->tm_year = CCUserDefault::sharedUserDefault()->getIntegerForKey("G_LAST_DEAD_TIME_YEAR");
+	_tm->tm_hour = CCUserDefault::sharedUserDefault()->getIntegerForKey("G_LAST_DEAD_TIME_HOUR", -1);
+	_tm->tm_min = CCUserDefault::sharedUserDefault()->getIntegerForKey("G_LAST_DEAD_TIME_MIN", -1);
+	_tm->tm_sec = CCUserDefault::sharedUserDefault()->getIntegerForKey("G_LAST_DEAD_TIME_SEC", -1);
+	_tm->tm_mday = CCUserDefault::sharedUserDefault()->getIntegerForKey("G_LAST_DEAD_TIME_MDAY", -1);
+	_tm->tm_mon = CCUserDefault::sharedUserDefault()->getIntegerForKey("G_LAST_DEAD_TIME_MON", -1);
+	_tm->tm_year = CCUserDefault::sharedUserDefault()->getIntegerForKey("G_LAST_DEAD_TIME_YEAR", -1);
 
-	return _tm;	
+	if (_tm->tm_hour == -1)
+	{
+		time_t t = time(NULL);
+		_tm = localtime(&t);
+	}
+
+	return _tm;
 }
 
 
@@ -165,9 +171,11 @@ void DataManager::RefreshPlayerLife()
 		double seconds = difftime(curTime, lastTime);
 
 		int add_lastLife = (int)((int)seconds / (int)G_PLAYER_TIME_TO_REVIVE);
-		lastLife += add_lastLife;
-
-		DataManager::sharedDataManager()->SetLastPlayerLife(lastLife);
+		if (add_lastLife > 0)
+		{
+			lastLife += add_lastLife;
+			DataManager::sharedDataManager()->SetLastPlayerLife(lastLife);
+		}
 	}
 }
 

@@ -232,12 +232,14 @@ void ScoreScene::keyBackClicked()
 
 void ScoreScene::xephangCallback( CCObject* pSender )
 {
+	PLAY_BUTTON_EFFECT;
 	m_isXepHangView = true;
 	refreshView();
 }
 
 void ScoreScene::quatangCallback( CCObject* pSender )
 {
+	PLAY_BUTTON_EFFECT;
 	m_isXepHangView = false;
 	refreshView();
 }
@@ -424,31 +426,40 @@ CCTableViewCell* ScoreScene::tableCellAtIndex(CCTableView *table, unsigned int i
 
 			if (isMyScore == false)
 			{
-				CCMenuItemImage* itBoom = CCMenuItemImage::create("boomgift1.png", "boomgift.png", this, menu_selector(ScoreScene::getBoomCallback));
-				itBoom->setPosition(ccp(600, m_sprCell->getContentSize().height/2));
+				CCMenuItemImage* itBoom = CCMenuItemImage::create("boomgift.png", "boomgift1.png", this, menu_selector(ScoreScene::getBoomCallback));
+				itBoom->setPosition(ccp(600, m_sprCell->getContentSize().height/2 + 10));
 				itBoom->setTag(1000 + idx);
 				((CustomTableViewCell*)cell)->itBoom = itBoom;
 
 				CCMenuItemImage* itSendLife = CCMenuItemImage::create("oil.png", "oil.png", this, menu_selector(ScoreScene::sendLifeCallback));
 				itSendLife->setRotation(180);
-				itSendLife->setPosition(ccp(725, m_sprCell->getContentSize().height/2));
+				itSendLife->setPosition(ccp(725, m_sprCell->getContentSize().height/2 + 15));
 				itSendLife->setTag(2000 + idx);
+
+				//Gửi
+				CCLabelTTF* lbSendBoom = CCLabelTTF::create("Gửi", "Roboto-Medium.ttf", 28);
+				lbSendBoom->setFontFillColor(ccc3(0, 0, 0));
+				lbSendBoom->setAnchorPoint(ccp(0.5f, 0.75f));
+				lbSendBoom->setPosition(ccp(725, m_sprCell->getContentSize().height/4));
+				lbSendBoom->setTag(4000 + idx);
+				cell->addChild(lbSendBoom);
+
 
 				CCMenu* cell_menu = CCMenu::create(itBoom, itSendLife, NULL);
 				cell_menu->setPosition(CCPointZero);
 				cell->addChild(cell_menu);
 
 				//610
-				CCLabelTTF* lbTimer = CCLabelTTF::create(sBoomTimer->getCString(), "Roboto-Medium.ttf", 32);
+				CCLabelTTF* lbTimer = CCLabelTTF::create(sBoomTimer->getCString(), "Roboto-Medium.ttf", 28); //32
 				lbTimer->setFontFillColor(ccc3(0, 0, 0));
-				lbTimer->setAnchorPoint(ccp(0.5f, 0.5f));
-				lbTimer->setPosition(ccp(600, m_sprCell->getContentSize().height/2));
+				lbTimer->setAnchorPoint(ccp(0.5f, 0.75f));
+				lbTimer->setPosition(ccp(600, m_sprCell->getContentSize().height/4));
 				lbTimer->setTag(3000 + idx);
 				cell->addChild(lbTimer);
 				((CustomTableViewCell*)cell)->lbTimer = lbTimer;
 
 				//Nhận
-				CCLabelTTF* lbGetBoom = CCLabelTTF::create("Nhận", "Roboto-Medium.ttf", 32);
+				CCLabelTTF* lbGetBoom = CCLabelTTF::create("Nhận", "Roboto-Medium.ttf", 28);
 				lbGetBoom->setFontFillColor(ccc3(0, 0, 0));
 				lbGetBoom->setAnchorPoint(ccp(0.5f, 0.75f));
 				lbGetBoom->setPosition(ccp(600, m_sprCell->getContentSize().height/4));
@@ -465,6 +476,8 @@ CCTableViewCell* ScoreScene::tableCellAtIndex(CCTableView *table, unsigned int i
 				}
 				else
 				{
+					itBoom->selected();
+
 					itBoom->setEnabled(false);
 					lbTimer->setVisible(true);
 					lbGetBoom->setVisible(false);
@@ -563,11 +576,28 @@ void ScoreScene::getBoomCallback( CCObject* pSender )
 	CCString* s = CCString::createWithFormat("In tag %d", tag);
 
 	int idx = tag - 1000;
-	CCTableViewCell* cell = m_tableXephang->cellAtIndex(idx);
+	CustomTableViewCell* cell = (CustomTableViewCell*)m_tableXephang->cellAtIndex(idx);
 	std::string fbID = ((CustomTableViewCell*)cell)->fbID;
 
-	//
-	DataManager::sharedDataManager()->SetTimeBoomFriendNow(fbID.c_str());
+	//check if ok
+	int numBoom = DataManager::sharedDataManager()->GetBoom();
+
+	if (numBoom < G_MAX_BOOM)
+	{
+		PLAY_GET_BOMB_EFFECT;
+		DataManager::sharedDataManager()->IncreaseBoom();
+		DataManager::sharedDataManager()->SetTimeBoomFriendNow(fbID.c_str());
+
+		//show clock
+		cell->lbGetBoom->setVisible(false);
+		cell->lbTimer->setVisible(true);
+		cell->itBoom->setEnabled(false);
+		cell->lastBoomTime = DataManager::sharedDataManager()->GetTimeBoomFriend(fbID.c_str());
+	}
+	else
+	{
+		PLAY_OUT_PORP_EFFECT;
+	}
 }
 
 void ScoreScene::sendLifeCallback( CCObject* pSender )
@@ -580,6 +610,8 @@ void ScoreScene::sendLifeCallback( CCObject* pSender )
 		return;
 	}
 	
+	PLAY_BUTTON_EFFECT;
+
 	int tag = ((CCMenuItemImage*)pSender)->getTag();
 	CCLOG("Out tag = %d", tag);
 	CCString* s = CCString::createWithFormat("Out tag %d", tag);
@@ -598,7 +630,6 @@ void ScoreScene::sendLifeCallback( CCObject* pSender )
 	giftDictionary->setObject(CCString::create("1"), "LIFE"); //number of gift, name of gift
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-
 	EziSocialObject::sharedObject()->isFacebookSessionActive();
 
 	EziSocialObject::sharedObject()->sendRequestToFriends(
@@ -904,17 +935,15 @@ void ScoreScene::fbHighScoresCallback( int responseCode, const char* responseMes
 void ScoreScene::fbSendRequestCallback( int responseCode, const char* responseMessage, cocos2d::CCArray* friendsGotRequests )
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	// 	FB_REQUEST_SENDING_ERROR - In case if there is any error while sending the request
-	// 	FB_REQUEST_SENDING_CANCELLED – In case, user decides not to send the request.
-	// 	FB_REQUEST_SENT - If sending request is success
-	
 	if (EziSocialWrapperNS::RESPONSE_CODE::FB_REQUEST_SENT == responseCode)
 	{
 		int numFriends = friendsGotRequests->count();
 		CCLOG("Request sent successfully to %d friends", numFriends);
 
 		int curLife = DataManager::sharedDataManager()->GetLastPlayerLife();
+		CCLOG("LAST_LIFE_FIRST = %d", DataManager::sharedDataManager()->GetLastPlayerLife());
 		DataManager::sharedDataManager()->SetLastPlayerLife(curLife - 1);
+		CCLOG("LAST_LIFE = %d", DataManager::sharedDataManager()->GetLastPlayerLife());
 	}
 	else
 	{
@@ -961,7 +990,7 @@ void ScoreScene::fbIncomingRequestCallback(int responseCode, const char* respons
 			CCLOG(" ------------ INVITE ------------ ");
 
 			//check incoming request again, i dont know why
-			EziSocialObject::sharedObject()->checkIncomingRequest();
+			//EziSocialObject::sharedObject()->checkIncomingRequest();
 		}
 	}
 
