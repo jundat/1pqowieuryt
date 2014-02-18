@@ -297,9 +297,18 @@ CCTableViewCell* ScoreScene::tableCellAtIndex(CCTableView *table, unsigned int i
 	std::string friendId;
 	CCString *gift = CCString::create("0");
 
-	tm* lastBoomTime;
-	int boomWaitTime = 0;
-	CCString* sBoomTimer = CCString::create("00:00:00");
+
+	//get boom
+	tm* _lastTimeGetBoom;
+	int _getBoomWaitTime = 0;
+	CCString* _sGetBoomTimer = CCString::create("00:00:00");
+	
+	//send life
+	tm* _lastTimeSendLife;
+	int _sendLifeWaitTime = 0;
+	CCString* _sSendLifeTimer = CCString::create("00:00:00");
+
+
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	if(m_arrHighScores == NULL)
@@ -322,40 +331,68 @@ CCTableViewCell* ScoreScene::tableCellAtIndex(CCTableView *table, unsigned int i
 		friendId = std::string(fbFriend->getFBID());
 		gift = CCString::createWithFormat("x%d", DataManager::sharedDataManager()->GetGiftFromFriend(friendId.c_str()));
 		
-		//boomTimer
-		lastBoomTime = DataManager::sharedDataManager()->GetTimeBoomFriend(friendId.c_str());
-		if (lastBoomTime == NULL)
+		//get boom
+		_lastTimeGetBoom = DataManager::sharedDataManager()->GetTimeBoomFriend(friendId.c_str());
+		if (_lastTimeGetBoom == NULL)
 		{
 			//2014 - 114 = 1900
 			//very last
-			lastBoomTime = new tm();
-			lastBoomTime->tm_hour = 0;
-			lastBoomTime->tm_min = 0;
-			lastBoomTime->tm_sec = 0;
-			lastBoomTime->tm_mday = 0;
-			lastBoomTime->tm_mon = 0;
-			lastBoomTime->tm_year = 0;
+			_lastTimeGetBoom = new tm();
+			_lastTimeGetBoom->tm_hour = 0;
+			_lastTimeGetBoom->tm_min = 0;
+			_lastTimeGetBoom->tm_sec = 0;
+			_lastTimeGetBoom->tm_mday = 0;
+			_lastTimeGetBoom->tm_mon = 0;
+			_lastTimeGetBoom->tm_year = 0;
 
-			DataManager::sharedDataManager()->SetTimeBoomFriend(friendId.c_str(), lastBoomTime);
+			DataManager::sharedDataManager()->SetTimeBoomFriend(friendId.c_str(), _lastTimeGetBoom);
 		}
-
-		time_t lastTime = mktime(lastBoomTime);
+		time_t lastTime = mktime(_lastTimeGetBoom);
 		time_t curTime = time(NULL);
-		boomWaitTime = 24 * 60 * 60 - (int)difftime(curTime, lastTime);
-		boomWaitTime = (boomWaitTime > 0) ? boomWaitTime : 0;
-
-
+		_getBoomWaitTime = 24 * 60 * 60 - (int)difftime(curTime, lastTime);
+		_getBoomWaitTime = (_getBoomWaitTime > 0) ? _getBoomWaitTime : 0;
+		
 		int hour, min, sec;
-		sec = boomWaitTime % 60;
-		boomWaitTime -= sec;
-		min =  ((int)(boomWaitTime / 60)) % 60;
-		hour = ((int)(boomWaitTime / 60)) / 60;
+		sec = _getBoomWaitTime % 60;
+		_getBoomWaitTime -= sec;
+		min =  ((int)(_getBoomWaitTime / 60)) % 60;
+		hour = ((int)(_getBoomWaitTime / 60)) / 60;
+		_sGetBoomTimer = CCString::createWithFormat("%d:%d:%d", hour, min, sec);
 
-		sBoomTimer = CCString::createWithFormat("%d:%d:%d", hour, min, sec);
 
 
-		int lastLife = (int)(boomWaitTime / G_PLAYER_TIME_TO_REVIVE);
-		lastLife = (lastLife > G_MAX_PLAYER_LIFE) ? G_MAX_PLAYER_LIFE : lastLife;
+		//send life
+		_lastTimeSendLife = DataManager::sharedDataManager()->GetTimeLifeToFriend(friendId.c_str());
+		if (_lastTimeSendLife == NULL)
+		{
+			//2014 - 114 = 1900
+			//very last
+			_lastTimeSendLife = new tm();
+			_lastTimeSendLife->tm_hour = 0;
+			_lastTimeSendLife->tm_min = 0;
+			_lastTimeSendLife->tm_sec = 0;
+			_lastTimeSendLife->tm_mday = 0;
+			_lastTimeSendLife->tm_mon = 0;
+			_lastTimeSendLife->tm_year = 0;
+
+			DataManager::sharedDataManager()->SetTimeLifeToFriend(friendId.c_str(), _lastTimeSendLife);
+		}
+		time_t lastTimeSendLife = mktime(_lastTimeSendLife);
+		time_t curTimeSendLife = time(NULL);
+		_sendLifeWaitTime = 24 * 60 * 60 - (int)difftime(curTimeSendLife, lastTimeSendLife);
+		_sendLifeWaitTime = (_sendLifeWaitTime > 0) ? _sendLifeWaitTime : 0;
+
+		//int hour, min, sec;
+		sec = _sendLifeWaitTime % 60;
+		_sendLifeWaitTime -= sec;
+		min =  ((int)(_sendLifeWaitTime / 60)) % 60;
+		hour = ((int)(_sendLifeWaitTime / 60)) / 60;
+		_sSendLifeTimer = CCString::createWithFormat("%d:%d:%d", hour, min, sec);
+
+		
+		
+		//////////////////////////////////////////////////////////////////////////
+		
 
 		if (strlen(fbFriend->getPhotoPath()) > 1)
 		{
@@ -376,7 +413,8 @@ CCTableViewCell* ScoreScene::tableCellAtIndex(CCTableView *table, unsigned int i
 			cell->autorelease();
 
 			((CustomTableViewCell*)cell)->fbID = friendId;
-			((CustomTableViewCell*)cell)->lastBoomTime = lastBoomTime;
+			((CustomTableViewCell*)cell)->m_lastTimeGetBoom = _lastTimeGetBoom;
+			((CustomTableViewCell*)cell)->m_lastTimeSendLife = _lastTimeSendLife;
 
 			CCSprite *sprite = CCSprite::create("table_cell_xephang.png");
 			sprite->setAnchorPoint(CCPointZero);
@@ -426,61 +464,100 @@ CCTableViewCell* ScoreScene::tableCellAtIndex(CCTableView *table, unsigned int i
 
 			if (isMyScore == false)
 			{
-				CCMenuItemImage* itBoom = CCMenuItemImage::create("boomgift.png", "boomgift1.png", this, menu_selector(ScoreScene::getBoomCallback));
-				itBoom->setPosition(ccp(600, m_sprCell->getContentSize().height/2 + 10));
-				itBoom->setTag(1000 + idx);
-				((CustomTableViewCell*)cell)->itBoom = itBoom;
+				CCMenuItemImage* itGetBoom = CCMenuItemImage::create("boomgift.png", "boomgift1.png", this, menu_selector(ScoreScene::getBoomCallback));
+				itGetBoom->setPosition(ccp(600, m_sprCell->getContentSize().height/2 + 10));
+				itGetBoom->setTag(1000 + idx);
+				((CustomTableViewCell*)cell)->m_itGetBoom = itGetBoom;
 
 				CCMenuItemImage* itSendLife = CCMenuItemImage::create("oil.png", "oil.png", this, menu_selector(ScoreScene::sendLifeCallback));
 				itSendLife->setRotation(180);
 				itSendLife->setPosition(ccp(725, m_sprCell->getContentSize().height/2 + 15));
 				itSendLife->setTag(2000 + idx);
+				((CustomTableViewCell*)cell)->m_itSendLife = itSendLife;
 
-				//Gửi
-				CCLabelTTF* lbSendBoom = CCLabelTTF::create("Gửi", "Roboto-Medium.ttf", 28);
-				lbSendBoom->setFontFillColor(ccc3(0, 0, 0));
-				lbSendBoom->setAnchorPoint(ccp(0.5f, 0.75f));
-				lbSendBoom->setPosition(ccp(725, m_sprCell->getContentSize().height/4));
-				lbSendBoom->setTag(4000 + idx);
-				cell->addChild(lbSendBoom);
-
-
-				CCMenu* cell_menu = CCMenu::create(itBoom, itSendLife, NULL);
+				CCMenu* cell_menu = CCMenu::create(itGetBoom, itSendLife, NULL);
 				cell_menu->setPosition(CCPointZero);
 				cell->addChild(cell_menu);
 
-				//610
-				CCLabelTTF* lbTimer = CCLabelTTF::create(sBoomTimer->getCString(), "Roboto-Medium.ttf", 28); //32
-				lbTimer->setFontFillColor(ccc3(0, 0, 0));
-				lbTimer->setAnchorPoint(ccp(0.5f, 0.75f));
-				lbTimer->setPosition(ccp(600, m_sprCell->getContentSize().height/4));
-				lbTimer->setTag(3000 + idx);
-				cell->addChild(lbTimer);
-				((CustomTableViewCell*)cell)->lbTimer = lbTimer;
 
-				//Nhận
+				//////////////////////////////////////////////////////////////////////////
+				
+
+				//Send life
+				CCLabelTTF* lbSendLifeTimer = CCLabelTTF::create(_sSendLifeTimer->getCString(), "Roboto-Medium.ttf", 28); //32
+				lbSendLifeTimer->setFontFillColor(ccc3(0, 0, 0));
+				lbSendLifeTimer->setAnchorPoint(ccp(0.5f, 0.75f));
+				lbSendLifeTimer->setPosition(ccp(725, m_sprCell->getContentSize().height/4));
+				lbSendLifeTimer->setTag(3000 + idx);
+				cell->addChild(lbSendLifeTimer);
+				((CustomTableViewCell*)cell)->m_lbSendLifeTimer = lbSendLifeTimer;
+
+				CCLabelTTF* lbSendLife = CCLabelTTF::create("Gửi", "Roboto-Medium.ttf", 28);
+				lbSendLife->setFontFillColor(ccc3(0, 0, 0));
+				lbSendLife->setAnchorPoint(ccp(0.5f, 0.75f));
+				lbSendLife->setPosition(ccp(725, m_sprCell->getContentSize().height/4));
+				lbSendLife->setTag(4000 + idx);
+				cell->addChild(lbSendLife);
+				((CustomTableViewCell*)cell)->m_lbSendLife = lbSendLife;
+				
+				
+				//////////////
+
+
+				//Get boom
+				CCLabelTTF* lbGetBoomTimer = CCLabelTTF::create(_sGetBoomTimer->getCString(), "Roboto-Medium.ttf", 28); //32
+				lbGetBoomTimer->setFontFillColor(ccc3(0, 0, 0));
+				lbGetBoomTimer->setAnchorPoint(ccp(0.5f, 0.75f));
+				lbGetBoomTimer->setPosition(ccp(600, m_sprCell->getContentSize().height/4));
+				lbGetBoomTimer->setTag(3000 + idx);
+				cell->addChild(lbGetBoomTimer);
+				((CustomTableViewCell*)cell)->m_lbGetBoomTimer = lbGetBoomTimer;
+
 				CCLabelTTF* lbGetBoom = CCLabelTTF::create("Nhận", "Roboto-Medium.ttf", 28);
 				lbGetBoom->setFontFillColor(ccc3(0, 0, 0));
 				lbGetBoom->setAnchorPoint(ccp(0.5f, 0.75f));
 				lbGetBoom->setPosition(ccp(600, m_sprCell->getContentSize().height/4));
 				lbGetBoom->setTag(4000 + idx);
 				cell->addChild(lbGetBoom);
-				((CustomTableViewCell*)cell)->lbGetBoom = lbGetBoom;
+				((CustomTableViewCell*)cell)->m_lbGetBoom = lbGetBoom;
 
-				if (boomWaitTime <= 0)
+
+				//////////////////////////////////////////////////////////////////////////
+				
+				//Get boom
+				if (_getBoomWaitTime <= 0)
 				{
 					//FULL TIME
-					itBoom->setEnabled(true);
-					lbTimer->setVisible(false);
+					itGetBoom->setEnabled(true);
+					lbGetBoomTimer->setVisible(false);
 					lbGetBoom->setVisible(true);
 				}
 				else
 				{
-					itBoom->selected();
+					itGetBoom->selected();
 
-					itBoom->setEnabled(false);
-					lbTimer->setVisible(true);
+					itGetBoom->setEnabled(false);
+					lbGetBoomTimer->setVisible(true);
 					lbGetBoom->setVisible(false);
+				}
+
+				//////////////////
+				
+				//Send life
+				if (_sendLifeWaitTime <= 0)
+				{
+					//FULL TIME
+					itSendLife->setEnabled(true);
+					lbSendLifeTimer->setVisible(false);
+					lbSendLife->setVisible(true);
+				}
+				else
+				{
+					itSendLife->selected();
+
+					itSendLife->setEnabled(false);
+					lbSendLifeTimer->setVisible(true);
+					lbSendLife->setVisible(false);
 				}
 			}
 		}
@@ -572,9 +649,6 @@ unsigned int ScoreScene::numberOfCellsInTableView(CCTableView *table)
 void ScoreScene::getBoomCallback( CCObject* pSender )
 {
 	int tag = ((CCMenuItemImage*)pSender)->getTag();
-	CCLOG("In tag = %d", tag);
-	CCString* s = CCString::createWithFormat("In tag %d", tag);
-
 	int idx = tag - 1000;
 	CustomTableViewCell* cell = (CustomTableViewCell*)m_tableXephang->cellAtIndex(idx);
 	std::string fbID = ((CustomTableViewCell*)cell)->fbID;
@@ -589,10 +663,9 @@ void ScoreScene::getBoomCallback( CCObject* pSender )
 		DataManager::sharedDataManager()->SetTimeBoomFriendNow(fbID.c_str());
 
 		//show clock
-		cell->lbGetBoom->setVisible(false);
-		cell->lbTimer->setVisible(true);
-		cell->itBoom->setEnabled(false);
-		cell->lastBoomTime = DataManager::sharedDataManager()->GetTimeBoomFriend(fbID.c_str());
+		cell->m_lbGetBoom->setVisible(false);
+		cell->m_lbGetBoomTimer->setVisible(true);
+		cell->m_lastTimeGetBoom = DataManager::sharedDataManager()->GetTimeBoomFriend(fbID.c_str());
 	}
 	else
 	{
@@ -613,16 +686,11 @@ void ScoreScene::sendLifeCallback( CCObject* pSender )
 	PLAY_BUTTON_EFFECT;
 
 	int tag = ((CCMenuItemImage*)pSender)->getTag();
-	CCLOG("Out tag = %d", tag);
-	CCString* s = CCString::createWithFormat("Out tag %d", tag);
-
 	int idx = tag - 2000;
-	CCTableViewCell* cell = m_tableXephang->cellAtIndex(idx);
-	std::string fbID = ((CustomTableViewCell*)cell)->fbID;
+	CustomTableViewCell* cell = (CustomTableViewCell*)m_tableXephang->cellAtIndex(idx);
+	std::string fbID = cell->fbID;
 	
-	CCLOG("Out facebookID = %s", fbID.c_str());
-
-	s = CCString::createWithFormat("%s", fbID.c_str());
+	CCString* s = CCString::createWithFormat("%s", fbID.c_str());
 	CCArray* arrFriends = new CCArray();
 	arrFriends->addObject(s);
 
@@ -634,12 +702,19 @@ void ScoreScene::sendLifeCallback( CCObject* pSender )
 
 	EziSocialObject::sharedObject()->sendRequestToFriends(
 		EziSocialWrapperNS::FB_REQUEST::REQUEST_GIFT,
-		"Cho mày 1 mạng nè!", 
+		"Cho bạn 1 mạng nè!", 
 		arrFriends,
 		giftDictionary, 
-		"Phi Công Bút Chì");
-
+		"Điện Biên Phủ Trên Không");
 #endif
+
+	//reset timer
+	DataManager::sharedDataManager()->SetTimeLifeToFriendNow(fbID.c_str());
+
+	//show clock
+	cell->m_lbSendLife->setVisible(false);
+	cell->m_lbSendLifeTimer->setVisible(true);
+	cell->m_lastTimeSendLife = DataManager::sharedDataManager()->GetTimeLifeToFriend(fbID.c_str());
 }
 
 
@@ -678,44 +753,97 @@ void ScoreScene::refreshView()
 
 void ScoreScene::scheduleTimer( float dt )
 {
+	//CCLOG("Schedule timer");
 	int numCell = numberOfCellsInTableView(m_tableXephang);
 
 	for (int i = 0; i < numCell; ++i)
 	{
 		CustomTableViewCell* cell = (CustomTableViewCell*) tableCellAtIndex(m_tableXephang, i);
 
-		if (cell != NULL && cell->lbTimer != NULL && cell->lbGetBoom != NULL)
+		//Get boom //////////////////////////////////////////////////////////////////////////
+
+		if (cell != NULL)
 		{
-			time_t lastTime = mktime(cell->lastBoomTime);
-			time_t curTime = time(NULL);
-			int boomWaitTime = 24 * 60 * 60 - (int)difftime(curTime, lastTime);
-
-			if (boomWaitTime <= 0)
-			{
-				//FULL TIME
-				cell->itBoom->setEnabled(true);
-				cell->lbTimer->setVisible(false);
-				cell->lbGetBoom->setVisible(true);
-			}
-			else
-			{
-				cell->itBoom->setEnabled(false);
-				cell->lbTimer->setVisible(true);
-				cell->lbGetBoom->setVisible(false);
-			}
-
-			boomWaitTime = (boomWaitTime > 0) ? boomWaitTime : 0;
+			//CCLOG("Schedule timer ------ Get boom");
+			//Get boom //////////////////////////////////////////////////////////////////////////
 			
-			int hour, min, sec;
-			sec = boomWaitTime % 60;
-			boomWaitTime -= sec;
-			min =  ((int)(boomWaitTime / 60)) % 60;
-			hour = ((int)(boomWaitTime / 60)) / 60;
-			CCString* sBoomTimer = CCString::createWithFormat("%d:%d:%d", hour, min, sec);
-
-			if (cell->lbTimer != NULL)
+			if (cell->m_itGetBoom != NULL &&
+				cell->m_lbGetBoomTimer != NULL &&
+				cell->m_lbGetBoom != NULL)
 			{
-				cell->lbTimer->setString(sBoomTimer->getCString());
+				time_t lastTime = mktime(cell->m_lastTimeGetBoom);
+				time_t curTime = time(NULL);
+				int waitTime = 24 * 60 * 60 - (int)difftime(curTime, lastTime);
+
+				if (waitTime <= 0)
+				{
+					//FULL TIME
+					cell->m_itGetBoom->setEnabled(true);
+					cell->m_lbGetBoomTimer->setVisible(false);
+					cell->m_lbGetBoom->setVisible(true);
+				}
+				else
+				{
+					cell->m_itGetBoom->setEnabled(false);
+					cell->m_lbGetBoomTimer->setVisible(true);
+					cell->m_lbGetBoom->setVisible(false);
+				}
+
+				waitTime = (waitTime > 0) ? waitTime : 0;
+			
+				int hour, min, sec;
+				sec = waitTime % 60;
+				waitTime -= sec;
+				min =  ((int)(waitTime / 60)) % 60;
+				hour = ((int)(waitTime / 60)) / 60;
+				CCString* str = CCString::createWithFormat("%d:%d:%d", hour, min, sec);
+
+				if (cell->m_lbGetBoomTimer != NULL)
+				{
+					cell->m_lbGetBoomTimer->setString(str->getCString());
+				}
+			}
+
+			//Send life //////////////////////////////////////////////////////////////////////////
+			
+			if (cell->m_itSendLife != NULL &&
+				cell->m_lbSendLifeTimer != NULL &&
+				cell->m_lbSendLife != NULL)
+			{
+				//CCLOG("Schedule timer ------ Send life");
+
+				time_t lastTime = mktime(cell->m_lastTimeSendLife);
+				time_t curTime = time(NULL);
+				int waitTime = 24 * 60 * 60 - (int)difftime(curTime, lastTime);
+
+				if (waitTime <= 0)
+				{
+					//FULL TIME
+					cell->m_itSendLife->setEnabled(true);
+					cell->m_lbSendLifeTimer->setVisible(false);
+					cell->m_lbSendLife->setVisible(true);
+				}
+				else
+				{
+					cell->m_itSendLife->setEnabled(false);
+					cell->m_lbSendLifeTimer->setVisible(true);
+					cell->m_lbSendLife->setVisible(false);
+				}
+
+				waitTime = (waitTime > 0) ? waitTime : 0;
+
+
+				int hour, min, sec;
+				sec = waitTime % 60;
+				waitTime -= sec;
+				min =  ((int)(waitTime / 60)) % 60;
+				hour = ((int)(waitTime / 60)) / 60;
+				CCString* str = CCString::createWithFormat("%d:%d:%d", hour, min, sec);
+
+				if (cell->m_lbSendLifeTimer != NULL)
+				{
+					cell->m_lbSendLifeTimer->setString(str->getCString());
+				}
 			}
 		}
 	}
@@ -937,6 +1065,8 @@ void ScoreScene::fbSendRequestCallback( int responseCode, const char* responseMe
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	if (EziSocialWrapperNS::RESPONSE_CODE::FB_REQUEST_SENT == responseCode)
 	{
+		PLAY_GET_BOMB_EFFECT;
+
 		int numFriends = friendsGotRequests->count();
 		CCLOG("Request sent successfully to %d friends", numFriends);
 
@@ -944,9 +1074,20 @@ void ScoreScene::fbSendRequestCallback( int responseCode, const char* responseMe
 		CCLOG("LAST_LIFE_FIRST = %d", DataManager::sharedDataManager()->GetLastPlayerLife());
 		DataManager::sharedDataManager()->SetLastPlayerLife(curLife - 1);
 		CCLOG("LAST_LIFE = %d", DataManager::sharedDataManager()->GetLastPlayerLife());
+
+		/*
+		//reset timer
+		DataManager::sharedDataManager()->SetTimeLifeToFriendNow(fbID.c_str());
+
+		//show clock
+		cell->m_lbSendLife->setVisible(false);
+		cell->m_lbSendLifeTimer->setVisible(true);
+		cell->m_lastTimeSendLife = DataManager::sharedDataManager()->GetTimeLifeToFriend(fbID.c_str());
+		*/
 	}
 	else
 	{
+		PLAY_OUT_PORP_EFFECT;
 		CCLOG("Request sent failed");
 	}
 #endif

@@ -64,6 +64,12 @@ public:
 	void	SetTimeBoomFriend(const char* fbId, tm* time);
 	void	SetTimeBoomFriendNow(const char* fbId);
 
+
+	tm*		GetTimeLifeToFriend(const char* fbId);
+	void	SetTimeLifeToFriend(const char* fbId, tm* time);
+	void	SetTimeLifeToFriendNow(const char* fbId);
+
+
 	int		GetBoom();
 	void	SetBoom(int boom);
 	void	IncreaseBoom();

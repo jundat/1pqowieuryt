@@ -283,15 +283,17 @@ tm* DataManager::GetTime( const char* key )
 	}
 }
 
+
+
 void DataManager::SetTimeBoomFriend( const char* fbId, tm* time )
 {
-	CCString* sKey = CCString::createWithFormat("LAST_BOOM_FROM_%s", fbId);
+	CCString* sKey = CCString::createWithFormat("LAST_GET_BOOM_FROM_%s", fbId);
 	SetTime(sKey->getCString(), time);
 }
 
 tm* DataManager::GetTimeBoomFriend( const char* fbId )
 {
-	CCString* sKey = CCString::createWithFormat("LAST_BOOM_FROM_%s", fbId);
+	CCString* sKey = CCString::createWithFormat("LAST_GET_BOOM_FROM_%s", fbId);
 	return GetTime(sKey->getCString());
 }
 
@@ -302,6 +304,31 @@ void DataManager::SetTimeBoomFriendNow( const char* fbId )
 
 	DataManager::sharedDataManager()->SetTimeBoomFriend(fbId, _tm);
 }
+
+
+
+void DataManager::SetTimeLifeToFriend( const char* fbId, tm* time )
+{
+	CCString* sKey = CCString::createWithFormat("LAST_SEND_LIFE_TO_%s", fbId);
+	SetTime(sKey->getCString(), time);
+}
+
+tm* DataManager::GetTimeLifeToFriend( const char* fbId )
+{
+	CCString* sKey = CCString::createWithFormat("LAST_SEND_LIFE_TO_%s", fbId);
+	return GetTime(sKey->getCString());
+}
+
+void DataManager::SetTimeLifeToFriendNow( const char* fbId )
+{
+	time_t curTime = time(NULL);
+	tm* _tm = localtime(&curTime);
+
+	DataManager::sharedDataManager()->SetTimeLifeToFriend(fbId, _tm);
+}
+
+
+
 
 int DataManager::GetBoom()
 {

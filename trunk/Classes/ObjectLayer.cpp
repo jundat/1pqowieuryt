@@ -153,7 +153,7 @@ void ObjectLayer::ScheduleGenerateItem( float dt )
 
 	float rdw = CCRANDOM_0_1() * (7.0f / 8.0f * G_DESIGN_WIDTH) + G_DESIGN_WIDTH / 8.0f;
 
-	if (rd < 0.667f) // 2/3
+	if ( rd > 1.0f/4.0f ) // 2/3
 	{
 		item = Item::create(G_ITEM_UPGRADE_BULLET, -0.3f, ccp(rdw, 3.0f/4*G_DESIGN_HEIGHT));
 		this->AddItem(item);
