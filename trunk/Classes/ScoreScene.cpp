@@ -596,10 +596,10 @@ void ScoreScene::refreshView()
 	else
 	{
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-		//check incoming request
-		EziSocialObject::sharedObject()->checkIncomingRequest();
-#endif
+// #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+// 		//check incoming request
+// 		EziSocialObject::sharedObject()->checkIncomingRequest();
+// #endif
 
 		m_xephangToggle->setSelectedIndex(1);
 		m_quatangToggle->setSelectedIndex(0);
@@ -750,6 +750,9 @@ void ScoreScene::fbUserPhotoCallback(const char *userPhotoPath, const char* fbID
 
 			m_tableXephang->reloadData();
 			m_tableXephang->reloadData();
+
+			//check incoming request
+			EziSocialObject::sharedObject()->checkIncomingRequest();
 		}
 	}
 #endif
