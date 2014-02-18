@@ -126,7 +126,6 @@ bool ScoreScene::init()
 		EziSocialObject::sharedObject()->checkIncomingRequest();
 
 
-
 		m_isLoggedIn = true;
 		m_fbLogInItem->setVisible(false);
 		m_lbInvite->setVisible(false);
@@ -214,6 +213,8 @@ bool ScoreScene::init()
 		m_lbWaiting->setVisible(false);
 	}
 
+	this->schedule(schedule_selector(ScoreScene::scheduleTimer), 1);
+
 	return true;
 }
 
@@ -297,6 +298,10 @@ CCTableViewCell* ScoreScene::tableCellAtIndex(CCTableView *table, unsigned int i
 	std::string friendId;
 	CCString *gift = CCString::create("0");
 
+	tm* lastBoomTime;
+	int boomWaitTime = 0;
+	CCString* sBoomTimer = CCString::create("00:00");
+
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	if(m_arrHighScores == NULL)
 	{
@@ -317,6 +322,28 @@ CCTableViewCell* ScoreScene::tableCellAtIndex(CCTableView *table, unsigned int i
 		name  = CCString::create(sname);
 		friendId = std::string(fbFriend->getFBID());
 		gift = CCString::createWithFormat("x%d", DataManager::sharedDataManager()->GetGiftFromFriend(friendId.c_str()));
+		
+		//boomTimer
+		lastBoomTime = DataManager::sharedDataManager()->GetTimeBoomFriend(friendId.c_str());
+		if (lastBoomTime == NULL)
+		{
+			time_t curTime = time(NULL);
+			tm* _tm = localtime(&curTime);
+			DataManager::sharedDataManager()->SetTimeBoomFriendNow(friendId.c_str());
+
+			lastBoomTime = _tm;
+		}
+
+		time_t lastTime = mktime(lastBoomTime);
+		time_t curTime = time(NULL);
+		boomWaitTime = (int)difftime(curTime, lastTime);
+		int min = boomWaitTime / 60;
+		int second = boomWaitTime % 60;
+		sBoomTimer = CCString::createWithFormat("%d:%d", min, second);
+
+
+		int lastLife = (int)(boomWaitTime / G_PLAYER_TIME_TO_REVIVE);
+		lastLife = (lastLife > G_MAX_PLAYER_LIFE) ? G_MAX_PLAYER_LIFE : lastLife;
 
 		if (strlen(fbFriend->getPhotoPath()) > 1)
 		{
@@ -337,6 +364,8 @@ CCTableViewCell* ScoreScene::tableCellAtIndex(CCTableView *table, unsigned int i
 			cell->autorelease();
 
 			((CustomTableViewCell*)cell)->fbID = friendId;
+			((CustomTableViewCell*)cell)->boomWaitTime = boomWaitTime;
+			((CustomTableViewCell*)cell)->lastBoomTime = lastBoomTime;
 
 			CCSprite *sprite = CCSprite::create("table_cell_xephang.png");
 			sprite->setAnchorPoint(CCPointZero);
@@ -350,7 +379,16 @@ CCTableViewCell* ScoreScene::tableCellAtIndex(CCTableView *table, unsigned int i
 			avatar->setTag(2);
 			cell->addChild(avatar);
 			
-			CCLabelTTF *lbOrder = CCLabelTTF::create(order->getCString(), "Villa.ttf", 42);
+			CCLabelTTF *lbOrder;
+			if (idx < 3)
+			{
+				lbOrder = CCLabelTTF::create(order->getCString(), "Villa.ttf", 42);
+			} 
+			else
+			{
+				lbOrder = CCLabelTTF::create(order->getCString(), "Roboto-Medium.ttf", 42);
+			}
+			
 			lbOrder->setFontFillColor(ccc3(0, 0, 0));
 			lbOrder->setHorizontalAlignment(kCCTextAlignmentLeft); //cocos2d::CCTextAlignment::
 			lbOrder->setPosition(ccp(30, m_sprCell->getContentSize().height/2));
@@ -392,12 +430,13 @@ CCTableViewCell* ScoreScene::tableCellAtIndex(CCTableView *table, unsigned int i
 				cell->addChild(cell_menu);
 
 				//610
-				CCLabelTTF* lbTimer = CCLabelTTF::create("00:00", "Roboto-Medium.ttf", 32);
+				CCLabelTTF* lbTimer = CCLabelTTF::create(sBoomTimer->getCString(), "Roboto-Medium.ttf", 32);
 				lbTimer->setFontFillColor(ccc3(0, 0, 0));
 				lbTimer->setAnchorPoint(ccp(0.5f, 0.5f));
 				lbTimer->setPosition(ccp(600, m_sprCell->getContentSize().height/2));
 				lbTimer->setTag(3000 + idx);
 				cell->addChild(lbTimer);
+				((CustomTableViewCell*)cell)->lbTimer = lbTimer;
 
 				m_arrLbTimer->addObject(lbTimer);
 			}
@@ -556,6 +595,12 @@ void ScoreScene::refreshView()
 	} 
 	else
 	{
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+		//check incoming request
+		EziSocialObject::sharedObject()->checkIncomingRequest();
+#endif
+
 		m_xephangToggle->setSelectedIndex(1);
 		m_quatangToggle->setSelectedIndex(0);
 
@@ -572,7 +617,27 @@ void ScoreScene::refreshView()
 
 void ScoreScene::scheduleTimer( float dt )
 {
+	int numCell = numberOfCellsInTableView(m_tableXephang);
 
+	for (int i = 0; i < numCell; ++i)
+	{
+		CustomTableViewCell* cell = (CustomTableViewCell*) tableCellAtIndex(m_tableXephang, i);
+
+		if (cell != NULL)
+		{
+			time_t lastTime = mktime(cell->lastBoomTime);
+			time_t curTime = time(NULL);
+			cell->boomWaitTime = (int)difftime(curTime, lastTime);
+			int min = cell->boomWaitTime / 60;
+			int second = cell->boomWaitTime % 60;
+			CCString* sBoomTimer = CCString::createWithFormat("%d:%d", min, second);
+
+			if (cell->lbTimer != NULL)
+			{
+				cell->lbTimer->setString(sBoomTimer->getCString());
+			}			
+		}
+	}
 }
 
 
@@ -605,28 +670,22 @@ void ScoreScene::fbLogOutCallback( CCObject* pSender )
 
 
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-
 void ScoreScene::fbSessionCallback(int responseCode, const char *responseMessage)
 {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	if (responseCode == EziSocialWrapperNS::RESPONSE_CODE::FB_LOGIN_SUCCESSFUL)
 	{
 		m_isLoggedIn = true;
-
-		//check incoming request
-		EziSocialObject::sharedObject()->checkIncomingRequest();
 
 		m_fbLogInItem->setVisible(false);
 		m_lbInvite->setVisible(false);
 		m_fbLogOutItem->setVisible(true);
 		refreshView();
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 		if(EziSocialObject::sharedObject()->isFacebookSessionActive()) //logged in state
 		{
 			EziSocialObject::sharedObject()->postScore(DataManager::sharedDataManager()->GetHighScore());
 		}
-#endif
 		EziSocialObject::sharedObject()->fetchFBUserDetails(true); //need email = true
 	}
 	else
@@ -641,10 +700,12 @@ void ScoreScene::fbSessionCallback(int responseCode, const char *responseMessage
 		m_lbInvite->setVisible(true);
 		m_fbLogOutItem->setVisible(false);
 	}
+#endif
 }
 
 void ScoreScene::fbUserPhotoCallback(const char *userPhotoPath, const char* fbID)
 {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	//CCLOG("Gotten avatar for %s", fbID);
 	std::string sid = std::string(fbID);
 
@@ -691,7 +752,10 @@ void ScoreScene::fbUserPhotoCallback(const char *userPhotoPath, const char* fbID
 			m_tableXephang->reloadData();
 		}
 	}
+#endif
 }
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) // fbUserDetailCallback
 
 void ScoreScene::fbUserDetailCallback( int responseCode, const char* responseMessage, EziFacebookUser* fbUser )
 {
@@ -716,22 +780,32 @@ void ScoreScene::fbUserDetailCallback( int responseCode, const char* responseMes
 			false // force download it from server
 		);
 
+
+		//check incoming request
+		//EziSocialObject::sharedObject()->checkIncomingRequest();
+
 		callGetHighScores();
 	}
 }
+#endif
 
 void ScoreScene::callSubmitScore()
 {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	EziSocialObject::sharedObject()->postScore(DataManager::sharedDataManager()->GetHighScore());
+#endif
 }
 
 void ScoreScene::callGetHighScores()
 {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	EziSocialObject::sharedObject()->getHighScores();
+#endif
 }
 
 void ScoreScene::fbHighScoresCallback( int responseCode, const char* responseMessage, cocos2d::CCArray* highScores )
 {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	if (m_arrHighScores != NULL)
 	{
 		m_arrHighScores->release();
@@ -771,10 +845,12 @@ void ScoreScene::fbHighScoresCallback( int responseCode, const char* responseMes
 
 	m_tableXephang->reloadData();
 	m_tableQuatang->reloadData();
+#endif
 }
 
 void ScoreScene::fbSendRequestCallback( int responseCode, const char* responseMessage, cocos2d::CCArray* friendsGotRequests )
 {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	// 	FB_REQUEST_SENDING_ERROR - In case if there is any error while sending the request
 	// 	FB_REQUEST_SENDING_CANCELLED – In case, user decides not to send the request.
 	// 	FB_REQUEST_SENT - If sending request is success
@@ -794,10 +870,12 @@ void ScoreScene::fbSendRequestCallback( int responseCode, const char* responseMe
 		CCLOG("Request sent failed");
 		CCMessageBox("Infor", "Request sent failed");
 	}
+#endif
 }
 
 void ScoreScene::fbIncomingRequestCallback(int responseCode, const char* responseMessage, int totalIncomingRequests)
 {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	int pendingRequest = EziFBIncomingRequestManager::sharedManager()->getPendingRequestCount();
 	CCLOG("------------------NewRequests= %d\n-----------------PendingRequests= %d", totalIncomingRequests, pendingRequest);
 
@@ -838,7 +916,8 @@ void ScoreScene::fbIncomingRequestCallback(int responseCode, const char* respons
 	}
 
 	m_tableQuatang->reloadData();
-}
+
 #endif
+}
 
 // Facebook //=========================================

@@ -56,6 +56,13 @@ public:
 	int		GetGiftFromFriend(const char* fbID);
 	void	IncreaseGiftFromFriend(const char* fbID);
 	void	DecreaseGiftFromFriend(const char* fbID);
+
+	tm*		GetTime(const char* key);
+	void	SetTime(const char* key, tm* time);
+
+	tm*		GetTimeBoomFriend(const char* fbId);
+	void	SetTimeBoomFriend(const char* fbId, tm* time);
+	void	SetTimeBoomFriendNow(const char* fbId);
 	
 	~DataManager(void);
 };

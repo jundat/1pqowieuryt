@@ -1,6 +1,9 @@
 #ifndef __MY_MACRO_H__
 #define __MY_MACRO_H__
 
+#include "cocos2d.h"
+USING_NS_CC;
+
 
 #define LIMIT_VALUE(x, minX, maxX) \
 {\
@@ -18,8 +21,6 @@ do\
 		(pObj) = NULL;\
 	}\
 } while(0);
-
-
 
 
 #endif //__MY_MACRO_H__
