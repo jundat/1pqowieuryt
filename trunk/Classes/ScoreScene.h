@@ -85,6 +85,7 @@ public:
 
 	bool m_isXepHangView;
 	void refreshView();
+	void refreshUserDetail();
 
 	void scheduleTimer(float dt);
 
@@ -111,6 +112,9 @@ private:
 public:
 	// Facebook //=========================================
 	CCSprite* m_userAvatar;
+	CCLabelTTF* m_lbLife;
+	CCLabelTTF* m_lbBoom;
+
 	CCMenuItem* m_fbLogInItem;
 	CCArray* m_friendList;
 

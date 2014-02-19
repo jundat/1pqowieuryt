@@ -40,7 +40,11 @@ bool ScoreScene::init()
 	table_border->setPosition(ccp(400, 1280-767));
 	this->addChild(table_border);
 
-	//facebook avatar
+
+	//USER Information //////////////////////////////////////////////////////////////////////////
+
+
+	//avatar
 	if(DataManager::sharedDataManager()->GetPhotoPath() != "NULL")
 	{
 		m_userAvatar = CCSprite::create(DataManager::sharedDataManager()->GetPhotoPath().c_str());
@@ -53,19 +57,56 @@ bool ScoreScene::init()
 	m_userAvatar->setPosition(ccp(93, 1280-202));
 	this->addChild(m_userAvatar);
 
+	//name
 	std::string name = DataManager::sharedDataManager()->GetName();
+	if (name.length() > 18) {
+		name = name.substr(0, 16);
+		name.append("..");
+	}
 	m_lbName = CCLabelTTF::create(name.c_str(), "Roboto-Medium.ttf", 52);
 	m_lbName->setFontFillColor(ccc3(0, 0, 0));
 	m_lbName->setPosition(ccp(174, 1280-173));
 	m_lbName->setAnchorPoint(ccp(0.0f, 0.5f));
 	this->addChild(m_lbName);
 
-	CCString* score = CCString::createWithFormat("%d", DataManager::sharedDataManager()->GetHighScore());
-	m_lbScore = CCLabelTTF::create(score->getCString(), "Roboto-Medium.ttf", 48);
+	//score
+	CCString* str = CCString::createWithFormat("%d", DataManager::sharedDataManager()->GetHighScore());
+	m_lbScore = CCLabelTTF::create(str->getCString(), "Roboto-Medium.ttf", 48);
 	m_lbScore->setFontFillColor(ccc3(0, 0, 0));
 	m_lbScore->setPosition(ccp(174, 1280-239));
 	m_lbScore->setAnchorPoint(ccp(0.0f, 0.5f));
 	this->addChild(m_lbScore);
+
+	//life
+	CCSprite* sprLife = CCSprite::create("oil.png");
+	sprLife->setScale(0.75f);
+	sprLife->setPosition(ccp(609, 1280-164));
+	this->addChild(sprLife);
+
+	str = CCString::createWithFormat("x%d", DataManager::sharedDataManager()->GetLastPlayerLife());
+	m_lbLife = CCLabelTTF::create(str->getCString(), "Roboto-Medium.ttf", 48);
+	m_lbLife->setFontFillColor(ccc3(0, 0, 0));
+	m_lbLife->setPosition(ccp(650, 1280-164));
+	m_lbLife->setAnchorPoint(ccp(0.0f, 0.5f));
+	this->addChild(m_lbLife);
+	
+	//boom
+	CCSprite* sprBoom = CCSprite::create("boomgift.png");
+	sprBoom->setScale(0.75f);
+	sprBoom->setPosition(ccp(609, 1280-245));
+	this->addChild(sprBoom);
+
+	str = CCString::createWithFormat("x%d", DataManager::sharedDataManager()->GetBoom());
+	m_lbBoom = CCLabelTTF::create(str->getCString(), "Roboto-Medium.ttf", 48);
+	m_lbBoom->setFontFillColor(ccc3(0, 0, 0));
+	m_lbBoom->setPosition(ccp(650, 1280-245));
+	m_lbBoom->setAnchorPoint(ccp(0.0f, 0.5f));
+	this->addChild(m_lbBoom);
+
+
+
+	//Table //////////////////////////////////////////////////////////////////////////
+
 
 	//Xep hang
 
@@ -684,6 +725,8 @@ void ScoreScene::getBoomCallback( CCObject* pSender )
 		cell->m_lbGetBoom->setVisible(false);
 		cell->m_lbGetBoomTimer->setVisible(true);
 		cell->m_lastTimeGetBoom = DataManager::sharedDataManager()->GetTimeBoomFriend(fbID.c_str());
+
+		refreshUserDetail();
 	}
 	else
 	{
@@ -755,6 +798,15 @@ void ScoreScene::refreshView()
 		m_tableXephang->setVisible(false);
 		m_tableQuatang->setVisible(false);
 	}
+}
+
+void ScoreScene::refreshUserDetail()
+{
+	CCString* str = CCString::createWithFormat("x%d", DataManager::sharedDataManager()->GetLastPlayerLife());
+	m_lbLife->setString(str->getCString());
+
+	str = CCString::createWithFormat("x%d", DataManager::sharedDataManager()->GetBoom());
+	m_lbBoom->setString(str->getCString());
 }
 
 void ScoreScene::scheduleTimer( float dt )
@@ -934,7 +986,7 @@ void ScoreScene::fbUserDetailCallback( int responseCode, const char* responseMes
 		EziSocialObject::sharedObject()->setCurrentFacebookUser(fbUser);
 
 		//save data
-		std::string firstname = fbUser->getFullName(); //getFirstName //getFullName
+		std::string firstname = fbUser->getFirstName(); //getFirstName //getFullName
 		std::string userName = fbUser->getUserName();
 		std::string profileID = fbUser->getProfileID();
 
@@ -1126,6 +1178,8 @@ void ScoreScene::fbSendRequestCallback( int responseCode, const char* responseMe
 			m_friendCell->m_lastTimeSendLife = DataManager::sharedDataManager()->GetTimeLifeToFriend(m_friendCell->fbID.c_str());
 
 			m_friendCell = NULL;
+
+			refreshUserDetail();
 		}		
 	}
 	else
@@ -1184,5 +1238,6 @@ void ScoreScene::fbIncomingRequestCallback(int responseCode, const char* respons
 
 #endif
 }
+
 
 // Facebook //=========================================

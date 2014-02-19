@@ -20,6 +20,7 @@ CCScene* MenuScene::scene()
 
 bool MenuScene::init()
 {
+	static int GAME_VERSION = 39;
 	//pre proccess
 
 	DataManager::sharedDataManager()->RefreshPlayerLife();
@@ -45,7 +46,7 @@ bool MenuScene::init()
 	initLifeIcon();	
 
 	//
-	CCString* s = CCString::createWithFormat("v%d", 38);
+	CCString* s = CCString::createWithFormat("v%d", GAME_VERSION);
 	CCLabelTTF* labelVersion = CCLabelTTF::create(s->getCString(), "Roboto-Medium.ttf", 32);
 	labelVersion->setColor(ccc3(56, 56, 56));
 	labelVersion->setPosition(ccp(labelVersion->getContentSize().width/4, G_DESIGN_HEIGHT - labelVersion->getContentSize().height/4));
