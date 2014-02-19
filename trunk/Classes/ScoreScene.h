@@ -114,6 +114,32 @@ public:
 	CCMenuItem* m_fbLogInItem;
 	CCArray* m_friendList;
 
+	bool m_isActive;
+
+	void onEnterTransitionDidFinish()
+	{
+		m_isActive = true;
+		
+		CCLog("[ScoreScene]: Enter Finished.");
+		// Set the delegates to receive responses.
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+		EziSocialObject::sharedObject()->setFacebookDelegate(this);
+#endif
+	}
+
+	void onExit() 
+	{
+		m_isActive = false;
+
+		CCLog("[ScoreScene]: Exit Finished.");
+		// Set the delegates to receive responses.
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+		EziSocialObject::sharedObject()->setFacebookDelegate(NULL);
+#endif
+	}
+
 	void callSubmitScore();
 	void callGetHighScores();
 	virtual void fbHighScoresCallback(int responseCode, const char* responseMessage, cocos2d::CCArray* highScores);

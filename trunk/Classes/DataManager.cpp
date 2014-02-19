@@ -175,6 +175,14 @@ void DataManager::RefreshPlayerLife()
 		{
 			lastLife += add_lastLife;
 			DataManager::sharedDataManager()->SetLastPlayerLife(lastLife);
+
+			//save next time
+			tm* _tm = DataManager::sharedDataManager()->GetLastDeadTime();
+			_tm->tm_sec += add_lastLife * G_PLAYER_TIME_TO_REVIVE;
+
+			mktime(_tm); //normalize
+
+			DataManager::sharedDataManager()->SetLastDeadTime(_tm);
 		}
 	}
 }

@@ -33,8 +33,7 @@ bool MainGameScene::init()
 	this->setKeypadEnabled(true);
 
 	CCSpriteFrameCache* cache = CCSpriteFrameCache::sharedSpriteFrameCache();
-	cache->addSpriteFramesWithFile("MainGame_1.plist");
-	cache->addSpriteFramesWithFile("MainGame_2.plist");
+	cache->addSpriteFramesWithFile("MainGame.plist");
 
     m_BackgroundLayer = BackgroundLayer::create();
 	this->addChild(m_BackgroundLayer);

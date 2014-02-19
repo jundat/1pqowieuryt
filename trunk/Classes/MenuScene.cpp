@@ -291,10 +291,6 @@ void MenuScene::ScheduleTick( float dt )
 			m_lbTime->setVisible(false);
 			return;
 		}
-
-		//save next time
-		DataManager::sharedDataManager()->GetLastDeadTime();
-		
 	}	
 
 	CCString* s;

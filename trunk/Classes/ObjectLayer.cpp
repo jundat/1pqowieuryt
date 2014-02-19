@@ -73,7 +73,7 @@ bool ObjectLayer::init()
 
 	this->addChild(m_labelScore, 10);
 
-	m_itemBoom = CCMenuItemImage::create("icon_boom.png", "icon_boom.png", this, menu_selector(ObjectLayer::ActiveBoom));
+	m_itemBoom = CCMenuItemImage::create("icon_boom.png", "icon_boomhover.png", this, menu_selector(ObjectLayer::ActiveBoom));
 	m_itemBoom->setPosition(ccp(m_itemBoom->getContentSize().width/2 - G_DESIGN_WIDTH/2, 
 		m_itemBoom->getContentSize().height/2 - G_DESIGN_HEIGHT/2));
 	

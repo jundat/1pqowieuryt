@@ -253,13 +253,13 @@ void Ship::UpgradeBullet()
 
 	if (m_bulletLevel <= G_MAX_PLAYER_BULLET_LEVEL) 
 	{
-		CCSprite* sprLevelUp = CCSprite::create("levelup.png");
-		this->addChild(sprLevelUp);
+		//CCSprite* sprLevelUp = CCSprite::create("levelup.png");
+		//this->addChild(sprLevelUp);
 
-		CCMoveBy* move = CCMoveBy::create(0.7f, ccp(0, sprLevelUp->getContentSize().height));
-		CCFadeOut* fade = CCFadeOut::create(0.7f);
-		CCSpawn* spaw = CCSpawn::create(move, fade, NULL);
-		sprLevelUp->runAction(spaw);
+		//CCMoveBy* move = CCMoveBy::create(0.7f, ccp(0, sprLevelUp->getContentSize().height));
+		//CCFadeOut* fade = CCFadeOut::create(0.7f);
+		//CCSpawn* spaw = CCSpawn::create(move, fade, NULL);
+		//sprLevelUp->runAction(spaw);
 	}
 	else
 	{

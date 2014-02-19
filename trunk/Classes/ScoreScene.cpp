@@ -408,6 +408,7 @@ CCTableViewCell* ScoreScene::tableCellAtIndex(CCTableView *table, unsigned int i
 
 	if (table == m_tableXephang)
 	{
+		CCLOG("----------- XEP HANG");
 		CCTableViewCell *cell = table->cellAtIndex(idx);// table->dequeueCell();
 		if (!cell) {
 			cell = new CustomTableViewCell();
@@ -586,6 +587,7 @@ CCTableViewCell* ScoreScene::tableCellAtIndex(CCTableView *table, unsigned int i
 	//////////////////////////////////////////////////////////////////////////	
 	
 	{
+		CCLOG("----------- QUA TANG");
 		CCTableViewCell *cell = table->cellAtIndex(idx);// table->dequeueCell();
 		if (!cell) {
 			cell = new CustomTableViewCell();
@@ -870,6 +872,11 @@ void ScoreScene::fbLogOutCallback( CCObject* pSender )
 
 void ScoreScene::fbSessionCallback(int responseCode, const char *responseMessage)
 {
+	if (m_isActive == false)
+	{
+		return;
+	}
+
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	if (responseCode == EziSocialWrapperNS::RESPONSE_CODE::FB_LOGIN_SUCCESSFUL)
 	{
@@ -903,6 +910,11 @@ void ScoreScene::fbSessionCallback(int responseCode, const char *responseMessage
 
 void ScoreScene::fbUserPhotoCallback(const char *userPhotoPath, const char* fbID)
 {
+	if (m_isActive == false)
+	{
+		return;
+	}
+
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	//CCLOG("Gotten avatar for %s", fbID);
 	std::string sid = std::string(fbID);
@@ -948,9 +960,6 @@ void ScoreScene::fbUserPhotoCallback(const char *userPhotoPath, const char* fbID
 
 			m_tableXephang->reloadData();
 			m_tableXephang->reloadData();
-
-			//check incoming request
-			EziSocialObject::sharedObject()->checkIncomingRequest();
 		}
 	}
 #endif
@@ -960,6 +969,11 @@ void ScoreScene::fbUserPhotoCallback(const char *userPhotoPath, const char* fbID
 
 void ScoreScene::fbUserDetailCallback( int responseCode, const char* responseMessage, EziFacebookUser* fbUser )
 {
+	if (m_isActive == false)
+	{
+		return;
+	}
+
 	if (fbUser != NULL)
 	{
 		EziSocialObject::sharedObject()->setCurrentFacebookUser(fbUser);
@@ -982,6 +996,9 @@ void ScoreScene::fbUserDetailCallback( int responseCode, const char* responseMes
 		);
 
 		callGetHighScores();
+
+		//check incoming request
+		//EziSocialObject::sharedObject()->checkIncomingRequest();
 	}
 }
 #endif
@@ -1002,6 +1019,11 @@ void ScoreScene::callGetHighScores()
 
 void ScoreScene::fbHighScoresCallback( int responseCode, const char* responseMessage, cocos2d::CCArray* highScores )
 {
+	if (m_isActive == false)
+	{
+		return;
+	}
+
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	if (m_arrHighScores != NULL)
 	{
@@ -1047,6 +1069,11 @@ void ScoreScene::fbHighScoresCallback( int responseCode, const char* responseMes
 
 void ScoreScene::fbSendRequestCallback( int responseCode, const char* responseMessage, cocos2d::CCArray* friendsGotRequests )
 {
+	if (m_isActive == false)
+	{
+		return;
+	}
+
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	if (EziSocialWrapperNS::RESPONSE_CODE::FB_REQUEST_SENT == responseCode)
 	{
@@ -1062,6 +1089,17 @@ void ScoreScene::fbSendRequestCallback( int responseCode, const char* responseMe
 
 		if (m_friendCell != NULL)
 		{
+			//Decrease life
+			int curLife = DataManager::sharedDataManager()->GetLastPlayerLife();
+			curLife--;
+			DataManager::sharedDataManager()->SetLastPlayerLife(curLife);
+
+			if (curLife == G_MAX_PLAYER_LIFE - 1)
+			{
+				DataManager::sharedDataManager()->SetLastDeadTimeNow();
+			}
+			
+
 			//reset timer
 			DataManager::sharedDataManager()->SetTimeLifeToFriendNow(m_friendCell->fbID.c_str());
 
@@ -1083,6 +1121,11 @@ void ScoreScene::fbSendRequestCallback( int responseCode, const char* responseMe
 
 void ScoreScene::fbIncomingRequestCallback(int responseCode, const char* responseMessage, int totalIncomingRequests)
 {
+	if (m_isActive == false)
+	{
+		return;
+	}
+
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	int pendingRequest = EziFBIncomingRequestManager::sharedManager()->getPendingRequestCount();
 	CCLOG("------------------NewRequests= %d\n-----------------PendingRequests= %d", totalIncomingRequests, pendingRequest);

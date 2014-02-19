@@ -75,6 +75,7 @@ bool Enemy::init()
 		TIME_ANIMATION = 0.15f;
 		break;
 	case 3:
+		m_sprite->setScale(1.15f + 0.20f);
 		NUM_FRAME_EXPLOSION = 9;
 		TIME_ANIMATION = 0.08f;
 		break;
@@ -193,8 +194,8 @@ cocos2d::CCRect Enemy::collisionBox()
 {
 	if (m_type == 3)
 	{
-		float tw = 0.25f; // 1/4
-		float th = 0.5f; // 1/2
+		float tw = 1.0f; //0.25f; // 1/4
+		float th = 0.6f; // 1/2
 		CCRect rect = GameObject::boundingBox();
 		rect.origin = ccp(this->getPosition().x - tw * rect.size.width/2, this->getPosition().y - th * rect.size.height/2);
 		rect.size.width = tw * rect.size.width;
