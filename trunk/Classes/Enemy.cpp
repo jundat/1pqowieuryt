@@ -189,6 +189,24 @@ bool Enemy::init()
 	return true;
 }
 
+cocos2d::CCRect Enemy::collisionBox()
+{
+	if (m_type == 3)
+	{
+		float tw = 0.25f; // 1/4
+		float th = 0.5f; // 1/2
+		CCRect rect = GameObject::boundingBox();
+		rect.origin = ccp(this->getPosition().x - tw * rect.size.width/2, this->getPosition().y - th * rect.size.height/2);
+		rect.size.width = tw * rect.size.width;
+		rect.size.height = th * rect.size.height;
+		return rect;
+	} 
+	else
+	{
+		return GameObject::boundingBox();
+	}
+}
+
 void Enemy::update( float delta )
 {
 	this->setPositionX(m_vx * delta * 1000 + this->getPositionX());

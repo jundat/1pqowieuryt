@@ -196,7 +196,7 @@ void ObjectLayer::ScheduleCheckCollision(float dt)
 				Enemy* enemy = dynamic_cast<Enemy*>(it2);
 				if (NULL != enemy)
 				{
-					CCRect enemyRect = enemy->boundingBox();
+					CCRect enemyRect = enemy->collisionBox();
 
 					if (enemyRect.intersectsRect(bulletRect))
 					{
@@ -233,7 +233,7 @@ void ObjectLayer::ScheduleCheckCollision(float dt)
 		Enemy* enemy = dynamic_cast<Enemy*>(it1);
 		if (NULL != enemy)
 		{
-			CCRect enemyRect = enemy->boundingBox();
+			CCRect enemyRect = enemy->collisionBox();
 
 			if (enemyRect.intersectsRect(playerRect))
 			{
@@ -293,7 +293,7 @@ void ObjectLayer::ScheduleCheckCollision(float dt)
 			Enemy* enemy = dynamic_cast<Enemy*>(it1);
 			if (NULL != enemy)
 			{
-				CCRect enemyRect = enemy->boundingBox();
+				CCRect enemyRect = enemy->collisionBox();
 
 				if (enemyRect.intersectsRect(lazerRect))
 				{

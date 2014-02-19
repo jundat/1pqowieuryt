@@ -47,16 +47,16 @@ bool WaitForLifeDialog::init()
 	labelTitle->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2 + 120));
 	this->addChild(labelTitle);
 
-	int mins = (int)m_waitTime/60;
-	int seconds = (int)m_waitTime%60;
-
-	CCString* s = CCString::createWithFormat("0%d:%d", mins, seconds);
-	m_lbTime = CCLabelTTF::create(s->getCString(), "Roboto-Medium", 48);
-	m_lbTime->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2));
-	m_lbTime->setColor(ccc3(56, 56, 56));
-	this->addChild(m_lbTime);
-
-	this->schedule(schedule_selector(WaitForLifeDialog::ScheduleTick), 1);
+// 	int mins = (int)m_waitTime/60;
+// 	int seconds = (int)m_waitTime%60;
+// 
+// 	CCString* s = CCString::createWithFormat("0%d:%d", mins, seconds);
+// 	m_lbTime = CCLabelTTF::create(s->getCString(), "Roboto-Medium", 48);
+// 	m_lbTime->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2));
+// 	m_lbTime->setColor(ccc3(56, 56, 56));
+// 	this->addChild(m_lbTime);
+// 
+// 	this->schedule(schedule_selector(WaitForLifeDialog::ScheduleTick), 1);
 
     return true;
 }
@@ -71,25 +71,20 @@ void WaitForLifeDialog::exitCallback( CCObject* pSender )
 
 void WaitForLifeDialog::askFriendCallback( CCObject* pSender )
 {
-// 	DataManager::sharedDataManager()->SetLastPlayerLife(5);
-// 	this->unschedule(schedule_selector(WaitForLifeDialog::ScheduleTick));
-// 
-// 	MenuScene* parent = (MenuScene*)this->getParent();
-// 	parent->setTouchEnabled(true);
-// 	parent->onCloseDialog();
-// 	this->removeFromParent();
-
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 
-	//invite friends
-	EziSocialObject::sharedObject()->sendRequestToFriends(
-		EziSocialWrapperNS::FB_REQUEST::REQUEST_INVITE,
-		"Cứu với, đang hết mạng nè!", 
-		NULL,
-		NULL,
-		"Phi Công Bút Chì");
+	if(EziSocialObject::sharedObject()->isFacebookSessionActive()) //logged in state
+	{
+		//invite friends
+		EziSocialObject::sharedObject()->sendRequestToFriends(
+			EziSocialWrapperNS::FB_REQUEST::REQUEST_INVITE,
+			"Cứu với, đang hết mạng nè!", 
+			NULL,
+			NULL,
+			"Phi Công Bút Chì");
+	}
 
-#else
+#else //WIN 32
 
 	DataManager::sharedDataManager()->SetLastPlayerLife(5);
 	this->unschedule(schedule_selector(WaitForLifeDialog::ScheduleTick));

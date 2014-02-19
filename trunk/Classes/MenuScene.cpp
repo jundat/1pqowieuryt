@@ -290,7 +290,11 @@ void MenuScene::ScheduleTick( float dt )
 			this->unschedule(schedule_selector(MenuScene::ScheduleTick));
 			m_lbTime->setVisible(false);
 			return;
-		}		
+		}
+
+		//save next time
+		DataManager::sharedDataManager()->GetLastDeadTime();
+		
 	}	
 
 	CCString* s;

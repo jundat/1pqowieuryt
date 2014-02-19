@@ -68,6 +68,7 @@ public:
 
 public:
 	virtual void update(float delta);
+	CCRect collisionBox();
 	void Fire();
 	void ScheduleFire(float dt);
 	void HitBullet(int damage);
