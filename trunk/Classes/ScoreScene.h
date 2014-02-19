@@ -114,12 +114,8 @@ public:
 	CCMenuItem* m_fbLogInItem;
 	CCArray* m_friendList;
 
-	bool m_isActive;
-
 	void onEnterTransitionDidFinish()
 	{
-		m_isActive = true;
-		
 		CCLog("[ScoreScene]: Enter Finished.");
 		// Set the delegates to receive responses.
 
@@ -130,8 +126,6 @@ public:
 
 	void onExit() 
 	{
-		m_isActive = false;
-
 		CCLog("[ScoreScene]: Exit Finished.");
 		// Set the delegates to receive responses.
 

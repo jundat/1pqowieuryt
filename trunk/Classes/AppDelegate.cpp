@@ -82,9 +82,9 @@ bool AppDelegate::applicationDidFinishLaunching() {
     CCScene *pScene = MenuScene::scene(); //  MenuScene::scene(); //  MainGameScene::scene(); //
 	pDirector->runWithScene(pScene);
 
-// #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-// 	EziSocialObject::sharedObject()->setAutoCheckIncomingRequestsOnAppLaunch(true);
-// #endif
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	EziSocialObject::sharedObject()->setAutoCheckIncomingRequestsOnAppLaunch(true);
+#endif
 
     return true;
 }

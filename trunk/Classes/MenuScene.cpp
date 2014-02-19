@@ -65,7 +65,7 @@ bool MenuScene::init()
 		"score_button_press.png",
 		this,
 		menu_selector(MenuScene::scoreCallback));
-	scoreItem->setPosition(ccp(377, 1280-1175));
+	scoreItem->setPosition(ccp(329, 1280-1175));
 
 	
 	//
