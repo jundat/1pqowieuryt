@@ -78,10 +78,10 @@ bool ScoreScene::init()
 	this->addChild(m_lbScore);
 
 	//life
-	CCSprite* sprLife = CCSprite::create("oil.png");
-	sprLife->setScale(0.75f);
-	sprLife->setPosition(ccp(609, 1280-164));
-	this->addChild(sprLife);
+	m_sprLife = CCSprite::create("oil.png");
+	m_sprLife->setScale(0.75f);
+	m_sprLife->setPosition(ccp(609, 1280-164));
+	this->addChild(m_sprLife);
 
 	str = CCString::createWithFormat("x%d", DataManager::sharedDataManager()->GetLastPlayerLife());
 	m_lbLife = CCLabelTTF::create(str->getCString(), "Roboto-Medium.ttf", 48);
@@ -91,10 +91,10 @@ bool ScoreScene::init()
 	this->addChild(m_lbLife);
 	
 	//boom
-	CCSprite* sprBoom = CCSprite::create("boomgift.png");
-	sprBoom->setScale(0.75f);
-	sprBoom->setPosition(ccp(609, 1280-245));
-	this->addChild(sprBoom);
+	m_sprBoom = CCSprite::create("boomgift.png");
+	m_sprBoom->setScale(0.75f);
+	m_sprBoom->setPosition(ccp(609, 1280-245));
+	this->addChild(m_sprBoom);
 
 	str = CCString::createWithFormat("x%d", DataManager::sharedDataManager()->GetBoom());
 	m_lbBoom = CCLabelTTF::create(str->getCString(), "Roboto-Medium.ttf", 48);
@@ -204,7 +204,7 @@ bool ScoreScene::init()
 	//vertical
 	m_tableXephang = CCTableView::create(this, tableSize);
 	m_tableXephang->setDirection(kCCScrollViewDirectionVertical);
-	m_tableXephang->setAnchorPoint(CCPointZero);
+	//m_tableXephang->setAnchorPoint(CCPointZero);
 	m_tableXephang->setPosition(ccp(400 - tableSize.width/2, 1280-768 - tableSize.height/2));
 	m_tableXephang->setDelegate(this);
 	m_tableXephang->setVerticalFillOrder(kCCTableViewFillTopDown);
@@ -223,7 +223,7 @@ bool ScoreScene::init()
 	//vertical
 	m_tableQuatang = CCTableView::create(this, tableSize);
 	m_tableQuatang->setDirection(kCCScrollViewDirectionVertical);
-	m_tableQuatang->setAnchorPoint(CCPointZero);
+	//m_tableQuatang->setAnchorPoint(CCPointZero);
 	m_tableQuatang->setPosition(ccp(400 - tableSize.width/2, 1280-768 - tableSize.height/2));
 	m_tableQuatang->setDelegate(this);
 	m_tableQuatang->setVerticalFillOrder(kCCTableViewFillTopDown);
@@ -727,6 +727,20 @@ void ScoreScene::getBoomCallback( CCObject* pSender )
 		cell->m_lastTimeGetBoom = DataManager::sharedDataManager()->GetTimeBoomFriend(fbID.c_str());
 
 		refreshUserDetail();
+
+		//animation
+		m_sprBoom->runAction(CCSequence::createWithTwoActions(
+			CCScaleBy::create(0.2f, 1.5f / 1.0f),
+			CCScaleBy::create(0.2f, 1.0f / 1.5f)
+			));
+
+// 		CCSprite* spr = CCSprite::create("boomgift.png");
+// 		spr->setPosition(cell->m_itGetBoom->getPosition() + cell->getPosition() + m_tableXephang->getPosition());
+// 		this->addChild(spr);
+// 		spr->runAction(CCSpawn::createWithTwoActions(
+// 			CCMoveTo::create(0.5f, m_sprBoom->getPosition()),
+// 			CCScaleTo::create(0.5f, m_sprBoom->getScale())
+// 			)); //no need to remove
 	}
 	else
 	{
@@ -737,10 +751,17 @@ void ScoreScene::getBoomCallback( CCObject* pSender )
 void ScoreScene::sendLifeCallback( CCObject* pSender )
 {
 	int curLife = DataManager::sharedDataManager()->GetLastPlayerLife();
-
+	
 	if (curLife <= 0)
 	{
 		PLAY_OUT_PORP_EFFECT;
+
+		//animation
+		m_sprLife->runAction(CCSequence::createWithTwoActions(
+			CCScaleBy::create(0.2f, 1.5f / 1.0f),
+			CCScaleBy::create(0.2f, 1.0f / 1.5f)
+			));
+
 		return;
 	}
 	
@@ -1180,6 +1201,23 @@ void ScoreScene::fbSendRequestCallback( int responseCode, const char* responseMe
 			m_friendCell = NULL;
 
 			refreshUserDetail();
+			
+			//animation
+			m_sprLife->runAction(CCSequence::createWithTwoActions(
+				CCScaleBy::create(0.2f, 1.5f / 1.0f),
+				CCScaleBy::create(0.2f, 1.0f / 1.5f)
+				));
+
+// 			CCSprite* spr = CCSprite::create("oil.png");
+// 			spr->setPosition(m_sprLife->getPosition());
+// 			this->addChild(spr);
+// 			spr->runAction(CCSpawn::create(
+// 				CCMoveTo::create(0.5f, m_friendCell->m_itSendLife->getPosition()),
+// 				CCScaleTo::create(0.5f, m_friendCell->m_itSendLife->getScale()),
+// 				CCRotateTo::create(0.5f, m_friendCell->m_itSendLife->getRotation()),
+// 				CCFadeOut::create(0.5f),
+// 				NULL
+// 				)); //no need to remove
 		}		
 	}
 	else

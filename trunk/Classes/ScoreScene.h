@@ -112,6 +112,9 @@ private:
 public:
 	// Facebook //=========================================
 	CCSprite* m_userAvatar;
+
+	CCSprite* m_sprLife;
+	CCSprite* m_sprBoom;
 	CCLabelTTF* m_lbLife;
 	CCLabelTTF* m_lbBoom;
 
