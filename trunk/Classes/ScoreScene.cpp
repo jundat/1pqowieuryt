@@ -614,18 +614,20 @@ CCTableViewCell* ScoreScene::tableCellAtIndex(CCTableView *table, unsigned int i
 			lbName->setTag(4);
 			cell->addChild(lbName);
 
-			CCSprite* sprLife = CCSprite::create("oil.png");
-			sprLife->setPosition(ccp(620, m_sprCell->getContentSize().height/2));
-			cell->addChild(sprLife);
+			if (isMyScore == false)
+			{
+				CCSprite* sprLife = CCSprite::create("oil.png");
+				sprLife->setPosition(ccp(620, m_sprCell->getContentSize().height/2));
+				cell->addChild(sprLife);
 
-			CCLabelTTF *lbGiftNumber = CCLabelTTF::create(gift->getCString(), "Roboto-Medium.ttf", 48);
-			lbGiftNumber->setFontFillColor(ccc3(0, 0, 0));
-			lbGiftNumber->setPosition(ccp(670, m_sprCell->getContentSize().height/2)); //0.25 * m_sprCell->getContentSize().width, m_sprCell->getContentSize().height/2));
-			lbGiftNumber->setAnchorPoint(ccp(0.0f, 0.5f));
-			lbGiftNumber->setHorizontalAlignment(kCCTextAlignmentLeft);
-			lbGiftNumber->setTag(5);
-			cell->addChild(lbGiftNumber);
-
+				CCLabelTTF *lbGiftNumber = CCLabelTTF::create(gift->getCString(), "Roboto-Medium.ttf", 48);
+				lbGiftNumber->setFontFillColor(ccc3(0, 0, 0));
+				lbGiftNumber->setPosition(ccp(670, m_sprCell->getContentSize().height/2)); //0.25 * m_sprCell->getContentSize().width, m_sprCell->getContentSize().height/2));
+				lbGiftNumber->setAnchorPoint(ccp(0.0f, 0.5f));
+				lbGiftNumber->setHorizontalAlignment(kCCTextAlignmentLeft);
+				lbGiftNumber->setTag(5);
+				cell->addChild(lbGiftNumber);
+			}
 		}
 		else
 		{
@@ -634,9 +636,12 @@ CCTableViewCell* ScoreScene::tableCellAtIndex(CCTableView *table, unsigned int i
 
 			CCLabelTTF *lbName = (CCLabelTTF*)cell->getChildByTag(4);
 			lbName->setString(name->getCString());
-
-			CCLabelTTF *lbGiftNumber = (CCLabelTTF*)cell->getChildByTag(5);
-			lbGiftNumber->setString(gift->getCString());
+			
+			if (isMyScore == false)
+			{
+				CCLabelTTF *lbGiftNumber = (CCLabelTTF*)cell->getChildByTag(5);
+				lbGiftNumber->setString(gift->getCString());
+			}
 		}
 		return cell;
 	}
