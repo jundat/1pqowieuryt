@@ -3,6 +3,7 @@
 
 #include "cocos2d.h"
 #include "cocos-ext.h"
+#include "CustomTableViewCell.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #include "EziSocialObject.h"
@@ -104,6 +105,8 @@ private:
 	CCTableView* m_tableQuatang;
 
 	CCArray* m_arrHighScores;
+
+	CustomTableViewCell* m_friendCell;
 
 public:
 	// Facebook //=========================================

@@ -26,6 +26,7 @@ bool ScoreScene::init()
 
 	m_friendList = NULL;
 	m_arrHighScores = NULL;
+	m_friendCell = NULL;
 
 	CCSprite* bg = CCSprite::create("bg_friend.png");
 	bg->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2));
@@ -708,13 +709,7 @@ void ScoreScene::sendLifeCallback( CCObject* pSender )
 		"Điện Biên Phủ Trên Không");
 #endif
 
-	//reset timer
-	DataManager::sharedDataManager()->SetTimeLifeToFriendNow(fbID.c_str());
-
-	//show clock
-	cell->m_lbSendLife->setVisible(false);
-	cell->m_lbSendLifeTimer->setVisible(true);
-	cell->m_lastTimeSendLife = DataManager::sharedDataManager()->GetTimeLifeToFriend(fbID.c_str());
+	m_friendCell = cell;
 }
 
 
@@ -1075,15 +1070,18 @@ void ScoreScene::fbSendRequestCallback( int responseCode, const char* responseMe
 		DataManager::sharedDataManager()->SetLastPlayerLife(curLife - 1);
 		CCLOG("LAST_LIFE = %d", DataManager::sharedDataManager()->GetLastPlayerLife());
 
-		/*
-		//reset timer
-		DataManager::sharedDataManager()->SetTimeLifeToFriendNow(fbID.c_str());
+		if (m_friendCell != NULL)
+		{
+			//reset timer
+			DataManager::sharedDataManager()->SetTimeLifeToFriendNow(m_friendCell->fbID.c_str());
 
-		//show clock
-		cell->m_lbSendLife->setVisible(false);
-		cell->m_lbSendLifeTimer->setVisible(true);
-		cell->m_lastTimeSendLife = DataManager::sharedDataManager()->GetTimeLifeToFriend(fbID.c_str());
-		*/
+			//show clock
+			m_friendCell->m_lbSendLife->setVisible(false);
+			m_friendCell->m_lbSendLifeTimer->setVisible(true);
+			m_friendCell->m_lastTimeSendLife = DataManager::sharedDataManager()->GetTimeLifeToFriend(m_friendCell->fbID.c_str());
+
+			m_friendCell = NULL;
+		}		
 	}
 	else
 	{
