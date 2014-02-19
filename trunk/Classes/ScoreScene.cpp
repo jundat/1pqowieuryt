@@ -953,13 +953,10 @@ void ScoreScene::fbUserPhotoCallback(const char *userPhotoPath, const char* fbID
 				}
 			}
 
-			//m_tableXephang->setVisible(true);
-			//m_tableQuatang->setVisible(true);
-
 			refreshView();
 
 			m_tableXephang->reloadData();
-			m_tableXephang->reloadData();
+			m_tableQuatang->reloadData();
 		}
 	}
 #endif
