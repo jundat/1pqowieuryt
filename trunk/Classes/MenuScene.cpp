@@ -45,7 +45,7 @@ bool MenuScene::init()
 	initLifeIcon();	
 
 	//
-	CCString* s = CCString::createWithFormat("v%d", 37);
+	CCString* s = CCString::createWithFormat("v%d", 38);
 	CCLabelTTF* labelVersion = CCLabelTTF::create(s->getCString(), "Roboto-Medium.ttf", 32);
 	labelVersion->setColor(ccc3(56, 56, 56));
 	labelVersion->setPosition(ccp(labelVersion->getContentSize().width/4, G_DESIGN_HEIGHT - labelVersion->getContentSize().height/4));

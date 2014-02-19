@@ -887,24 +887,29 @@ void ScoreScene::fbLogOutCallback( CCObject* pSender )
 
 void ScoreScene::fbSessionCallback(int responseCode, const char *responseMessage)
 {
+	CCLOG("fbSessionCallback");
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	if (responseCode == EziSocialWrapperNS::RESPONSE_CODE::FB_LOGIN_SUCCESSFUL)
 	{
+		CCLOG("fbSessionCallback: SUCCESSFUL");
 		m_isLoggedIn = true;
 
 		m_fbLogInItem->setVisible(false);
 		m_lbInvite->setVisible(false);
 		m_fbLogOutItem->setVisible(true);
+
 		refreshView();
 
-		if(EziSocialObject::sharedObject()->isFacebookSessionActive()) //logged in state
-		{
-			EziSocialObject::sharedObject()->postScore(DataManager::sharedDataManager()->GetHighScore());
-		}
-		EziSocialObject::sharedObject()->fetchFBUserDetails(true); //need email = true
+		callSubmitScore();
+		
+		//Auto fetchFBUserDetails, do not call it again
+		//It make exception
+		//CCLOG("call: fetchFBUserDetails");
+		//EziSocialObject::sharedObject()->fetchFBUserDetails(true); //need email = true
 	}
 	else
 	{
+		CCLOG("fbSessionCallback: FAILED");
 		m_isLoggedIn = false;
 
 		m_lbWaiting->setVisible(false);
@@ -918,16 +923,54 @@ void ScoreScene::fbSessionCallback(int responseCode, const char *responseMessage
 #endif
 }
 
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) // fbUserDetailCallback
+
+void ScoreScene::fbUserDetailCallback( int responseCode, const char* responseMessage, EziFacebookUser* fbUser )
+{
+	CCLOG("fbUserDetailCallback");
+	if (fbUser != NULL)
+	{
+		CCLOG("fbUserDetailCallback: user != NULL");
+		EziSocialObject::sharedObject()->setCurrentFacebookUser(fbUser);
+
+		//save data
+		std::string firstname = fbUser->getFullName(); //getFirstName //getFullName
+		std::string userName = fbUser->getUserName();
+		std::string profileID = fbUser->getProfileID();
+
+		DataManager::sharedDataManager()->SetName(firstname.c_str());
+		DataManager::sharedDataManager()->SetProfileID(profileID.c_str());
+		DataManager::sharedDataManager()->SetFbUserName(userName.c_str());
+
+		m_lbName->setString(firstname.c_str());
+
+		CCLOG("call: getProfilePicForID");
+		EziSocialObject::sharedObject()->getProfilePicForID(this, fbUser->getProfileID(), // Profile ID of current user
+			G_AVATAR_SIZE, G_AVATAR_SIZE, // Size of the image
+			false // force download it from server
+		);
+
+		callGetHighScores();
+
+		//check incoming request
+		EziSocialObject::sharedObject()->checkIncomingRequest();
+	}
+}
+#endif
+
 void ScoreScene::fbUserPhotoCallback(const char *userPhotoPath, const char* fbID)
 {
+	CCLOG("fbUserPhotoCallback");
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	//CCLOG("Gotten avatar for %s", fbID);
 	std::string sid = std::string(fbID);
 
 	if ((strcmp(userPhotoPath, "") != 0))
 	{
+		CCLOG("fbUserPhotoCallback: userPhotoPath != NULL");
 		if(sid == DataManager::sharedDataManager()->GetProfileID())
 		{
+			CCLOG("fbUserPhotoCallback: this user");
 			//CCLOG("Gotten avatar for user");
 
 			//save 
@@ -936,12 +979,20 @@ void ScoreScene::fbUserPhotoCallback(const char *userPhotoPath, const char* fbID
 			CCSprite* userPhoto = CCSprite::create(userPhotoPath);
 			userPhoto->setPosition(ccp(m_userAvatar->getContentSize().width/2, m_userAvatar->getContentSize().height/2));
 			userPhoto->setScale(m_userAvatar->getContentSize().width/userPhoto->getContentSize().width);
-			m_userAvatar->addChild(userPhoto);
+			
+			if (m_userAvatar)
+			{
+				m_userAvatar->addChild(userPhoto);
+			}
+			else
+			{
+				CCLOG("ERROR: m_userAvatar == NULL");
+			}
 		}
 		
 		if (m_arrHighScores != NULL)
 		{
-			//CCLOG("Gotten avatar for friends");
+			CCLOG("fbUserPhotoCallback: friends");
 
 			CCObject* it;
 			CCARRAY_FOREACH(m_arrHighScores, it)
@@ -967,55 +1018,31 @@ void ScoreScene::fbUserPhotoCallback(const char *userPhotoPath, const char* fbID
 #endif
 }
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) // fbUserDetailCallback
-
-void ScoreScene::fbUserDetailCallback( int responseCode, const char* responseMessage, EziFacebookUser* fbUser )
-{
-	if (fbUser != NULL)
-	{
-		EziSocialObject::sharedObject()->setCurrentFacebookUser(fbUser);
-
-		//save data
-		EziFacebookUser* currentUser = EziSocialObject::sharedObject()->getCurrentFacebookUser();
-		std::string firstname = fbUser->getFullName(); //getFirstName //getFullName
-		std::string userName = currentUser->getUserName();
-		std::string profileID = currentUser->getProfileID();
-
-		DataManager::sharedDataManager()->SetName(firstname.c_str());
-		DataManager::sharedDataManager()->SetProfileID(profileID.c_str());
-		DataManager::sharedDataManager()->SetFbUserName(userName.c_str());
-
-		m_lbName->setString(firstname.c_str());
-
-		EziSocialObject::sharedObject()->getProfilePicForID(this, currentUser->getProfileID(), // Profile ID of current user
-			G_AVATAR_SIZE, G_AVATAR_SIZE, // Size of the image
-			false // force download it from server
-		);
-
-		callGetHighScores();
-
-		//check incoming request
-		//EziSocialObject::sharedObject()->checkIncomingRequest();
-	}
-}
-#endif
-
 void ScoreScene::callSubmitScore()
 {
+	CCLOG("callSubmitScore");
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	EziSocialObject::sharedObject()->postScore(DataManager::sharedDataManager()->GetHighScore());
+	if(EziSocialObject::sharedObject()->isFacebookSessionActive()) //logged in state
+	{
+		EziSocialObject::sharedObject()->postScore(DataManager::sharedDataManager()->GetHighScore());
+	}
 #endif
 }
 
 void ScoreScene::callGetHighScores()
 {
+	CCLOG("callGetHighScores");
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	EziSocialObject::sharedObject()->getHighScores();
+	if(EziSocialObject::sharedObject()->isFacebookSessionActive()) //logged in state
+	{
+		EziSocialObject::sharedObject()->getHighScores();
+	}
 #endif
 }
 
 void ScoreScene::fbHighScoresCallback( int responseCode, const char* responseMessage, cocos2d::CCArray* highScores )
 {
+	CCLOG("fbHighScoresCallback");
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	if (m_arrHighScores != NULL)
 	{
@@ -1061,14 +1088,17 @@ void ScoreScene::fbHighScoresCallback( int responseCode, const char* responseMes
 
 void ScoreScene::fbSendRequestCallback( int responseCode, const char* responseMessage, cocos2d::CCArray* friendsGotRequests )
 {
+	CCLOG("fbSendRequestCallback");
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	if (EziSocialWrapperNS::RESPONSE_CODE::FB_REQUEST_SENT == responseCode)
 	{
+		CCLOG("fbSendRequestCallback: FB_REQUEST_SENT");
 		int numFriends = friendsGotRequests->count();
 		CCLOG("Request sent successfully to %d friends", numFriends);
 		
 		if (m_friendCell != NULL)
 		{
+			CCLOG("fbSendRequestCallback: FB_REQUEST_SENT: m_friendCell != NULL");
 			PLAY_GET_BOMB_EFFECT;
 
 			int curLife = DataManager::sharedDataManager()->GetLastPlayerLife();
@@ -1100,6 +1130,7 @@ void ScoreScene::fbSendRequestCallback( int responseCode, const char* responseMe
 	}
 	else
 	{
+		CCLOG("fbSendRequestCallback: FB_REQUEST_SENT: m_friendCell == NULL");
 		PLAY_OUT_PORP_EFFECT;
 		CCLOG("Request sent failed");
 	}
@@ -1108,6 +1139,7 @@ void ScoreScene::fbSendRequestCallback( int responseCode, const char* responseMe
 
 void ScoreScene::fbIncomingRequestCallback(int responseCode, const char* responseMessage, int totalIncomingRequests)
 {
+	CCLOG("fbIncomingRequestCallback");
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	int pendingRequest = EziFBIncomingRequestManager::sharedManager()->getPendingRequestCount();
 	CCLOG("------------------NewRequests= %d\n-----------------PendingRequests= %d", totalIncomingRequests, pendingRequest);
