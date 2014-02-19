@@ -464,12 +464,12 @@ CCTableViewCell* ScoreScene::tableCellAtIndex(CCTableView *table, unsigned int i
 
 			if (isMyScore == false)
 			{
-				CCMenuItemImage* itGetBoom = CCMenuItemImage::create("boomgift.png", "boomgift1.png", this, menu_selector(ScoreScene::getBoomCallback));
+				CCMenuItemImage* itGetBoom = CCMenuItemImage::create("boomgift.png", "boomgift1.png", "boomgift1.png", this, menu_selector(ScoreScene::getBoomCallback));
 				itGetBoom->setPosition(ccp(600, m_sprCell->getContentSize().height/2 + 10));
 				itGetBoom->setTag(1000 + idx);
 				((CustomTableViewCell*)cell)->m_itGetBoom = itGetBoom;
 
-				CCMenuItemImage* itSendLife = CCMenuItemImage::create("oil.png", "oil.png", this, menu_selector(ScoreScene::sendLifeCallback));
+				CCMenuItemImage* itSendLife = CCMenuItemImage::create("oil.png", "oil_blur.png", "oil_blur.png", this, menu_selector(ScoreScene::sendLifeCallback));
 				itSendLife->setRotation(180);
 				itSendLife->setPosition(ccp(725, m_sprCell->getContentSize().height/2 + 15));
 				itSendLife->setTag(2000 + idx);

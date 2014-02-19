@@ -297,11 +297,7 @@ void ObjectLayer::ScheduleCheckCollision(float dt)
 
 				if (enemyRect.intersectsRect(lazerRect))
 				{
-					//sound
-					//PLAY_USE_BOMB_EFFECT;
-
 					enemy->HitBullet(1000);
-					m_arrEnemies->removeObject(enemy);
 				}
 			}
 		}
