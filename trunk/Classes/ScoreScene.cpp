@@ -726,12 +726,6 @@ void ScoreScene::refreshView()
 	} 
 	else
 	{
-
-// #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-// 		//check incoming request
-// 		EziSocialObject::sharedObject()->checkIncomingRequest();
-// #endif
-
 		m_xephangToggle->setSelectedIndex(1);
 		m_quatangToggle->setSelectedIndex(0);
 
@@ -986,10 +980,6 @@ void ScoreScene::fbUserDetailCallback( int responseCode, const char* responseMes
 			G_AVATAR_SIZE, G_AVATAR_SIZE, // Size of the image
 			false // force download it from server
 		);
-
-
-		//check incoming request
-		//EziSocialObject::sharedObject()->checkIncomingRequest();
 
 		callGetHighScores();
 	}
