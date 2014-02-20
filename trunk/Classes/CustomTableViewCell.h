@@ -31,7 +31,6 @@ public:
 	CCLabelTTF* m_lbSendLife;
 	CCMenuItemImage* m_itSendLife;
 
-	//request
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	EziFBIncomingRequest* m_request;

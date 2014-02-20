@@ -22,13 +22,15 @@ bool ScoreScene::init()
 
 	//////////////////////////////////////////////////////////////////////////
 
-	m_tableXepHangSize = 0;
-	m_tableQuatangSize = 0;
+	m_listSize = 0;
 
 	m_friendList = NULL;
 	m_arrHighScores = NULL;
-	m_arrRequests = NULL;
+	m_dictPengdingRequests = NULL;
 	m_friendCell = NULL;
+
+	m_tableQuatang = NULL;
+	m_tableXephang = NULL;
 
 	CCSprite* bg = CCSprite::create("bg_friend.png");
 	bg->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2));
@@ -44,7 +46,7 @@ bool ScoreScene::init()
 
 
 	//USER Information //////////////////////////////////////////////////////////////////////////
-
+	CCLOG("USER Information");
 
 	//avatar
 	if(DataManager::sharedDataManager()->GetPhotoPath() != "NULL")
@@ -70,7 +72,7 @@ bool ScoreScene::init()
 	m_lbName->setPosition(ccp(174, 1280-173));
 	m_lbName->setAnchorPoint(ccp(0.0f, 0.5f));
 	this->addChild(m_lbName);
-
+	CCLOG("1");
 	//score
 	CCString* str = CCString::createWithFormat("%d", DataManager::sharedDataManager()->GetHighScore());
 	m_lbScore = CCLabelTTF::create(str->getCString(), "Roboto-Medium.ttf", 48);
@@ -84,7 +86,7 @@ bool ScoreScene::init()
 	m_sprLife->setScale(0.75f);
 	m_sprLife->setPosition(ccp(609, 1280-164));
 	this->addChild(m_sprLife);
-
+	CCLOG("2");
 	str = CCString::createWithFormat("x%d", DataManager::sharedDataManager()->GetLastPlayerLife());
 	m_lbLife = CCLabelTTF::create(str->getCString(), "Roboto-Medium.ttf", 48);
 	m_lbLife->setFontFillColor(ccc3(0, 0, 0));
@@ -97,14 +99,13 @@ bool ScoreScene::init()
 	m_sprBoom->setScale(0.75f);
 	m_sprBoom->setPosition(ccp(609, 1280-245));
 	this->addChild(m_sprBoom);
-
+	CCLOG("3");
 	str = CCString::createWithFormat("x%d", DataManager::sharedDataManager()->GetBoom());
 	m_lbBoom = CCLabelTTF::create(str->getCString(), "Roboto-Medium.ttf", 48);
 	m_lbBoom->setFontFillColor(ccc3(0, 0, 0));
 	m_lbBoom->setPosition(ccp(650, 1280-245));
 	m_lbBoom->setAnchorPoint(ccp(0.0f, 0.5f));
 	this->addChild(m_lbBoom);
-
 
 	//Xep hang
 
@@ -113,7 +114,7 @@ bool ScoreScene::init()
 	m_xephangToggle = CCMenuItemToggle::createWithTarget(this,  menu_selector(ScoreScene::xephangCallback), xephangOn, xephangOff, NULL);
 	m_xephangToggle->setSelectedIndex(0);
 	m_xephangToggle->setPosition(ccp(202, 1280-351));
-
+	CCLOG("4");
 	//Qua tang
 
 	CCMenuItem* quatangOn = CCMenuItemImage::create("quatang.png", NULL, NULL);
@@ -130,7 +131,7 @@ bool ScoreScene::init()
 		this,
 		menu_selector(ScoreScene::menuCallback));
 	backItem->setPosition(ccp(92, 1280-1201));
-
+	CCLOG("5");
 	//
 	m_fbLogOutItem = CCMenuItemImage::create(
 		"disconnect_facebook.png",
@@ -138,8 +139,7 @@ bool ScoreScene::init()
 		this,
 		menu_selector(ScoreScene::fbLogOutCallback));
 	m_fbLogOutItem->setPosition(ccp(611, 1280-1205));
-	this->addChild(m_fbLogOutItem);
-
+	
 	//Facebook button
 	
 
@@ -150,21 +150,24 @@ bool ScoreScene::init()
 		this,  
 		menu_selector(ScoreScene::fbLogInCallback));
 	m_fbLogInItem->setPosition(ccp(400, 1280-805));
-
+	CCLOG("6");
 	m_lbInvite = CCLabelTTF::create("Liên kết Facebook\nthêm niềm vui", "Roboto-Medium.ttf", 48);
 	m_lbInvite->setFontFillColor(ccc3(0, 0, 0));
 	m_lbInvite->setPosition(ccp(400, 1280-672)); //320
 	this->addChild(m_lbInvite, 1); //samw menu
 
-
+	CCLOG("7");
 	CCMenu* pMenu = CCMenu::create(backItem, m_fbLogInItem, m_fbLogOutItem, m_xephangToggle, m_quatangToggle, NULL);
 	pMenu->setPosition(CCPointZero);
+
+	CCLOG("8");
 	this->addChild(pMenu, 1);
 
 
 
 	//Table //////////////////////////////////////////////////////////////////////////
 
+	CCLOG("9");
 
 	m_isXepHangView = true;
 
@@ -173,11 +176,20 @@ bool ScoreScene::init()
 	m_sprCell = CCSprite::create("table_cell_xephang.png");
 	m_sprCell->retain();
 	CCSize cellsize = m_sprCell->getContentSize();
-	CCSize tableSize = CCSizeMake(783, 718);
+	CCSize tableSize = CCSizeMake(783, 718); //CCSizeMake(cellsize.width, cellsize.height * 6.0f);
+
+	CCLOG("10");
 
 	//vertical
 	m_tableXephang = CCTableView::create(this, tableSize);
+	
+	CCLOG("10.5");
+
 	m_tableXephang->setDirection(kCCScrollViewDirectionVertical);
+	//m_tableXephang->setAnchorPoint(CCPointZero);
+
+	CCLOG("11");
+
 	m_tableXephang->setPosition(ccp(400 - tableSize.width/2, 1280-768 - tableSize.height/2));
 	m_tableXephang->setDelegate(this);
 	m_tableXephang->setVerticalFillOrder(kCCTableViewFillTopDown);
@@ -185,11 +197,11 @@ bool ScoreScene::init()
 
 	m_tableXephang->setVisible(true);
 
+	CCLOG("12");
 
 
 	// table view QuaTang //////////////////////////////////////////////////////////////////////////
-
-
+	
 
 	m_sprCell = CCSprite::create("table_cell_quatang.png");
 	m_sprCell->retain();
@@ -199,6 +211,7 @@ bool ScoreScene::init()
 	//vertical
 	m_tableQuatang = CCTableView::create(this, tableSize);
 	m_tableQuatang->setDirection(kCCScrollViewDirectionVertical);
+	//m_tableQuatang->setAnchorPoint(CCPointZero);
 	m_tableQuatang->setPosition(ccp(400 - tableSize.width/2, 1280-768 - tableSize.height/2));
 	m_tableQuatang->setDelegate(this);
 	m_tableQuatang->setVerticalFillOrder(kCCTableViewFillTopDown);
@@ -232,7 +245,7 @@ bool ScoreScene::init()
 
 		//check incoming request
 		EziSocialObject::sharedObject()->checkIncomingRequest();
-
+		CCLOG("IS LOGIN");
 
 		m_isLoggedIn = true;
 		m_fbLogInItem->setVisible(false);
@@ -248,7 +261,7 @@ bool ScoreScene::init()
 		callGetHighScores();
 	}
 	else //logged out stated
-	{
+	{CCLOG("IS LOG OUT");
 		m_isLoggedIn = false;
 
 		m_tableXephang->setVisible(false);
@@ -260,7 +273,8 @@ bool ScoreScene::init()
 		m_fbLogOutItem->setVisible(false);
 	}
 #endif
-	
+	CCLOG("INIT OK");
+
 	this->schedule(schedule_selector(ScoreScene::scheduleTimer), 1);
 
 	return true;
@@ -347,25 +361,415 @@ CCSize ScoreScene::tableCellSizeForIndex(CCTableView *table, unsigned int idx)
 
 CCTableViewCell* ScoreScene::tableCellAtIndex(CCTableView *table, unsigned int idx)
 {
+	
+#pragma region TABLE XEP HANG
+
 	if (table == m_tableXephang)
 	{
-		return tableCellXepHangAtIndex(table, idx);
+		bool isMyScore = false;
+		CCString *order = CCString::createWithFormat("%d", idx + 1);
+		CCString *score = CCString::create("0");
+		CCString *name = CCString::create(G_DEFAULT_NAME);
+		CCString *photo = CCString::create("fb-profile.png");
+		std::string friendId;
+
+		//get boom
+		tm* _lastTimeGetBoom;
+		int _getBoomWaitTime = 0;
+		CCString* _sGetBoomTimer = CCString::create("00:00:00");
+
+		//send life
+		tm* _lastTimeSendLife;
+		int _sendLifeWaitTime = 0;
+		CCString* _sSendLifeTimer = CCString::create("00:00:00");
+
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+		if(m_arrHighScores == NULL)
+		{
+			CCLOG("m_arrHighScores == NULL");
+		}
+		else
+		{
+			EziFacebookFriend* fbFriend = dynamic_cast<EziFacebookFriend*>(m_arrHighScores->objectAtIndex(idx));
+			score = CCString::createWithFormat("%d", (int)fbFriend->getScore());
+
+			std::string sname = std::string(fbFriend->getName());
+			if (sname.length() > 18)
+			{
+				sname = sname.substr(0, 15);
+				sname.append("...");
+			}
+
+			name  = CCString::create(sname);
+			friendId = std::string(fbFriend->getFBID());
+
+
+			//get boom
+			_lastTimeGetBoom = DataManager::sharedDataManager()->GetTimeBoomFriend(friendId.c_str());
+			if (_lastTimeGetBoom == NULL)
+			{
+				//2014 - 114 = 1900
+				//very last
+				_lastTimeGetBoom = new tm();
+				_lastTimeGetBoom->tm_hour = 0;
+				_lastTimeGetBoom->tm_min = 0;
+				_lastTimeGetBoom->tm_sec = 0;
+				_lastTimeGetBoom->tm_mday = 0;
+				_lastTimeGetBoom->tm_mon = 0;
+				_lastTimeGetBoom->tm_year = 0;
+
+				DataManager::sharedDataManager()->SetTimeBoomFriend(friendId.c_str(), _lastTimeGetBoom);
+			}
+			time_t lastTime = mktime(_lastTimeGetBoom);
+			time_t curTime = time(NULL);
+			_getBoomWaitTime = 24 * 60 * 60 - (int)difftime(curTime, lastTime);
+			_getBoomWaitTime = (_getBoomWaitTime > 0) ? _getBoomWaitTime : 0;
+
+			int hour, min, sec;
+			sec = _getBoomWaitTime % 60;
+			_getBoomWaitTime -= sec;
+			min =  ((int)(_getBoomWaitTime / 60)) % 60;
+			hour = ((int)(_getBoomWaitTime / 60)) / 60;
+			_sGetBoomTimer = CCString::createWithFormat("%d:%d:%d", hour, min, sec);
+
+
+
+			//send life
+			_lastTimeSendLife = DataManager::sharedDataManager()->GetTimeLifeToFriend(friendId.c_str());
+			if (_lastTimeSendLife == NULL)
+			{
+				//2014 - 114 = 1900
+				//very last
+				_lastTimeSendLife = new tm();
+				_lastTimeSendLife->tm_hour = 0;
+				_lastTimeSendLife->tm_min = 0;
+				_lastTimeSendLife->tm_sec = 0;
+				_lastTimeSendLife->tm_mday = 0;
+				_lastTimeSendLife->tm_mon = 0;
+				_lastTimeSendLife->tm_year = 0;
+
+				DataManager::sharedDataManager()->SetTimeLifeToFriend(friendId.c_str(), _lastTimeSendLife);
+			}
+			time_t lastTimeSendLife = mktime(_lastTimeSendLife);
+			time_t curTimeSendLife = time(NULL);
+			_sendLifeWaitTime = 24 * 60 * 60 - (int)difftime(curTimeSendLife, lastTimeSendLife);
+			_sendLifeWaitTime = (_sendLifeWaitTime > 0) ? _sendLifeWaitTime : 0;
+
+			//int hour, min, sec;
+			sec = _sendLifeWaitTime % 60;
+			_sendLifeWaitTime -= sec;
+			min =  ((int)(_sendLifeWaitTime / 60)) % 60;
+			hour = ((int)(_sendLifeWaitTime / 60)) / 60;
+			_sSendLifeTimer = CCString::createWithFormat("%d:%d:%d", hour, min, sec);
+
+
+
+			//////////////////////////////////////////////////////////////////////////
+
+
+			if (strlen(fbFriend->getPhotoPath()) > 1)
+			{
+				photo  = CCString::createWithFormat("%s", fbFriend->getPhotoPath());
+			}
+			if(fbFriend->getFBID() == DataManager::sharedDataManager()->GetProfileID())
+			{
+				isMyScore = true;
+			}
+		}
+
+#endif
+
+		CCTableViewCell *cell = table->cellAtIndex(idx);// table->dequeueCell();
+		if (!cell) {
+			cell = new CustomTableViewCell();
+			cell->autorelease();
+
+			((CustomTableViewCell*)cell)->fbID = friendId;
+			((CustomTableViewCell*)cell)->m_lastTimeGetBoom = _lastTimeGetBoom;
+			((CustomTableViewCell*)cell)->m_lastTimeSendLife = _lastTimeSendLife;
+
+			CCSprite *sprite = CCSprite::create("table_cell_xephang.png");
+			sprite->setAnchorPoint(CCPointZero);
+			sprite->setPosition(ccp(0, 0));
+			sprite->setTag(1);
+			cell->addChild(sprite);
+
+			CCSprite *avatar = CCSprite::create(photo->getCString());
+			avatar->setScale(0.78125f);
+			avatar->setPosition(ccp(140, m_sprCell->getContentSize().height/2));
+			avatar->setTag(2);
+			cell->addChild(avatar);
+			
+			CCLabelTTF *lbOrder;
+			if (idx < 3)
+			{
+				lbOrder = CCLabelTTF::create(order->getCString(), "Villa.ttf", 42);
+			} 
+			else
+			{
+				lbOrder = CCLabelTTF::create(order->getCString(), "Roboto-Medium.ttf", 42);
+			}
+			
+			lbOrder->setFontFillColor(ccc3(0, 0, 0));
+			lbOrder->setHorizontalAlignment(kCCTextAlignmentLeft); //cocos2d::CCTextAlignment::
+			lbOrder->setPosition(ccp(30, m_sprCell->getContentSize().height/2));
+			lbOrder->setTag(3);
+			lbOrder->setAnchorPoint(ccp(0.0f, 0.5f));
+			cell->addChild(lbOrder);
+
+			//Jundat TPham..
+			//21
+			
+			CCLabelTTF *lbName = CCLabelTTF::create(name->getCString(), "Roboto-Medium.ttf", 42);
+			lbName->setFontFillColor(ccc3(0,0,0));
+			lbName->setPosition(ccp(210, m_sprCell->getContentSize().height * 3/4));
+			lbName->setAnchorPoint(ccp(0.0f, 0.5f));
+			lbName->setTag(4);
+			cell->addChild(lbName);
+
+			CCLabelTTF *lbScore = CCLabelTTF::create(score->getCString(), "Roboto-Medium.ttf", 42);
+			lbScore->setFontFillColor(ccc3(0, 0, 0));
+			lbScore->setPosition(ccp(210, m_sprCell->getContentSize().height * 3/8)); //0.25 * m_sprCell->getContentSize().width, m_sprCell->getContentSize().height/2));
+			lbScore->setAnchorPoint(ccp(0.0f, 0.5f));
+			lbScore->setTag(5);
+			cell->addChild(lbScore);
+
+			if (isMyScore == false)
+			{
+				CCMenuItemImage* itGetBoom = CCMenuItemImage::create("boomgift.png", "boomgift1.png", "boomgift1.png", this, menu_selector(ScoreScene::getBoomCallback));
+				itGetBoom->setPosition(ccp(600, m_sprCell->getContentSize().height/2 + 10));
+				itGetBoom->setTag(1000 + idx);
+				((CustomTableViewCell*)cell)->m_itGetBoom = itGetBoom;
+
+				CCMenuItemImage* itSendLife = CCMenuItemImage::create("oil.png", "oil_blur.png", "oil_blur.png", this, menu_selector(ScoreScene::sendLifeCallback));
+				itSendLife->setRotation(180);
+				itSendLife->setPosition(ccp(725, m_sprCell->getContentSize().height/2 + 15));
+				itSendLife->setTag(2000 + idx);
+				((CustomTableViewCell*)cell)->m_itSendLife = itSendLife;
+
+				CCMenu* cell_menu = CCMenu::create(itGetBoom, itSendLife, NULL);
+				cell_menu->setPosition(CCPointZero);
+				cell->addChild(cell_menu);
+
+
+				//////////////////////////////////////////////////////////////////////////
+				
+
+				//Send life
+				CCLabelTTF* lbSendLifeTimer = CCLabelTTF::create(_sSendLifeTimer->getCString(), "Roboto-Medium.ttf", 28); //32
+				lbSendLifeTimer->setFontFillColor(ccc3(0, 0, 0));
+				lbSendLifeTimer->setAnchorPoint(ccp(0.5f, 0.75f));
+				lbSendLifeTimer->setPosition(ccp(725, m_sprCell->getContentSize().height/4));
+				lbSendLifeTimer->setTag(3000 + idx);
+				cell->addChild(lbSendLifeTimer);
+				((CustomTableViewCell*)cell)->m_lbSendLifeTimer = lbSendLifeTimer;
+
+				CCLabelTTF* lbSendLife = CCLabelTTF::create("Gửi", "Roboto-Medium.ttf", 28);
+				lbSendLife->setFontFillColor(ccc3(0, 0, 0));
+				lbSendLife->setAnchorPoint(ccp(0.5f, 0.75f));
+				lbSendLife->setPosition(ccp(725, m_sprCell->getContentSize().height/4));
+				lbSendLife->setTag(4000 + idx);
+				cell->addChild(lbSendLife);
+				((CustomTableViewCell*)cell)->m_lbSendLife = lbSendLife;
+				
+				
+				//////////////
+
+
+				//Get boom
+				CCLabelTTF* lbGetBoomTimer = CCLabelTTF::create(_sGetBoomTimer->getCString(), "Roboto-Medium.ttf", 28); //32
+				lbGetBoomTimer->setFontFillColor(ccc3(0, 0, 0));
+				lbGetBoomTimer->setAnchorPoint(ccp(0.5f, 0.75f));
+				lbGetBoomTimer->setPosition(ccp(600, m_sprCell->getContentSize().height/4));
+				lbGetBoomTimer->setTag(3000 + idx);
+				cell->addChild(lbGetBoomTimer);
+				((CustomTableViewCell*)cell)->m_lbGetBoomTimer = lbGetBoomTimer;
+
+				CCLabelTTF* lbGetBoom = CCLabelTTF::create("Nhận", "Roboto-Medium.ttf", 28);
+				lbGetBoom->setFontFillColor(ccc3(0, 0, 0));
+				lbGetBoom->setAnchorPoint(ccp(0.5f, 0.75f));
+				lbGetBoom->setPosition(ccp(600, m_sprCell->getContentSize().height/4));
+				lbGetBoom->setTag(4000 + idx);
+				cell->addChild(lbGetBoom);
+				((CustomTableViewCell*)cell)->m_lbGetBoom = lbGetBoom;
+
+
+				//////////////////////////////////////////////////////////////////////////
+				
+				//Get boom
+				if (_getBoomWaitTime <= 0)
+				{
+					//FULL TIME
+					itGetBoom->setEnabled(true);
+					lbGetBoomTimer->setVisible(false);
+					lbGetBoom->setVisible(true);
+				}
+				else
+				{
+					itGetBoom->selected();
+
+					itGetBoom->setEnabled(false);
+					lbGetBoomTimer->setVisible(true);
+					lbGetBoom->setVisible(false);
+				}
+
+				//////////////////
+				
+				//Send life
+				if (_sendLifeWaitTime <= 0)
+				{
+					//FULL TIME
+					itSendLife->setEnabled(true);
+					lbSendLifeTimer->setVisible(false);
+					lbSendLife->setVisible(true);
+				}
+				else
+				{
+					itSendLife->selected();
+
+					itSendLife->setEnabled(false);
+					lbSendLifeTimer->setVisible(true);
+					lbSendLife->setVisible(false);
+				}
+			}
+		}
+		else
+		{
+			CCSprite *avatar = (CCSprite*)cell->getChildByTag(2);
+			avatar = CCSprite::create(photo->getCString());
+			
+			CCLabelTTF *lbOrder = (CCLabelTTF*)cell->getChildByTag(3);
+			lbOrder->setString(order->getCString());
+
+			CCLabelTTF *lbName = (CCLabelTTF*)cell->getChildByTag(4);
+			lbName->setString(name->getCString());
+
+			CCLabelTTF *lbScore = (CCLabelTTF*)cell->getChildByTag(5);
+			lbScore->setString(score->getCString());
+		}
+		return cell;
 	} 
-	else
+
+#pragma endregion TABLE XEP HANG
+
+	//////////////////////////////////////////////////////////////////////////
+	
+	else //////////////////////////////////////////////////////////////////////////
+	
+	//////////////////////////////////////////////////////////////////////////	
+
+#pragma region TABLE QUA TANG
+
 	{
-		return tableCellQuatangAtIndex(table, idx);
+		if(m_dictPengdingRequests == NULL)
+		{
+			CCLOG("m_dictPengdingRequests == NULL");
+		}
+		else
+		{
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+			CCDictElement* pElement = NULL;
+			CCDICT_FOREACH(m_dictPengdingRequests, pElement)
+			{
+				EziFBIncomingRequest* request = (EziFBIncomingRequest*)pElement->getObject();
+				if (request->getRequestType() == EziSocialWrapperNS::FB_REQUEST::REQUEST_GIFT)
+				{
+					if (request->isConsumed())
+					{
+						CCLOG(" ------------ CONSUMED GIFT ------------- ");
+					} 
+					else
+					{
+						CCLOG(" --------------- NEW GIFT --------------- ");
+						EziFacebookFriend* fbFriend = request->getSender();
+						CCString* name = CCString::create(fbFriend->getName());
+						std::string friendId = std::string(fbFriend->getFBID());
+						CCString* photo = CCString::create("fb-profile.png");
+
+						if (strlen(fbFriend->getPhotoPath()) > 1)
+						{
+							photo  = CCString::createWithFormat("%s", fbFriend->getPhotoPath());
+						}
+						
+
+						CCTableViewCell *cell = table->cellAtIndex(idx);// table->dequeueCell();
+						if (!cell) {
+							cell = new CustomTableViewCell();
+							cell->autorelease();
+
+							((CustomTableViewCell*)cell)->fbID = friendId;
+
+							CCSprite *sprite = CCSprite::create("table_cell_quatang.png");
+							sprite->setAnchorPoint(CCPointZero);
+							sprite->setPosition(ccp(0, 0));
+							sprite->setTag(1);
+							cell->addChild(sprite);							
+							
+							CCSprite *avatar = CCSprite::create(photo->getCString());
+							avatar->setScale(0.78125);
+							avatar->setPosition(ccp(50 + 30, m_sprCell->getContentSize().height/2));
+							avatar->setTag(2);
+							cell->addChild(avatar);
+
+							CCLabelTTF *lbName = CCLabelTTF::create(name->getCString(), "Roboto-Medium.ttf", 42);
+							lbName->setFontFillColor(ccc3(0,0,0));
+							lbName->setPosition(ccp(0.75f * G_FRIEND_AVATAR_SIZE + 50, m_sprCell->getContentSize().height/2));
+							lbName->setAnchorPoint(ccp(0.0f, 0.5f));
+							lbName->setTag(4);
+							cell->addChild(lbName);
+						}
+						else
+						{
+							CCSprite *avatar = (CCSprite*)cell->getChildByTag(2);
+							avatar = CCSprite::create(photo->getCString());
+
+							CCLabelTTF *lbName = (CCLabelTTF*)cell->getChildByTag(4);
+							lbName->setString(name->getCString());
+						}
+						return cell;
+					}
+				}
+				else if (request->getRequestType() == EziSocialWrapperNS::FB_REQUEST::REQUEST_INVITE)
+				{
+					if (request->isConsumed())
+					{
+						CCLOG(" ------------ CONSUMED INVITE ------------- ");
+					}
+					else
+					{
+						CCLOG(" --------------- NEW INVITE --------------- ");
+					}
+				}
+			}
+#endif
+		}
 	}
+
+	return NULL;
+#pragma endregion TABLE QUA TANG
 }
 
 unsigned int ScoreScene::numberOfCellsInTableView(CCTableView *table)
 {
 	if (table == m_tableXephang)
 	{
-		return m_tableXepHangSize;
+		CCLOG("table == m_tableXephang");
+		return m_listSize;
 	} 
-	else //Qua tang
+	else if (table == m_tableQuatang)
 	{
-		return m_tableQuatangSize;
+		CCLOG("table == m_tableQuatang");
+		if (NULL != m_dictPengdingRequests)
+		{
+			CCLOG("NULL != m_dictPengdingRequests");
+			return m_dictPengdingRequests->count();
+		}
+		else
+		{
+			CCLOG("NULL == m_dictPengdingRequests");
+			return 0;
+		}
 	}	
 }
 
@@ -792,7 +1196,7 @@ void ScoreScene::fbHighScoresCallback( int responseCode, const char* responseMes
 	m_arrHighScores = CCArray::createWithArray(highScores);
 	m_arrHighScores->retain();
 
-	m_tableXepHangSize = m_arrHighScores->count();
+	m_listSize = m_arrHighScores->count();
 
 	CCObject* it;
 	CCARRAY_FOREACH(m_arrHighScores, it)
@@ -902,444 +1306,20 @@ void ScoreScene::fbIncomingRequestCallback(int responseCode, const char* respons
 	int pendingRequest = EziFBIncomingRequestManager::sharedManager()->getPendingRequestCount();
 	CCLOG("------------------NewRequests= %d\n-----------------PendingRequests= %d", totalIncomingRequests, pendingRequest);
 
-	if (pendingRequest > 0)
+	if (m_dictPengdingRequests != NULL)
 	{
-		if (m_arrRequests != NULL)
-		{
-			m_arrRequests->release();
-			m_arrRequests = NULL;
-		}
-		m_arrRequests = new CCArray();
-		m_arrRequests->retain();
-
-		CCDictionary* dictPendingRequests = EziFBIncomingRequestManager::sharedManager()->getPendingRequests();
-
-		//foreach Dictionary to put into m_arrRequests
-
-		m_tableQuatangSize = 0;
-		CCDictElement* pElement = NULL;
-		CCDICT_FOREACH(dictPendingRequests, pElement)
-		{
-			EziFBIncomingRequest* request = (EziFBIncomingRequest*)pElement->getObject();
-			if (request->getRequestType() == EziSocialWrapperNS::FB_REQUEST::REQUEST_GIFT)
-			{
-				if (request->isConsumed())
-				{
-					CCLOG(" ------------ CONSUMED GIFT ------------- ");
-				} 
-				else
-				{
-					CCLOG(" --------------- NEW GIFT --------------- ");
-					m_arrRequests->addObject(request);
-					m_tableQuatangSize++;
-				}
-			}
-			else if (request->getRequestType() == EziSocialWrapperNS::FB_REQUEST::REQUEST_INVITE)
-			{
-				if (request->isConsumed())
-				{
-					CCLOG(" ------------ CONSUMED INVITE ------------- ");
-				}
-				else
-				{
-					CCLOG(" --------------- NEW INVITE --------------- ");
-				}
-			}
-		}
-		
-		CCLOG("CALL: m_tableQuatang->reloadData()");
-		m_tableQuatang->reloadData();
+		m_dictPengdingRequests->release();
+		m_dictPengdingRequests = NULL;
 	}
-#endif
-}
-
-CCTableViewCell* ScoreScene::tableCellXepHangAtIndex( CCTableView *table, unsigned int idx )
-{
-	CCLOG("tableCellXepHangAtIndex");
-
-	bool isMyScore = false;
-	CCString *strOrder = CCString::createWithFormat("%d", idx + 1);
-	CCString *strScore = CCString::create("0");
-	CCString *strName = CCString::create(G_DEFAULT_NAME);
-	CCString *strPhoto = CCString::create("fb-profile.png");
-	std::string strFriendId;
-
-	//get boom
-	tm* _lastTimeGetBoom;
-	int _getBoomWaitTime = 0;
-	CCString* strGetBoomTimer = CCString::create("00:00:00");
-
-	//send life
-	tm* _lastTimeSendLife;
-	int _sendLifeWaitTime = 0;
-	CCString* strSendLifeTimer = CCString::create("00:00:00");
-
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	if(m_arrHighScores == NULL)
-	{
-		CCLOG("m_arrHighScores == NULL");
-	}
-	else
-	{
-		EziFacebookFriend* fbFriend = dynamic_cast<EziFacebookFriend*>(m_arrHighScores->objectAtIndex(idx));
-
-		strScore = CCString::createWithFormat("%d", (int)fbFriend->getScore());
-
-		std::string sname = std::string(fbFriend->getName());
-		if (sname.length() > 18) {
-			sname = sname.substr(0, 15);
-			sname.append("...");
-		}			
-		strName  = CCString::create(sname);
-
-		strFriendId = std::string(fbFriend->getFBID());
-
-		//get boom
-		_lastTimeGetBoom = DataManager::sharedDataManager()->GetTimeBoomFriend(strFriendId.c_str());
-		if (_lastTimeGetBoom == NULL)
-		{
-			//2014 - 114 = 1900
-			//very last
-			_lastTimeGetBoom = new tm();
-			_lastTimeGetBoom->tm_hour = 0;
-			_lastTimeGetBoom->tm_min = 0;
-			_lastTimeGetBoom->tm_sec = 0;
-			_lastTimeGetBoom->tm_mday = 0;
-			_lastTimeGetBoom->tm_mon = 0;
-			_lastTimeGetBoom->tm_year = 0;
-
-			DataManager::sharedDataManager()->SetTimeBoomFriend(strFriendId.c_str(), _lastTimeGetBoom);
-		}
-		time_t lastTime = mktime(_lastTimeGetBoom);
-		time_t curTime = time(NULL);
-		_getBoomWaitTime = 24 * 60 * 60 - (int)difftime(curTime, lastTime);
-		_getBoomWaitTime = (_getBoomWaitTime > 0) ? _getBoomWaitTime : 0;
-
-		int hour, min, sec;
-		sec = _getBoomWaitTime % 60;
-		_getBoomWaitTime -= sec;
-		min =  ((int)(_getBoomWaitTime / 60)) % 60;
-		hour = ((int)(_getBoomWaitTime / 60)) / 60;
-		strGetBoomTimer = CCString::createWithFormat("%d:%d:%d", hour, min, sec);
-
-
-
-		//send life
-		_lastTimeSendLife = DataManager::sharedDataManager()->GetTimeLifeToFriend(strFriendId.c_str());
-		if (_lastTimeSendLife == NULL)
-		{
-			//2014 - 114 = 1900
-			//very last
-			_lastTimeSendLife = new tm();
-			_lastTimeSendLife->tm_hour = 0;
-			_lastTimeSendLife->tm_min = 0;
-			_lastTimeSendLife->tm_sec = 0;
-			_lastTimeSendLife->tm_mday = 0;
-			_lastTimeSendLife->tm_mon = 0;
-			_lastTimeSendLife->tm_year = 0;
-
-			DataManager::sharedDataManager()->SetTimeLifeToFriend(strFriendId.c_str(), _lastTimeSendLife);
-		}
-		time_t lastTimeSendLife = mktime(_lastTimeSendLife);
-		time_t curTimeSendLife = time(NULL);
-		_sendLifeWaitTime = 24 * 60 * 60 - (int)difftime(curTimeSendLife, lastTimeSendLife);
-		_sendLifeWaitTime = (_sendLifeWaitTime > 0) ? _sendLifeWaitTime : 0;
-
-		//int hour, min, sec;
-		sec = _sendLifeWaitTime % 60;
-		_sendLifeWaitTime -= sec;
-		min =  ((int)(_sendLifeWaitTime / 60)) % 60;
-		hour = ((int)(_sendLifeWaitTime / 60)) / 60;
-		strSendLifeTimer = CCString::createWithFormat("%d:%d:%d", hour, min, sec);
-		
-		//////////////////////////////////////////////////////////////////////////
-
-
-		if (strlen(fbFriend->getPhotoPath()) > 1)
-		{
-			strPhoto  = CCString::createWithFormat("%s", fbFriend->getPhotoPath());
-		}
-		if(fbFriend->getFBID() == DataManager::sharedDataManager()->GetProfileID())
-		{
-			isMyScore = true;
-		}
-	}
-#endif
-
-	CCTableViewCell *cell = table->cellAtIndex(idx);
-	if (!cell) 
-	{
-		cell = new CustomTableViewCell();
-		cell->autorelease();
-
-		((CustomTableViewCell*)cell)->fbID = strFriendId;
-		((CustomTableViewCell*)cell)->m_lastTimeGetBoom = _lastTimeGetBoom;
-		((CustomTableViewCell*)cell)->m_lastTimeSendLife = _lastTimeSendLife;
-
-		CCSprite *sprite = CCSprite::create("table_cell_xephang.png");
-		sprite->setAnchorPoint(CCPointZero);
-		sprite->setPosition(ccp(0, 0));
-		sprite->setTag(1);
-		cell->addChild(sprite);
-
-		CCSprite *avatar = CCSprite::create(strPhoto->getCString());
-		avatar->setScale(0.78125f);
-		avatar->setPosition(ccp(140, m_sprCell->getContentSize().height/2));
-		avatar->setTag(2);
-		cell->addChild(avatar);
-
-		CCLabelTTF *lbOrder;
-		if (idx < 3)
-		{
-			lbOrder = CCLabelTTF::create(strOrder->getCString(), "Villa.ttf", 42);
-		} 
-		else
-		{
-			lbOrder = CCLabelTTF::create(strOrder->getCString(), "Roboto-Medium.ttf", 42);
-		}
-
-		lbOrder->setFontFillColor(ccc3(0, 0, 0));
-		lbOrder->setHorizontalAlignment(kCCTextAlignmentLeft); //cocos2d::CCTextAlignment::
-		lbOrder->setPosition(ccp(30, m_sprCell->getContentSize().height/2));
-		lbOrder->setTag(3);
-		lbOrder->setAnchorPoint(ccp(0.0f, 0.5f));
-		cell->addChild(lbOrder);
-
-		//Jundat TPham..
-		//21
-
-		CCLabelTTF *lbName = CCLabelTTF::create(strName->getCString(), "Roboto-Medium.ttf", 42);
-		lbName->setFontFillColor(ccc3(0,0,0));
-		lbName->setPosition(ccp(210, m_sprCell->getContentSize().height * 3/4));
-		lbName->setAnchorPoint(ccp(0.0f, 0.5f));
-		lbName->setTag(4);
-		cell->addChild(lbName);
-
-		CCLabelTTF *lbScore = CCLabelTTF::create(strScore->getCString(), "Roboto-Medium.ttf", 42);
-		lbScore->setFontFillColor(ccc3(0, 0, 0));
-		lbScore->setPosition(ccp(210, m_sprCell->getContentSize().height * 3/8)); //0.25 * m_sprCell->getContentSize().width, m_sprCell->getContentSize().height/2));
-		lbScore->setAnchorPoint(ccp(0.0f, 0.5f));
-		lbScore->setTag(5);
-		cell->addChild(lbScore);
-
-		if (isMyScore == false)
-		{
-			CCMenuItemImage* itGetBoom = CCMenuItemImage::create("boomgift.png", "boomgift1.png", "boomgift1.png", this, menu_selector(ScoreScene::getBoomCallback));
-			itGetBoom->setPosition(ccp(600, m_sprCell->getContentSize().height/2 + 10));
-			itGetBoom->setTag(1000 + idx);
-			((CustomTableViewCell*)cell)->m_itGetBoom = itGetBoom;
-
-			CCMenuItemImage* itSendLife = CCMenuItemImage::create("oil.png", "oil_blur.png", "oil_blur.png", this, menu_selector(ScoreScene::sendLifeCallback));
-			itSendLife->setRotation(180);
-			itSendLife->setPosition(ccp(725, m_sprCell->getContentSize().height/2 + 15));
-			itSendLife->setTag(2000 + idx);
-			((CustomTableViewCell*)cell)->m_itSendLife = itSendLife;
-
-			CCMenu* cell_menu = CCMenu::create(itGetBoom, itSendLife, NULL);
-			cell_menu->setPosition(CCPointZero);
-			cell->addChild(cell_menu);
-
-
-			//////////////////////////////////////////////////////////////////////////
-
-
-			//Send life
-			CCLabelTTF* lbSendLifeTimer = CCLabelTTF::create(strSendLifeTimer->getCString(), "Roboto-Medium.ttf", 28); //32
-			lbSendLifeTimer->setFontFillColor(ccc3(0, 0, 0));
-			lbSendLifeTimer->setAnchorPoint(ccp(0.5f, 0.75f));
-			lbSendLifeTimer->setPosition(ccp(725, m_sprCell->getContentSize().height/4));
-			lbSendLifeTimer->setTag(3000 + idx);
-			cell->addChild(lbSendLifeTimer);
-			((CustomTableViewCell*)cell)->m_lbSendLifeTimer = lbSendLifeTimer;
-
-			CCLabelTTF* lbSendLife = CCLabelTTF::create("Gửi", "Roboto-Medium.ttf", 28);
-			lbSendLife->setFontFillColor(ccc3(0, 0, 0));
-			lbSendLife->setAnchorPoint(ccp(0.5f, 0.75f));
-			lbSendLife->setPosition(ccp(725, m_sprCell->getContentSize().height/4));
-			lbSendLife->setTag(4000 + idx);
-			cell->addChild(lbSendLife);
-			((CustomTableViewCell*)cell)->m_lbSendLife = lbSendLife;
-
-
-			//////////////
-
-
-			//Get boom
-			CCLabelTTF* lbGetBoomTimer = CCLabelTTF::create(strGetBoomTimer->getCString(), "Roboto-Medium.ttf", 28); //32
-			lbGetBoomTimer->setFontFillColor(ccc3(0, 0, 0));
-			lbGetBoomTimer->setAnchorPoint(ccp(0.5f, 0.75f));
-			lbGetBoomTimer->setPosition(ccp(600, m_sprCell->getContentSize().height/4));
-			lbGetBoomTimer->setTag(3000 + idx);
-			cell->addChild(lbGetBoomTimer);
-			((CustomTableViewCell*)cell)->m_lbGetBoomTimer = lbGetBoomTimer;
-
-			CCLabelTTF* lbGetBoom = CCLabelTTF::create("Nhận", "Roboto-Medium.ttf", 28);
-			lbGetBoom->setFontFillColor(ccc3(0, 0, 0));
-			lbGetBoom->setAnchorPoint(ccp(0.5f, 0.75f));
-			lbGetBoom->setPosition(ccp(600, m_sprCell->getContentSize().height/4));
-			lbGetBoom->setTag(4000 + idx);
-			cell->addChild(lbGetBoom);
-			((CustomTableViewCell*)cell)->m_lbGetBoom = lbGetBoom;
-
-
-			//////////////////////////////////////////////////////////////////////////
-
-			//Get boom
-			if (_getBoomWaitTime <= 0)
-			{
-				//FULL TIME
-				itGetBoom->setEnabled(true);
-				lbGetBoomTimer->setVisible(false);
-				lbGetBoom->setVisible(true);
-			}
-			else
-			{
-				itGetBoom->selected();
-
-				itGetBoom->setEnabled(false);
-				lbGetBoomTimer->setVisible(true);
-				lbGetBoom->setVisible(false);
-			}
-
-			//////////////////
-
-			//Send life
-			if (_sendLifeWaitTime <= 0)
-			{
-				//FULL TIME
-				itSendLife->setEnabled(true);
-				lbSendLifeTimer->setVisible(false);
-				lbSendLife->setVisible(true);
-			}
-			else
-			{
-				itSendLife->selected();
-
-				itSendLife->setEnabled(false);
-				lbSendLifeTimer->setVisible(true);
-				lbSendLife->setVisible(false);
-			}
-		}
-	}
-	else
-	{
-		CCSprite *avatar = (CCSprite*)cell->getChildByTag(2);
-		avatar = CCSprite::create(strPhoto->getCString());
-
-		CCLabelTTF *lbOrder = (CCLabelTTF*)cell->getChildByTag(3);
-		lbOrder->setString(strOrder->getCString());
-
-		CCLabelTTF *lbName = (CCLabelTTF*)cell->getChildByTag(4);
-		lbName->setString(strName->getCString());
-
-		CCLabelTTF *lbScore = (CCLabelTTF*)cell->getChildByTag(5);
-		lbScore->setString(strScore->getCString());
-	}
-
-	return cell;
-}
-
-CCTableViewCell* ScoreScene::tableCellQuatangAtIndex( CCTableView *table, unsigned int idx )
-{
-	CCLOG("tableCellQuatangAtIndex");
-
-	CCString* strName = CCString::create(G_DEFAULT_NAME);
-	CCString* strPhoto = CCString::create("fb-profile.png");
-	std::string strFriendId;
 	
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	EziFBIncomingRequest* request = (EziFBIncomingRequest*)m_arrRequests->objectAtIndex(idx);
-	if (NULL != request)
-	{
-		EziFacebookFriend* fbFriend = request->getSender();
-		strFriendId = std::string(fbFriend->getFBID());
-		strName = CCString::create(fbFriend->getName());
 
-		CCLOG("1");
-		
-		//check if photopath is ok
-		if (strlen(fbFriend->getPhotoPath()) > 1)
-		{
-			CCLOG("GET RIGHT PHOTOPATH");
-			strPhoto = CCString::createWithFormat("%s", fbFriend->getPhotoPath());
-		} 
-		else
-		{
-			CCLOG("FOREACH TO GET PHOTOPATH");
-			//foreach m_arrHighScores to get photopath
-			CCObject* it = NULL;
-			CCARRAY_FOREACH(m_arrHighScores, it)
-			{
-				EziFacebookFriend* fr = (EziFacebookFriend*)(it);
+	m_dictPengdingRequests = CCDictionary::createWithDictionary(EziFBIncomingRequestManager::sharedManager()->getPendingRequests());
+	m_dictPengdingRequests->retain();
 
-				if (NULL != fr && fr->getFBID() == strFriendId)
-				{
-					if (strlen(fr->getPhotoPath()) > 1)
-					{
-						CCLOG("FOREACH TO GET PHOTOPATH: --- OK");
-						strPhoto = CCString::createWithFormat("%s", fr->getPhotoPath());
-						fbFriend->setPhotoPath(fr->getPhotoPath());
-						break;
-					}
-				}
-			}
-		}		
+	m_tableQuatang->reloadData();
 
-		CCLOG("2");
-	}
-	else
-	{
-		CCLOG("NULL REQUEST");
-		return NULL;
-	}
 #endif
-
-	CCTableViewCell *cell = table->cellAtIndex(idx);
-	if (!cell) 
-	{
-		cell = new CustomTableViewCell();
-		cell->autorelease();
-
-		((CustomTableViewCell*)(cell))->m_request = request;
-
-
-		CCLOG("3");
-		CCSprite *sprite = CCSprite::create("table_cell_quatang.png");
-		sprite->setAnchorPoint(CCPointZero);
-		sprite->setPosition(ccp(0, 0));
-		sprite->setTag(1);
-		cell->addChild(sprite);
-
-		CCLOG("4");
-		CCSprite *avatar = CCSprite::create(strPhoto->getCString());
-		avatar->setScale(0.78125);
-		avatar->setPosition(ccp(50 + 30, m_sprCell->getContentSize().height/2));
-		avatar->setTag(2);
-		cell->addChild(avatar);
-
-		CCLOG("5");
-		CCLabelTTF *lbName = CCLabelTTF::create(strName->getCString(), "Roboto-Medium.ttf", 42);
-		lbName->setFontFillColor(ccc3(0,0,0));
-		lbName->setPosition(ccp(0.75f * G_FRIEND_AVATAR_SIZE + 50, m_sprCell->getContentSize().height/2));
-		lbName->setAnchorPoint(ccp(0.0f, 0.5f));
-		lbName->setTag(4);
-		cell->addChild(lbName);
-	}
-	else
-	{
-		CCLOG("6");
-		CCSprite *avatar = (CCSprite*)cell->getChildByTag(2);
-		avatar = CCSprite::create(strPhoto->getCString());
-
-		CCLOG("7");
-		CCLabelTTF *lbName = (CCLabelTTF*)cell->getChildByTag(4);
-		lbName->setString(strName->getCString());
-	}
-
-	return cell;
 }
-
-
 
 
 // Facebook //=========================================

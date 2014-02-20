@@ -80,11 +80,6 @@ public:
 	virtual cocos2d::extension::CCTableViewCell* tableCellAtIndex(cocos2d::extension::CCTableView *table, unsigned int idx);
 	virtual unsigned int numberOfCellsInTableView(cocos2d::extension::CCTableView *table);
 
-	//my function
-	CCTableViewCell* tableCellXepHangAtIndex(CCTableView *table, unsigned int idx);
-	CCTableViewCell* tableCellQuatangAtIndex(CCTableView *table, unsigned int idx);
-
-
 	void getBoomCallback(CCObject* pSender);
 	void sendLifeCallback(CCObject* pSender);
 
@@ -98,8 +93,7 @@ public:
 
 private:
 	bool m_isLoggedIn;
-	int m_tableXepHangSize;
-	int m_tableQuatangSize;
+	int m_listSize;
 
 	CCLabelTTF* m_lbInvite;
 	CCLabelTTF* m_lbWaiting;
@@ -112,7 +106,7 @@ private:
 	CCTableView* m_tableQuatang;
 
 	CCArray* m_arrHighScores;
-	CCArray* m_arrRequests;
+	CCDictionary* m_dictPengdingRequests;
 
 	CustomTableViewCell* m_friendCell;
 
