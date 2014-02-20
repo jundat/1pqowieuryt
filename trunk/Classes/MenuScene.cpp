@@ -60,7 +60,6 @@ bool MenuScene::init()
                                         menu_selector(MenuScene::playCallback));
 	m_playItem->setPosition(ccp(400, 1280-813));
 
-
 	CCMenuItemImage *scoreItem = CCMenuItemImage::create(
 		"score_button.png",
 		"score_button_press.png",

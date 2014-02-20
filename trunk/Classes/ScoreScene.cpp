@@ -312,17 +312,15 @@ void ScoreScene::tableCellTouched(CCTableView* table, CCTableViewCell* cell)
 		CustomTableViewCell* customCell = (CustomTableViewCell*) cell;
 
 		int curLife = DataManager::sharedDataManager()->GetLastPlayerLife();
-		int gift = DataManager::sharedDataManager()->GetGiftFromFriend(customCell->fbID.c_str());
-
-		if (curLife < G_MAX_PLAYER_LIFE && gift > 0)
+		CCLOG("CURRENT LIFE = %d", curLife);
+		if (curLife < G_MAX_PLAYER_LIFE)
 		{
 			PLAY_GET_BOMB_EFFECT;
 
 			curLife++;
-			gift--;
 
 			DataManager::sharedDataManager()->SetLastPlayerLife(curLife);
-			DataManager::sharedDataManager()->DecreaseGiftFromFriend(customCell->fbID.c_str());
+			CCLOG("ADD TO CURRENT LIFE = %d", curLife);
 
 			//save next time
 			tm* _tm = DataManager::sharedDataManager()->GetLastDeadTime();
@@ -330,8 +328,30 @@ void ScoreScene::tableCellTouched(CCTableView* table, CCTableViewCell* cell)
 			mktime(_tm); //normalize
 			DataManager::sharedDataManager()->SetLastDeadTime(_tm);
 
-			//refresh
+			//delete request
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+			CCLOG("REMOVE REQUEST");
+
+			m_arrRequests->removeObject(customCell->m_request);
+			m_tableQuatangSize = m_arrRequests->count();
+
+			//delete request in pool
+			customCell->m_request->purgeFromUserDefault();
+			customCell->m_request->setConsumed(true);
+			EziFBIncomingRequestManager::sharedManager()->consumeItem(customCell->m_request);
+			EziFBIncomingRequestManager::sharedManager()->clearCompletedRequestList();
+#endif
+
+			//refresh UI
 			m_tableQuatang->reloadData();
+
+			refreshUserDetail();
+
+			//animation
+			m_sprLife->runAction(CCSequence::createWithTwoActions(
+				CCScaleBy::create(0.2f, 1.5f / 1.0f),
+				CCScaleBy::create(0.2f, 1.0f / 1.5f)
+				));
 		} 
 		else
 		{
@@ -931,7 +951,6 @@ void ScoreScene::fbIncomingRequestCallback(int responseCode, const char* respons
 				{
 					CCLOG(" --------------- NEW GIFT --------------- ");
 					m_arrRequests->addObject(request);
-					m_tableQuatangSize++;
 				}
 			}
 			else if (request->getRequestType() == EziSocialWrapperNS::FB_REQUEST::REQUEST_INVITE)
@@ -946,6 +965,7 @@ void ScoreScene::fbIncomingRequestCallback(int responseCode, const char* respons
 				}
 			}
 		}
+		m_tableQuatangSize = m_arrRequests->count();
 		
 		CCLOG("CALL: m_tableQuatang->reloadData()");
 		m_tableQuatang->reloadData();
@@ -955,8 +975,6 @@ void ScoreScene::fbIncomingRequestCallback(int responseCode, const char* respons
 
 CCTableViewCell* ScoreScene::tableCellXepHangAtIndex( CCTableView *table, unsigned int idx )
 {
-	CCLOG("tableCellXepHangAtIndex");
-
 	bool isMyScore = false;
 	CCString *strOrder = CCString::createWithFormat("%d", idx + 1);
 	CCString *strScore = CCString::create("0");
@@ -1241,8 +1259,6 @@ CCTableViewCell* ScoreScene::tableCellXepHangAtIndex( CCTableView *table, unsign
 
 CCTableViewCell* ScoreScene::tableCellQuatangAtIndex( CCTableView *table, unsigned int idx )
 {
-	CCLOG("tableCellQuatangAtIndex");
-
 	CCString* strName = CCString::create(G_DEFAULT_NAME);
 	CCString* strPhoto = CCString::create("fb-profile.png");
 	std::string strFriendId;
@@ -1253,7 +1269,13 @@ CCTableViewCell* ScoreScene::tableCellQuatangAtIndex( CCTableView *table, unsign
 	{
 		EziFacebookFriend* fbFriend = request->getSender();
 		strFriendId = std::string(fbFriend->getFBID());
-		strName = CCString::create(fbFriend->getName());
+
+		std::string sname = std::string(fbFriend->getName());
+		if (sname.length() > 18) {
+			sname = sname.substr(0, 15);
+			sname.append("...");
+		}			
+		strName  = CCString::create(sname);
 
 		CCLOG("1");
 		

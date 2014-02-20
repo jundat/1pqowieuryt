@@ -128,25 +128,6 @@ public:
 	CCMenuItem* m_fbLogInItem;
 	CCArray* m_friendList;
 
-	void onEnterTransitionDidFinish()
-	{
-		CCLog("[ScoreScene]: Enter Finished.");
-		// Set the delegates to receive responses.
-
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-		EziSocialObject::sharedObject()->setFacebookDelegate(this);
-#endif
-	}
-
-	void onExit() 
-	{
-		CCLog("[ScoreScene]: Exit Finished.");
-		// Set the delegates to receive responses.
-
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-		EziSocialObject::sharedObject()->setFacebookDelegate(NULL);
-#endif
-	}
 
 	void callSubmitScore();
 	void callGetHighScores();
