@@ -16,8 +16,12 @@ bool ObjectLayer::init()
         return false;
     }
 
-	//CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, 0, true);
+#ifdef WIN32
+	CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, 0, true);
+#else
 	CCDirector::sharedDirector()->getTouchDispatcher()->addStandardDelegate(this, 0);
+#endif
+
 	this->setTouchEnabled(true);
 
 	//////////////////////////////////////////////////////////////////////////
@@ -112,27 +116,6 @@ bool ObjectLayer::init()
 
     return true;
 }
-
-// bool ObjectLayer::ccTouchBegan( CCTouch *pTouch, CCEvent *pEvent )
-// {
-// 	m_lastPoint = pTouch->getLocation();
-// 	return true;
-// }
-// 
-// void ObjectLayer::ccTouchMoved( CCTouch *pTouch, CCEvent *pEvent )
-// {
-// 	CCPoint curPoint = pTouch->getLocation();
-// 
-// 	float dx = curPoint.x - m_lastPoint.x;
-// 	float dy = curPoint.y - m_lastPoint.y;
-// 
-// 	m_player->setPosition(m_player->getPositionX() + dx, m_player->getPositionY() + dy);
-// 	m_lastPoint = curPoint;
-// }
-// 
-// void ObjectLayer::ccTouchEnded( CCTouch *pTouch, CCEvent *pEvent )
-// {
-// }
 
 void ObjectLayer::AddEmemy( Enemy* enemy )
 {
