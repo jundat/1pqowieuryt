@@ -33,6 +33,8 @@ bool ObjectLayer::init()
 	m_arrItems->retain();
 	
 	m_isEndGame = false;
+	m_isPauseGame = false;
+	m_isActiveBoom = false;
 	m_killedEnemies = 0;
 	m_score = 0;
 	m_playedTime = 0;
@@ -149,7 +151,7 @@ void ObjectLayer::ScheduleGenerateItem( float dt )
 {
 	Item* item = NULL;
 	float rd = CCRANDOM_0_1();
-	//CCLOG("Random Item: %f", rd);
+	CCLOG("Random Item: %f", rd);
 
 	float rdw = CCRANDOM_0_1() * (7.0f / 8.0f * G_DESIGN_WIDTH) + G_DESIGN_WIDTH / 8.0f;
 
@@ -332,7 +334,7 @@ void ObjectLayer::RemoveEnemy( Enemy* enemy )
 		break;
 	case 3:
 		Enemy::S_NUMBER_BIG--;
-		//CCLOG("Remove: %d <<<<<<<<<<<<", Enemy::S_NUMBER_BIG);
+		CCLOG("Remove: %d <<<<<<<<<<<<", Enemy::S_NUMBER_BIG);
 		break;
 	}
 
@@ -467,7 +469,6 @@ void ObjectLayer::RestartGame()
 	//	player's HP
 	//	player's Position
 	//	score
-	//	numberBoom
 
 	m_playedTime = 0;
 	m_killedEnemies = 0;
@@ -508,9 +509,6 @@ void ObjectLayer::RestartGame()
 	m_player->Restart();
 	m_player->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT * 0.1));
 	
-	m_labelBoom->setVisible(false);
-	m_itemBoom->setVisible(false);
-
 	m_labelScore->setString("0");
 	m_labelScore->setHorizontalAlignment(kCCTextAlignmentLeft);
 	
@@ -563,10 +561,12 @@ void ObjectLayer::IncreaseBoom()
 
 void ObjectLayer::ActiveBoom(CCObject* pSender)
 {
-	if (m_isEndGame)
+	if (m_isEndGame || m_isPauseGame || m_isActiveBoom)
 	{
 		return;
 	}
+	
+	m_isActiveBoom = true;
 
 	PLAY_USE_BOMB_EFFECT;
 
@@ -598,12 +598,16 @@ void ObjectLayer::ActiveBoom(CCObject* pSender)
 
 void ObjectLayer::ScheduleStopLazer( float dt )
 {
+	m_isActiveBoom = false;
+
 	this->unschedule(schedule_selector(ObjectLayer::ScheduleStopLazer));
 	m_sprLazer->setVisible(false);
 }
 
 void ObjectLayer::Pause()
 {
+	m_isPauseGame = true;
+
 	CCDirector::sharedDirector()->getTouchDispatcher()->removeDelegate(this);
 	this->setTouchEnabled(false);
 	this->unschedule(schedule_selector(ObjectLayer::ScheduleGenerateItem));
@@ -639,6 +643,8 @@ void ObjectLayer::Pause()
 
 void ObjectLayer::Resume()
 {
+	m_isPauseGame = false;
+
 	CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, 0, true);
 	this->setTouchEnabled(true);
 	this->schedule(schedule_selector(ObjectLayer::ScheduleGenerateItem), G_TIME_TO_GENERATE_ITEM);

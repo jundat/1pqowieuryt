@@ -51,7 +51,7 @@ LevelLoader::LevelLoader(void)
 			&arrEnemy[9], &arrEnemy[10], &arrEnemy[11], &arrEnemy[12], &arrEnemy[13], &arrEnemy[14]);
 
 		LevelData* ld = LevelData::create(score, hp1, hp2, hp3, velocity1, velocity2, velocity3, smallDelay, bigDelay, arrEnemy);
-		//CCLOG("%s", ld->ToString());
+		CCLOG("%s", ld->ToString());
 		m_dict->setObject(ld, score);
 	}
 }

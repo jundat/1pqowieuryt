@@ -85,12 +85,12 @@ void EnemyFactory::update( float delta, int score )
 				{
 					if (Enemy::S_NUMBER_BIG < MAX_ENEMY_BIG)
 					{
-						//CCLOG("YES");
+						CCLOG("YES");
 						enemy = Enemy::create(3, id, m_currentLevel.m_hp3, getVy(id));
 					}
 					else
 					{
-						//CCLOG("NO");
+						CCLOG("NO");
 						continue;
 					}
 				}

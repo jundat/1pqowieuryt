@@ -102,13 +102,13 @@ void MainGameScene::showEndGame( int score, int killedEnemies )
 	lastLife--;
 	DataManager::sharedDataManager()->SetLastPlayerLife(lastLife);
 
-	//CCLOG("Last life: %d", lastLife);
+	CCLOG("Last life: %d", lastLife);
 
 	//if life = G_MAX_PLAYER_LIFE = 4
 	//start counter
 	if (lastLife == G_MAX_PLAYER_LIFE - 1)
 	{
-		//CCLOG("SET LAST DEAD TIME VALUE");
+		CCLOG("SET LAST DEAD TIME VALUE");
 		DataManager::sharedDataManager()->SetLastDeadTimeNow();
 	}
 
@@ -132,7 +132,7 @@ void MainGameScene::reviveCallback()
  	lastLife++;
  	DataManager::sharedDataManager()->SetLastPlayerLife(lastLife);
 	
-	//CCLOG("Revive, lastLife: %d", lastLife);
+	CCLOG("Revive, lastLife: %d", lastLife);
 	
 	DataManager::sharedDataManager()->SetIsJustRevived(true);
 	m_ObjLayer->ContinueGame();

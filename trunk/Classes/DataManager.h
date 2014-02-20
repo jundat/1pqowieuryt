@@ -53,8 +53,8 @@ public:
 	bool	GetIsJustRevived();
 	void	SetIsJustRevived(bool isJustRevived);
 
-	int		GetValueFromKey(char* key);
-	void	SetValueFromKey(char* key, int val);
+	int		GetValueFromKey(const char* key);
+	void	SetValueFromKey(const char* key, int val);
 
 	int		GetGiftFromFriend(const char* fbID);
 	void	IncreaseGiftFromFriend(const char* fbID);

@@ -39,14 +39,14 @@ void DataManager::SetCurrentHighScore(int score)
 
 
 //Default value = 0
-int	DataManager::GetValueFromKey(char* key)
+int	DataManager::GetValueFromKey(const char* key)
 {
 	return CCUserDefault::sharedUserDefault()->getIntegerForKey(key, 0);
 }
 
 
 //Default value = 0
-void DataManager::SetValueFromKey(char* key, int val)
+void DataManager::SetValueFromKey(const char* key, int val)
 {
 	CCUserDefault::sharedUserDefault()->setIntegerForKey(key, val);
 	CCUserDefault::sharedUserDefault()->flush();

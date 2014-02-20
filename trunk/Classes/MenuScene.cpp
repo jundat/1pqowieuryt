@@ -20,7 +20,7 @@ CCScene* MenuScene::scene()
 
 bool MenuScene::init()
 {
-	static int GAME_VERSION = 42;
+	static int GAME_VERSION = 44;
 	//pre proccess
 
 	DataManager::sharedDataManager()->RefreshPlayerLife();
@@ -46,11 +46,11 @@ bool MenuScene::init()
 	initLifeIcon();	
 
 	//
-// 	CCString* s = CCString::createWithFormat("v%d", GAME_VERSION);
-// 	CCLabelTTF* labelVersion = CCLabelTTF::create(s->getCString(), "Roboto-Medium.ttf", 32);
-// 	labelVersion->setColor(ccc3(56, 56, 56));
-// 	labelVersion->setPosition(ccp(labelVersion->getContentSize().width/4, G_DESIGN_HEIGHT - labelVersion->getContentSize().height/4));
-// 	this->addChild(labelVersion);
+	CCString* s = CCString::createWithFormat("v%d", GAME_VERSION);
+	CCLabelTTF* labelVersion = CCLabelTTF::create(s->getCString(), "Roboto-Medium.ttf", 32);
+	labelVersion->setColor(ccc3(56, 56, 56));
+	labelVersion->setPosition(ccp(labelVersion->getContentSize().width/4, G_DESIGN_HEIGHT - labelVersion->getContentSize().height/4));
+	this->addChild(labelVersion);
 
 	//
     m_playItem = CCMenuItemImage::create(
@@ -91,7 +91,7 @@ bool MenuScene::init()
 	//check if life = 0 to show
 
 	int life = DataManager::sharedDataManager()->GetLastPlayerLife();
-	//CCLOG("MenuScene: Last life = %d", life);
+	CCLOG("MenuScene: Last life = %d", life);
 	if (life < G_MAX_PLAYER_LIFE) //start counter when not full of life
 	{
 		initTimer();
@@ -181,7 +181,7 @@ void MenuScene::playCallback(CCObject* pSender)
 	//check if last_player_life > 0
 	int lastLife = DataManager::sharedDataManager()->GetLastPlayerLife();
 
-	//CCLOG("GOTO PLAY: Lastlife: %d", lastLife);
+	CCLOG("GOTO PLAY: Lastlife: %d", lastLife);
 
 	if (lastLife > 0)
 	{
@@ -237,7 +237,7 @@ void MenuScene::onCompletedWaiting()
 	int lastLife = (int)(seconds / G_PLAYER_TIME_TO_REVIVE);
 	lastLife = (lastLife > G_MAX_PLAYER_LIFE) ? G_MAX_PLAYER_LIFE : lastLife;
 
-	//CCLOG("Revive Last life: %d", lastLife);
+	CCLOG("Revive Last life: %d", lastLife);
 
 	if (lastLife > 0)
 	{
@@ -246,7 +246,7 @@ void MenuScene::onCompletedWaiting()
 	}
 	else
 	{
-		//CCLOG("Your code is failed!, F**k the coder!");
+		CCLOG("Your code is failed!, F**k the coder!");
 	}
 }
 
@@ -284,7 +284,7 @@ void MenuScene::ScheduleTick( float dt )
 		refreshLifeIcon();
 
 		int life = DataManager::sharedDataManager()->GetLastPlayerLife();
-		//CCLOG("REFRESH LIFE ICON, Life = %d", life);
+		CCLOG("REFRESH LIFE ICON, Life = %d", life);
 		if (life >= G_MAX_PLAYER_LIFE)
 		{
 			this->unschedule(schedule_selector(MenuScene::ScheduleTick));
@@ -308,7 +308,7 @@ void MenuScene::ScheduleTick( float dt )
 
 void MenuScene::initTimer()
 {
-	//CCLOG("Initing... timer! ...");
+	CCLOG("Initing... timer! ...");
 
 	int life = DataManager::sharedDataManager()->GetLastPlayerLife();
 	tm* lasttm = DataManager::sharedDataManager()->GetLastDeadTime();

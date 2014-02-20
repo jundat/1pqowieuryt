@@ -44,7 +44,7 @@ public:
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	void onEnterTransitionDidFinish()
 	{
-		//CCLOG("[FeedAPIScene]: Enter Transition Finished.");
+		CCLOG("[FeedAPIScene]: Enter Transition Finished.");
 		EziSocialObject::sharedObject()->setFacebookDelegate(this);
 	}
 
