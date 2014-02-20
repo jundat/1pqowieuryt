@@ -313,6 +313,7 @@ void ScoreScene::tableCellTouched(CCTableView* table, CCTableViewCell* cell)
 
 		int curLife = DataManager::sharedDataManager()->GetLastPlayerLife();
 		CCLOG("CURRENT LIFE = %d", curLife);
+		
 		if (curLife < G_MAX_PLAYER_LIFE)
 		{
 			PLAY_GET_BOMB_EFFECT;
@@ -346,17 +347,17 @@ void ScoreScene::tableCellTouched(CCTableView* table, CCTableViewCell* cell)
 			m_tableQuatang->reloadData();
 
 			refreshUserDetail();
-
-			//animation
-			m_sprLife->runAction(CCSequence::createWithTwoActions(
-				CCScaleBy::create(0.2f, 1.5f / 1.0f),
-				CCScaleBy::create(0.2f, 1.0f / 1.5f)
-				));
 		} 
 		else
 		{
 			PLAY_OUT_PORP_EFFECT;
 		}
+
+		//animation
+		m_sprLife->runAction(CCSequence::createWithTwoActions(
+			CCScaleBy::create(0.2f, 1.5f / 1.0f),
+			CCScaleBy::create(0.2f, 1.0f / 1.5f)
+			));
 	}	
 }
 
