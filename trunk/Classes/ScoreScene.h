@@ -106,6 +106,7 @@ private:
 	CCTableView* m_tableQuatang;
 
 	CCArray* m_arrHighScores;
+	CCDictionary* m_dictPengdingRequests;
 
 	CustomTableViewCell* m_friendCell;
 
