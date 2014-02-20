@@ -8,7 +8,7 @@ ConfigLoader* ConfigLoader::s_instance = NULL;
 
 ConfigLoader::ConfigLoader(void)
 {
-	CCLOG("-----------CONFIG------------");
+	//CCLOG("-----------CONFIG------------");
 	m_dict = CCDictionary::createWithContentsOfFile(configeFile->getCString());
 
 	CCDictElement* pElement = NULL;
@@ -16,9 +16,9 @@ ConfigLoader::ConfigLoader(void)
 	{
 		CCString* v = (CCString*)pElement->getObject();
 		std::string oneStrKey = pElement->getStrKey();
-		CCLOG("%s : %s", oneStrKey.c_str(), v->getCString());
+		//CCLOG("%s : %s", oneStrKey.c_str(), v->getCString());
 	}
-	CCLOG("------------CONFIG-----------");
+	//CCLOG("------------CONFIG-----------");
 
 	//save to variant
 	G_DESIGN_WIDTH = GetValue(std::string("G_DESIGN_WIDTH"))->intValue();
@@ -101,7 +101,7 @@ const CCString* ConfigLoader::GetValue(const std::string key )
 	const CCString* v = m_dict->valueForKey(key);
 	if (v->length() == 0)
 	{
-		CCLOG("NOT A VALID KEY CONFIG: %s", key.c_str());
+		//CCLOG("NOT A VALID KEY CONFIG: %s", key.c_str());
 		return CCStringMake("NULL_STRING");
 	}
 

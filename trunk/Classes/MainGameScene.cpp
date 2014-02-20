@@ -48,14 +48,6 @@ bool MainGameScene::init()
 		menu_selector(MainGameScene::pauseCallback));
 	itPause->setPosition(ccp(1.15f * itPause->getContentSize().width/2, G_DESIGN_HEIGHT - 1.15f * itPause->getContentSize().height/2));
 
-	//cheat
-// 	CCMenuItemImage *itCheat = CCMenuItemImage::create(
-// 		"pause_0.png",
-// 		"pause_1.png",
-// 		this,
-// 		menu_selector(MainGameScene::cheatCallback));
-// 	itCheat->setPosition(ccp(G_DESIGN_WIDTH - 1.15f * itCheat->getContentSize().width/2, G_DESIGN_HEIGHT - 1.15f * itCheat->getContentSize().height/2));
-
 	CCMenu* pMenu = CCMenu::create(itPause, /*itCheat, */ NULL);
 	pMenu->setPosition(CCPointZero);
 	this->addChild(pMenu);
@@ -110,13 +102,13 @@ void MainGameScene::showEndGame( int score, int killedEnemies )
 	lastLife--;
 	DataManager::sharedDataManager()->SetLastPlayerLife(lastLife);
 
-	CCLOG("Last life: %d", lastLife);
+	//CCLOG("Last life: %d", lastLife);
 
 	//if life = G_MAX_PLAYER_LIFE = 4
 	//start counter
 	if (lastLife == G_MAX_PLAYER_LIFE - 1)
 	{
-		CCLOG("SET LAST DEAD TIME VALUE");
+		//CCLOG("SET LAST DEAD TIME VALUE");
 		DataManager::sharedDataManager()->SetLastDeadTimeNow();
 	}
 
@@ -140,7 +132,7 @@ void MainGameScene::reviveCallback()
  	lastLife++;
  	DataManager::sharedDataManager()->SetLastPlayerLife(lastLife);
 	
-	CCLOG("Revive, lastLife: %d", lastLife);
+	//CCLOG("Revive, lastLife: %d", lastLife);
 	
 	DataManager::sharedDataManager()->SetIsJustRevived(true);
 	m_ObjLayer->ContinueGame();

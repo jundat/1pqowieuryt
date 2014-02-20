@@ -68,8 +68,8 @@ bool ObjectLayer::init()
 	
 	m_labelScore = CCLabelTTF::create("0", "Roboto-Medium.ttf", 52);
 	m_labelScore->setFontFillColor(ccc3(0, 0, 0));
-	m_labelScore->setHorizontalAlignment(kCCTextAlignmentLeft);
-	m_labelScore->setPosition(ccp(2 * w, G_DESIGN_HEIGHT - h/2));
+	m_labelScore->setAnchorPoint(ccp(0.0f, 0.5f));
+	m_labelScore->setPosition(ccp(1.2f * w, G_DESIGN_HEIGHT - h/2));
 
 	this->addChild(m_labelScore, 10);
 
@@ -149,7 +149,7 @@ void ObjectLayer::ScheduleGenerateItem( float dt )
 {
 	Item* item = NULL;
 	float rd = CCRANDOM_0_1();
-	CCLOG("Random Item: %f", rd);
+	//CCLOG("Random Item: %f", rd);
 
 	float rdw = CCRANDOM_0_1() * (7.0f / 8.0f * G_DESIGN_WIDTH) + G_DESIGN_WIDTH / 8.0f;
 
@@ -332,7 +332,7 @@ void ObjectLayer::RemoveEnemy( Enemy* enemy )
 		break;
 	case 3:
 		Enemy::S_NUMBER_BIG--;
-		CCLOG("Remove: %d <<<<<<<<<<<<", Enemy::S_NUMBER_BIG);
+		//CCLOG("Remove: %d <<<<<<<<<<<<", Enemy::S_NUMBER_BIG);
 		break;
 	}
 

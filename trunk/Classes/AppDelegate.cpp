@@ -85,7 +85,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	if(DataManager::sharedDataManager()->GetProfileID() != std::string("NULL"))
 	{
-		CCLOG("SET AUTO CHECK INCOMING REQUEST");
+		//CCLOG("SET AUTO CHECK INCOMING REQUEST");
 		EziSocialObject::sharedObject()->setAutoCheckIncomingRequestsOnAppLaunch(true);
 	}
 #endif

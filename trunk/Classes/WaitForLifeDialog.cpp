@@ -106,7 +106,7 @@ void WaitForLifeDialog::fbMessageCallback(int responseCode, const char* response
 
 	if(responseCode == EziSocialWrapperNS::RESPONSE_CODE::FB_NORMAL_MESSAGE_PUBLISHED)
 	{
-		CCLOG("Message published successfully!");
+		//CCLOG("Message published successfully!");
 		DataManager::sharedDataManager()->SetLastPlayerLife(5);
 		this->unschedule(schedule_selector(WaitForLifeDialog::ScheduleTick));
 
@@ -117,7 +117,7 @@ void WaitForLifeDialog::fbMessageCallback(int responseCode, const char* response
 	}
 	else
 	{
-		CCLOG("Message published failed!");
+		//CCLOG("Message published failed!");
 	}
 #endif
 }
@@ -134,7 +134,7 @@ void WaitForLifeDialog::fbSendRequestCallback( int responseCode, const char* res
 	{
 		int numFriends = friendsGotRequests->count();
 
-		CCLOG("Request sent successfully to %d friends", numFriends);
+		//CCLOG("Request sent successfully to %d friends", numFriends);
 
 		numFriends = (numFriends > G_MAX_PLAYER_LIFE) ? G_MAX_PLAYER_LIFE : numFriends;
 		DataManager::sharedDataManager()->SetLastPlayerLife(numFriends);
@@ -147,7 +147,7 @@ void WaitForLifeDialog::fbSendRequestCallback( int responseCode, const char* res
 	}
 	else
 	{
-		CCLOG("Error, Request sent failed!");
+		//CCLOG("Error, Request sent failed!");
 	}
 
 #endif

@@ -326,7 +326,7 @@ void ScoreScene::quatangCallback( CCObject* pSender )
 
 void ScoreScene::tableCellTouched(CCTableView* table, CCTableViewCell* cell)
 {
-	CCLOG("Cell at index: %i", cell->getIdx());
+	//CCLOG("Cell at index: %i", cell->getIdx());
 
 	if (table == m_tableXephang) //Xep hang
 	{
@@ -337,7 +337,7 @@ void ScoreScene::tableCellTouched(CCTableView* table, CCTableViewCell* cell)
 		CustomTableViewCell* customCell = (CustomTableViewCell*) cell;
 
 		int curLife = DataManager::sharedDataManager()->GetLastPlayerLife();
-		CCLOG("CURRENT LIFE = %d", curLife);
+		//CCLOG("CURRENT LIFE = %d", curLife);
 		
 		if (curLife < G_MAX_PLAYER_LIFE)
 		{
@@ -346,7 +346,7 @@ void ScoreScene::tableCellTouched(CCTableView* table, CCTableViewCell* cell)
 			curLife++;
 
 			DataManager::sharedDataManager()->SetLastPlayerLife(curLife);
-			CCLOG("ADD TO CURRENT LIFE = %d", curLife);
+			//CCLOG("ADD TO CURRENT LIFE = %d", curLife);
 
 			//save next time
 			tm* _tm = DataManager::sharedDataManager()->GetLastDeadTime();
@@ -356,7 +356,7 @@ void ScoreScene::tableCellTouched(CCTableView* table, CCTableViewCell* cell)
 
 			//delete request
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-			CCLOG("REMOVE REQUEST");
+			//CCLOG("REMOVE REQUEST");
 
 			m_arrRequests->removeObject(customCell->m_request);
 			m_tableQuatangSize = m_arrRequests->count();
@@ -530,7 +530,7 @@ void ScoreScene::refreshUserDetail()
 
 void ScoreScene::scheduleTimer( float dt )
 {
-	//CCLOG("Schedule timer");
+	////CCLOG("Schedule timer");
 	int numCell = numberOfCellsInTableView(m_tableXephang);
 
 	for (int i = 0; i < numCell; ++i)
@@ -541,7 +541,7 @@ void ScoreScene::scheduleTimer( float dt )
 
 		if (cell != NULL)
 		{
-			//CCLOG("Schedule timer ------ Get boom");
+			////CCLOG("Schedule timer ------ Get boom");
 			//Get boom //////////////////////////////////////////////////////////////////////////
 			
 			if (cell->m_itGetBoom != NULL &&
@@ -587,7 +587,7 @@ void ScoreScene::scheduleTimer( float dt )
 				cell->m_lbSendLifeTimer != NULL &&
 				cell->m_lbSendLife != NULL)
 			{
-				//CCLOG("Schedule timer ------ Send life");
+				////CCLOG("Schedule timer ------ Send life");
 
 				time_t lastTime = mktime(cell->m_lastTimeSendLife);
 				time_t curTime = time(NULL);
@@ -658,11 +658,11 @@ void ScoreScene::fbLogOutCallback( CCObject* pSender )
 
 void ScoreScene::fbSessionCallback(int responseCode, const char *responseMessage)
 {
-	CCLOG("fbSessionCallback");
+	//CCLOG("fbSessionCallback");
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	if (responseCode == EziSocialWrapperNS::RESPONSE_CODE::FB_LOGIN_SUCCESSFUL)
 	{
-		CCLOG("fbSessionCallback: SUCCESSFUL");
+		//CCLOG("fbSessionCallback: SUCCESSFUL");
 		m_isLoggedIn = true;
 
 		m_fbLogInItem->setVisible(false);
@@ -675,12 +675,12 @@ void ScoreScene::fbSessionCallback(int responseCode, const char *responseMessage
 		
 		//Auto fetchFBUserDetails, do not call it again
 		//It make exception
-		//CCLOG("call: fetchFBUserDetails");
+		////CCLOG("call: fetchFBUserDetails");
 		//EziSocialObject::sharedObject()->fetchFBUserDetails(true); //need email = true
 	}
 	else
 	{
-		CCLOG("fbSessionCallback: FAILED");
+		//CCLOG("fbSessionCallback: FAILED");
 		m_isLoggedIn = false;
 
 		m_lbWaiting->setVisible(false);
@@ -698,10 +698,10 @@ void ScoreScene::fbSessionCallback(int responseCode, const char *responseMessage
 
 void ScoreScene::fbUserDetailCallback( int responseCode, const char* responseMessage, EziFacebookUser* fbUser )
 {
-	CCLOG("fbUserDetailCallback");
+	//CCLOG("fbUserDetailCallback");
 	if (fbUser != NULL)
 	{
-		CCLOG("fbUserDetailCallback: user != NULL");
+		//CCLOG("fbUserDetailCallback: user != NULL");
 		EziSocialObject::sharedObject()->setCurrentFacebookUser(fbUser);
 
 		//save data
@@ -717,7 +717,7 @@ void ScoreScene::fbUserDetailCallback( int responseCode, const char* responseMes
 
 		m_lbName->setString(firstname.c_str());
 
-		CCLOG("call: getProfilePicForID");
+		//CCLOG("call: getProfilePicForID");
 		EziSocialObject::sharedObject()->getProfilePicForID(this, fbUser->getProfileID(), // Profile ID of current user
 			G_AVATAR_SIZE, G_AVATAR_SIZE, // Size of the image
 			false // force download it from server
@@ -733,18 +733,18 @@ void ScoreScene::fbUserDetailCallback( int responseCode, const char* responseMes
 
 void ScoreScene::fbUserPhotoCallback(const char *userPhotoPath, const char* fbID)
 {
-	CCLOG("fbUserPhotoCallback");
+	//CCLOG("fbUserPhotoCallback");
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	//CCLOG("Gotten avatar for %s", fbID);
+	////CCLOG("Gotten avatar for %s", fbID);
 	std::string sid = std::string(fbID);
 
 	if ((strcmp(userPhotoPath, "") != 0))
 	{
-		CCLOG("fbUserPhotoCallback: userPhotoPath != NULL");
+		//CCLOG("fbUserPhotoCallback: userPhotoPath != NULL");
 		if(sid == DataManager::sharedDataManager()->GetProfileID())
 		{
-			CCLOG("fbUserPhotoCallback: this user");
-			//CCLOG("Gotten avatar for user");
+			//CCLOG("fbUserPhotoCallback: this user");
+			////CCLOG("Gotten avatar for user");
 
 			//save 
 			DataManager::sharedDataManager()->SetPhotoPath(userPhotoPath);
@@ -759,13 +759,13 @@ void ScoreScene::fbUserPhotoCallback(const char *userPhotoPath, const char* fbID
 			}
 			else
 			{
-				CCLOG("ERROR: m_userAvatar == NULL");
+				//CCLOG("ERROR: m_userAvatar == NULL");
 			}
 		}
 		
 		if (m_arrHighScores != NULL)
 		{
-			CCLOG("fbUserPhotoCallback: friends");
+			//CCLOG("fbUserPhotoCallback: friends");
 
 			CCObject* it;
 			CCARRAY_FOREACH(m_arrHighScores, it)
@@ -773,11 +773,11 @@ void ScoreScene::fbUserPhotoCallback(const char *userPhotoPath, const char* fbID
 				EziFacebookFriend* fbFriend = dynamic_cast<EziFacebookFriend*>(it);
 				if (NULL != fbFriend)
 				{
-					//CCLOG("%s => %s", sid.c_str(), userPhotoPath);
+					////CCLOG("%s => %s", sid.c_str(), userPhotoPath);
 					if(fbFriend->getFBID() == sid)
 					{
 						fbFriend->setPhotoPath(userPhotoPath);
-						//CCLOG("Set photo path ok --- ");
+						////CCLOG("Set photo path ok --- ");
 					}
 				}
 			}
@@ -793,7 +793,7 @@ void ScoreScene::fbUserPhotoCallback(const char *userPhotoPath, const char* fbID
 
 void ScoreScene::callSubmitScore()
 {
-	CCLOG("callSubmitScore");
+	//CCLOG("callSubmitScore");
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	if(EziSocialObject::sharedObject()->isFacebookSessionActive()) //logged in state
 	{
@@ -804,7 +804,7 @@ void ScoreScene::callSubmitScore()
 
 void ScoreScene::callGetHighScores()
 {
-	CCLOG("callGetHighScores");
+	//CCLOG("callGetHighScores");
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	if(EziSocialObject::sharedObject()->isFacebookSessionActive()) //logged in state
 	{
@@ -815,7 +815,7 @@ void ScoreScene::callGetHighScores()
 
 void ScoreScene::fbHighScoresCallback( int responseCode, const char* responseMessage, cocos2d::CCArray* highScores )
 {
-	CCLOG("fbHighScoresCallback");
+	//CCLOG("fbHighScoresCallback");
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	if (m_arrHighScores != NULL)
 	{
@@ -861,15 +861,15 @@ void ScoreScene::fbHighScoresCallback( int responseCode, const char* responseMes
 
 void ScoreScene::fbSendRequestCallback( int responseCode, const char* responseMessage, cocos2d::CCArray* friendsGotRequests )
 {
-	CCLOG("fbSendRequestCallback");
+	//CCLOG("fbSendRequestCallback");
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	if (EziSocialWrapperNS::RESPONSE_CODE::FB_REQUEST_SENT == responseCode)
 	{
-		CCLOG("fbSendRequestCallback: FB_REQUEST_SENT");
+		//CCLOG("fbSendRequestCallback: FB_REQUEST_SENT");
 		
 		if (m_friendCell != NULL) //send life
 		{
-			CCLOG("fbSendRequestCallback: FB_REQUEST_SENT: m_friendCell != NULL");
+			//CCLOG("fbSendRequestCallback: FB_REQUEST_SENT: m_friendCell != NULL");
 			PLAY_GET_BOMB_EFFECT;
 
 			//reset timer
@@ -885,19 +885,19 @@ void ScoreScene::fbSendRequestCallback( int responseCode, const char* responseMe
 	}
 	else
 	{
-		CCLOG("fbSendRequestCallback: FB_REQUEST_SENT: m_friendCell == NULL");
+		//CCLOG("fbSendRequestCallback: FB_REQUEST_SENT: m_friendCell == NULL");
 		PLAY_OUT_PORP_EFFECT;
-		CCLOG("Request sent failed");
+		//CCLOG("Request sent failed");
 	}
 #endif
 }
 
 void ScoreScene::fbIncomingRequestCallback(int responseCode, const char* responseMessage, int totalIncomingRequests)
 {
-	CCLOG("fbIncomingRequestCallback");
+	//CCLOG("fbIncomingRequestCallback");
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	int pendingRequest = EziFBIncomingRequestManager::sharedManager()->getPendingRequestCount();
-	CCLOG("------------------NewRequests= %d\n-----------------PendingRequests= %d", totalIncomingRequests, pendingRequest);
+	//CCLOG("------------------NewRequests= %d\n-----------------PendingRequests= %d", totalIncomingRequests, pendingRequest);
 
 	if (pendingRequest > 0)
 	{
@@ -922,11 +922,11 @@ void ScoreScene::fbIncomingRequestCallback(int responseCode, const char* respons
 			{
 				if (request->isConsumed())
 				{
-					CCLOG(" ------------ CONSUMED GIFT ------------- ");
+					//CCLOG(" ------------ CONSUMED GIFT ------------- ");
 				} 
 				else
 				{
-					CCLOG(" --------------- NEW GIFT --------------- ");
+					//CCLOG(" --------------- NEW GIFT --------------- ");
 					m_arrRequests->addObject(request);
 				}
 			}
@@ -934,17 +934,17 @@ void ScoreScene::fbIncomingRequestCallback(int responseCode, const char* respons
 			{
 				if (request->isConsumed())
 				{
-					CCLOG(" ------------ CONSUMED INVITE ------------- ");
+					//CCLOG(" ------------ CONSUMED INVITE ------------- ");
 				}
 				else
 				{
-					CCLOG(" --------------- NEW INVITE --------------- ");
+					//CCLOG(" --------------- NEW INVITE --------------- ");
 				}
 			}
 		}
 		m_tableQuatangSize = m_arrRequests->count();
 		
-		CCLOG("CALL: m_tableQuatang->reloadData()");
+		//CCLOG("CALL: m_tableQuatang->reloadData()");
 		m_tableQuatang->reloadData();
 	}
 #endif
@@ -972,7 +972,7 @@ CCTableViewCell* ScoreScene::tableCellXepHangAtIndex( CCTableView *table, unsign
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	if(m_arrHighScores == NULL)
 	{
-		CCLOG("m_arrHighScores == NULL");
+		//CCLOG("m_arrHighScores == NULL");
 	}
 	else
 	{
@@ -1253,17 +1253,17 @@ CCTableViewCell* ScoreScene::tableCellQuatangAtIndex( CCTableView *table, unsign
 		}			
 		strName  = CCString::create(sname);
 
-		CCLOG("1");
+		//CCLOG("1");
 		
 		//check if photopath is ok
 		if (strlen(fbFriend->getPhotoPath()) > 1)
 		{
-			CCLOG("GET RIGHT PHOTOPATH");
+			//CCLOG("GET RIGHT PHOTOPATH");
 			strPhoto = CCString::createWithFormat("%s", fbFriend->getPhotoPath());
 		} 
 		else
 		{
-			CCLOG("FOREACH TO GET PHOTOPATH");
+			//CCLOG("FOREACH TO GET PHOTOPATH");
 			//foreach m_arrHighScores to get photopath
 			CCObject* it = NULL;
 			CCARRAY_FOREACH(m_arrHighScores, it)
@@ -1274,7 +1274,7 @@ CCTableViewCell* ScoreScene::tableCellQuatangAtIndex( CCTableView *table, unsign
 				{
 					if (strlen(fr->getPhotoPath()) > 1)
 					{
-						CCLOG("FOREACH TO GET PHOTOPATH: --- OK");
+						//CCLOG("FOREACH TO GET PHOTOPATH: --- OK");
 						strPhoto = CCString::createWithFormat("%s", fr->getPhotoPath());
 						fbFriend->setPhotoPath(fr->getPhotoPath());
 						break;
@@ -1283,14 +1283,13 @@ CCTableViewCell* ScoreScene::tableCellQuatangAtIndex( CCTableView *table, unsign
 			}
 		}		
 
-		CCLOG("2");
+		//CCLOG("2");
 	}
 	else
 	{
-		CCLOG("NULL REQUEST");
+		//CCLOG("NULL REQUEST");
 		return NULL;
 	}
-#endif
 
 	CCTableViewCell *cell = table->cellAtIndex(idx);
 	if (!cell) 
@@ -1301,21 +1300,21 @@ CCTableViewCell* ScoreScene::tableCellQuatangAtIndex( CCTableView *table, unsign
 		((CustomTableViewCell*)(cell))->m_request = request;
 
 
-		CCLOG("3");
+		//CCLOG("3");
 		CCSprite *sprite = CCSprite::create("table_cell_quatang.png");
 		sprite->setAnchorPoint(CCPointZero);
 		sprite->setPosition(ccp(0, 0));
 		sprite->setTag(1);
 		cell->addChild(sprite);
 
-		CCLOG("4");
+		//CCLOG("4");
 		CCSprite *avatar = CCSprite::create(strPhoto->getCString());
 		avatar->setScale(0.78125);
 		avatar->setPosition(ccp(50 + 30, m_sprCell->getContentSize().height/2));
 		avatar->setTag(2);
 		cell->addChild(avatar);
 
-		CCLOG("5");
+		//CCLOG("5");
 		CCLabelTTF *lbName = CCLabelTTF::create(strName->getCString(), "Roboto-Medium.ttf", 42);
 		lbName->setFontFillColor(ccc3(0,0,0));
 		lbName->setPosition(ccp(0.75f * G_FRIEND_AVATAR_SIZE + 50, m_sprCell->getContentSize().height/2));
@@ -1337,16 +1336,19 @@ CCTableViewCell* ScoreScene::tableCellQuatangAtIndex( CCTableView *table, unsign
 	}
 	else
 	{
-		CCLOG("6");
+		//CCLOG("6");
 		CCSprite *avatar = (CCSprite*)cell->getChildByTag(2);
 		avatar = CCSprite::create(strPhoto->getCString());
 
-		CCLOG("7");
+		//CCLOG("7");
 		CCLabelTTF *lbName = (CCLabelTTF*)cell->getChildByTag(4);
 		lbName->setString(strName->getCString());
 	}
 
 	return cell;
+#else
+	return NULL;
+#endif
 }
 
 

@@ -27,14 +27,14 @@ Enemy::Enemy(int _type, int _smallType, int _hp, float _vy) : GameObject()
 		break;
 	case 3:
 		S_NUMBER_BIG++;
-		CCLOG("NEW BIG: %d  >>>>>>>>>>>>>", S_NUMBER_BIG);
+		//CCLOG("NEW BIG: %d  >>>>>>>>>>>>>", S_NUMBER_BIG);
 		break;
 	}
 }
 
 Enemy::~Enemy()
 {
-	CCLOG("Destructor in Enemy <<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+	//CCLOG("Destructor in Enemy <<<<<<<<<<<<<<<<<<<<<<<<<<<<");
 
 	m_acFlying->release();
 	m_acExplosion->release();
