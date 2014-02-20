@@ -131,6 +131,12 @@ bool ScoreScene::init()
 		menu_selector(ScoreScene::menuCallback));
 	backItem->setPosition(ccp(92, 1280-1201));
 
+
+	//add more friends
+	CCMenuItemImage* itAddFriend = CCMenuItemImage::create("add_friend.png", "add_friend_hover.png", this, menu_selector(ScoreScene::addFriendCallback));
+	itAddFriend->setPosition(ccp(255, 1280-1198)); //382, 1280-1205));
+	
+
 	//
 	m_fbLogOutItem = CCMenuItemImage::create(
 		"disconnect_facebook.png",
@@ -157,7 +163,7 @@ bool ScoreScene::init()
 	this->addChild(m_lbInvite, 1); //samw menu
 
 
-	CCMenu* pMenu = CCMenu::create(backItem, m_fbLogInItem, m_fbLogOutItem, m_xephangToggle, m_quatangToggle, NULL);
+	CCMenu* pMenu = CCMenu::create(backItem, m_fbLogInItem, m_fbLogOutItem, m_xephangToggle, m_quatangToggle, itAddFriend, NULL);
 	pMenu->setPosition(CCPointZero);
 	this->addChild(pMenu, 1);
 
@@ -274,6 +280,25 @@ void ScoreScene::menuCallback(CCObject* pSender)
 	CCDirector::sharedDirector()->replaceScene(pScene);
 }
 
+void ScoreScene::addFriendCallback( CCObject* pSender )
+{
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	if(EziSocialObject::sharedObject()->isFacebookSessionActive()) //logged in state
+	{
+		CCString* str = CCString::createWithFormat("%s đang tả xung hữu đột tiêu diệt máy bay địch trong Điện Biên Phủ trên không. Hãy cùng tham chiến nào.", 
+			DataManager::sharedDataManager()->GetFbFullName().c_str());
+		
+		//invite friends
+		EziSocialObject::sharedObject()->sendRequestToFriends(
+			EziSocialWrapperNS::FB_REQUEST::REQUEST_INVITE,
+			str->getCString(), 
+			NULL,
+			NULL,
+			"Điện Biên Phủ Trên Không");
+	}
+#endif
+}
+
 void ScoreScene::keyBackClicked()
 {
 	menuCallback(NULL);
@@ -354,6 +379,7 @@ void ScoreScene::tableCellTouched(CCTableView* table, CCTableViewCell* cell)
 		}
 
 		//animation
+		m_sprLife->setScale(0.75f);
 		m_sprLife->runAction(CCSequence::createWithTwoActions(
 			CCScaleBy::create(0.2f, 1.5f / 1.0f),
 			CCScaleBy::create(0.2f, 1.0f / 1.5f)
@@ -697,10 +723,12 @@ void ScoreScene::fbUserDetailCallback( int responseCode, const char* responseMes
 		std::string firstname = fbUser->getFirstName(); //getFirstName //getFullName
 		std::string userName = fbUser->getUserName();
 		std::string profileID = fbUser->getProfileID();
+		std::string fullName = fbUser->getFullName();
 
 		DataManager::sharedDataManager()->SetName(firstname.c_str());
 		DataManager::sharedDataManager()->SetProfileID(profileID.c_str());
 		DataManager::sharedDataManager()->SetFbUserName(userName.c_str());
+		DataManager::sharedDataManager()->SetFbFullName(fullName.c_str());
 
 		m_lbName->setString(firstname.c_str());
 
@@ -856,7 +884,7 @@ void ScoreScene::fbSendRequestCallback( int responseCode, const char* responseMe
 		int numFriends = friendsGotRequests->count();
 		CCLOG("Request sent successfully to %d friends", numFriends);
 		
-		if (m_friendCell != NULL)
+		if (m_friendCell != NULL) //send life
 		{
 			CCLOG("fbSendRequestCallback: FB_REQUEST_SENT: m_friendCell != NULL");
 			PLAY_GET_BOMB_EFFECT;
@@ -1347,6 +1375,18 @@ CCTableViewCell* ScoreScene::tableCellQuatangAtIndex( CCTableView *table, unsign
 		lbName->setAnchorPoint(ccp(0.0f, 0.5f));
 		lbName->setTag(4);
 		cell->addChild(lbName);
+
+		//icon life 
+		CCSprite* iconLife = CCSprite::create("oil.png");
+		iconLife->setPosition(ccp(600, m_sprCell->getContentSize().height/2 + 15));
+		cell->addChild(iconLife);
+
+		//lable nhận
+		CCLabelTTF* lbGetBoom = CCLabelTTF::create("Nhận", "Roboto-Medium.ttf", 28);
+		lbGetBoom->setFontFillColor(ccc3(0, 0, 0));
+		lbGetBoom->setAnchorPoint(ccp(0.5f, 0.75f));
+		lbGetBoom->setPosition(ccp(600, m_sprCell->getContentSize().height/4));
+		cell->addChild(lbGetBoom);
 	}
 	else
 	{

@@ -52,6 +52,7 @@ public:
 
 	virtual void keyBackClicked();
 	void menuCallback(CCObject* pSender);
+	void addFriendCallback(CCObject* pSender);
 
 	static int MyMoreScoreFunction(const CCObject* p1, const CCObject* p2)
 	{
@@ -145,8 +146,6 @@ public:
 
 	//check incomming request
 	void fbIncomingRequestCallback(int responseCode, const char* responseMessage, int totalIncomingRequests);
-
-
 	// Facebook //=========================================
 };
 

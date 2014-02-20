@@ -27,6 +27,9 @@ public:
 	std::string GetFbUserName();
 	void SetFbUserName(const char* fbusernam);
 
+	std::string GetFbFullName();
+	void SetFbFullName(const char* fbusernam);
+
 	//facebook
 
 	std::string	GetName();

@@ -75,13 +75,16 @@ void WaitForLifeDialog::askFriendCallback( CCObject* pSender )
 
 	if(EziSocialObject::sharedObject()->isFacebookSessionActive()) //logged in state
 	{
+		CCString* str = CCString::createWithFormat("%s đang tả xung hữu đột tiêu diệt máy bay địch trong Điện Biên Phủ trên không. Hãy cùng tham chiến nào.", 
+			DataManager::sharedDataManager()->GetFbFullName().c_str());
+
 		//invite friends
 		EziSocialObject::sharedObject()->sendRequestToFriends(
 			EziSocialWrapperNS::FB_REQUEST::REQUEST_INVITE,
-			"Cứu với, đang hết mạng nè!", 
+			str->getCString(), 
 			NULL,
 			NULL,
-			"Phi Công Bút Chì");
+			"Điện Biên Phủ Trên Không");
 	}
 
 #else //WIN 32
@@ -97,10 +100,10 @@ void WaitForLifeDialog::askFriendCallback( CCObject* pSender )
 #endif
 }
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-
 void WaitForLifeDialog::fbMessageCallback(int responseCode, const char* responseMessage)
 {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+
 	if(responseCode == EziSocialWrapperNS::RESPONSE_CODE::FB_NORMAL_MESSAGE_PUBLISHED)
 	{
 		CCLOG("Message published successfully!");
@@ -116,11 +119,13 @@ void WaitForLifeDialog::fbMessageCallback(int responseCode, const char* response
 	{
 		CCLOG("Message published failed!");
 	}
+#endif
 }
 
 
 void WaitForLifeDialog::fbSendRequestCallback( int responseCode, const char* responseMessage, cocos2d::CCArray* friendsGotRequests )
 {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 // 	FB_REQUEST_SENDING_ERROR - In case if there is any error while sending the request
 // 	FB_REQUEST_SENDING_CANCELLED – In case, user decides not to send the request.
 // 	FB_REQUEST_SENT - If sending request is success
@@ -144,10 +149,10 @@ void WaitForLifeDialog::fbSendRequestCallback( int responseCode, const char* res
 	{
 		CCLOG("Error, Request sent failed!");
 	}
-}
-
 
 #endif
+}
+
 
 void WaitForLifeDialog::ScheduleTick( float dt )
 {

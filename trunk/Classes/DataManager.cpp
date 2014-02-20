@@ -209,6 +209,19 @@ void DataManager::SetFbUserName( const char* fbusernam )
 	CCUserDefault::sharedUserDefault()->flush();
 }
 
+
+std::string DataManager::GetFbFullName()
+{
+	return CCUserDefault::sharedUserDefault()->getStringForKey("G_FB_FULL_NAME", std::string("NULL"));
+}
+
+void DataManager::SetFbFullName( const char* fbusernam )
+{
+	CCUserDefault::sharedUserDefault()->setStringForKey("G_FB_FULL_NAME", std::string(fbusernam));
+	CCUserDefault::sharedUserDefault()->flush();
+}
+
+
 std::string DataManager::GetPhotoPath()
 {
 	return CCUserDefault::sharedUserDefault()->getStringForKey("G_PHOTO_PATH", std::string("NULL"));
