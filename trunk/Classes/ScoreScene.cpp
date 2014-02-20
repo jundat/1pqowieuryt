@@ -104,10 +104,6 @@ bool ScoreScene::init()
 	this->addChild(m_lbBoom);
 
 
-
-	//Table //////////////////////////////////////////////////////////////////////////
-
-
 	//Xep hang
 
 	CCMenuItem* xephangOn = CCMenuItemImage::create("xephang.png", NULL, NULL);
@@ -115,6 +111,8 @@ bool ScoreScene::init()
 	m_xephangToggle = CCMenuItemToggle::createWithTarget(this,  menu_selector(ScoreScene::xephangCallback), xephangOn, xephangOff, NULL);
 	m_xephangToggle->setSelectedIndex(0);
 	m_xephangToggle->setPosition(ccp(202, 1280-351));
+
+	//Qua tang
 
 	CCMenuItem* quatangOn = CCMenuItemImage::create("quatang.png", NULL, NULL);
 	CCMenuItem* quatangOff = CCMenuItemImage::create("quatang1.png", NULL, NULL);
@@ -140,7 +138,9 @@ bool ScoreScene::init()
 	m_fbLogOutItem->setPosition(ccp(611, 1280-1205));
 	this->addChild(m_fbLogOutItem);
 
-	//
+	//Facebook button
+	
+
 	m_isLoggedIn = true;
 	m_fbLogInItem = CCMenuItemImage::create(
 		"connect_facebook.png", 
@@ -154,12 +154,84 @@ bool ScoreScene::init()
 	m_lbInvite->setPosition(ccp(400, 1280-672)); //320
 	this->addChild(m_lbInvite, 1); //samw menu
 
+
+	CCMenu* pMenu = CCMenu::create(backItem, m_fbLogInItem, m_fbLogOutItem, m_xephangToggle, m_quatangToggle, NULL);
+	pMenu->setPosition(CCPointZero);
+	this->addChild(pMenu, 1);
+
+
+
+	//Table //////////////////////////////////////////////////////////////////////////
+
+
+	m_isXepHangView = true;
+
+	//table view XepHang //////////////////////////////////////
+
+	m_sprCell = CCSprite::create("table_cell_xephang.png");
+	m_sprCell->retain();
+	CCSize cellsize = m_sprCell->getContentSize();
+	CCSize tableSize = CCSizeMake(783, 718); //CCSizeMake(cellsize.width, cellsize.height * 6.0f);
+
+	//vertical
+	m_tableXephang = CCTableView::create(this, tableSize);
+	m_tableXephang->setDirection(kCCScrollViewDirectionVertical);
+	//m_tableXephang->setAnchorPoint(CCPointZero);
+	m_tableXephang->setPosition(ccp(400 - tableSize.width/2, 1280-768 - tableSize.height/2));
+	m_tableXephang->setDelegate(this);
+	m_tableXephang->setVerticalFillOrder(kCCTableViewFillTopDown);
+	this->addChild(m_tableXephang);
+
+	m_tableXephang->setVisible(true);
+
+
+
+	// table view QuaTang //////////////////////////////////////////////////////////////////////////
+
+
+
+	m_sprCell = CCSprite::create("table_cell_quatang.png");
+	m_sprCell->retain();
+	cellsize = m_sprCell->getContentSize();
+	tableSize = CCSizeMake(783, 718);
+
+	//vertical
+	m_tableQuatang = CCTableView::create(this, tableSize);
+	m_tableQuatang->setDirection(kCCScrollViewDirectionVertical);
+	//m_tableQuatang->setAnchorPoint(CCPointZero);
+	m_tableQuatang->setPosition(ccp(400 - tableSize.width/2, 1280-768 - tableSize.height/2));
+	m_tableQuatang->setDelegate(this);
+	m_tableQuatang->setVerticalFillOrder(kCCTableViewFillTopDown);
+	this->addChild(m_tableQuatang);
+
+	m_tableQuatang->setVisible(false);
+
+	//////////////////////////////////////////////////////////////////////////
+
+	m_lbWaiting = CCLabelTTF::create("... Đang chờ ...", "Roboto-Medium.ttf", 64);
+	m_lbWaiting->setColor(ccc3(0, 0, 0));
+	m_lbWaiting->setHorizontalAlignment(kCCTextAlignmentCenter);
+	m_lbWaiting->setVerticalAlignment(kCCVerticalTextAlignmentCenter);
+	m_lbWaiting->setPosition(ccp(400, 640));
+
+	this->addChild(m_lbWaiting);
+
+
+
+
+	//////////////////////////////////////////////////////////////////////////
+	
+
+
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	EziSocialObject::sharedObject()->setFacebookDelegate(this);
 
 	if(EziSocialObject::sharedObject()->isFacebookSessionActive()) //logged in state
 	{
 		callSubmitScore();
+
+		//check incoming request
+		EziSocialObject::sharedObject()->checkIncomingRequest();
 
 
 		m_isLoggedIn = true;
@@ -179,84 +251,16 @@ bool ScoreScene::init()
 	{
 		m_isLoggedIn = false;
 
+		m_tableXephang->setVisible(false);
+		m_tableQuatang->setVisible(false);
+		m_lbWaiting->setVisible(false);
+
 		m_fbLogInItem->setVisible(true);
 		m_lbInvite->setVisible(true);
 		m_fbLogOutItem->setVisible(false);
 	}
 #endif
-
-	CCMenu* pMenu = CCMenu::create(backItem, m_fbLogInItem, m_fbLogOutItem, m_xephangToggle, m_quatangToggle, NULL);
-	pMenu->setPosition(CCPointZero);
-	this->addChild(pMenu, 1);
-
 	
-	//SEPERATE ///////////////////////////////////
-
-	m_isXepHangView = true;
-	
-	//table view XepHang //////////////////////////////////////
-
-	m_sprCell = CCSprite::create("table_cell_xephang.png");
-	m_sprCell->retain();
-	CCSize cellsize = m_sprCell->getContentSize();
-	CCSize tableSize = CCSizeMake(783, 718); //CCSizeMake(cellsize.width, cellsize.height * 6.0f);
-
-	//vertical
-	m_tableXephang = CCTableView::create(this, tableSize);
-	m_tableXephang->setDirection(kCCScrollViewDirectionVertical);
-	//m_tableXephang->setAnchorPoint(CCPointZero);
-	m_tableXephang->setPosition(ccp(400 - tableSize.width/2, 1280-768 - tableSize.height/2));
-	m_tableXephang->setDelegate(this);
-	m_tableXephang->setVerticalFillOrder(kCCTableViewFillTopDown);
-	this->addChild(m_tableXephang);
-
-	m_tableXephang->setVisible(true);
-
-	// table view QuaTang //////////////////////////////////////////////////////////////////////////
-
-
-	m_sprCell = CCSprite::create("table_cell_quatang.png");
-	m_sprCell->retain();
-	cellsize = m_sprCell->getContentSize();
-	tableSize = CCSizeMake(783, 718);
-
-	//vertical
-	m_tableQuatang = CCTableView::create(this, tableSize);
-	m_tableQuatang->setDirection(kCCScrollViewDirectionVertical);
-	//m_tableQuatang->setAnchorPoint(CCPointZero);
-	m_tableQuatang->setPosition(ccp(400 - tableSize.width/2, 1280-768 - tableSize.height/2));
-	m_tableQuatang->setDelegate(this);
-	m_tableQuatang->setVerticalFillOrder(kCCTableViewFillTopDown);
-	this->addChild(m_tableQuatang);
-
-	m_tableQuatang->setVisible(false);
-	
-	//////////////////////////////////////////////////////////////////////////
-	
-
-	m_lbWaiting = CCLabelTTF::create("... Đang chờ ...", "Roboto-Medium.ttf", 64);
-	m_lbWaiting->setColor(ccc3(0, 0, 0));
-	m_lbWaiting->setHorizontalAlignment(kCCTextAlignmentCenter);
-	m_lbWaiting->setVerticalAlignment(kCCVerticalTextAlignmentCenter);
-	m_lbWaiting->setPosition(ccp(400, 640));
-
-	this->addChild(m_lbWaiting);
-
-	if (m_isLoggedIn == false)
-	{
-		m_tableXephang->setVisible(false);
-		m_tableQuatang->setVisible(false);
-		m_lbWaiting->setVisible(false);
-	}
-
-	if (m_isLoggedIn)
-	{
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-		//check incoming request
-		EziSocialObject::sharedObject()->checkIncomingRequest();
-#endif
-	}	
-
 	this->schedule(schedule_selector(ScoreScene::scheduleTimer), 1);
 
 	return true;
@@ -1236,14 +1240,14 @@ void ScoreScene::fbIncomingRequestCallback(int responseCode, const char* respons
 	int pendingRequest = EziFBIncomingRequestManager::sharedManager()->getPendingRequestCount();
 	CCLOG("------------------NewRequests= %d\n-----------------PendingRequests= %d", totalIncomingRequests, pendingRequest);
 
-	CCArray* _fbNewList = EziFBIncomingRequestManager::sharedManager()->getAllRequests();
-	int totalNew = _fbNewList->count();
 
-	CCLOG("----------------- TOTALT = %d", totalNew);
+	CCDictionary* dictPengding = EziFBIncomingRequestManager::sharedManager()->getPendingRequests();
+	dictPengding->retain();
 
-	for (int i = 0; i < totalNew; i++)
+	CCDictElement* pElement = NULL;
+	CCDICT_FOREACH(dictPengding, pElement)
 	{
-		EziFBIncomingRequest* request = (EziFBIncomingRequest*)_fbNewList->objectAtIndex(i);
+		EziFBIncomingRequest* request = (EziFBIncomingRequest*)pElement->getObject();
 		if (request->getRequestType() == EziSocialWrapperNS::FB_REQUEST::REQUEST_GIFT)
 		{
 			if (request->isConsumed())
@@ -1257,10 +1261,10 @@ void ScoreScene::fbIncomingRequestCallback(int responseCode, const char* respons
 				EziFacebookFriend* fr = request->getSender();
 				DataManager::sharedDataManager()->IncreaseGiftFromFriend(fr->getFBID());
 
-				request->purgeFromUserDefault();
-				request->setConsumed(true);
-				EziFBIncomingRequestManager::sharedManager()->consumeItem(request);
-				EziFBIncomingRequestManager::sharedManager()->clearCompletedRequestList();
+				//request->purgeFromUserDefault();
+				//request->setConsumed(true);
+				//EziFBIncomingRequestManager::sharedManager()->consumeItem(request);
+				//EziFBIncomingRequestManager::sharedManager()->clearCompletedRequestList();
 			}
 		}
 		else if (request->getRequestType() == EziSocialWrapperNS::FB_REQUEST::REQUEST_INVITE)
@@ -1272,7 +1276,44 @@ void ScoreScene::fbIncomingRequestCallback(int responseCode, const char* respons
 		}
 	}
 
-	m_tableQuatang->reloadData();
+
+// 	CCArray* _fbNewList = EziFBIncomingRequestManager::sharedManager()->getAllRequests();
+// 	int totalNew = _fbNewList->count();
+// 
+// 	CCLOG("----------------- TOTALT = %d", totalNew);
+// 
+// 	for (int i = 0; i < totalNew; i++)
+// 	{
+// 		EziFBIncomingRequest* request = (EziFBIncomingRequest*)_fbNewList->objectAtIndex(i);
+// 		if (request->getRequestType() == EziSocialWrapperNS::FB_REQUEST::REQUEST_GIFT)
+//		{
+//			if (request->isConsumed())
+//			{
+//				CCLOG(" ------------ CONSUMED GIFT ------------- ");
+//			} 
+//			else
+//			{
+//				CCLOG(" --------------- NEW GIFT --------------- ");
+//
+// 				EziFacebookFriend* fr = request->getSender();
+// 				DataManager::sharedDataManager()->IncreaseGiftFromFriend(fr->getFBID());
+// 
+// 				request->purgeFromUserDefault();
+//				request->setConsumed(true);
+// 				EziFBIncomingRequestManager::sharedManager()->consumeItem(request);
+//				EziFBIncomingRequestManager::sharedManager()->clearCompletedRequestList();
+//			}
+// 		}
+// 		else if (request->getRequestType() == EziSocialWrapperNS::FB_REQUEST::REQUEST_INVITE)
+// 		{
+// 			CCLOG(" ------------ INVITE ------------ ");
+//
+//			//check incoming request again, i dont know why
+//			//EziSocialObject::sharedObject()->checkIncomingRequest();
+// 		}
+// 	}
+
+//	m_tableQuatang->reloadData();
 
 #endif
 }
