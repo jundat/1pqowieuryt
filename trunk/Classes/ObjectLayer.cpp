@@ -16,7 +16,8 @@ bool ObjectLayer::init()
         return false;
     }
 
-	CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, 0, true);
+	//CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, 0, true);
+	CCDirector::sharedDirector()->getTouchDispatcher()->addStandardDelegate(this, 0);
 	this->setTouchEnabled(true);
 
 	//////////////////////////////////////////////////////////////////////////
@@ -39,6 +40,8 @@ bool ObjectLayer::init()
 	m_score = 0;
 	m_playedTime = 0;
 	m_difficulty = 0;
+
+	m_touchId = -1;
 
 	m_sprLazer = CCSprite::createWithSpriteFrameName("lazer.png");
 	m_sprLazer->setVisible(false);
@@ -110,26 +113,26 @@ bool ObjectLayer::init()
     return true;
 }
 
-bool ObjectLayer::ccTouchBegan( CCTouch *pTouch, CCEvent *pEvent )
-{
-	m_lastPoint = pTouch->getLocation();
-	return true;
-}
-
-void ObjectLayer::ccTouchMoved( CCTouch *pTouch, CCEvent *pEvent )
-{
-	CCPoint curPoint = pTouch->getLocation();
-
-	float dx = curPoint.x - m_lastPoint.x;
-	float dy = curPoint.y - m_lastPoint.y;
-
-	m_player->setPosition(m_player->getPositionX() + dx, m_player->getPositionY() + dy);
-	m_lastPoint = curPoint;
-}
-
-void ObjectLayer::ccTouchEnded( CCTouch *pTouch, CCEvent *pEvent )
-{
-}
+// bool ObjectLayer::ccTouchBegan( CCTouch *pTouch, CCEvent *pEvent )
+// {
+// 	m_lastPoint = pTouch->getLocation();
+// 	return true;
+// }
+// 
+// void ObjectLayer::ccTouchMoved( CCTouch *pTouch, CCEvent *pEvent )
+// {
+// 	CCPoint curPoint = pTouch->getLocation();
+// 
+// 	float dx = curPoint.x - m_lastPoint.x;
+// 	float dy = curPoint.y - m_lastPoint.y;
+// 
+// 	m_player->setPosition(m_player->getPositionX() + dx, m_player->getPositionY() + dy);
+// 	m_lastPoint = curPoint;
+// }
+// 
+// void ObjectLayer::ccTouchEnded( CCTouch *pTouch, CCEvent *pEvent )
+// {
+// }
 
 void ObjectLayer::AddEmemy( Enemy* enemy )
 {
@@ -676,4 +679,43 @@ void ObjectLayer::Resume()
 			item->scheduleUpdate();
 		}
 	}
+}
+
+void ObjectLayer::ccTouchesBegan( CCSet *pTouches, CCEvent *pEvent )
+{
+	CCTouch* pTouch = (CCTouch*)(*pTouches->begin());
+	m_touchId = pTouch->getID();
+	m_lastPoint = pTouch->getLocation();
+}
+
+void ObjectLayer::ccTouchesMoved( CCSet *pTouches, CCEvent *pEvent )
+{
+	CCSetIterator it = pTouches->begin();
+	CCTouch* pTouch;
+	for (it = pTouches->begin(); it != pTouches->end(); it++)
+	{
+		pTouch = (CCTouch*)(*it);
+		if (pTouch->getID() == m_touchId)
+		{
+			CCPoint curPoint = pTouch->getLocation();
+
+			float dx = curPoint.x - m_lastPoint.x;
+			float dy = curPoint.y - m_lastPoint.y;
+
+			m_player->setPosition(m_player->getPositionX() + dx, m_player->getPositionY() + dy);
+			m_lastPoint = curPoint;
+
+			break;
+		}
+	}	
+}
+
+void ObjectLayer::ccTouchesEnded( CCSet *pTouches, CCEvent *pEvent )
+{
+	m_touchId = -1;
+}
+
+void ObjectLayer::ccTouchesCancelled( CCSet *pTouches, CCEvent *pEvent )
+{
+	m_touchId = -1;
 }
