@@ -463,21 +463,6 @@ void ScoreScene::getBoomCallback( CCObject* pSender )
 
 void ScoreScene::sendLifeCallback( CCObject* pSender )
 {
-	int curLife = DataManager::sharedDataManager()->GetLastPlayerLife();
-	
-	if (curLife <= 0)
-	{
-		PLAY_OUT_PORP_EFFECT;
-
-		//animation
-		m_sprLife->runAction(CCSequence::createWithTwoActions(
-			CCScaleBy::create(0.2f, 1.5f / 1.0f),
-			CCScaleBy::create(0.2f, 1.0f / 1.5f)
-			));
-
-		return;
-	}
-	
 	PLAY_BUTTON_EFFECT;
 
 	int tag = ((CCMenuItemImage*)pSender)->getTag();
@@ -490,7 +475,7 @@ void ScoreScene::sendLifeCallback( CCObject* pSender )
 	arrFriends->addObject(s);
 
 	CCDictionary *giftDictionary = CCDictionary::create();
-	giftDictionary->setObject(CCString::create("1"), "LIFE"); //number of gift, name of gift
+	giftDictionary->setObject(CCString::create("1"), "LIFE");
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	EziSocialObject::sharedObject()->isFacebookSessionActive();
@@ -881,29 +866,11 @@ void ScoreScene::fbSendRequestCallback( int responseCode, const char* responseMe
 	if (EziSocialWrapperNS::RESPONSE_CODE::FB_REQUEST_SENT == responseCode)
 	{
 		CCLOG("fbSendRequestCallback: FB_REQUEST_SENT");
-		int numFriends = friendsGotRequests->count();
-		CCLOG("Request sent successfully to %d friends", numFriends);
 		
 		if (m_friendCell != NULL) //send life
 		{
 			CCLOG("fbSendRequestCallback: FB_REQUEST_SENT: m_friendCell != NULL");
 			PLAY_GET_BOMB_EFFECT;
-
-			int curLife = DataManager::sharedDataManager()->GetLastPlayerLife();
-			curLife--;
-			DataManager::sharedDataManager()->SetLastPlayerLife(curLife);
-
-			CCLOG("LIFE = %d", DataManager::sharedDataManager()->GetLastPlayerLife());
-
-			if (curLife == G_MAX_PLAYER_LIFE - 1)
-			{
-				CCLOG(">>>>>>>>>> 4 LIFE >>>>>>>>>>>>>>");
-				DataManager::sharedDataManager()->SetLastDeadTimeNow();
-			}
-			else
-			{
-				CCLOG(">>>>>>>>>> SAVE NEXT TIME >>>>>>>>>>>>>>");
-			}
 
 			//reset timer
 			DataManager::sharedDataManager()->SetTimeLifeToFriendNow(m_friendCell->fbID.c_str());
@@ -914,25 +881,6 @@ void ScoreScene::fbSendRequestCallback( int responseCode, const char* responseMe
 			m_friendCell->m_lastTimeSendLife = DataManager::sharedDataManager()->GetTimeLifeToFriend(m_friendCell->fbID.c_str());
 
 			m_friendCell = NULL;
-
-			refreshUserDetail();
-			
-			//animation
-			m_sprLife->runAction(CCSequence::createWithTwoActions(
-				CCScaleBy::create(0.2f, 1.5f / 1.0f),
-				CCScaleBy::create(0.2f, 1.0f / 1.5f)
-				));
-
-// 			CCSprite* spr = CCSprite::create("oil.png");
-// 			spr->setPosition(m_sprLife->getPosition());
-// 			this->addChild(spr);
-// 			spr->runAction(CCSpawn::create(
-// 				CCMoveTo::create(0.5f, m_friendCell->m_itSendLife->getPosition()),
-// 				CCScaleTo::create(0.5f, m_friendCell->m_itSendLife->getScale()),
-// 				CCRotateTo::create(0.5f, m_friendCell->m_itSendLife->getRotation()),
-// 				CCFadeOut::create(0.5f),
-// 				NULL
-// 				)); //no need to remove
 		}		
 	}
 	else
@@ -1177,7 +1125,6 @@ CCTableViewCell* ScoreScene::tableCellXepHangAtIndex( CCTableView *table, unsign
 			((CustomTableViewCell*)cell)->m_itGetBoom = itGetBoom;
 
 			CCMenuItemImage* itSendLife = CCMenuItemImage::create("oil.png", "oil_blur.png", "oil_blur.png", this, menu_selector(ScoreScene::sendLifeCallback));
-			itSendLife->setRotation(180);
 			itSendLife->setPosition(ccp(725, m_sprCell->getContentSize().height/2 + 15));
 			itSendLife->setTag(2000 + idx);
 			((CustomTableViewCell*)cell)->m_itSendLife = itSendLife;

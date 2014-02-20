@@ -20,7 +20,7 @@ CCScene* MenuScene::scene()
 
 bool MenuScene::init()
 {
-	static int GAME_VERSION = 41;
+	static int GAME_VERSION = 42;
 	//pre proccess
 
 	DataManager::sharedDataManager()->RefreshPlayerLife();
