@@ -379,10 +379,9 @@ void ScoreScene::tableCellTouched(CCTableView* table, CCTableViewCell* cell)
 		}
 
 		//animation
-		m_sprLife->setScale(0.75f);
 		m_sprLife->runAction(CCSequence::createWithTwoActions(
-			CCScaleBy::create(0.2f, 1.5f / 1.0f),
-			CCScaleBy::create(0.2f, 1.0f / 1.5f)
+			CCScaleTo::create(0.2f, 1.0f),
+			CCScaleTo::create(0.2f, 0.75f)
 			));
 	}	
 }
@@ -443,17 +442,9 @@ void ScoreScene::getBoomCallback( CCObject* pSender )
 
 		//animation
 		m_sprBoom->runAction(CCSequence::createWithTwoActions(
-			CCScaleBy::create(0.2f, 1.5f / 1.0f),
-			CCScaleBy::create(0.2f, 1.0f / 1.5f)
+			CCScaleTo::create(0.2f, 1.0f),
+			CCScaleTo::create(0.2f, 0.75f)
 			));
-
-// 		CCSprite* spr = CCSprite::create("boomgift.png");
-// 		spr->setPosition(cell->m_itGetBoom->getPosition() + cell->getPosition() + m_tableXephang->getPosition());
-// 		this->addChild(spr);
-// 		spr->runAction(CCSpawn::createWithTwoActions(
-// 			CCMoveTo::create(0.5f, m_sprBoom->getPosition()),
-// 			CCScaleTo::create(0.5f, m_sprBoom->getScale())
-// 			)); //no need to remove
 	}
 	else
 	{
