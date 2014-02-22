@@ -378,3 +378,18 @@ void DataManager::DecreaseBoom()
 
 	CCUserDefault::sharedUserDefault()->flush();
 }
+
+
+
+
+int DataManager::GetDiamon()
+{
+	return CCUserDefault::sharedUserDefault()->getIntegerForKey("DIAMON", G_DEFAULT_DIAMON);
+}
+
+void DataManager::SetDiamon( int diamon )
+{
+	CCUserDefault::sharedUserDefault()->setIntegerForKey("DIAMON", diamon);
+	CCUserDefault::sharedUserDefault()->flush();
+}
+

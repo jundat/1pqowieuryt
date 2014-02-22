@@ -79,6 +79,10 @@ ConfigLoader::ConfigLoader(void)
 
 	G_DEFAULT_BOOM = GetValue(std::string("G_DEFAULT_BOOM"))->intValue();
 	G_MAX_BOOM = GetValue(std::string("G_MAX_BOOM"))->intValue();
+
+
+	G_DEFAULT_DIAMON = GetValue(std::string("G_DEFAULT_DIAMON"))->intValue();
+	G_DIAMON_PER_LIFE = GetValue(std::string("G_DIAMON_PER_LIFE"))->intValue();
 }
 
 

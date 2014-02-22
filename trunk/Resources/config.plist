@@ -107,5 +107,10 @@
 		    <string>10</string>
 
 
+   		<key>G_DEFAULT_DIAMON</key> <!-- Mới vào có bao nhiêu kim cương -->
+		    <string>30</string>
+	    <key>G_DIAMON_PER_LIFE</key> <!-- Số kim cương cần cho 1 mạng hồi sinh -->
+		    <string>10</string>
+
     </dict>
 </plist>

@@ -89,5 +89,9 @@ extern int G_DEFAULT_BOOM;
 extern int G_MAX_BOOM;
 
 
+extern int G_DEFAULT_DIAMON;
+extern int G_DIAMON_PER_LIFE;
+
+
 
 #endif //__GLOBAL_H__

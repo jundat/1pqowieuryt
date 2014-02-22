@@ -77,6 +77,10 @@ public:
 	void	SetBoom(int boom);
 	void	IncreaseBoom();
 	void	DecreaseBoom();
+
+	int		GetDiamon();
+	void	SetDiamon(int diamon);
+	
 	
 	~DataManager(void);
 };

@@ -78,3 +78,7 @@ float G_ENEMY_3_PERCENT = 0.05f;
 
 int G_DEFAULT_BOOM;
 int G_MAX_BOOM;
+
+
+int G_DEFAULT_DIAMON;
+int G_DIAMON_PER_LIFE;
