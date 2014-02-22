@@ -33,7 +33,8 @@ bool MainGameScene::init()
 	this->setKeypadEnabled(true);
 
 	CCSpriteFrameCache* cache = CCSpriteFrameCache::sharedSpriteFrameCache();
-	cache->addSpriteFramesWithFile("MainGame.plist");
+	cache->addSpriteFramesWithFile("MainGame_1.plist");
+	cache->addSpriteFramesWithFile("MainGame_2.plist");
 
     m_BackgroundLayer = BackgroundLayer::create();
 	this->addChild(m_BackgroundLayer);
@@ -87,9 +88,6 @@ void MainGameScene::showEndGame( int score, int killedEnemies )
 {
 	m_isShowingLose = true;
 
-	//save highscore
-	DataManager::sharedDataManager()->SetCurrentHighScore(score);
-
 
 	CCDirector::sharedDirector()->getTouchDispatcher()->removeDelegate(this);
 	this->setTouchEnabled(false);
@@ -117,6 +115,9 @@ void MainGameScene::showEndGame( int score, int killedEnemies )
 	
 	LoseDialog* dialog = LoseDialog::create(score, killedEnemies);
 	this->addChild(dialog);
+
+	//save highscore after show dialog
+	DataManager::sharedDataManager()->SetCurrentHighScore(score);
 }
 
 //revived just 1 time for 1 life

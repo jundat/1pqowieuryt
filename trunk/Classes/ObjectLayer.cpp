@@ -354,6 +354,7 @@ void ObjectLayer::update( float delta )
 		m_isEndGame = true;
 	}
 
+	ccDrawCircle(ccp(400, 640), 400, 90, 32, true);
 	//////////////////////////////////////////////////////////////////////////
 	m_playedTime += delta;
 
