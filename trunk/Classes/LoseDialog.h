@@ -40,6 +40,7 @@ public:
 private:
 	void breakRecord();
 	void initParticle();
+	void closeReviveAnimation();
 };
 
 #endif // __LOSE_DIALOG_H__

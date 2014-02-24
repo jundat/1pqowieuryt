@@ -112,12 +112,39 @@ void LoseDialog::menuCallBack( CCObject* pSender )
 
 void LoseDialog::reviveCallBack( CCObject* pSender )
 {
-	//revive
-	MainGameScene* maingame = (MainGameScene*) this->getParent();
-	maingame->reviveCallback();
+	//check if enough Diamon
+	int diamon = DataManager::sharedDataManager()->GetDiamon();
+	if (diamon >= G_DIAMON_PER_LIFE)
+	{
+		DataManager::sharedDataManager()->SetDiamon(diamon - G_DIAMON_PER_LIFE);
 
-	//remove dialog
-	this->removeFromParent();
+		//animation diamon
+		CCSprite* sprDiamon = CCSprite::create("sub_diamond.png");
+		sprDiamon->setPosition(m_itRevive->getPosition());
+		this->addChild(sprDiamon);
+
+		PLAY_GET_DOUBLE_LAZER_EFFECT;
+
+		sprDiamon->runAction(CCSequence::createWithTwoActions(
+			CCSpawn::createWithTwoActions(
+				CCJumpTo::create(1.0f, ccp(sprDiamon->getPositionX(), - sprDiamon->getContentSize().height), 600, 1),
+				CCFadeOut::create(1.0f)
+			),
+			CCCallFunc::create(this, callfunc_selector(LoseDialog::closeReviveAnimation))
+			));
+	}
+	else //Need more diamon
+	{
+		CCMessageBox("Info", "Lack of diamon :(");
+
+		//unvisiable
+		m_timerBar->setVisible(false);
+		m_timerNode->setVisible(false);
+
+		m_itRevive->setEnabled(false);
+		m_itRevive->setOpacity(0.6f * 255);
+		this->unscheduleUpdate();
+	}
 }
 
 void LoseDialog::breakRecord()
@@ -277,4 +304,13 @@ void LoseDialog::update( float delta )
 			this->unscheduleUpdate();
 		}
 	}	
+}
+
+void LoseDialog::closeReviveAnimation()
+{
+	MainGameScene* maingame = (MainGameScene*) this->getParent();
+	maingame->reviveCallback();
+
+	//remove dialog after animation
+	this->removeFromParent();
 }
