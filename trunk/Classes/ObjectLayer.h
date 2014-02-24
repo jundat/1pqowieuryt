@@ -38,7 +38,7 @@ public:
 	void RemoveEnemy(Enemy* enemy);
 	void IncreaseBoom();
 	void ActiveBoom(CCObject* pSender);
-	void ContinueGame();
+	void ReviveGame();
 	void RestartGame();
 	void Pause();
 	void Resume();

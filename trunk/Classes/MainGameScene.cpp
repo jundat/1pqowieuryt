@@ -33,8 +33,7 @@ bool MainGameScene::init()
 	this->setKeypadEnabled(true);
 
 	CCSpriteFrameCache* cache = CCSpriteFrameCache::sharedSpriteFrameCache();
-	cache->addSpriteFramesWithFile("MainGame_1.plist");
-	cache->addSpriteFramesWithFile("MainGame_2.plist");
+	cache->addSpriteFramesWithFile("MainGame.plist");
 
     m_BackgroundLayer = BackgroundLayer::create();
 	this->addChild(m_BackgroundLayer);
@@ -87,8 +86,7 @@ void MainGameScene::resumeCallback()
 void MainGameScene::showEndGame( int score, int killedEnemies )
 {
 	m_isShowingLose = true;
-
-
+	
 	CCDirector::sharedDirector()->getTouchDispatcher()->removeDelegate(this);
 	this->setTouchEnabled(false);
 
@@ -110,7 +108,6 @@ void MainGameScene::showEndGame( int score, int killedEnemies )
 		DataManager::sharedDataManager()->SetLastDeadTimeNow();
 	}
 
-	DataManager::sharedDataManager()->SetIsJustRevived(false);
 	AudioManager::sharedAudioManager()->PlayEffect("game_over.wav");
 	
 	LoseDialog* dialog = LoseDialog::create(score, killedEnemies);
@@ -133,10 +130,10 @@ void MainGameScene::reviveCallback()
  	lastLife++;
  	DataManager::sharedDataManager()->SetLastPlayerLife(lastLife);
 	
-	CCLOG("Revive, lastLife: %d", lastLife);
+	CCLOG("------------- REVIVE ------------ %d", lastLife);
 	
 	DataManager::sharedDataManager()->SetIsJustRevived(true);
-	m_ObjLayer->ContinueGame();
+	m_ObjLayer->ReviveGame();
 }
 
 void MainGameScene::restartCallback()

@@ -847,6 +847,10 @@ void ScoreScene::fbHighScoresCallback( int responseCode, const char* responseMes
 
 	m_tableXephang->reloadData();
 	m_tableQuatang->reloadData();
+
+	//save data
+
+
 #endif
 }
 

@@ -116,6 +116,7 @@ void DataManager::SetLastPlayerLife( int lastLife )
 	CCUserDefault::sharedUserDefault()->flush();
 }
 
+//default = false
 bool DataManager::GetIsJustRevived()
 {
 	return CCUserDefault::sharedUserDefault()->getBoolForKey("G_IS_JUST_REVIVED", false);

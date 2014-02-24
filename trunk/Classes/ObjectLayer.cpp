@@ -442,7 +442,7 @@ void ObjectLayer::update( float delta )
 	}
 }
 
-void ObjectLayer::ContinueGame()
+void ObjectLayer::ReviveGame()
 {
 	//keep:
 	//	score
@@ -451,17 +451,21 @@ void ObjectLayer::ContinueGame()
 	//reset:
 	//	player's HP
 
+	m_isEndGame = false;
+	m_isPauseGame = false;
+
 	CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, 0, true);
 	this->setTouchEnabled(true);
+	this->schedule(schedule_selector(ObjectLayer::ScheduleGenerateItem), G_TIME_TO_GENERATE_ITEM);
+	this->schedule(schedule_selector(ObjectLayer::ScheduleCheckCollision), CCDirector::sharedDirector()->getAnimationInterval());
+	this->scheduleUpdate();
 
-	m_isEndGame = false;
+	m_player->scheduleUpdate();
+
 	//reset
 	m_player->setVisible(true);
 	m_player->Restart();
 	m_player->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT * 0.1));
-	this->schedule(schedule_selector(ObjectLayer::ScheduleGenerateItem), G_TIME_TO_GENERATE_ITEM);
-	this->schedule(schedule_selector(ObjectLayer::ScheduleCheckCollision), CCDirector::sharedDirector()->getAnimationInterval());
-	this->scheduleUpdate();
 }
 
 void ObjectLayer::RestartGame()
