@@ -133,6 +133,7 @@ public:
 	void callSubmitScore();
 	void callGetHighScores();
 	virtual void fbHighScoresCallback(int responseCode, const char* responseMessage, cocos2d::CCArray* highScores);
+	virtual void fbMessageCallback(int responseCode, const char* responseMessage);
 
 	// Facebook Callback methods...
 	virtual void fbSessionCallback(int responseCode, const char* responseMessage);
@@ -141,7 +142,7 @@ public:
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	virtual void fbUserDetailCallback(int responseCode, const char* responseMessage, EziFacebookUser* fbUser);
 #endif
-	
+
 	virtual void fbSendRequestCallback(int responseCode, const char* responseMessage, cocos2d::CCArray* friendsGotRequests);
 
 	//check incomming request

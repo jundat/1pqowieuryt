@@ -847,10 +847,31 @@ void ScoreScene::fbHighScoresCallback( int responseCode, const char* responseMes
 
 	m_tableXephang->reloadData();
 	m_tableQuatang->reloadData();
+	
+	
+	//////////////////////////////////////////////////////////////////////////
+	
 
-	//save data
+	//let try to post message
+	EziSocialObject::sharedObject()->autoPostMessageOnWall(
+		"The Croods",									//heading => Điện Biên Phủ Trên Không
+		"Let got it!",											//caption
+		"Hey, i just got 3000 points in The Croods, do you feel so shy! Kaka :v",		//message => Status
+		"From the creators of Angry Birds and the creative minds at DreamWorks Animation: a FREE new game based on the motion picture phenomenon!",		//descripton
+		"https://lh5.ggpht.com/fblIg4MEELZ7JrBWB9OmEtx07dh-kR83Xwx1KhFMnZHgsk0xw4YreLPrxXwtwZyolGw=w300-rw",		//badgeIconURL
+		"https://play.google.com/store/apps/details?id=com.rovio.croods");							//deepLinkURL
+#endif
+}
 
+void ScoreScene::fbMessageCallback(int responseCode, const char* responseMessage)
+{
+	//FB_AUTO_MESSAGE_ERROR
 
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	if(responseCode == EziSocialWrapperNS::RESPONSE_CODE::FB_AUTO_MESSAGE_PUBLISHED)
+	{
+		CCLOG("Message published successfully!");
+	}
 #endif
 }
 
