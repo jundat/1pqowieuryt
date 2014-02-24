@@ -82,3 +82,6 @@ int G_MAX_BOOM;
 
 int G_DEFAULT_DIAMON;
 int G_DIAMON_PER_LIFE;
+
+
+float G_WAIT_TO_REVIVE;

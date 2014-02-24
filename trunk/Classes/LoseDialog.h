@@ -22,6 +22,12 @@ public:
 private:
 	int m_score;
 	int m_killedEnemies;
+	float m_elapsedTime;
+
+	CCSprite* m_timerBar;
+	CCSprite* m_timerNode;
+
+	CCMenuItemImage* m_itRevive;
 
 	//particle
 	CCParticleSystem*    m_emitter;
@@ -29,6 +35,7 @@ private:
 public:
 	void menuCallBack(CCObject* pSender);
 	void reviveCallBack(CCObject* pSender);
+	void update(float delta);
 
 private:
 	void breakRecord();

@@ -92,6 +92,7 @@ extern int G_MAX_BOOM;
 extern int G_DEFAULT_DIAMON;
 extern int G_DIAMON_PER_LIFE;
 
-
+//Thời gian hiển thị của Nút REVIVE trong Lose Scene
+extern float G_WAIT_TO_REVIVE;
 
 #endif //__GLOBAL_H__

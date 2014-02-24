@@ -12,6 +12,9 @@ bool LoseDialog::init()
     {
         return false;
     }
+	
+	m_timerBar = NULL;
+	m_timerNode = NULL;
 
 	CCPoint pExit = ccp(233, 1280-813);
 	CCPoint pRevive = ccp(565, 1280-813);
@@ -31,14 +34,14 @@ bool LoseDialog::init()
 	exitButton->setPosition(pExit);
 	
 
-	CCMenuItemImage* reviveButton = CCMenuItemImage::create(
+	m_itRevive = CCMenuItemImage::create(
 		"hoisinh1.png",
 		"hoisinh.png",
 		"hoisinh.png",
 		this,
 		menu_selector(LoseDialog::reviveCallBack));
-	reviveButton->setScale(BUTTON_SCALE);
-	reviveButton->setPosition(pRevive);
+	m_itRevive->setScale(BUTTON_SCALE);
+	m_itRevive->setPosition(pRevive);
 
 
 	//REVIVE /////////////////////////////////////////////////////////////////
@@ -46,12 +49,28 @@ bool LoseDialog::init()
 	bool isJustRevive = DataManager::sharedDataManager()->GetIsJustRevived();
 	if (isJustRevive == true)
 	{
-		reviveButton->setEnabled(false);
-		reviveButton->setOpacity(0.60f * 255);
+		m_itRevive->setEnabled(false);
+		m_itRevive->setOpacity(0.60f * 255);
+	}
+	else //timer
+	{
+		m_elapsedTime = 0;
+
+		m_timerBar = CCSprite::create("timer_bar.png");
+		m_timerBar->setAnchorPoint(ccp(0.0f, 0.5f));
+		m_timerBar->setPosition(ccp(403, 1280-737));
+		this->addChild(m_timerBar);
+		
+		m_timerNode = CCSprite::create("timer_node.png");
+		m_timerNode->setAnchorPoint(ccp(0.0f, 0.5f));
+		m_timerNode->setPosition(ccp(403, 1280-737));
+		this->addChild(m_timerNode);
+
+		this->scheduleUpdate();
 	}
 	//////////////////////////////////////////////////////////////////////////
 	
-	CCMenu* menu = CCMenu::create(exitButton, reviveButton, NULL);
+	CCMenu* menu = CCMenu::create(exitButton, m_itRevive, NULL);
 	menu->setPosition(CCPointZero);
 	this->addChild(menu);
 
@@ -231,4 +250,31 @@ void LoseDialog::initParticle()
 	m_emitter->setPosition( ccp(138, 1280-475) );
 
 	//START,i dont know //////////////////////////////////////////////////////////////////////////
+}
+
+void LoseDialog::update( float delta )
+{
+	if (m_timerBar != NULL)
+	{
+		m_elapsedTime += delta;
+
+		if (m_elapsedTime < G_WAIT_TO_REVIVE) //scale
+		{
+			float originW = m_timerBar->getContentSize().width;
+			float originH = m_timerBar->getContentSize().height;
+
+			//m_timerNode->setScaleX((G_WAIT_TO_REVIVE - m_elapsedTime) / G_WAIT_TO_REVIVE);
+			m_timerNode->setTextureRect(CCRectMake(0, 0, ((G_WAIT_TO_REVIVE - m_elapsedTime) / G_WAIT_TO_REVIVE) * originW, originH));
+		}
+		else
+		{
+			//unvisiable
+			m_timerBar->setVisible(false);
+			m_timerNode->setVisible(false);
+
+			m_itRevive->setEnabled(false);
+			m_itRevive->setOpacity(0.6f * 255);
+			this->unscheduleUpdate();
+		}
+	}	
 }
