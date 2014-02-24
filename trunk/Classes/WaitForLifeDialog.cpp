@@ -75,16 +75,12 @@ void WaitForLifeDialog::askFriendCallback( CCObject* pSender )
 
 	if(EziSocialObject::sharedObject()->isFacebookSessionActive()) //logged in state
 	{
-		CCString* str = CCString::createWithFormat("%s đang tả xung hữu đột tiêu diệt máy bay địch trong Điện Biên Phủ trên không. Hãy cùng tham chiến nào.", 
-			DataManager::sharedDataManager()->GetFbFullName().c_str());
-
-		//invite friends
-		EziSocialObject::sharedObject()->sendRequestToFriends(
-			EziSocialWrapperNS::FB_REQUEST::REQUEST_INVITE,
-			str->getCString(), 
-			NULL,
-			NULL,
-			"Điện Biên Phủ Trên Không");
+		inviteFriends();
+	}
+	else //Connect facebook
+	{
+		bool needPublicPermission = true;
+		EziSocialObject::sharedObject()->performLoginUsingFacebook(needPublicPermission); // Pass true if you need publish permission also
 	}
 
 #else //WIN 32
@@ -100,6 +96,89 @@ void WaitForLifeDialog::askFriendCallback( CCObject* pSender )
 #endif
 }
 
+void WaitForLifeDialog::fbSessionCallback(int responseCode, const char *responseMessage)
+{
+	CCLOG("fbSessionCallback");
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	if (responseCode == EziSocialWrapperNS::RESPONSE_CODE::FB_LOGIN_SUCCESSFUL)
+	{
+		CCLOG("fbSessionCallback: SUCCESSFUL");
+		
+		//Auto fetchFBUserDetails, do not call it again
+		//It make exception
+		//CCLOG("call: fetchFBUserDetails");
+		//EziSocialObject::sharedObject()->fetchFBUserDetails(true); //need email = true
+	}
+	else
+	{
+		CCLOG("fbSessionCallback: FAILED");
+	}
+#endif
+}
+
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) // fbUserDetailCallback
+void WaitForLifeDialog::fbUserDetailCallback( int responseCode, const char* responseMessage, EziFacebookUser* fbUser )
+{
+	CCLOG("fbUserDetailCallback");
+	if (fbUser != NULL)
+	{
+		CCLOG("fbUserDetailCallback: user != NULL");
+		EziSocialObject::sharedObject()->setCurrentFacebookUser(fbUser);
+
+		//save data
+		std::string firstname = fbUser->getFirstName(); //getFirstName //getFullName
+		std::string userName = fbUser->getUserName();
+		std::string profileID = fbUser->getProfileID();
+		std::string fullName = fbUser->getFullName();
+
+		DataManager::sharedDataManager()->SetName(firstname.c_str());
+		DataManager::sharedDataManager()->SetProfileID(profileID.c_str());
+		DataManager::sharedDataManager()->SetFbUserName(userName.c_str());
+		DataManager::sharedDataManager()->SetFbFullName(fullName.c_str());
+
+// 		CCLOG("call: getProfilePicForID");
+// 		EziSocialObject::sharedObject()->getProfilePicForID(this, fbUser->getProfileID(), // Profile ID of current user
+//			G_AVATAR_SIZE, G_AVATAR_SIZE, // Size of the image
+//			false // force download it from server
+//			);
+
+
+		//send request to friend
+		inviteFriends();
+	}
+}
+#endif
+
+
+void WaitForLifeDialog::fbUserPhotoCallback(const char *userPhotoPath, const char* fbID)
+{
+	CCLOG("fbUserPhotoCallback");
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	//CCLOG("Gotten avatar for %s", fbID);
+	std::string sid = std::string(fbID);
+
+	if ((strcmp(userPhotoPath, "") != 0))
+	{
+		CCLOG("fbUserPhotoCallback: userPhotoPath != NULL");
+		if(sid == DataManager::sharedDataManager()->GetProfileID())
+		{
+			CCLOG("fbUserPhotoCallback: this user");
+			//CCLOG("Gotten avatar for user");
+
+			//save 
+			DataManager::sharedDataManager()->SetPhotoPath(userPhotoPath);
+
+			//send request to friend
+			inviteFriends();
+		}
+	}
+#endif
+}
+
+
+
+//Post status  callback
 void WaitForLifeDialog::fbMessageCallback(int responseCode, const char* responseMessage)
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
@@ -180,6 +259,22 @@ void WaitForLifeDialog::ScheduleTick( float dt )
 		CCString* s = CCString::createWithFormat("0%d:%d", mins, seconds);
 		m_lbTime->setString(s->getCString());
 	}
+}
+
+void WaitForLifeDialog::inviteFriends()
+{
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	CCString* str = CCString::createWithFormat("%s đang tả xung hữu đột tiêu diệt máy bay địch trong Điện Biên Phủ trên không. Hãy cùng tham chiến nào.", 
+		DataManager::sharedDataManager()->GetFbFullName().c_str());
+
+	//invite friends
+	EziSocialObject::sharedObject()->sendRequestToFriends(
+		EziSocialWrapperNS::FB_REQUEST::REQUEST_INVITE,
+		str->getCString(), 
+		NULL,
+		NULL,
+		"Điện Biên Phủ Trên Không");
+#endif
 }
 
 

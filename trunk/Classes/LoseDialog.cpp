@@ -290,7 +290,6 @@ void LoseDialog::update( float delta )
 			float originW = m_timerBar->getContentSize().width;
 			float originH = m_timerBar->getContentSize().height;
 
-			//m_timerNode->setScaleX((G_WAIT_TO_REVIVE - m_elapsedTime) / G_WAIT_TO_REVIVE);
 			m_timerNode->setTextureRect(CCRectMake(0, 0, ((G_WAIT_TO_REVIVE - m_elapsedTime) / G_WAIT_TO_REVIVE) * originW, originH));
 		}
 		else

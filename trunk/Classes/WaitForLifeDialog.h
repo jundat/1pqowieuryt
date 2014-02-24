@@ -55,11 +55,15 @@ public:
 	}
 
 	// Facebook Delegate Methods
+	void fbUserDetailCallback( int responseCode, const char* responseMessage, EziFacebookUser* fbUser );
+
 #endif
 
+	void fbUserPhotoCallback(const char *userPhotoPath, const char* fbID);
+	void fbSessionCallback(int responseCode, const char *responseMessage);
 	virtual void fbSendRequestCallback(int responseCode, const char* responseMessage, cocos2d::CCArray* friendsGotRequests);
 	virtual void fbMessageCallback(int responseCode, const char* responseMessage);
-
+	void inviteFriends();
 
 	//end facebook
 };
