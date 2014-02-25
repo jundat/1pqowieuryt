@@ -140,7 +140,6 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
     <ClCompile Include="..\Classes\Enemy.cpp" />
     <ClCompile Include="..\Classes\EnemyFactory.cpp" />
     <ClCompile Include="..\Classes\GameObject.cpp" />
-    <ClCompile Include="..\Classes\Global.cpp" />
     <ClCompile Include="..\Classes\IntroScene.cpp" />
     <ClCompile Include="..\Classes\Item.cpp" />
     <ClCompile Include="..\Classes\LevelLoader.cpp" />
@@ -161,6 +160,7 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
     <ClInclude Include="..\Classes\BackgroundLayer.h" />
     <ClInclude Include="..\Classes\Bullet.h" />
     <ClInclude Include="..\Classes\CCParallaxNodeExtras.h" />
+    <ClInclude Include="..\Classes\Config.h" />
     <ClInclude Include="..\Classes\ConfigLoader.h" />
     <ClInclude Include="..\Classes\CustomTableViewCell.h" />
     <ClInclude Include="..\Classes\DataManager.h" />

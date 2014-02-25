@@ -3,10 +3,12 @@
 #ifndef __CONFIG_LOADER_H__
 #define __CONFIG_LOADER_H__
 
-#include "Global.h"
+//#include "Global.h"
 #include "cocos2d.h"
 
 USING_NS_CC;
+
+
 
 class ConfigLoader
 {
@@ -14,7 +16,6 @@ public:
 	ConfigLoader(void);
 	~ConfigLoader(void);
 
-	static CCString* configeFile;
 	static ConfigLoader* shareConfigLoader();
 
 	CCDictionary* m_dict;
