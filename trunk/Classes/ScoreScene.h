@@ -103,7 +103,7 @@ private:
 	int m_tableQuatangSize;
 
 	CCLabelTTF* m_lbInvite;
-	CCLabelTTF* m_lbWaiting;
+	CCSprite* m_sprWaiting;
 	CCLabelTTF* m_lbName;
 	CCLabelTTF* m_lbScore;
 	CCSprite* m_sprCell;
