@@ -22,7 +22,7 @@ bool MainGameScene::init()
 {
     //////////////////////////////
     // 1. super init first
-    if ( !CCLayer::init() )
+    if ( !CCLayerColor::initWithColor(ccc4(195, 200, 201, 255)) )
     {
         return false;
     }
@@ -32,10 +32,12 @@ bool MainGameScene::init()
 
 	this->setKeypadEnabled(true);
 
-	CCSpriteFrameCache* cache = CCSpriteFrameCache::sharedSpriteFrameCache();
-	cache->addSpriteFramesWithFile("MainGame.plist");
+	CCSpriteFrameCache* sprcache = CCSpriteFrameCache::sharedSpriteFrameCache();
+	sprcache->addSpriteFramesWithFile("MainGame.plist");
+	
 
     m_BackgroundLayer = BackgroundLayer::create();
+	m_BackgroundLayer->unscheduleUpdate();
 	this->addChild(m_BackgroundLayer);
 
 	m_ObjLayer = ObjectLayer::create();
@@ -57,6 +59,12 @@ bool MainGameScene::init()
 	PLAY_BACKGROUND_MUSIC;
 
     return true;
+}
+
+void MainGameScene::onEnterTransitionDidFinish()
+{
+	CCLOG("[FeedAPIScene]: Enter Transition Finished.");
+	m_BackgroundLayer->scheduleUpdate();
 }
 
 void MainGameScene::pauseCallback(CCObject* pSender)

@@ -133,6 +133,7 @@ public:
 	void callSubmitScore();
 	void callGetHighScores();
 	virtual void fbHighScoresCallback(int responseCode, const char* responseMessage, cocos2d::CCArray* highScores);
+	void postMessageToLoser(std::string loserName, std::string loserUserName, int yourScore);
 	virtual void fbMessageCallback(int responseCode, const char* responseMessage);
 
 	// Facebook Callback methods...

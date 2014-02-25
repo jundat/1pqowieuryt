@@ -1,4 +1,4 @@
-#include "BackgroundLayer.h"
+﻿#include "BackgroundLayer.h"
 #include "Global.h"
 
 USING_NS_CC;
@@ -28,7 +28,7 @@ bool BackgroundLayer::init()
 }
 
 void BackgroundLayer::update(float dt) {
-	bg1->setPositionY(bg1->getPositionY() - 160 * dt);
+	bg1->setPositionY(bg1->getPositionY() - 160 * dt); // 60/1000 * 160 = số pixel
 	CCSize size = bg1->getContentSize();
 
 	if (bg1->getPositionY() <= - size.height/2)

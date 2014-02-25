@@ -20,7 +20,7 @@ CCScene* MenuScene::scene()
 
 bool MenuScene::init()
 {
-	static int GAME_VERSION = 49;
+	static int GAME_VERSION = 50;
 	//pre proccess
 
 	DataManager::sharedDataManager()->RefreshPlayerLife();
@@ -28,7 +28,7 @@ bool MenuScene::init()
 	//////////////////////////////////////////////////////////////////////////
 	
 
-    if ( !CCLayer::init() )
+    if ( !CCLayerColor::initWithColor(ccc4(195, 200, 201, 255)) )
     {
         return false;
     }
@@ -155,28 +155,46 @@ void MenuScene::refreshLifeIcon()
 
 void MenuScene::playStartAnimation(int lastLife)
 {
+	//CCTransitionProgessVertical
+	//CCTransitionMoveInT
+	//CCTransitionSlideInT
+	
 	CCSprite* spr = (CCSprite*)m_arrSprLife->objectAtIndex(lastLife - 1);
-	CCSequence* seq = CCSequence::create(
-		CCSpawn::create(
-			//CCScaleTo::create(0.5f, 0.0f, 0.0f),
-			//CCFadeOut::create(0.5f)
-			CCMoveTo::create(0.5f, ccp(spr->getPositionX(), 1280 + 200)),
+	float dy = 800;
+
+	CCSpawn* spawn = CCSpawn::create(
+			CCEaseBackIn::create(CCMoveBy::create(dy / 320.0f, ccp(0, dy))),
+			CCSequence::create(
+				CCDelayTime::create(1.0f),
+				CCCallFunc::create(this, callfunc_selector(MenuScene::gotoMainGame)),
+				NULL
+			),
 			NULL
-		),
-		CCCallFunc::create(this, callfunc_selector(MenuScene::gotoMainGame)),
-		NULL);
+		);
+
+	CCSequence* seq = CCSequence::create(
+		//CCDelayTime::create(0.5f),
+		spawn,
+		NULL
+		);
+	
+	MainGameScene::scene();
+
 	spr->runAction(seq);
 }
 
 void MenuScene::gotoMainGame()
 {
-	CCScene *pScene = CCTransitionFade::create(0.5, MainGameScene::scene());
+	CCScene *pScene = CCTransitionSlideInT::create(1280.0f / 480.0f, MainGameScene::scene());
 	CCDirector::sharedDirector()->replaceScene(pScene);
 }
 
 void MenuScene::playCallback(CCObject* pSender)
 {
 	PLAY_ENEMY1_DOWN_EFFECT;
+
+	this->setKeypadEnabled(false);
+	this->setTouchEnabled(false);
 
 	//check if last_player_life > 0
 	int lastLife = DataManager::sharedDataManager()->GetLastPlayerLife();

@@ -3,8 +3,20 @@
 
 USING_NS_CC;
 
+//////////////////////////////////////////////////////////////////////////
+
+
+#define CONF_CCSTR(key)		ConfigLoader::shareConfigLoader()->GetValue(key)
+#define CONF_STR(key)		ConfigLoader::shareConfigLoader()->GetValue(key)->getCString()
+#define CONF_INT(key)		ConfigLoader::shareConfigLoader()->GetValue(key)->intValue()
+#define CONF_FLOAT(key)		ConfigLoader::shareConfigLoader()->GetValue(key)->floatValue()
+
+
+//////////////////////////////////////////////////////////////////////////
+
 CCString* ConfigLoader::configeFile = CCStringMake("config.plist");
 ConfigLoader* ConfigLoader::s_instance = NULL;
+
 
 ConfigLoader::ConfigLoader(void)
 {
@@ -14,9 +26,9 @@ ConfigLoader::ConfigLoader(void)
 	CCDictElement* pElement = NULL;
 	CCDICT_FOREACH(m_dict, pElement)
 	{
-		CCString* v = (CCString*)pElement->getObject();
-		std::string oneStrKey = pElement->getStrKey();
-		CCLOG("%s : %s", oneStrKey.c_str(), v->getCString());
+		CCString* val = (CCString*)pElement->getObject();
+		std::string key = pElement->getStrKey();
+		CCLOG("%s : %s", key.c_str(), val->getCString());
 	}
 	CCLOG("------------CONFIG-----------");
 
@@ -88,7 +100,6 @@ ConfigLoader::ConfigLoader(void)
 	G_WAIT_TO_REVIVE = GetValue(std::string("G_WAIT_TO_REVIVE"))->floatValue();
 }
 
-
 ConfigLoader::~ConfigLoader(void)
 {
 }
@@ -105,12 +116,12 @@ ConfigLoader* ConfigLoader::shareConfigLoader()
 
 const CCString* ConfigLoader::GetValue(const std::string key )
 {
-	const CCString* v = m_dict->valueForKey(key);
-	if (v->length() == 0)
+	const CCString* val = m_dict->valueForKey(key);
+	if (val->length() == 0)
 	{
 		CCLOG("NOT A VALID KEY CONFIG: %s", key.c_str());
 		return CCStringMake("NULL_STRING");
 	}
 
-	return v;
+	return val;
 }

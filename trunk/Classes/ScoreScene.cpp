@@ -818,26 +818,39 @@ void ScoreScene::fbHighScoresCallback( int responseCode, const char* responseMes
 	m_arrHighScores->retain();
 
 	m_tableXepHangSize = m_arrHighScores->count();
+	std::string myProfileID = DataManager::sharedDataManager()->GetProfileID();
+	int count = m_arrHighScores->count();
 
-	CCObject* it;
-	CCARRAY_FOREACH(m_arrHighScores, it)
+	for (int i = 0; i < count; ++i)
 	{
-		EziFacebookFriend* fbFriend = dynamic_cast<EziFacebookFriend*>(it);
+		EziFacebookFriend* fbFriend = dynamic_cast<EziFacebookFriend*>(m_arrHighScores->objectAtIndex(i));
 		if (NULL != fbFriend)
 		{
 			std::string profileID = fbFriend->getFBID();
-			std::string myProfileID = DataManager::sharedDataManager()->GetProfileID();
 
 			if(profileID == myProfileID)
 			{
 				fbFriend->setScore(DataManager::sharedDataManager()->GetHighScore());
+
+				//////////////////////////////////////////////////////////////////////////
+				//get the next friend to post message
+				if (i+1 < count)
+				{
+					EziFacebookFriend* fbLoser = dynamic_cast<EziFacebookFriend*>(m_arrHighScores->objectAtIndex(i+1));
+					if (fbLoser != NULL)
+					{
+						postMessageToLoser(std::string(fbLoser->getName()),
+							std::string(fbLoser->getFBID()),
+							DataManager::sharedDataManager()->GetHighScore());
+					}
+				}
 			}
-			
+
 			//get avatar
 			EziSocialObject::sharedObject()->getProfilePicForID(this, profileID.c_str(), // Profile ID of current user
 				G_FRIEND_AVATAR_SIZE, G_FRIEND_AVATAR_SIZE, // Size of the image
 				false // force download it from server
-				);
+				);	
 		}
 	}
 
@@ -848,20 +861,29 @@ void ScoreScene::fbHighScoresCallback( int responseCode, const char* responseMes
 	m_tableXephang->reloadData();
 	m_tableQuatang->reloadData();
 	
-	
-	//////////////////////////////////////////////////////////////////////////
-	
-
-	//let try to post message
-	EziSocialObject::sharedObject()->autoPostMessageOnWall(
-		"The Croods",									//heading => Điện Biên Phủ Trên Không
-		"Let got it!",											//caption
-		"Hey, i just got 3000 points in The Croods, do you feel so shy! Kaka :v",		//message => Status
-		"From the creators of Angry Birds and the creative minds at DreamWorks Animation: a FREE new game based on the motion picture phenomenon!",		//descripton
-		"https://lh5.ggpht.com/fblIg4MEELZ7JrBWB9OmEtx07dh-kR83Xwx1KhFMnZHgsk0xw4YreLPrxXwtwZyolGw=w300-rw",		//badgeIconURL
-		"https://play.google.com/store/apps/details?id=com.rovio.croods");							//deepLinkURL
 #endif
 }
+
+void ScoreScene::postMessageToLoser( std::string loserName, std::string loserUserName, int yourScore )
+{
+	CCLOG("postMessageToLoser");
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	CCString* strMessage = CCString::createWithFormat("Hey, i just got %d points in The Croods, following me is %s\nhttps://www.facebook.com/%s! Kaka :v", yourScore, loserName.c_str(), loserUserName.c_str());
+
+	//let try to post message
+	//postMessageOnWall
+	//autoPostMessageOnWall
+
+	EziSocialObject::sharedObject()->autoPostMessageOnWall(
+		"The Croods",					//heading => Điện Biên Phủ Trên Không
+		"Let got it!",					//caption
+		strMessage->getCString(),		//message => Status
+		"From the creators of Angry Birds and the creative minds at DreamWorks Animation: a FREE new game based on the motion picture phenomenon!",	//descripton
+		"http://www.reelmama.com/wp-content/uploads/2013/04/Grug-from-THE-CROODS.jpg", //badgeIconURL
+		"https://play.google.com/store/apps/details?id=com.rovio.croods");	//deepLinkURL
+#endif
+}
+
 
 void ScoreScene::fbMessageCallback(int responseCode, const char* responseMessage)
 {

@@ -6,7 +6,7 @@
 
 USING_NS_CC;
 
-class MenuScene : public cocos2d::CCLayer
+class MenuScene : public cocos2d::CCLayerColor
 {
 public:
 	~MenuScene() 
@@ -31,6 +31,11 @@ public:
 	void scoreCallback(CCObject* pSender);
 	void soundCallback(CCObject* pSender);
 	
+	void onEnterTransitionDidFinish()
+	{
+		CCSpriteFrameCache* sprcache = CCSpriteFrameCache::sharedSpriteFrameCache();
+		sprcache->addSpriteFramesWithFile("MainGame.plist");
+	}
 
 	void onCompletedWaiting();
 	void onShowDialog();

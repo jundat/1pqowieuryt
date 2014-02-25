@@ -9,11 +9,11 @@
 
 USING_NS_CC;
 
-class MainGameScene : public cocos2d::CCLayer
+class MainGameScene : public cocos2d::CCLayerColor
 {
 public:
 	~MainGameScene() {
-		CCSpriteFrameCache::sharedSpriteFrameCache()->removeUnusedSpriteFrames();
+		//CCSpriteFrameCache::sharedSpriteFrameCache()->removeUnusedSpriteFrames();
 	}
 
     virtual bool init();
@@ -22,6 +22,8 @@ public:
 	void pauseCallback(CCObject* pSender);
 	void resumeCallback();
 	virtual void keyBackClicked();
+
+	void onEnterTransitionDidFinish();
 
 	//cheat
 	void cheatCallback(CCObject* pSender);

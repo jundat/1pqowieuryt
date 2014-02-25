@@ -9,6 +9,8 @@
 
 USING_NS_CC;
 
+static const int PLAYER_Y = 400;
+
 bool ObjectLayer::init()
 {
     if ( !CCLayer::init() )
@@ -60,7 +62,7 @@ bool ObjectLayer::init()
 
 
 	m_player = Ship::create();
-	m_player->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT * 0.1));
+	m_player->setPosition(ccp(G_DESIGN_WIDTH/2, PLAYER_Y));
 	this->addChild(m_player, 2);
 
 
@@ -101,7 +103,7 @@ bool ObjectLayer::init()
 
 	m_enemyFactory = EnemyFactory::create();
 	this->addChild(m_enemyFactory, 2);
-	m_enemyFactory->update(-2.0f, m_score); //pause 2s before start generate enemies
+	m_enemyFactory->update(-6.0f, m_score); //pause 2s before start generate enemies
 
 
 	this->schedule(schedule_selector(ObjectLayer::ScheduleGenerateItem), G_TIME_TO_GENERATE_ITEM);
@@ -465,7 +467,7 @@ void ObjectLayer::ReviveGame()
 	//reset
 	m_player->setVisible(true);
 	m_player->Restart();
-	m_player->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT * 0.1));
+	m_player->setPosition(ccp(G_DESIGN_WIDTH/2, PLAYER_Y));
 }
 
 void ObjectLayer::RestartGame()
@@ -513,7 +515,7 @@ void ObjectLayer::RestartGame()
 	m_isEndGame = false;
 	m_player->setVisible(true);
 	m_player->Restart();
-	m_player->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT * 0.1));
+	m_player->setPosition(ccp(G_DESIGN_WIDTH/2, PLAYER_Y));
 	
 	m_labelScore->setString("0");
 	m_labelScore->setHorizontalAlignment(kCCTextAlignmentLeft);
