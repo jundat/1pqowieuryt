@@ -576,7 +576,7 @@ void ObjectLayer::ActiveBoom(CCObject* pSender)
 	
 	m_isActiveBoom = true;
 
-	PLAY_USE_BOMB_EFFECT;
+	PLAY_LAZER_EFFECT;
 
 	int m_numberBoom = DataManager::sharedDataManager()->GetBoom();
 

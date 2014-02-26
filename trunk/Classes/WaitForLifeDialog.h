@@ -4,7 +4,7 @@
 #include "cocos2d.h"
 
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #include "EziSocialObject.h"
 #include "EziSocialDelegate.h"
 #include "EziFacebookFriend.h"
@@ -13,7 +13,7 @@
 USING_NS_CC;
 
 class WaitForLifeDialog : public cocos2d::CCLayer
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	,public EziFacebookDelegate
 #endif
 {
@@ -41,7 +41,7 @@ public:
 	
 	//facebook /////////////////////////////////
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	void onEnterTransitionDidFinish()
 	{
 		CCLOG("[FeedAPIScene]: Enter Transition Finished.");

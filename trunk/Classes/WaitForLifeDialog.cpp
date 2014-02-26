@@ -71,7 +71,7 @@ void WaitForLifeDialog::exitCallback( CCObject* pSender )
 
 void WaitForLifeDialog::askFriendCallback( CCObject* pSender )
 {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 
 	if(EziSocialObject::sharedObject()->isFacebookSessionActive()) //logged in state
 	{
@@ -99,7 +99,7 @@ void WaitForLifeDialog::askFriendCallback( CCObject* pSender )
 void WaitForLifeDialog::fbSessionCallback(int responseCode, const char *responseMessage)
 {
 	CCLOG("fbSessionCallback");
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	if (responseCode == EziSocialWrapperNS::RESPONSE_CODE::FB_LOGIN_SUCCESSFUL)
 	{
 		CCLOG("fbSessionCallback: SUCCESSFUL");
@@ -117,7 +117,7 @@ void WaitForLifeDialog::fbSessionCallback(int responseCode, const char *response
 }
 
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) // fbUserDetailCallback
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS) // fbUserDetailCallback
 void WaitForLifeDialog::fbUserDetailCallback( int responseCode, const char* responseMessage, EziFacebookUser* fbUser )
 {
 	CCLOG("fbUserDetailCallback");
@@ -154,7 +154,7 @@ void WaitForLifeDialog::fbUserDetailCallback( int responseCode, const char* resp
 void WaitForLifeDialog::fbUserPhotoCallback(const char *userPhotoPath, const char* fbID)
 {
 	CCLOG("fbUserPhotoCallback");
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	//CCLOG("Gotten avatar for %s", fbID);
 	std::string sid = std::string(fbID);
 
@@ -181,7 +181,7 @@ void WaitForLifeDialog::fbUserPhotoCallback(const char *userPhotoPath, const cha
 //Post status  callback
 void WaitForLifeDialog::fbMessageCallback(int responseCode, const char* responseMessage)
 {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 
 	if(responseCode == EziSocialWrapperNS::RESPONSE_CODE::FB_NORMAL_MESSAGE_PUBLISHED)
 	{
@@ -204,7 +204,7 @@ void WaitForLifeDialog::fbMessageCallback(int responseCode, const char* response
 
 void WaitForLifeDialog::fbSendRequestCallback( int responseCode, const char* responseMessage, cocos2d::CCArray* friendsGotRequests )
 {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 // 	FB_REQUEST_SENDING_ERROR - In case if there is any error while sending the request
 // 	FB_REQUEST_SENDING_CANCELLED – In case, user decides not to send the request.
 // 	FB_REQUEST_SENT - If sending request is success
@@ -263,7 +263,7 @@ void WaitForLifeDialog::ScheduleTick( float dt )
 
 void WaitForLifeDialog::inviteFriends()
 {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	CCString* str = CCString::createWithFormat("%s đang tả xung hữu đột tiêu diệt máy bay địch trong Điện Biên Phủ trên không. Hãy cùng tham chiến nào.", 
 		DataManager::sharedDataManager()->GetFbFullName().c_str());
 

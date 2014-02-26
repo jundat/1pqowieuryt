@@ -5,7 +5,7 @@
 #include "cocos-ext.h"
 #include "CustomTableViewCell.h"
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #include "EziSocialObject.h"
 #include "EziSocialDelegate.h"
 #include "EziFacebookFriend.h"
@@ -19,7 +19,7 @@ USING_NS_CC;
 USING_NS_CC_EXT;
 
 class ScoreScene : public cocos2d::CCLayer, 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	public EziFacebookDelegate,
 #endif
 	public cocos2d::extension::CCTableViewDataSource, 
@@ -56,7 +56,7 @@ public:
 
 	static int MyMoreScoreFunction(const CCObject* p1, const CCObject* p2)
 	{
-		#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+		#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 			EziFacebookFriend* f1 = (EziFacebookFriend*)(p1);
 			EziFacebookFriend* f2 = (EziFacebookFriend*)(p2);
 
@@ -102,8 +102,9 @@ private:
 	int m_tableXepHangSize;
 	int m_tableQuatangSize;
 
+	CCLabelTTF* m_lbInviteQuatang;
 	CCLabelTTF* m_lbInvite;
-	CCLabelTTF* m_lbWaiting;
+	CCSprite* m_sprWaiting;
 	CCLabelTTF* m_lbName;
 	CCLabelTTF* m_lbScore;
 	CCSprite* m_sprCell;
@@ -140,7 +141,7 @@ public:
 	virtual void fbSessionCallback(int responseCode, const char* responseMessage);
 	virtual void fbUserPhotoCallback(const char *userPhotoPath, const char* fbID);
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	virtual void fbUserDetailCallback(int responseCode, const char* responseMessage, EziFacebookUser* fbUser);
 #endif
 

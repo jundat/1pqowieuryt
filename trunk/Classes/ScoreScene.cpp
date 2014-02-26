@@ -30,6 +30,9 @@ bool ScoreScene::init()
 	m_arrRequests = NULL;
 	m_friendCell = NULL;
 
+	m_lbInviteQuatang = NULL;
+
+
 	CCSprite* bg = CCSprite::create("bg_friend.png");
 	bg->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2));
 	this->addChild(bg);
@@ -195,7 +198,12 @@ bool ScoreScene::init()
 
 	// table view QuaTang //////////////////////////////////////////////////////////////////////////
 
-
+	m_lbInviteQuatang = CCLabelTTF::create("Bạn không có quà nào cả\nHãy kết nối với bạn bè để có đầy quà mỗi ngày nhé!", "Roboto-Medium.ttf", 48);
+	m_lbInviteQuatang->setFontFillColor(ccc3(0, 0, 0));
+	m_lbInviteQuatang->setPosition(ccp(400, 1280-672)); //320
+	m_lbInviteQuatang->setVisible(false);
+	this->addChild(m_lbInviteQuatang, 1);
+	
 
 	m_sprCell = CCSprite::create("table_cell_quatang.png");
 	m_sprCell->retain();
@@ -214,14 +222,11 @@ bool ScoreScene::init()
 
 	//////////////////////////////////////////////////////////////////////////
 
-	m_lbWaiting = CCLabelTTF::create("... Đang chờ ...", "Roboto-Medium.ttf", 64);
-	m_lbWaiting->setColor(ccc3(0, 0, 0));
-	m_lbWaiting->setHorizontalAlignment(kCCTextAlignmentCenter);
-	m_lbWaiting->setVerticalAlignment(kCCVerticalTextAlignmentCenter);
-	m_lbWaiting->setPosition(ccp(400, 640));
+	m_sprWaiting = CCSprite::create("loading.png");
+	m_sprWaiting->setPosition(ccp(400, 640));
+	this->addChild(m_sprWaiting);
 
-	this->addChild(m_lbWaiting);
-
+	m_sprWaiting->runAction(CCRepeatForever::create(CCRotateBy::create(1.0f, 360.0f)));
 
 
 
@@ -229,7 +234,7 @@ bool ScoreScene::init()
 	
 
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	EziSocialObject::sharedObject()->setFacebookDelegate(this);
 
 	if(EziSocialObject::sharedObject()->isFacebookSessionActive()) //logged in state
@@ -259,7 +264,7 @@ bool ScoreScene::init()
 
 		m_tableXephang->setVisible(false);
 		m_tableQuatang->setVisible(false);
-		m_lbWaiting->setVisible(false);
+		m_sprWaiting->setVisible(false);
 
 		m_fbLogInItem->setVisible(true);
 		m_lbInvite->setVisible(true);
@@ -282,7 +287,7 @@ void ScoreScene::menuCallback(CCObject* pSender)
 
 void ScoreScene::addFriendCallback( CCObject* pSender )
 {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	if(EziSocialObject::sharedObject()->isFacebookSessionActive()) //logged in state
 	{
 		CCString* str = CCString::createWithFormat("%s đang tả xung hữu đột tiêu diệt máy bay địch trong Điện Biên Phủ trên không. Hãy cùng tham chiến nào.", 
@@ -355,7 +360,7 @@ void ScoreScene::tableCellTouched(CCTableView* table, CCTableViewCell* cell)
 			DataManager::sharedDataManager()->SetLastDeadTime(_tm);
 
 			//delete request
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 			CCLOG("REMOVE REQUEST");
 
 			m_arrRequests->removeObject(customCell->m_request);
@@ -411,6 +416,18 @@ unsigned int ScoreScene::numberOfCellsInTableView(CCTableView *table)
 	} 
 	else //Qua tang
 	{
+		if (m_isXepHangView == false && m_lbInviteQuatang != NULL)
+		{
+			if (m_tableQuatangSize <= 0)
+			{
+				m_lbInviteQuatang->setVisible(true);
+			}
+			else
+			{
+				m_lbInviteQuatang->setVisible(false);
+			}
+		}
+
 		return m_tableQuatangSize;
 	}	
 }
@@ -468,7 +485,7 @@ void ScoreScene::sendLifeCallback( CCObject* pSender )
 	CCDictionary *giftDictionary = CCDictionary::create();
 	giftDictionary->setObject(CCString::create("1"), "LIFE");
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	EziSocialObject::sharedObject()->isFacebookSessionActive();
 
 	EziSocialObject::sharedObject()->sendRequestToFriends(
@@ -486,27 +503,40 @@ void ScoreScene::sendLifeCallback( CCObject* pSender )
 
 void ScoreScene::refreshView()
 {
-	if (m_isXepHangView)
+	if (m_isXepHangView) //left
 	{
 		m_xephangToggle->setSelectedIndex(0);
 		m_quatangToggle->setSelectedIndex(1);
 
 		m_tableXephang->setVisible(true);
 		m_tableQuatang->setVisible(false);
+
+		m_lbInviteQuatang->setVisible(false);
 	} 
-	else
+	else //right
 	{
 		m_xephangToggle->setSelectedIndex(1);
 		m_quatangToggle->setSelectedIndex(0);
 
 		m_tableXephang->setVisible(false);
 		m_tableQuatang->setVisible(true);
+
+		if (m_tableQuatangSize <= 0)
+		{
+			m_lbInviteQuatang->setVisible(true);
+		}
+		else
+		{
+			m_lbInviteQuatang->setVisible(false);
+		}
 	}
 
 	if (m_isLoggedIn == false)
 	{
 		m_tableXephang->setVisible(false);
 		m_tableQuatang->setVisible(false);
+
+		if (m_lbInviteQuatang != NULL) m_lbInviteQuatang->setVisible(false);		
 	}
 }
 
@@ -629,8 +659,8 @@ void ScoreScene::fbLogInCallback( CCObject* pSender )
 {
 	PLAY_BUTTON_EFFECT;
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	m_lbWaiting->setVisible(true);
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+	m_sprWaiting->setVisible(true);
 	bool needPublicPermission = true;
 	EziSocialObject::sharedObject()->performLoginUsingFacebook(needPublicPermission); // Pass true if you need publish permission also
 #endif
@@ -640,7 +670,7 @@ void ScoreScene::fbLogOutCallback( CCObject* pSender )
 {
 	PLAY_BUTTON_EFFECT;
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	EziSocialObject::sharedObject()->perfromLogoutFromFacebook();
 #endif
 }
@@ -650,7 +680,7 @@ void ScoreScene::fbLogOutCallback( CCObject* pSender )
 void ScoreScene::fbSessionCallback(int responseCode, const char *responseMessage)
 {
 	CCLOG("fbSessionCallback");
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	if (responseCode == EziSocialWrapperNS::RESPONSE_CODE::FB_LOGIN_SUCCESSFUL)
 	{
 		CCLOG("fbSessionCallback: SUCCESSFUL");
@@ -674,18 +704,23 @@ void ScoreScene::fbSessionCallback(int responseCode, const char *responseMessage
 		CCLOG("fbSessionCallback: FAILED");
 		m_isLoggedIn = false;
 
-		m_lbWaiting->setVisible(false);
+		m_sprWaiting->setVisible(false);
 		m_tableXephang->setVisible(false);
 		m_tableQuatang->setVisible(false);
 
 		m_fbLogInItem->setVisible(true);
 		m_lbInvite->setVisible(true);
 		m_fbLogOutItem->setVisible(false);
+
+		if (m_lbInviteQuatang != NULL)
+		{
+			m_lbInviteQuatang->setVisible(false);
+		}
 	}
 #endif
 }
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) // fbUserDetailCallback
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS) // fbUserDetailCallback
 
 void ScoreScene::fbUserDetailCallback( int responseCode, const char* responseMessage, EziFacebookUser* fbUser )
 {
@@ -725,7 +760,7 @@ void ScoreScene::fbUserDetailCallback( int responseCode, const char* responseMes
 void ScoreScene::fbUserPhotoCallback(const char *userPhotoPath, const char* fbID)
 {
 	CCLOG("fbUserPhotoCallback");
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	//CCLOG("Gotten avatar for %s", fbID);
 	std::string sid = std::string(fbID);
 
@@ -785,7 +820,7 @@ void ScoreScene::fbUserPhotoCallback(const char *userPhotoPath, const char* fbID
 void ScoreScene::callSubmitScore()
 {
 	CCLOG("callSubmitScore");
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	if(EziSocialObject::sharedObject()->isFacebookSessionActive()) //logged in state
 	{
 		EziSocialObject::sharedObject()->postScore(DataManager::sharedDataManager()->GetHighScore());
@@ -796,7 +831,7 @@ void ScoreScene::callSubmitScore()
 void ScoreScene::callGetHighScores()
 {
 	CCLOG("callGetHighScores");
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	if(EziSocialObject::sharedObject()->isFacebookSessionActive()) //logged in state
 	{
 		EziSocialObject::sharedObject()->getHighScores();
@@ -807,7 +842,7 @@ void ScoreScene::callGetHighScores()
 void ScoreScene::fbHighScoresCallback( int responseCode, const char* responseMessage, cocos2d::CCArray* highScores )
 {
 	CCLOG("fbHighScoresCallback");
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	if (m_arrHighScores != NULL)
 	{
 		m_arrHighScores->release();
@@ -856,7 +891,7 @@ void ScoreScene::fbHighScoresCallback( int responseCode, const char* responseMes
 
 	MySortHighScore();
 
-	m_lbWaiting->setVisible(false);
+	m_sprWaiting->setVisible(false);
 
 	m_tableXephang->reloadData();
 	m_tableQuatang->reloadData();
@@ -867,7 +902,7 @@ void ScoreScene::fbHighScoresCallback( int responseCode, const char* responseMes
 void ScoreScene::postMessageToLoser( std::string loserName, std::string loserUserName, int yourScore )
 {
 	CCLOG("postMessageToLoser");
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	CCString* strMessage = CCString::createWithFormat("Hey, i just got %d points in The Croods, following me is %s\nhttps://www.facebook.com/%s! Kaka :v", yourScore, loserName.c_str(), loserUserName.c_str());
 
 	//let try to post message
@@ -889,7 +924,7 @@ void ScoreScene::fbMessageCallback(int responseCode, const char* responseMessage
 {
 	//FB_AUTO_MESSAGE_ERROR
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	if(responseCode == EziSocialWrapperNS::RESPONSE_CODE::FB_AUTO_MESSAGE_PUBLISHED)
 	{
 		CCLOG("Message published successfully!");
@@ -900,7 +935,7 @@ void ScoreScene::fbMessageCallback(int responseCode, const char* responseMessage
 void ScoreScene::fbSendRequestCallback( int responseCode, const char* responseMessage, cocos2d::CCArray* friendsGotRequests )
 {
 	CCLOG("fbSendRequestCallback");
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	if (EziSocialWrapperNS::RESPONSE_CODE::FB_REQUEST_SENT == responseCode)
 	{
 		CCLOG("fbSendRequestCallback: FB_REQUEST_SENT");
@@ -933,7 +968,7 @@ void ScoreScene::fbSendRequestCallback( int responseCode, const char* responseMe
 void ScoreScene::fbIncomingRequestCallback(int responseCode, const char* responseMessage, int totalIncomingRequests)
 {
 	CCLOG("fbIncomingRequestCallback");
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	int pendingRequest = EziFBIncomingRequestManager::sharedManager()->getPendingRequestCount();
 	CCLOG("------------------NewRequests= %d\n-----------------PendingRequests= %d", totalIncomingRequests, pendingRequest);
 
@@ -1007,7 +1042,7 @@ CCTableViewCell* ScoreScene::tableCellXepHangAtIndex( CCTableView *table, unsign
 	int _sendLifeWaitTime = 0;
 	CCString* strSendLifeTimer = CCString::create("00:00:00");
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	if(m_arrHighScores == NULL)
 	{
 		CCLOG("m_arrHighScores == NULL");
@@ -1277,7 +1312,7 @@ CCTableViewCell* ScoreScene::tableCellQuatangAtIndex( CCTableView *table, unsign
 	CCString* strPhoto = CCString::create("fb-profile.png");
 	std::string strFriendId;
 	
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	EziFBIncomingRequest* request = (EziFBIncomingRequest*)m_arrRequests->objectAtIndex(idx);
 	if (NULL != request)
 	{

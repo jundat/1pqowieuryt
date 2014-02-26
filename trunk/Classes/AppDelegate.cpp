@@ -11,7 +11,7 @@
 #include <time.h>
 
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #include "EziSocialObject.h"
 #include "EziSocialDelegate.h"
 #include "EziFacebookFriend.h"
@@ -81,14 +81,6 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
     CCScene *pScene = MenuScene::scene(); //  MenuScene::scene(); //  MainGameScene::scene(); //
 	pDirector->runWithScene(pScene);
-
-// #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-// 	if(DataManager::sharedDataManager()->GetProfileID() != std::string("NULL"))
-// 	{
-// 		CCLOG("SET AUTO CHECK INCOMING REQUEST");
-// 		EziSocialObject::sharedObject()->setAutoCheckIncomingRequestsOnAppLaunch(true);
-// 	}
-// #endif
 
     return true;
 }

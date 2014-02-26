@@ -4,7 +4,7 @@
 #include "cocos2d.h"
 #include "cocos-ext.h"
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #include "EziSocialObject.h"
 #include "EziSocialDelegate.h"
 #include "EziFacebookFriend.h"
@@ -32,7 +32,7 @@ public:
 	CCMenuItemImage* m_itSendLife;
 
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	EziFBIncomingRequest* m_request;
 #endif
 	
@@ -50,7 +50,7 @@ public:
 		m_lbSendLife = NULL;
 		m_itSendLife = NULL;
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 		m_request = NULL;
 #endif
 	}

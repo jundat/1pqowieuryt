@@ -164,9 +164,9 @@ void MenuScene::playStartAnimation(int lastLife)
 	float time = dy / 320.0f;
 
 	CCSpawn* spawn = CCSpawn::create(
-			CCFadeOut::create()
+			CCFadeOut::create(time),
 			CCEaseBackIn::create(CCMoveBy::create(time, ccp(0, dy))),
-			CCSequence::create(time),
+			CCSequence::create(
 				CCDelayTime::create(1.0f),
 				CCCallFunc::create(this, callfunc_selector(MenuScene::gotoMainGame)),
 				NULL

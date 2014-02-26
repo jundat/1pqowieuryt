@@ -29,6 +29,8 @@
 #define		PLAY_BIG_SHIP_FLYING_EFFECT		AudioManager::sharedAudioManager()->PlayEffect("big_spaceship_flying.wav", true)
 #define		STOP_BIG_SHIP_FLYING_EFFECT		AudioManager::sharedAudioManager()->StopLoopEffect("big_spaceship_flying.wav")
 
+#define		PLAY_LAZER_EFFECT				AudioManager::sharedAudioManager()->PlayEffect("lazer.wav")
+
 
 class AudioManager
 {
