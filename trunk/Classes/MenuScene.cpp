@@ -160,11 +160,13 @@ void MenuScene::playStartAnimation(int lastLife)
 	//CCTransitionSlideInT
 	
 	CCSprite* spr = (CCSprite*)m_arrSprLife->objectAtIndex(lastLife - 1);
-	float dy = 800;
+	float dy = 600;
+	float time = dy / 320.0f;
 
 	CCSpawn* spawn = CCSpawn::create(
-			CCEaseBackIn::create(CCMoveBy::create(dy / 320.0f, ccp(0, dy))),
-			CCSequence::create(
+			CCFadeOut::create()
+			CCEaseBackIn::create(CCMoveBy::create(time, ccp(0, dy))),
+			CCSequence::create(time),
 				CCDelayTime::create(1.0f),
 				CCCallFunc::create(this, callfunc_selector(MenuScene::gotoMainGame)),
 				NULL

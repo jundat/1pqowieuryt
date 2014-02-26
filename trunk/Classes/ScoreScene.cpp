@@ -214,14 +214,13 @@ bool ScoreScene::init()
 
 	//////////////////////////////////////////////////////////////////////////
 
-	m_sprWaiting = CCSprite::create("loading.png"); //CCLabelTTF::create("... Đang chờ ...", "Roboto-Medium.ttf", 64);
-	//m_sprWaiting->setColor(ccc3(0, 0, 0));
-	//m_sprWaiting->setHorizontalAlignment(kCCTextAlignmentCenter);
-	//m_sprWaiting->setVerticalAlignment(kCCVerticalTextAlignmentCenter);
-	m_sprWaiting->setPosition(ccp(400, 640));
-	m_sprWaiting->runAction(CCRepeatForever::create(CCRotateBy::create(1.0f, 180)));
+	m_lbWaiting = CCLabelTTF::create("... Đang chờ ...", "Roboto-Medium.ttf", 64);
+	m_lbWaiting->setColor(ccc3(0, 0, 0));
+	m_lbWaiting->setHorizontalAlignment(kCCTextAlignmentCenter);
+	m_lbWaiting->setVerticalAlignment(kCCVerticalTextAlignmentCenter);
+	m_lbWaiting->setPosition(ccp(400, 640));
 
-	this->addChild(m_sprWaiting);
+	this->addChild(m_lbWaiting);
 
 
 
@@ -260,7 +259,7 @@ bool ScoreScene::init()
 
 		m_tableXephang->setVisible(false);
 		m_tableQuatang->setVisible(false);
-		m_sprWaiting->setVisible(false);
+		m_lbWaiting->setVisible(false);
 
 		m_fbLogInItem->setVisible(true);
 		m_lbInvite->setVisible(true);
@@ -631,7 +630,7 @@ void ScoreScene::fbLogInCallback( CCObject* pSender )
 	PLAY_BUTTON_EFFECT;
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	m_sprWaiting->setVisible(true);
+	m_lbWaiting->setVisible(true);
 	bool needPublicPermission = true;
 	EziSocialObject::sharedObject()->performLoginUsingFacebook(needPublicPermission); // Pass true if you need publish permission also
 #endif
@@ -675,7 +674,7 @@ void ScoreScene::fbSessionCallback(int responseCode, const char *responseMessage
 		CCLOG("fbSessionCallback: FAILED");
 		m_isLoggedIn = false;
 
-		m_sprWaiting->setVisible(false);
+		m_lbWaiting->setVisible(false);
 		m_tableXephang->setVisible(false);
 		m_tableQuatang->setVisible(false);
 
@@ -857,7 +856,7 @@ void ScoreScene::fbHighScoresCallback( int responseCode, const char* responseMes
 
 	MySortHighScore();
 
-	m_sprWaiting->setVisible(false);
+	m_lbWaiting->setVisible(false);
 
 	m_tableXephang->reloadData();
 	m_tableQuatang->reloadData();
