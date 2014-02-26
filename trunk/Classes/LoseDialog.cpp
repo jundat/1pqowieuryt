@@ -29,6 +29,21 @@ bool LoseDialog::init()
 	this->addChild(bg, -2);
 	
 
+	//diamon
+	CCString* s = CCString::createWithFormat("%d", DataManager::sharedDataManager()->GetDiamon());
+	m_lbDiamon = CCLabelTTF::create(s->getCString(), "Roboto-Medium.ttf", 48);
+	m_lbDiamon->setColor(ccc3(0, 0, 0));
+	m_lbDiamon->setAnchorPoint(ccp(1.0f, 0.5f));
+	m_lbDiamon->setPosition(ccp(bg->getContentSize().width/2 - 10 + bg->getPositionX(), bg->getContentSize().height/2 - 40 + bg->getPositionY()));
+	this->addChild(m_lbDiamon);
+
+
+	CCSprite* sprDiamon = CCSprite::create("diamond.png");
+	sprDiamon->setPosition(ccp(m_lbDiamon->getPositionX() - m_lbDiamon->getContentSize().width - sprDiamon->getContentSize().width/1.5f, m_lbDiamon->getPositionY()));
+	this->addChild(sprDiamon);
+
+	//////////////////////////////////////////////////////////////////////////
+
 	m_itExitButton = CCMenuItemImage::create(
 		"exit_button.png",
 		"exit_button_press.png",
@@ -63,7 +78,7 @@ bool LoseDialog::init()
 
 		m_elapsedTime = 0;
 
-		CCString* s = CCString::createWithFormat("%d", (int)G_WAIT_TO_REVIVE);
+		s = CCString::createWithFormat("%d", (int)G_WAIT_TO_REVIVE);
 		m_lbTimer = CCLabelTTF::create(s->getCString(), "Roboto-Medium.ttf", 48);
 		m_lbTimer->setFontFillColor(ccc3(0, 0, 0));
 		m_lbTimer->setPosition(pTimer);
@@ -93,7 +108,7 @@ bool LoseDialog::init()
 	labelTitle->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2 + 160)); //+40
 	this->addChild(labelTitle);
 
-	CCString* s = CCString::createWithFormat("%d", m_score);
+	s = CCString::createWithFormat("%d", m_score);
 	CCLabelTTF* lbScore = CCLabelTTF::create(s->getCString(), "Roboto-Medium.ttf", 96);
 	lbScore->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2 + 50));
 	lbScore->setColor(ccc3(56, 56, 56));
@@ -150,6 +165,12 @@ void LoseDialog::reviveCallBack( CCObject* pSender )
 		m_itRevive->setEnabled(false);
 		m_itRevive->setOpacity(0.6f * 255);
 		this->unscheduleUpdate();
+
+		//m_lbDiamond
+
+		CCString* s = CCString::createWithFormat("%d", DataManager::sharedDataManager()->GetDiamon());
+		m_lbDiamon->setString(s->getCString());
+
 		//////////////////////////////////////////////////////////////////////////
 
 

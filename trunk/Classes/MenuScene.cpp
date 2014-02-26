@@ -45,8 +45,24 @@ bool MenuScene::init()
 	
 	initLifeIcon();	
 
+	//diamon
+	CCString* s = CCString::createWithFormat("%d", DataManager::sharedDataManager()->GetDiamon());
+	CCLabelTTF* lbDiamon = CCLabelTTF::create(s->getCString(), "Roboto-Medium.ttf", 48);
+	lbDiamon->setColor(ccc3(0, 0, 0));
+	lbDiamon->setAnchorPoint(ccp(1.0f, 0.5f));
+	lbDiamon->setPosition(ccp(790, 1250));
+	this->addChild(lbDiamon);
+
+
+	CCSprite* sprDiamon = CCSprite::create("diamond.png");
+	sprDiamon->setPosition(ccp(lbDiamon->getPositionX() - lbDiamon->getContentSize().width - sprDiamon->getContentSize().width/1.5f, lbDiamon->getPositionY()));
+	this->addChild(sprDiamon);
+
+	//////////////////////////////////////////////////////////////////////////
+	
+
 	//
-	CCString* s = CCString::createWithFormat("v%d", GAME_VERSION);
+	s = CCString::createWithFormat("v%d", GAME_VERSION);
 	CCLabelTTF* labelVersion = CCLabelTTF::create(s->getCString(), "Roboto-Medium.ttf", 32);
 	labelVersion->setColor(ccc3(56, 56, 56));
 	labelVersion->setPosition(ccp(labelVersion->getContentSize().width/4, G_DESIGN_HEIGHT - labelVersion->getContentSize().height/4));

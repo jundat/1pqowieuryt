@@ -25,6 +25,7 @@ private:
 	float m_elapsedTime;
 
 	CCLabelTTF* m_lbTimer;
+	CCLabelTTF* m_lbDiamon;
 
 	CCSprite* m_timerBar;
 	CCSprite* m_timerNode;
