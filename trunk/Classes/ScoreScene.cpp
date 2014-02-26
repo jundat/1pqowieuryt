@@ -198,7 +198,7 @@ bool ScoreScene::init()
 
 	// table view QuaTang //////////////////////////////////////////////////////////////////////////
 
-	m_lbInviteQuatang = CCLabelTTF::create("Bạn không có quà nào cả\nHãy kết nối với bạn bè để có đầy quà mỗi ngày nhé!", "Roboto-Medium.ttf", 48);
+	m_lbInviteQuatang = CCLabelTTF::create("Bạn không có quà nào cả\nHãy kết nối với bạn bè\nđể có đầy quà mỗi ngày nhé!", "Roboto-Medium.ttf", 48);
 	m_lbInviteQuatang->setFontFillColor(ccc3(0, 0, 0));
 	m_lbInviteQuatang->setPosition(ccp(400, 1280-672)); //320
 	m_lbInviteQuatang->setVisible(false);
@@ -226,7 +226,7 @@ bool ScoreScene::init()
 	m_sprWaiting->setPosition(ccp(400, 640));
 	this->addChild(m_sprWaiting);
 
-	m_sprWaiting->runAction(CCRepeatForever::create(CCRotateBy::create(1.0f, 360.0f)));
+	m_sprWaiting->runAction(CCRepeatForever::create(CCRotateBy::create(1.0f, -360.0f)));
 
 
 
@@ -856,40 +856,55 @@ void ScoreScene::fbHighScoresCallback( int responseCode, const char* responseMes
 	std::string myProfileID = DataManager::sharedDataManager()->GetProfileID();
 	int count = m_arrHighScores->count();
 
+
+	//sort
 	for (int i = 0; i < count; ++i)
 	{
 		EziFacebookFriend* fbFriend = dynamic_cast<EziFacebookFriend*>(m_arrHighScores->objectAtIndex(i));
 		if (NULL != fbFriend)
 		{
 			std::string profileID = fbFriend->getFBID();
-
 			if(profileID == myProfileID)
 			{
 				fbFriend->setScore(DataManager::sharedDataManager()->GetHighScore());
-
-				//////////////////////////////////////////////////////////////////////////
-				//get the next friend to post message
-				if (i+1 < count)
-				{
-					EziFacebookFriend* fbLoser = dynamic_cast<EziFacebookFriend*>(m_arrHighScores->objectAtIndex(i+1));
-					if (fbLoser != NULL)
-					{
-						postMessageToLoser(std::string(fbLoser->getName()),
-							std::string(fbLoser->getFBID()),
-							DataManager::sharedDataManager()->GetHighScore());
-					}
-				}
+				break;
 			}
+		}
+	}
+
+	MySortHighScore();
+
+	for (int i = 0; i < count; ++i)
+	{
+		EziFacebookFriend* fbFriend = dynamic_cast<EziFacebookFriend*>(m_arrHighScores->objectAtIndex(i));
+		if (NULL != fbFriend)
+		{
+ 			std::string profileID = fbFriend->getFBID();
+// 
+// 			if(profileID == myProfileID)
+// 			{
+// 				//////////////////////////////////////////////////////////////////////////
+// 				//get the next friend to post message
+// 				if (i+1 < count)
+// 				{
+// 					EziFacebookFriend* fbLoser = dynamic_cast<EziFacebookFriend*>(m_arrHighScores->objectAtIndex(i+1));
+// 					if (fbLoser != NULL)
+// 					{
+// 						postMessageToLoser(std::string(fbLoser->getName()),
+// 							std::string(fbLoser->getFBID()),
+// 							DataManager::sharedDataManager()->GetHighScore());
+// 					}
+// 				}
+// 			}
 
 			//get avatar
 			EziSocialObject::sharedObject()->getProfilePicForID(this, profileID.c_str(), // Profile ID of current user
 				G_FRIEND_AVATAR_SIZE, G_FRIEND_AVATAR_SIZE, // Size of the image
 				false // force download it from server
-				);	
+				);
 		}
 	}
 
-	MySortHighScore();
 
 	m_sprWaiting->setVisible(false);
 
@@ -909,7 +924,7 @@ void ScoreScene::postMessageToLoser( std::string loserName, std::string loserUse
 	//postMessageOnWall
 	//autoPostMessageOnWall
 
-	EziSocialObject::sharedObject()->autoPostMessageOnWall(
+	EziSocialObject::sharedObject()->postMessageOnWall(
 		"The Croods",					//heading => Điện Biên Phủ Trên Không
 		"Let got it!",					//caption
 		strMessage->getCString(),		//message => Status

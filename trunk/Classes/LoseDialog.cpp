@@ -15,9 +15,13 @@ bool LoseDialog::init()
 	
 	m_timerBar = NULL;
 	m_timerNode = NULL;
+	m_lbTimer = NULL;
 
-	CCPoint pExit = ccp(233, 1280-813);
-	CCPoint pRevive = ccp(565, 1280-813);
+	CCPoint pExit = ccp(400, 1280-813); // ccp(233, 1280-813);
+	CCPoint pRevive = ccp(400, 1280-813); //ccp(565, 1280-813);
+	CCPoint pTimerBar = ccp(400 - 161, 1280-740); //ccp(565, 1280-813);
+	CCPoint pTimer = ccp(400, 1280-700); //ccp(565, 1280-813);
+
 	float BUTTON_SCALE = 0.6722f;
 
 	CCSprite* bg = CCSprite::create("dialog.png");
@@ -25,13 +29,13 @@ bool LoseDialog::init()
 	this->addChild(bg, -2);
 	
 
-	CCMenuItemImage* exitButton = CCMenuItemImage::create(
+	m_itExitButton = CCMenuItemImage::create(
 		"exit_button.png",
 		"exit_button_press.png",
 		this,
 		menu_selector(LoseDialog::menuCallBack));
-	exitButton->setScale(BUTTON_SCALE);
-	exitButton->setPosition(pExit);
+	m_itExitButton->setScale(BUTTON_SCALE);
+	m_itExitButton->setPosition(pExit);
 	
 
 	m_itRevive = CCMenuItemImage::create(
@@ -49,28 +53,38 @@ bool LoseDialog::init()
 	bool isJustRevive = DataManager::sharedDataManager()->GetIsJustRevived();
 	if (isJustRevive == true)
 	{
-		m_itRevive->setEnabled(false);
-		m_itRevive->setOpacity(0.60f * 255);
+		m_itRevive->setVisible(false);
+		//m_itRevive->setEnabled(false);
+		//m_itRevive->setOpacity(0.60f * 255);
 	}
 	else //timer
 	{
+		m_itExitButton->setVisible(false);
+
 		m_elapsedTime = 0;
+
+		CCString* s = CCString::createWithFormat("%d", (int)G_WAIT_TO_REVIVE);
+		m_lbTimer = CCLabelTTF::create(s->getCString(), "Roboto-Medium.ttf", 48);
+		m_lbTimer->setFontFillColor(ccc3(0, 0, 0));
+		m_lbTimer->setPosition(pTimer);
+		m_lbTimer->setAnchorPoint(ccp(0.5f, 0.5f));
+		this->addChild(m_lbTimer);
 
 		m_timerBar = CCSprite::create("timer_bar.png");
 		m_timerBar->setAnchorPoint(ccp(0.0f, 0.5f));
-		m_timerBar->setPosition(ccp(403, 1280-737));
+		m_timerBar->setPosition(pTimerBar);
 		this->addChild(m_timerBar);
 		
 		m_timerNode = CCSprite::create("timer_node.png");
 		m_timerNode->setAnchorPoint(ccp(0.0f, 0.5f));
-		m_timerNode->setPosition(ccp(403, 1280-737));
+		m_timerNode->setPosition(pTimerBar);
 		this->addChild(m_timerNode);
 
 		this->scheduleUpdate();
 	}
 	//////////////////////////////////////////////////////////////////////////
 	
-	CCMenu* menu = CCMenu::create(exitButton, m_itRevive, NULL);
+	CCMenu* menu = CCMenu::create(m_itExitButton, m_itRevive, NULL);
 	menu->setPosition(CCPointZero);
 	this->addChild(menu);
 
@@ -125,6 +139,20 @@ void LoseDialog::reviveCallBack( CCObject* pSender )
 
 		PLAY_GET_DOUBLE_LAZER_EFFECT;
 
+
+		//////////////////////////////////////////////////////////////////////////
+		//unvisiable
+		m_lbTimer->setVisible(false);
+		m_timerBar->setVisible(false);
+		m_timerNode->setVisible(false);
+
+		//m_itRevive->setVisible(false);
+		m_itRevive->setEnabled(false);
+		m_itRevive->setOpacity(0.6f * 255);
+		this->unscheduleUpdate();
+		//////////////////////////////////////////////////////////////////////////
+
+
 		sprDiamon->runAction(CCSequence::createWithTwoActions(
 			CCSpawn::createWithTwoActions(
 				CCJumpTo::create(1.0f, ccp(sprDiamon->getPositionX(), - sprDiamon->getContentSize().height), 600, 1),
@@ -135,14 +163,21 @@ void LoseDialog::reviveCallBack( CCObject* pSender )
 	}
 	else //Need more diamon
 	{
-		CCMessageBox("Info", "Lack of diamon :(");
+		PLAY_OUT_PORP_EFFECT;
+
+		CCMessageBox("Thông tin", "Bạn đã hết kim cương!");
+
+		//visitble
+		m_itExitButton->setVisible(true);
 
 		//unvisiable
+		m_lbTimer->setVisible(false);
 		m_timerBar->setVisible(false);
 		m_timerNode->setVisible(false);
 
-		m_itRevive->setEnabled(false);
-		m_itRevive->setOpacity(0.6f * 255);
+		m_itRevive->setVisible(false);
+		//m_itRevive->setEnabled(false);
+		//m_itRevive->setOpacity(0.6f * 255);
 		this->unscheduleUpdate();
 	}
 }
@@ -287,6 +322,9 @@ void LoseDialog::update( float delta )
 
 		if (m_elapsedTime < G_WAIT_TO_REVIVE) //scale
 		{
+			CCString* s = CCString::createWithFormat("%d", (int)(1 + (G_WAIT_TO_REVIVE - m_elapsedTime)));
+			m_lbTimer->setString(s->getCString());
+
 			float originW = m_timerBar->getContentSize().width;
 			float originH = m_timerBar->getContentSize().height;
 
@@ -295,11 +333,15 @@ void LoseDialog::update( float delta )
 		else
 		{
 			//unvisiable
+			m_itExitButton->setVisible(true);
+			m_lbTimer->setVisible(false);
+
 			m_timerBar->setVisible(false);
 			m_timerNode->setVisible(false);
 
-			m_itRevive->setEnabled(false);
-			m_itRevive->setOpacity(0.6f * 255);
+			//m_itRevive->setEnabled(false);
+			m_itRevive->setVisible(false);
+			//m_itRevive->setOpacity(0.6f * 255);
 			this->unscheduleUpdate();
 		}
 	}	

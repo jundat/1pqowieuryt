@@ -9,7 +9,7 @@
 
 USING_NS_CC;
 
-static const int PLAYER_Y = 400;
+static const int PLAYER_Y = 250;
 
 bool ObjectLayer::init()
 {
@@ -103,7 +103,7 @@ bool ObjectLayer::init()
 
 	m_enemyFactory = EnemyFactory::create();
 	this->addChild(m_enemyFactory, 2);
-	m_enemyFactory->update(-6.0f, m_score); //pause 2s before start generate enemies
+	m_enemyFactory->update(-3.0f, m_score); //pause 2s before start generate enemies
 
 
 	this->schedule(schedule_selector(ObjectLayer::ScheduleGenerateItem), G_TIME_TO_GENERATE_ITEM);
@@ -360,6 +360,9 @@ void ObjectLayer::update( float delta )
 	//////////////////////////////////////////////////////////////////////////
 	m_playedTime += delta;
 
+	//add score
+
+
 	m_enemyFactory->update(delta, m_score);
 
 	CCObject* it = NULL;
@@ -444,7 +447,7 @@ void ObjectLayer::update( float delta )
 	}
 }
 
-void ObjectLayer::ReviveGame()
+void ObjectLayer::Revive()
 {
 	//keep:
 	//	score
@@ -470,7 +473,7 @@ void ObjectLayer::ReviveGame()
 	m_player->setPosition(ccp(G_DESIGN_WIDTH/2, PLAYER_Y));
 }
 
-void ObjectLayer::RestartGame()
+void ObjectLayer::Restart()
 {
 	//reset:
 	//	difficulty (time, score)

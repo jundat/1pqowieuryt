@@ -20,7 +20,7 @@ CCScene* MenuScene::scene()
 
 bool MenuScene::init()
 {
-	static int GAME_VERSION = 50;
+	static int GAME_VERSION = 53;
 	//pre proccess
 
 	DataManager::sharedDataManager()->RefreshPlayerLife();
@@ -159,35 +159,50 @@ void MenuScene::playStartAnimation(int lastLife)
 	//CCTransitionMoveInT
 	//CCTransitionSlideInT
 	
+// 	CCSprite* spr = (CCSprite*)m_arrSprLife->objectAtIndex(lastLife - 1);
+// 	float dy = 600;
+// 	float time = dy / 320.0f;
+// 
+// 	CCSpawn* spawn = CCSpawn::create(
+// 			CCFadeOut::create(time),
+// 			CCEaseBackIn::create(CCMoveBy::create(time, ccp(0, dy))),
+// 			CCSequence::create(
+// 				CCDelayTime::create(1.0f),
+// 				CCCallFunc::create(this, callfunc_selector(MenuScene::gotoMainGame)),
+// 				NULL
+// 			),
+// 			NULL
+// 		);
+// 
+// 	CCSequence* seq = CCSequence::create(
+// 		//CCDelayTime::create(0.5f),
+// 		spawn,
+// 		NULL
+// 		);
+// 	
+// 	MainGameScene::scene();
+// 
+// 	spr->runAction(seq);
+
 	CCSprite* spr = (CCSprite*)m_arrSprLife->objectAtIndex(lastLife - 1);
-	float dy = 600;
-	float time = dy / 320.0f;
-
-	CCSpawn* spawn = CCSpawn::create(
-			CCFadeOut::create(time),
-			CCEaseBackIn::create(CCMoveBy::create(time, ccp(0, dy))),
-			CCSequence::create(
-				CCDelayTime::create(1.0f),
-				CCCallFunc::create(this, callfunc_selector(MenuScene::gotoMainGame)),
-				NULL
-			),
-			NULL
-		);
-
 	CCSequence* seq = CCSequence::create(
-		//CCDelayTime::create(0.5f),
-		spawn,
+		CCSpawn::create(
+		//CCScaleTo::create(0.5f, 0.0f, 0.0f),
+		//CCFadeOut::create(0.5f)
+		CCMoveTo::create(0.5f, ccp(spr->getPositionX(), 1280 + 200)),
 		NULL
-		);
-	
-	MainGameScene::scene();
-
+		),
+		CCCallFunc::create(this, callfunc_selector(MenuScene::gotoMainGame)),
+		NULL);
 	spr->runAction(seq);
 }
 
 void MenuScene::gotoMainGame()
 {
-	CCScene *pScene = CCTransitionSlideInT::create(1280.0f / 480.0f, MainGameScene::scene());
+// 	CCScene *pScene = CCTransitionSlideInT::create(1280.0f / 480.0f, MainGameScene::scene());
+// 	CCDirector::sharedDirector()->replaceScene(pScene);
+
+	CCScene *pScene = CCTransitionFade::create(0.5, MainGameScene::scene());
 	CCDirector::sharedDirector()->replaceScene(pScene);
 }
 
@@ -227,9 +242,9 @@ void MenuScene::scoreCallback( CCObject* pSender )
 
 void MenuScene::keyBackClicked()
 {
-	PLAY_BUTTON_EFFECT;
-
-	CCDirector::sharedDirector()->end();
+	//PLAY_BUTTON_EFFECT;
+	//
+	//CCDirector::sharedDirector()->end();
 }
 
 void MenuScene::onShowDialog()

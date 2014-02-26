@@ -24,9 +24,12 @@ private:
 	int m_killedEnemies;
 	float m_elapsedTime;
 
+	CCLabelTTF* m_lbTimer;
+
 	CCSprite* m_timerBar;
 	CCSprite* m_timerNode;
-
+	
+	CCMenuItemImage* m_itExitButton;
 	CCMenuItemImage* m_itRevive;
 
 	//particle

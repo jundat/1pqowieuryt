@@ -141,7 +141,7 @@ void MainGameScene::reviveCallback()
 	CCLOG("------------- REVIVE ------------ %d", lastLife);
 	
 	DataManager::sharedDataManager()->SetIsJustRevived(true);
-	m_ObjLayer->ReviveGame();
+	m_ObjLayer->Revive();
 }
 
 void MainGameScene::restartCallback()
@@ -153,7 +153,7 @@ void MainGameScene::restartCallback()
 	this->setTouchEnabled(true);
 
 	DataManager::sharedDataManager()->SetIsJustRevived(false);
-	m_ObjLayer->RestartGame();
+	m_ObjLayer->Restart();
 }
 
 void MainGameScene::keyBackClicked()
