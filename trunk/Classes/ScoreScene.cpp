@@ -226,7 +226,7 @@ bool ScoreScene::init()
 	//////////////////////////////////////////////////////////////////////////
 
 	m_sprWaiting = CCSprite::create("loading.png");
-	m_sprWaiting->setPosition(ccp(400, 640));
+	m_sprWaiting->setPosition(ccp(400, 1280-768));
 	this->addChild(m_sprWaiting);
 
 	m_sprWaiting->runAction(CCRepeatForever::create(CCRotateBy::create(1.0f, -360.0f)));

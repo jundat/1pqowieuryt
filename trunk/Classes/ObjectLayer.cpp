@@ -103,7 +103,7 @@ bool ObjectLayer::init()
 
 	m_enemyFactory = EnemyFactory::create();
 	this->addChild(m_enemyFactory, 2);
-	m_enemyFactory->update(-3.0f, m_score); //pause 2s before start generate enemies
+	m_enemyFactory->update(-1.5f, m_score); //pause 2s before start generate enemies
 
 
 	this->schedule(schedule_selector(ObjectLayer::ScheduleGenerateItem), G_TIME_TO_GENERATE_ITEM);

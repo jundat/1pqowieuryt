@@ -14,16 +14,16 @@ CCScene* IntroScene::scene()
 
 bool IntroScene::init()
 {
-    if ( !CCLayerColor::initWithColor(ccc4(255, 255, 255, 255)) )
+    if ( !CCLayerColor::initWithColor(G_CCWHITE4) )
     {
         return false;
     }
 
-	CCSprite* sprLogo = CCSprite::create("logo.png");
-	sprLogo->setPosition(ccp(400, 640));
+	CCSprite* sprLogo = CCSprite::create(G_LOGO);
+	sprLogo->setPosition(G_LOGO_POSITION);
 	sprLogo->runAction(CCSequence::create(
-		CCFadeIn::create(1.5f),
-		CCDelayTime::create(2.0f),
+		CCFadeIn::create(G_INTRO_FADE_IN_TIME),
+		CCDelayTime::create(G_INTRO_DELAY_TIME),
 		CCCallFunc::create(this, callfunc_selector(IntroScene::menuCallback)),
 		NULL));
 	this->addChild(sprLogo);
@@ -34,6 +34,6 @@ bool IntroScene::init()
 
 void IntroScene::menuCallback()
 {
-	CCScene *pScene = CCTransitionFade::create(1.5f, MenuScene::scene(), ccWHITE);
+	CCScene *pScene = CCTransitionFade::create(G_INTRO_TRANSITION_MENU_TIME, MenuScene::scene(), ccWHITE);
 	CCDirector::sharedDirector()->replaceScene(pScene);
 }

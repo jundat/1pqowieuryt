@@ -20,15 +20,12 @@ CCScene* MenuScene::scene()
 
 bool MenuScene::init()
 {
-	static int G_VERSION = 57;
-	//pre proccess
-
 	DataManager::sharedDataManager()->RefreshPlayerLife();
 
 	//////////////////////////////////////////////////////////////////////////
 	
 
-    if ( !CCLayerColor::initWithColor(ccc4(195, 200, 201, 255)) )
+    if ( !CCLayerColor::initWithColor(G_MENU_BG_COLOR) )
     {
         return false;
     }
@@ -38,19 +35,19 @@ bool MenuScene::init()
 
     /////////////////////////////
 
-	CCSprite* bg = CCSprite::create("bg_menu.png");
-	bg->setAnchorPoint(ccp(0.0f, 0.0f));
-	bg->setPosition(ccp(0, 0));
-	this->addChild(bg, 0);
+	CCSprite* bg = CCSprite::create(G_MENU_BG);
+	bg->setAnchorPoint(G_MENU_BG_ANCHORPOINT);
+	bg->setPosition(G_MENU_BG_POS);
+	this->addChild(bg, G_MENU_BG_Z);
 	
 	initLifeIcon();	
 
 	//diamon
 	CCString* s = CCString::createWithFormat("%d", DataManager::sharedDataManager()->GetDiamon());
-	CCLabelTTF* lbDiamon = CCLabelTTF::create(s->getCString(), "Roboto-Medium.ttf", 48);
-	lbDiamon->setColor(ccc3(0, 0, 0));
-	lbDiamon->setAnchorPoint(ccp(1.0f, 0.5f));
-	lbDiamon->setPosition(ccp(790, 1250));
+	CCLabelTTF* lbDiamon = CCLabelTTF::create(s->getCString(), G_FONT_NORMAL, G_MENU_DIAMON_TEXT_SIZE);
+	lbDiamon->setColor(G_MENU_DIAMON_TEXT_COLOR);
+	lbDiamon->setAnchorPoint(G_MENU_DIAMON_TEXT_ANCHOR);
+	lbDiamon->setPosition(G_MENU_DIAMON_TEXT_POS);
 	this->addChild(lbDiamon);
 
 

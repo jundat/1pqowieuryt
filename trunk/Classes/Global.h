@@ -5,6 +5,12 @@
 
 //////////////////////////////////////////////////////////////////////////
 //CONSTANT
+#define G_CCWHITE4				ccc4(255, 255, 255, 255)
+#define G_FONT_NORMAL			"Roboto-Medium.ttf"
+#define G_FONT_LEADERBOARD		"Villa.ttf"
+
+
+//GAME CONSTANT
 
 #define G_DEFAULT_NAME			"Việt Nam"
 #define G_AVATAR_SIZE			128
@@ -16,6 +22,13 @@
 #define G_ITEM_UPGRADE_BULLET	1
 #define G_ITEM_ARMOR			2
 #define G_ITEM_BOOM				3
+
+#define G_CHECK_INSTALLED		"CHECK_INSTALLED"
+#define G_INSTALLED				1
+#define G_FPS					1/60.0f
+#define G_SMALL_DEVIVE_SIZE		320
+#define	G_DEFAULT_VOLUME		0.25f
+
 
 //////////////////////////////////////////////////////////////////////////
 //VARIANT

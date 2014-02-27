@@ -6,6 +6,20 @@
 
 USING_NS_CC;
 
+
+#define G_VERSION			58
+#define G_MENU_BG_COLOR		ccc4(195, 200, 201, 255)
+#define G_MENU_BG			"bg_menu.png"
+#define G_MENU_BG_ANCHORPOINT	ccp(0.0f, 0.0f)
+#define G_MENU_BG_POS			CCPointZero
+#define G_MENU_BG_Z					0
+#define G_MENU_DIAMON_TEXT_SIZE		48
+#define G_MENU_DIAMON_TEXT_COLOR	ccBLACK
+#define G_MENU_DIAMON_TEXT_ANCHOR	ccp(1.0f, 0.5f)
+#define G_MENU_DIAMON_TEXT_POS		ccp(790, 1250)
+
+
+
 class MenuScene : public cocos2d::CCLayerColor
 {
 public:

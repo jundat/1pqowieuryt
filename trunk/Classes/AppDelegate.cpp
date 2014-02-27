@@ -38,11 +38,11 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
 	//check if first time install
 	DataManager* DM = DataManager::sharedDataManager();
-	int isInstall = DM->GetValueFromKey("IS_INSTALL");
-	if (isInstall == 0)
+	int isInstall = DM->GetValueFromKey(G_CHECK_INSTALLED);
+	if (isInstall != G_INSTALLED)
 	{
 		//first install
-		DM->SetValueFromKey("IS_INSTALL", 1);
+		DM->SetValueFromKey(G_CHECK_INSTALLED, G_INSTALLED);
 
 		//save some value
 		DM->SetLastPlayerLife(G_MAX_PLAYER_LIFE);
@@ -59,11 +59,11 @@ bool AppDelegate::applicationDidFinishLaunching() {
 #endif
 	
     pDirector->setOpenGLView(pEGLView);
-    pDirector->setAnimationInterval(1.0 / 60);
+    pDirector->setAnimationInterval(G_FPS);
 	
 	CCSize realSize = pEGLView->getFrameSize();
 	
-	if (realSize.width < 320) //mini device
+	if (realSize.width < G_SMALL_DEVIVE_SIZE) //mini device
 	{
 		pEGLView->setDesignResolutionSize(G_DESIGN_WIDTH, G_DESIGN_HEIGHT, kResolutionExactFit);
 	} 
@@ -72,8 +72,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
 		pEGLView->setDesignResolutionSize(G_DESIGN_WIDTH, G_DESIGN_HEIGHT, kResolutionShowAll);
 	}
 	
-	AudioManager::sharedAudioManager()->SetVolumeMusic(0.25f);
-	AudioManager::sharedAudioManager()->SetVolumeFX(0.25f);
+	AudioManager::sharedAudioManager()->SetVolumeMusic(G_DEFAULT_VOLUME);
+	AudioManager::sharedAudioManager()->SetVolumeFX(G_DEFAULT_VOLUME);
 
 
     CCScene *pScene = IntroScene::scene(); //  MenuScene::scene(); //  MainGameScene::scene(); //
