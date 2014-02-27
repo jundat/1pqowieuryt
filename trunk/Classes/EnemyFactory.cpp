@@ -121,6 +121,7 @@ void EnemyFactory::update( float delta, int score )
 
 	if (score > m_currentLevel.m_score)
 	{
+		score = 1000 * (int)(score / 1000);
 		LevelData* newLd = LevelLoader::shareLevelLoader()->GetValueLowerThan(score);
 
 		if (newLd != NULL && (*newLd).m_score > m_currentLevel.m_score)

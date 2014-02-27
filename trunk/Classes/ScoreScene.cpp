@@ -50,13 +50,16 @@ bool ScoreScene::init()
 
 
 	//avatar
+	m_userAvatar = CCSprite::create("fb-profile.png");
 	if(DataManager::sharedDataManager()->GetPhotoPath() != "NULL")
 	{
-		m_userAvatar = CCSprite::create(DataManager::sharedDataManager()->GetPhotoPath().c_str());
-	}
-	else
-	{
-		m_userAvatar = CCSprite::create("fb-profile.png");
+		CCSprite* userPhoto = CCSprite::create(DataManager::sharedDataManager()->GetPhotoPath().c_str());
+		userPhoto->setPosition(ccp(m_userAvatar->getContentSize().width/2, m_userAvatar->getContentSize().height/2));
+
+		if (m_userAvatar)
+		{
+			m_userAvatar->addChild(userPhoto);
+		}
 	}
 
 	m_userAvatar->setPosition(ccp(93, 1280-202));
@@ -777,7 +780,6 @@ void ScoreScene::fbUserPhotoCallback(const char *userPhotoPath, const char* fbID
 
 			CCSprite* userPhoto = CCSprite::create(userPhotoPath);
 			userPhoto->setPosition(ccp(m_userAvatar->getContentSize().width/2, m_userAvatar->getContentSize().height/2));
-			userPhoto->setScale(m_userAvatar->getContentSize().width/userPhoto->getContentSize().width);
 			
 			if (m_userAvatar)
 			{
@@ -899,7 +901,7 @@ void ScoreScene::fbHighScoresCallback( int responseCode, const char* responseMes
 
 			//get avatar
 			EziSocialObject::sharedObject()->getProfilePicForID(this, profileID.c_str(), // Profile ID of current user
-				G_FRIEND_AVATAR_SIZE, G_FRIEND_AVATAR_SIZE, // Size of the image
+				G_AVATAR_SIZE, G_AVATAR_SIZE, // Size of the image
 				false // force download it from server
 				);
 		}
@@ -1165,12 +1167,17 @@ CCTableViewCell* ScoreScene::tableCellXepHangAtIndex( CCTableView *table, unsign
 		sprite->setTag(1);
 		cell->addChild(sprite);
 
-		CCSprite *avatar = CCSprite::create(strPhoto->getCString());
-		avatar->setScale(0.78125f);
-		avatar->setPosition(ccp(140, m_sprCell->getContentSize().height/2));
-		avatar->setTag(2);
-		cell->addChild(avatar);
+		CCSprite *defaultAvatar = CCSprite::create("fb-profile.png");
+		defaultAvatar->setScale((float)G_FRIEND_AVATAR_SIZE/(float)G_AVATAR_SIZE);
+		defaultAvatar->setPosition(ccp(140, m_sprCell->getContentSize().height/2));
+		defaultAvatar->setTag(2);
+		cell->addChild(defaultAvatar);
 
+		CCSprite *avatar = CCSprite::create(strPhoto->getCString());
+		avatar->setPosition(ccp(defaultAvatar->getContentSize().width/2, defaultAvatar->getContentSize().height/2));
+		avatar->setTag(2);
+		defaultAvatar->addChild(avatar);
+		
 		CCLabelTTF *lbOrder;
 		if (idx < 3)
 		{
@@ -1305,9 +1312,10 @@ CCTableViewCell* ScoreScene::tableCellXepHangAtIndex( CCTableView *table, unsign
 	}
 	else
 	{
-		CCSprite *avatar = (CCSprite*)cell->getChildByTag(2);
+		CCSprite *defaultAvatar = (CCSprite*)cell->getChildByTag(2);
+		CCSprite *avatar = (CCSprite*)defaultAvatar->getChildByTag(2);
 		avatar = CCSprite::create(strPhoto->getCString());
-
+		
 		CCLabelTTF *lbOrder = (CCLabelTTF*)cell->getChildByTag(3);
 		lbOrder->setString(strOrder->getCString());
 
@@ -1396,16 +1404,23 @@ CCTableViewCell* ScoreScene::tableCellQuatangAtIndex( CCTableView *table, unsign
 		cell->addChild(sprite);
 
 		CCLOG("4");
+
+		CCSprite *defaultAvatar = CCSprite::create("fb-profile.png");
+		defaultAvatar->setPosition(ccp(75, m_sprCell->getContentSize().height/2));
+		defaultAvatar->setScale((float)G_FRIEND_AVATAR_SIZE/(float)G_AVATAR_SIZE);
+		defaultAvatar->setTag(2);
+		cell->addChild(defaultAvatar);
+
 		CCSprite *avatar = CCSprite::create(strPhoto->getCString());
-		avatar->setScale(0.78125);
-		avatar->setPosition(ccp(50 + 30, m_sprCell->getContentSize().height/2));
+		avatar->setPosition(ccp(defaultAvatar->getContentSize().width/2, defaultAvatar->getContentSize().height/2));
 		avatar->setTag(2);
-		cell->addChild(avatar);
+		defaultAvatar->addChild(avatar);
+
 
 		CCLOG("5");
 		CCLabelTTF *lbName = CCLabelTTF::create(strName->getCString(), "Roboto-Medium.ttf", 42);
 		lbName->setFontFillColor(ccc3(0,0,0));
-		lbName->setPosition(ccp(0.75f * G_FRIEND_AVATAR_SIZE + 50, m_sprCell->getContentSize().height/2));
+		lbName->setPosition(ccp(0.75f * G_FRIEND_AVATAR_SIZE + 60, m_sprCell->getContentSize().height/2));
 		lbName->setAnchorPoint(ccp(0.0f, 0.5f));
 		lbName->setTag(4);
 		cell->addChild(lbName);
@@ -1425,7 +1440,8 @@ CCTableViewCell* ScoreScene::tableCellQuatangAtIndex( CCTableView *table, unsign
 	else
 	{
 		CCLOG("6");
-		CCSprite *avatar = (CCSprite*)cell->getChildByTag(2);
+		CCSprite *defaultAvatar = (CCSprite*)cell->getChildByTag(2);
+		CCSprite *avatar = (CCSprite*)defaultAvatar->getChildByTag(2);
 		avatar = CCSprite::create(strPhoto->getCString());
 
 		CCLOG("7");

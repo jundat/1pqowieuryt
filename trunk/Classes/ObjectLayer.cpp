@@ -359,8 +359,18 @@ void ObjectLayer::update( float delta )
 	ccDrawCircle(ccp(400, 640), 400, 90, 32, true);
 	//////////////////////////////////////////////////////////////////////////
 	m_playedTime += delta;
-
+	
 	//add score
+	if (m_playedTime >= 1.0f)
+	{
+		m_playedTime -= 1.0f;
+
+		m_score += G_POINTS_PER_SECOND;
+		
+		CCString* sscore = CCString::createWithFormat("%d", m_score);
+		m_labelScore->setString(sscore->getCString());
+	}
+
 
 
 	m_enemyFactory->update(delta, m_score);
@@ -425,7 +435,6 @@ void ObjectLayer::update( float delta )
 				
 				CCString* sscore = CCString::createWithFormat("%d", m_score);
 				m_labelScore->setString(sscore->getCString());
-				m_labelScore->setHorizontalAlignment(kCCTextAlignmentLeft);
 			}
 
 			//out of screen

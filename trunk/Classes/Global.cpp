@@ -69,3 +69,5 @@ int G_DIAMON_PER_LIFE;
 
 
 float G_WAIT_TO_REVIVE;
+
+int G_POINTS_PER_SECOND;

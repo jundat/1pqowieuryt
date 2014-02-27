@@ -8,7 +8,7 @@
 
 #define G_DEFAULT_NAME			"Việt Nam"
 #define G_AVATAR_SIZE			128
-#define G_FRIEND_AVATAR_SIZE	128
+#define G_FRIEND_AVATAR_SIZE	110
 
 #define	G_BULLET_PLAYER_ID		1
 #define G_BULLET_ENEMY_ID		2
@@ -85,7 +85,7 @@ extern int G_DIAMON_PER_LIFE;
 //Thời gian hiển thị của Nút REVIVE trong Lose Scene
 extern float G_WAIT_TO_REVIVE;
 
-
+extern int G_POINTS_PER_SECOND;
 
 
 #endif //__GLOBAL_H__

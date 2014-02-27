@@ -89,6 +89,9 @@ ConfigLoader::ConfigLoader(void)
 
 	
 	G_WAIT_TO_REVIVE = GetValue(std::string("G_WAIT_TO_REVIVE"))->floatValue();
+
+	G_POINTS_PER_SECOND = GetValue(std::string("G_POINTS_PER_SECOND"))->intValue();
+	
 }
 
 ConfigLoader::~ConfigLoader(void)

@@ -115,5 +115,8 @@
 		<key>G_WAIT_TO_REVIVE</key> <!-- Thời gian nút revive hiển thị khi thua -->
 		    <string>5</string>
 
+		<key>G_POINTS_PER_SECOND</key> <!-- Số điểm trên 1s -->
+		    <string>10</string>
+
     </dict>
 </plist>
