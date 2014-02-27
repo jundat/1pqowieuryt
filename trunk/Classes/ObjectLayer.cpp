@@ -243,7 +243,7 @@ void ObjectLayer::ScheduleCheckCollision(float dt)
 			if (enemyRect.intersectsRect(playerRect))
 			{
 				//sound
-				PLAY_USE_BOMB_EFFECT;
+				PLAY_ENEMY2_DOWN_EFFECT;
 
 				m_player->HitBullet(1);
 				enemy->HitBullet(1000);
