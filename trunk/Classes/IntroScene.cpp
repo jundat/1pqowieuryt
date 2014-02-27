@@ -14,28 +14,26 @@ CCScene* IntroScene::scene()
 
 bool IntroScene::init()
 {
-    if ( !CCLayer::init() )
+    if ( !CCLayerColor::initWithColor(ccc4(255, 255, 255, 255)) )
     {
         return false;
     }
 
-	CCSprite* bg = CCSprite::create("welcome.png");
-	bg->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2));
-	this->addChild(bg, 0);
-	
-	bg->runAction(CCSequence::create(
-		CCFadeIn::create(2.0f),
-		CCDelayTime::create(1.0f),
-		CCFadeOut::create(1.0f),
-		CCCallFunc::create(this, callfunc_selector(IntroScene::MenuCallback)),
+	CCSprite* sprLogo = CCSprite::create("logo.png");
+	sprLogo->setPosition(ccp(400, 640));
+	sprLogo->runAction(CCSequence::create(
+		CCFadeIn::create(1.5f),
+		CCDelayTime::create(2.0f),
+		CCCallFunc::create(this, callfunc_selector(IntroScene::menuCallback)),
 		NULL));
+	this->addChild(sprLogo);
 
 	CCScene *pScene = MenuScene::scene();
     return true;
 }
 
-void IntroScene::MenuCallback()
+void IntroScene::menuCallback()
 {
-	CCScene *pScene = MenuScene::scene();
+	CCScene *pScene = CCTransitionFade::create(1.5f, MenuScene::scene(), ccWHITE);
 	CCDirector::sharedDirector()->replaceScene(pScene);
 }

@@ -5,14 +5,14 @@
 
 USING_NS_CC;
 
-class IntroScene : public cocos2d::CCLayer
+class IntroScene : public cocos2d::CCLayerColor
 {
 public:
     virtual bool init();
     static cocos2d::CCScene* scene();
 	CREATE_FUNC(IntroScene);
 
-	void MenuCallback();
+	void menuCallback();
 };
 
 #endif // __INTRO_SCENE_H__

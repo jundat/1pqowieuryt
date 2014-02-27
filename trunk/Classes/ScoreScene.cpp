@@ -293,6 +293,8 @@ void ScoreScene::addFriendCallback( CCObject* pSender )
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	if(EziSocialObject::sharedObject()->isFacebookSessionActive()) //logged in state
 	{
+		PLAY_BUTTON_EFFECT;
+
 		CCString* str = CCString::createWithFormat("%s đang tả xung hữu đột tiêu diệt máy bay địch trong Điện Biên Phủ trên không. Hãy cùng tham chiến nào.", 
 			DataManager::sharedDataManager()->GetFbFullName().c_str());
 		
@@ -957,10 +959,11 @@ void ScoreScene::fbSendRequestCallback( int responseCode, const char* responseMe
 	{
 		CCLOG("fbSendRequestCallback: FB_REQUEST_SENT");
 		
+		PLAY_GET_BOMB_EFFECT;
+
 		if (m_friendCell != NULL) //send life
 		{
 			CCLOG("fbSendRequestCallback: FB_REQUEST_SENT: m_friendCell != NULL");
-			PLAY_GET_BOMB_EFFECT;
 
 			//reset timer
 			DataManager::sharedDataManager()->SetTimeLifeToFriendNow(m_friendCell->fbID.c_str());

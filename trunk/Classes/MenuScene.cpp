@@ -20,7 +20,7 @@ CCScene* MenuScene::scene()
 
 bool MenuScene::init()
 {
-	static int G_VERSION = 55;
+	static int G_VERSION = 56;
 	//pre proccess
 
 	DataManager::sharedDataManager()->RefreshPlayerLife();
@@ -305,6 +305,8 @@ void MenuScene::soundCallback( CCObject* pSender )
 {
 	if(AudioManager::sharedAudioManager()->IsEnableBackground())
 	{
+		PLAY_BUTTON_EFFECT;
+
 		AudioManager::sharedAudioManager()->SetEnableBackground(false);
 		AudioManager::sharedAudioManager()->SetEnableEffect(false);
 

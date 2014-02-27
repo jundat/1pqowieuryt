@@ -72,14 +72,11 @@ bool AppDelegate::applicationDidFinishLaunching() {
 		pEGLView->setDesignResolutionSize(G_DESIGN_WIDTH, G_DESIGN_HEIGHT, kResolutionShowAll);
 	}
 	
-	//pDirector->setDisplayStats(true);
-
-
 	AudioManager::sharedAudioManager()->SetVolumeMusic(0.25f);
 	AudioManager::sharedAudioManager()->SetVolumeFX(0.25f);
 
 
-    CCScene *pScene = MenuScene::scene(); //  MenuScene::scene(); //  MainGameScene::scene(); //
+    CCScene *pScene = IntroScene::scene(); //  MenuScene::scene(); //  MainGameScene::scene(); //
 	pDirector->runWithScene(pScene);
 
     return true;

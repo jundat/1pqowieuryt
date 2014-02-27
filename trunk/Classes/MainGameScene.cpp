@@ -73,7 +73,9 @@ void MainGameScene::pauseCallback(CCObject* pSender)
 	{
 		return;
 	}
-	
+
+	PLAY_BUTTON_EFFECT;
+
 	m_isShowingPause = true;
 
 	m_BackgroundLayer->Pause();
