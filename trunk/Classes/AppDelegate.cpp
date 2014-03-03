@@ -9,6 +9,7 @@
 #include "AudioManager.h"
 #include "IntroScene.h"
 #include <time.h>
+#include "TestPostGetScene.h"
 
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
@@ -76,7 +77,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	AudioManager::sharedAudioManager()->SetVolumeFX(G_DEFAULT_VOLUME);
 
 
-    CCScene *pScene = IntroScene::scene(); //  MenuScene::scene(); //  MainGameScene::scene(); //
+    CCScene *pScene = TestPostGetScene::scene(); // IntroScene::scene(); //  MenuScene::scene(); //  MainGameScene::scene(); //
 	pDirector->runWithScene(pScene);
 
     return true;
