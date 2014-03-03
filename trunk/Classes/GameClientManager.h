@@ -21,7 +21,7 @@ USING_NS_CC_EXT;
 
 
 //GET DATA
-#define G_URL_GET_SCORE					""
+#define G_URL_GET_SCORE					"192.168.0.118:8025/score"
 #define G_URL_GET_FRIEND_LEADERBOARD	""
 #define G_URL_GET_WORLD_LEADERBOARD		""
 
@@ -79,6 +79,11 @@ public:
 		return s_instance;
 	}
 	
+	std::string encodeBeforeSend(std::string strData)
+	{
+		return strData;
+	}
+
 	void setDelegate(GameClientDelegate* clientDelegate)
 	{
 		this->m_clientDelegate = clientDelegate;

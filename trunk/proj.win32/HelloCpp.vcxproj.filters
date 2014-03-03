@@ -7,6 +7,9 @@
     <Filter Include="Classes">
       <UniqueIdentifier>{bb6c862e-70e9-49d9-81b7-3829a6f50471}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Classes\jansson">
+      <UniqueIdentifier>{c9a33ac2-5e46-485b-b6fd-79369a184462}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -86,6 +89,45 @@
     </ClCompile>
     <ClCompile Include="..\Classes\Global.cpp">
       <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\TestPostGetScene.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\GameClientDelegate.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\GameClientManager.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\jansson\dump.c">
+      <Filter>Classes\jansson</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\jansson\error.c">
+      <Filter>Classes\jansson</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\jansson\hashtable.c">
+      <Filter>Classes\jansson</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\jansson\load.c">
+      <Filter>Classes\jansson</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\jansson\memory.c">
+      <Filter>Classes\jansson</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\jansson\pack_unpack.c">
+      <Filter>Classes\jansson</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\jansson\strbuffer.c">
+      <Filter>Classes\jansson</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\jansson\strconv.c">
+      <Filter>Classes\jansson</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\jansson\utf.c">
+      <Filter>Classes\jansson</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\jansson\value.c">
+      <Filter>Classes\jansson</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -169,6 +211,33 @@
     </ClInclude>
     <ClInclude Include="..\Classes\SendRequestScene.h">
       <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\TestPostGetScene.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\GameClientDelegate.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\GameClientManager.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\jansson\hashtable.h">
+      <Filter>Classes\jansson</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\jansson\jansson.h">
+      <Filter>Classes\jansson</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\jansson\jansson_config.h">
+      <Filter>Classes\jansson</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\jansson\jansson_private.h">
+      <Filter>Classes\jansson</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\jansson\strbuffer.h">
+      <Filter>Classes\jansson</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\jansson\utf.h">
+      <Filter>Classes\jansson</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

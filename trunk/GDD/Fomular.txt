@@ -1,0 +1,13 @@
+
+
+GenerateEnemyInterval = ?
+PlayerFireInterval = ?
+
+Difficulty		= f1(Score, Time)
+
+EnemyDamage 	= f2(Difficulty)
+EnemyHp 		= f3(Difficulty)
+EnemyVelocity 	= f4(Difficulty)
+
+Score 			= f5(EnemyDamage, EnemyHp, EnemyVelocity)
+

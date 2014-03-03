@@ -17,7 +17,8 @@ public:
     static cocos2d::CCScene* scene();
 	CREATE_FUNC(TestPostGetScene);
 
-	void testSendPlayerProfile(CCObject *sender);
+	void testPost1(CCObject *sender);
+	void testPost2(CCObject *sender);
 	virtual void onSendPlayerFbProfileCompleted( bool isSuccess )
 	{
 		if (isSuccess)
