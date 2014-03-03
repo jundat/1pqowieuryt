@@ -199,8 +199,8 @@ void Ship::update( float delta )
 {
 	float x = getPositionX();
 	float y = getPositionY();
-	float w_2 = collisionBox().size.width/2;
-	float h_2 = collisionBox().size.height/2;
+	float w_2 = boundingBox().size.width/2;
+	float h_2 = boundingBox().size.height/2;
 
 	LIMIT_VALUE(x, w_2, G_DESIGN_WIDTH - w_2);
 	LIMIT_VALUE(y, h_2, G_DESIGN_HEIGHT - h_2);
