@@ -1,5 +1,21 @@
 <plist version="1.0">
     <dict>
+    	<!---------------- SEND DATA --------------->
+		<key>G_URL_PLAYER_FB_PROFILE</key>
+		    <string>192.168.0.118:8025/profile</string>
+
+	    <key>G_URL_FRIEND_LIST</key>
+		    <string>192.168.0.118:8025/friend</string>
+
+	    <key>G_URL_DEVICE_PROFILE</key>
+		    <string>192.168.0.118:8025/device</string>
+
+	    <key>G_URL_SCORE</key>
+		    <string>192.168.0.118:8025/score</string>
+
+
+
+
       	<key>G_DESIGN_WIDTH</key> <!-- Chiều rộng màn hình, ko nên sửa -->
 		    <string>800</string>
 	    <key>G_DESIGN_HEIGHT</key> <!-- Chiều cao màn hình, ko nên sửa -->

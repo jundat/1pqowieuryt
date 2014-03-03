@@ -129,6 +129,9 @@
     <ClCompile Include="..\Classes\jansson\value.c">
       <Filter>Classes\jansson</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\GameClientObjects.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -238,6 +241,9 @@
     </ClInclude>
     <ClInclude Include="..\Classes\jansson\utf.h">
       <Filter>Classes\jansson</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\GameClientObjects.h">
+      <Filter>Classes</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

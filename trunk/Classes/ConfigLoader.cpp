@@ -23,6 +23,15 @@ ConfigLoader::ConfigLoader(void)
 	}
 	CCLOG("------------CONFIG-----------");
 
+	//SEND DATA
+	G_URL_PLAYER_FB_PROFILE = std::string(GetValue(std::string("G_URL_PLAYER_FB_PROFILE"))->getCString());
+	G_URL_FRIEND_LIST = std::string(GetValue(std::string("G_URL_FRIEND_LIST"))->getCString());
+	G_URL_DEVICE_PROFILE = std::string(GetValue(std::string("G_URL_DEVICE_PROFILE"))->getCString());
+	G_URL_SCORE = std::string(GetValue(std::string("G_URL_SCORE"))->getCString());
+
+
+	//////////////////////////////////////////////////////////////////////////
+
 	//save to variant
 	G_DESIGN_WIDTH = GetValue(std::string("G_DESIGN_WIDTH"))->intValue();
 	G_DESIGN_HEIGHT = GetValue(std::string("G_DESIGN_HEIGHT"))->intValue();

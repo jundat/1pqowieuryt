@@ -31,6 +31,17 @@
 
 
 //////////////////////////////////////////////////////////////////////////
+//
+
+
+
+//SEND DATA
+extern std::string G_URL_PLAYER_FB_PROFILE;
+extern std::string G_URL_FRIEND_LIST;
+extern std::string G_URL_DEVICE_PROFILE;
+extern std::string G_URL_SCORE;
+
+
 //VARIANT
 
 extern int G_DESIGN_WIDTH;

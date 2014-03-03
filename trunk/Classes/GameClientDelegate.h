@@ -2,6 +2,7 @@
 #define __GAME_CLIENT_DELEGATE_H__
 
 #include "cocos2d.h"
+#include "GameClientObjects.h"
 
 USING_NS_CC;
 
@@ -46,6 +47,16 @@ public:
 		bool isSuccess,
 		CCArray* arrHighScore //array of FacebookAccount (our code)
 		){}
+
+	virtual void onGetFriendListCompleted(
+		bool isSuccess,
+		CCArray* arrFriends //array of FacebookAccount (our code)
+		){}
+
+	virtual void onGetPlayerFbProfileCompleted(bool isSuccess, FacebookAccount* acc){}
+
+	virtual void onGetDeviceProfileCompleted(bool isSuccess, DeviceProfile* deviceProfile){}
+
 };
 
 

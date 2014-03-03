@@ -7,51 +7,11 @@
 #include "GameClientDelegate.h"
 #include "jansson/jansson.h"
 #include <string>
+#include "Global.h"
+#include "GameClientObjects.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
-
-
-
-//SEND DATA
-#define G_URL_SEND_PLAYER_FB_PROFILE	"192.168.0.118"
-#define G_URL_SEND_FRIEND_LIST			""
-#define G_URL_SEND_DEVICE_PROFILE		""
-#define G_URL_SEND_SCORE				"192.168.0.118:8025/score"
-
-
-//GET DATA
-#define G_URL_GET_SCORE					"192.168.0.118:8025/score"
-#define G_URL_GET_FRIEND_LEADERBOARD	""
-#define G_URL_GET_WORLD_LEADERBOARD		""
-
-
-
-
-class FacebookAccount : public CCNode
-{
-public:
-	std::string fbId;
-	std::string fbName; //get the fullname
-	int score;
-
-public:
-	FacebookAccount(std::string _fbId, std::string _fbName, int _score)
-	{
-		fbId = _fbId;
-		fbName = _fbName;
-		score = _score;
-	}
-
-	std::string toJson()
-	{
-		CCString* s = CCString::createWithFormat("{fbId: \"%s\", fbName: \"%s\", score: %d}", fbId.c_str(), fbName.c_str(), score);
-		return std::string(s->getCString());
-	}
-};
-
-
-//////////////////////////////////////////////////////////////////////////
 
 
 class GameClientManager : public CCObject
@@ -157,23 +117,27 @@ public:
 
 	//////////////////////////////////////////////////////////////////////////
 
-	void getFriendLeaderboard(
+	void getFriendList(
 		std::string appId,
 		std::string fbId
 		);
 
-	void _onGetFriendLeaderboardCompleted(CCHttpClient *sender, CCHttpResponse *response);
+	void _onGetFriendListCompleted(CCHttpClient *sender, CCHttpResponse *response);
+
+	//////////////////////////////////////////////////////////////////////////
+	
+	void getPlayerFbProfile(std::string fbId );
+
+	void _onGetPlayerFbProfileCompleted( CCHttpClient *sender, CCHttpResponse *response );
 
 	//////////////////////////////////////////////////////////////////////////
 
-	void getWorldLeaderboard(
-		std::string appId,
-		std::string fbId
-		);
+	void getDeviceProfile(std::string fbId );
 
-	void _onGetWorldLeaderboardCompleted(CCHttpClient *sender, CCHttpResponse *response);
+	void _onGetDeviceProfileCompleted( CCHttpClient *sender, CCHttpResponse *response );
 
-	//////////////////////////////////////////////////////////////////////////
+
+
 	//more ...
 };
 
