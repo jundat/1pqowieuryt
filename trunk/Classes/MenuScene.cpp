@@ -56,22 +56,21 @@ bool MenuScene::init()
 	this->addChild(sprDiamon);
 
 	//////////////////////////////////////////////////////////////////////////
-	
 
 	//
-	s = CCString::createWithFormat("v%d", G_VERSION);
-	CCLabelTTF* labelVersion = CCLabelTTF::create(s->getCString(), "Roboto-Medium.ttf", 32);
-	labelVersion->setColor(ccc3(56, 56, 56));
-	labelVersion->setPosition(ccp(labelVersion->getContentSize().width/4, G_DESIGN_HEIGHT - labelVersion->getContentSize().height/4));
-	this->addChild(labelVersion);
+// 	s = CCString::createWithFormat("v%d", G_VERSION);
+// 	CCLabelTTF* labelVersion = CCLabelTTF::create(s->getCString(), G_FONT_NORMAL, G_MENU_VERSION_TEXT_SIZE);
+// 	labelVersion->setColor(G_MENU_VERSION_TEXT_COLOR);
+// 	labelVersion->setPosition(G_MENU_VERSION_TEXT_POS);
+// 	this->addChild(labelVersion);
 
 	//
     m_playItem = CCMenuItemImage::create(
-                                        "new_button.png",
-                                        "new_button_press.png",
+                                        G_MENU_NEW_BUTTON_SPR_NORMAL,
+                                        G_MENU_NEW_BUTTON_SPR_PRESS,
                                         this,
                                         menu_selector(MenuScene::playCallback));
-	m_playItem->setPosition(ccp(400, 1280-813));
+	m_playItem->setPosition(G_MENU_NEW_BUTTON_POS);
 
 	CCMenuItemImage *scoreItem = CCMenuItemImage::create(
 		"score_button.png",

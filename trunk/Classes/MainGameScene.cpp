@@ -37,7 +37,7 @@ bool MainGameScene::init()
 	
 
     m_BackgroundLayer = BackgroundLayer::create();
-	m_BackgroundLayer->unscheduleUpdate();
+	//m_BackgroundLayer->unscheduleUpdate();
 	this->addChild(m_BackgroundLayer);
 
 	m_ObjLayer = ObjectLayer::create();
@@ -63,8 +63,8 @@ bool MainGameScene::init()
 
 void MainGameScene::onEnterTransitionDidFinish()
 {
-	CCLOG("[FeedAPIScene]: Enter Transition Finished.");
-	m_BackgroundLayer->scheduleUpdate();
+	//CCLOG("[FeedAPIScene]: Enter Transition Finished.");
+	//m_BackgroundLayer->scheduleUpdate();
 }
 
 void MainGameScene::pauseCallback(CCObject* pSender)
