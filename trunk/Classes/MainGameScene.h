@@ -8,6 +8,8 @@
 
 
 USING_NS_CC;
+using namespace std;
+
 
 class MainGameScene : public cocos2d::CCLayerColor
 {

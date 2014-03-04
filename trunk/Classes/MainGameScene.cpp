@@ -6,6 +6,7 @@
 #include "DataManager.h"
 #include <time.h>
 #include "PauseDialog.h"
+#include "GameClientManager.h"
 
 USING_NS_CC;
 
@@ -125,6 +126,16 @@ void MainGameScene::showEndGame( int score, int killedEnemies )
 
 	//save highscore after show dialog
 	DataManager::sharedDataManager()->SetCurrentHighScore(score);
+
+	//submit score
+	
+	if (DataManager::sharedDataManager()->GetFbID().compare("NULL") != 0)
+	{
+		GameClientManager::sharedGameClientManager()->sendScore(
+			string(G_APP_ID), 
+			DataManager::sharedDataManager()->GetFbID(), 
+			DataManager::sharedDataManager()->GetHighScore());
+	}	
 }
 
 //revived just 1 time for 1 life

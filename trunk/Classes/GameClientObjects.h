@@ -4,50 +4,91 @@
 #include "cocos2d.h"
 
 USING_NS_CC;
+using namespace std;
 
 
 
 
-class FacebookAccount : public CCNode
+class FacebookAccount : public CCObject
 {
 public:
-	std::string fbId;
-	std::string fbName; //get the fullname
-	std::string email;
+	string fbId;
+	string fbName; //get the fullname
+	string email;
 	int score;
 
-public:
-	FacebookAccount(){}
+	string photoPath;
 
-	FacebookAccount(std::string _fbId, std::string _fbName, std::string _email, int _score)
+public:
+	FacebookAccount() 
+	{
+		fbId = string();
+		fbName = string();
+		email = string();
+		score = -1;
+
+		photoPath = string();
+	}
+
+	FacebookAccount(string _fbId, string _fbName, string _email, int _score)
 	{
 		fbId = _fbId;
 		fbName = _fbName;
 		email = _email;
 		score = _score;
+
+		photoPath = string();
 	}
 
-	std::string toJson()
+	CCObject* copyWithZone(CCZone *pZone)
+	{
+		CCZone *pNewZone = NULL;
+		FacebookAccount *pRet = NULL;
+		if(pZone && pZone->m_pCopyObject) //in case of being called at sub class
+		{
+			pRet = (FacebookAccount*)(pZone->m_pCopyObject);
+		}
+		else
+		{
+			pRet = new FacebookAccount();
+			pZone = pNewZone = new CCZone(pRet);
+		}
+		CCObject::copyWithZone(pZone);
+		// copy member data
+		//pRet->m_nTag = m_nTag;
+		pRet->fbId = string(fbId);
+		pRet->fbName = string(fbName);
+		pRet->email = string(email);
+		pRet->score = score;
+
+		pRet->photoPath = string(photoPath);
+		
+
+		CC_SAFE_DELETE(pNewZone);
+		return pRet;
+	}
+
+	string toJson()
 	{
 		CCString* s = CCString::createWithFormat("{fbId: \"%s\", fbName: \"%s\", email: \"%s\", score: %d}", fbId.c_str(), fbName.c_str(), email.c_str(), score);
-		return std::string(s->getCString());
+		return string(s->getCString());
 	}
 };
 
 
 //////////////////////////////////////////////////////////////////////////
 
-class DeviceProfile : public CCNode
+class DeviceProfile : public CCObject
 {
 public:
-	std::string deviceId;
-	std::string deviceToken;
-	std::string deviceConfig;
-	std::string devicePhoneNumber;
+	string deviceId;
+	string deviceToken;
+	string deviceConfig;
+	string devicePhoneNumber;
 
 	DeviceProfile(){}
 
-	DeviceProfile(std::string _deviceId, std::string _deviceToken, std::string _deviceConfig, std::string _devicePhoneNumber)
+	DeviceProfile(string _deviceId, string _deviceToken, string _deviceConfig, string _devicePhoneNumber)
 	{
 		deviceId = _deviceId;
 		deviceToken = _deviceToken;
@@ -55,11 +96,11 @@ public:
 		devicePhoneNumber = _devicePhoneNumber;
 	}
 
-	std::string toJson()
+	string toJson()
 	{
 		CCString* s = CCString::createWithFormat("{deviceId: \"%s\", deviceToken: \"%s\", deviceConfig: \"%s\", devicePhoneNumber: \"%s\" }", 
 			deviceId.c_str(), deviceToken.c_str(), deviceConfig.c_str(), devicePhoneNumber.c_str());
-		return std::string(s->getCString());
+		return string(s->getCString());
 	}
 };
 

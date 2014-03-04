@@ -84,6 +84,9 @@ public:
 	void scheduleTimer(float dt);
 
 public:
+	static int s_beginFriendInd;
+	static int s_endFriendInd;
+
 	bool m_isLoggedIn;
 	bool m_isXepHangView;
 	int m_tableXepHangSize;
@@ -118,16 +121,17 @@ public:
 	CCLabelTTF* m_lbLife;
 	CCLabelTTF* m_lbBoom;
 	CCArray* m_friendList;
-		
+	
 	void submitScore();
 	void getHighScores();
 	virtual void onGetFriendListCompleted(bool isSuccess, CCArray* arrFriends);
 	void sendUserProfileToServer(string fbId, string fbName, string email);
-	virtual void onSendPlayerFbProfileCompleted( bool isSuccess ){}
+	virtual void onSendPlayerFbProfileCompleted( bool isSuccess ){ CCLOG("onSendPlayerFbProfileCompleted"); if(isSuccess) CCLOG("TRUE"); else CCLOG("FALSE"); }
 	void postMessageToLoser(std::string loserName, std::string loserUserName, int yourScore);
+	virtual void onSendFriendListCompleted( bool isSuccess ){ CCLOG("onSendFriendListCompleted"); if(isSuccess) CCLOG("TRUE"); else CCLOG("FALSE"); }
 
 	//Ezibyte
-	virtual void fbHighScoresCallback(int responseCode, const char* responseMessage, cocos2d::CCArray* highScores);
+	virtual void fbFriendsCallback(int responseCode, const char* responseMessage, cocos2d::CCArray* friends);
 	virtual void fbMessageCallback(int responseCode, const char* responseMessage);
 	virtual void fbSessionCallback(int responseCode, const char* responseMessage);
 	virtual void fbUserPhotoCallback(const char *userPhotoPath, const char* fbID);

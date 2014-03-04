@@ -258,8 +258,8 @@ void GameClientManager::_onGetFriendListCompleted( CCHttpClient *sender, CCHttpR
 
 		//foreach to get all friend, insert to list
 		int count = json_array_size(friendList);
-		CCArray* arrFriends = new CCArray();
-		arrFriends->retain();
+		CCArray* arrFriends = CCArray::create();
+		//arrFriends->retain();
 
 		for(int i = 0; i < count; i++)
 		{
@@ -280,7 +280,14 @@ void GameClientManager::_onGetFriendListCompleted( CCHttpClient *sender, CCHttpR
 			arrFriends->addObject(acc);
 		}
 
-		SortFriendScore(arrFriends);
+		CCObject* it;
+		CCARRAY_FOREACH(arrFriends, it)
+		{
+			FacebookAccount* acc = (FacebookAccount*)(it);
+			CCLOG("%s", acc->toJson().c_str());
+		}
+
+		//GameClientManager::SortFriendScore(arrFriends);
 		m_clientDelegate->onGetFriendListCompleted(true, arrFriends);
 	}
 

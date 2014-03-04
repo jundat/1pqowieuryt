@@ -12,6 +12,10 @@ USING_NS_CC;
 USING_NS_CC_EXT;
 using namespace std;
 
+#define G_MAX_FRIENDS	100
+int ScoreScene::s_beginFriendInd = 0;
+int ScoreScene::s_endFriendInd = 0;
+
 
 bool ScoreScene::init()
 {
@@ -236,7 +240,7 @@ bool ScoreScene::init()
 
 
 	//////////////////////////////////////////////////////////////////////////
-	
+	GameClientManager::sharedGameClientManager()->setDelegate(this);
 
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
@@ -285,6 +289,8 @@ bool ScoreScene::init()
 void ScoreScene::itMenuCallback(CCObject* pSender)
 {
 	PLAY_BUTTON_EFFECT;
+
+	GameClientManager::sharedGameClientManager()->setDelegate(NULL);
 
 	CCScene *pScene = CCTransitionFade::create(0.5, MenuScene::scene());
 	CCDirector::sharedDirector()->replaceScene(pScene);
@@ -686,39 +692,93 @@ void ScoreScene::itFbLogOutCallback( CCObject* pSender )
 void ScoreScene::submitScore()
 {
 	CCLOG("callSubmitScore");
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-	if(EziSocialObject::sharedObject()->isFacebookSessionActive()) //logged in state
-	{
-		EziSocialObject::sharedObject()->postScore(DataManager::sharedDataManager()->GetHighScore());
-	}
-#endif
-
-	GameClientManager::sharedGameClientManager()->sendScore(string(G_APP_ID), )
+	GameClientManager::sharedGameClientManager()->sendScore(
+		string(G_APP_ID), 
+		DataManager::sharedDataManager()->GetFbID(), 
+		DataManager::sharedDataManager()->GetHighScore());
 }
 
 void ScoreScene::getHighScores()
 {
-	CCLOG("callGetHighScores");
-// #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-// 	if(EziSocialObject::sharedObject()->isFacebookSessionActive()) //logged in state
-// 	{
-// 		EziSocialObject::sharedObject()->getHighScores();
-// 	}
-// #endif
-
+	CCLOG("getHighScores");
 	GameClientManager::sharedGameClientManager()->getFriendList(string(G_APP_ID), DataManager::sharedDataManager()->GetFbID());
 }
 
+//get highscore list completed
 void ScoreScene::onGetFriendListCompleted(bool isSuccess, CCArray* arrFriends)
 {
-	
+	CCLOG("onGetFriendListCompleted");
+	if (isSuccess == false) 
+	{
+		CCLOG("FAILED");
+		return;
+	}
+
+	CCLOG("-1");
+	if (m_arrHighScores != NULL)
+	{
+		m_arrHighScores->release();
+		m_arrHighScores = NULL;
+	}
+
+	CCLOG("0");
+	m_arrHighScores = CCArray::createWithArray(arrFriends);
+	m_arrHighScores->retain();
+
+	CCLOG("--CLONED");
+	CCObject* it;
+	CCARRAY_FOREACH(m_arrHighScores, it)
+	{
+		FacebookAccount* acc = (FacebookAccount*)(it);
+		CCLOG("%s", acc->toJson().c_str());
+	}
+	CCLOG("CLONED--");
+
+	CCLOG("1");
+	//add current user to list
+	FacebookAccount* curUser = new FacebookAccount(
+		DataManager::sharedDataManager()->GetFbID(),
+		DataManager::sharedDataManager()->GetFbFullName(),
+		DataManager::sharedDataManager()->GetFbEmail(),
+		DataManager::sharedDataManager()->GetHighScore());
+	m_arrHighScores->addObject(curUser);
+
+	CCLOG("2");
+	m_tableXepHangSize = m_arrHighScores->count();
+	std::string myProfileID = DataManager::sharedDataManager()->GetFbID();
+	int count = m_arrHighScores->count();
+
+	CCLOG("3");
+	GameClientManager::SortFriendScore(m_arrHighScores);
+
+	for (int i = 0; i < count; ++i)
+	{
+		FacebookAccount* fbFriend = (FacebookAccount*) (m_arrHighScores->objectAtIndex(i));
+		if (NULL != fbFriend)
+		{
+			std::string profileID = fbFriend->fbId;
+
+			CCLOG("4: %d", i);
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+			EziSocialObject::sharedObject()->getProfilePicForID(this, profileID.c_str(), // Profile ID of current user
+				G_AVATAR_SIZE, G_AVATAR_SIZE, // Size of the image
+				false // force download it from server
+				);
+#endif
+		}
+	}
+
+	CCLOG("5");
+	m_sprWaiting->setVisible(false);
+	m_tableXephang->reloadData();
+	m_tableQuatang->reloadData();
 }
 
 void ScoreScene::sendUserProfileToServer(string fbId, string fbName, string email)
 {
+	CCLOG("sendUserProfileToServer");
 	GameClientManager::sharedGameClientManager()->sendPlayerFbProfile(fbId, fbName, email);
 }
-
 
 
 
@@ -741,6 +801,10 @@ void ScoreScene::fbSessionCallback(int responseCode, const char *responseMessage
 		refreshView();
 
 		submitScore();
+
+		ScoreScene::s_beginFriendInd = 0;
+		ScoreScene::s_endFriendInd = G_MAX_FRIENDS - 1;
+		EziSocialObject::sharedObject()->getFriends(EziSocialWrapperNS::FB_FRIEND_SEARCH::ALL_FRIENDS, s_beginFriendInd, s_endFriendInd);
 		
 		//Auto fetchFBUserDetails, do not call it again
 		//It make exception
@@ -812,14 +876,13 @@ void ScoreScene::fbUserDetailCallback( int responseCode, const char* responseMes
 void ScoreScene::fbUserPhotoCallback(const char *userPhotoPath, const char* fbID)
 {
 	CCLOG("fbUserPhotoCallback");
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-	//CCLOG("Gotten avatar for %s", fbID);
+
 	std::string sid = std::string(fbID);
 
 	if ((strcmp(userPhotoPath, "") != 0))
 	{
 		CCLOG("fbUserPhotoCallback: userPhotoPath != NULL");
-		if(sid == DataManager::sharedDataManager()->GetFbID())
+		if(sid == DataManager::sharedDataManager()->GetFbID()) //////////////////////////////////////////////////
 		{
 			CCLOG("fbUserPhotoCallback: this user");
 			//CCLOG("Gotten avatar for user");
@@ -840,106 +903,64 @@ void ScoreScene::fbUserPhotoCallback(const char *userPhotoPath, const char* fbID
 			}
 		}
 		
-		if (m_arrHighScores != NULL)
+		if (m_arrHighScores != NULL) ////////////////////////////////////////////////////////////////
 		{
 			CCLOG("fbUserPhotoCallback: friends");
 
 			CCObject* it;
 			CCARRAY_FOREACH(m_arrHighScores, it)
 			{
-				EziFacebookFriend* fbFriend = dynamic_cast<EziFacebookFriend*>(it);
+				FacebookAccount* fbFriend = (FacebookAccount*) (it);
 				if (NULL != fbFriend)
 				{
 					//CCLOG("%s => %s", sid.c_str(), userPhotoPath);
-					if(fbFriend->getFBID() == sid)
+					if(fbFriend->fbId == sid)
 					{
-						fbFriend->setPhotoPath(userPhotoPath);
+						fbFriend->photoPath = userPhotoPath;
 						//CCLOG("Set photo path ok --- ");
 					}
 				}
 			}
 
 			refreshView();
-
 			m_tableXephang->reloadData();
 			m_tableQuatang->reloadData();
 		}
 	}
-#endif
 }
 
-void ScoreScene::fbHighScoresCallback( int responseCode, const char* responseMessage, cocos2d::CCArray* highScores )
+void ScoreScene::fbFriendsCallback( int responseCode, const char* responseMessage, cocos2d::CCArray* friends )
 {
-	CCLOG("fbHighScoresCallback");
+	CCLOG("fbFriendsCallback");
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-	if (m_arrHighScores != NULL)
+	int count = friends->count();
+	CCLOG("ALL FRIENDS: %d", count);
+
+	CCArray* arrFriends = new CCArray();
+	arrFriends->retain();
+
+	CCObject* it;
+	CCARRAY_FOREACH(friends, it)
 	{
-		m_arrHighScores->release();
-		m_arrHighScores = NULL;
-	}
-
-	m_arrHighScores = CCArray::createWithArray(highScores);
-	m_arrHighScores->retain();
-
-	m_tableXepHangSize = m_arrHighScores->count();
-	std::string myProfileID = DataManager::sharedDataManager()->GetFbID();
-	int count = m_arrHighScores->count();
-
-
-	//sort
-	for (int i = 0; i < count; ++i)
-	{
-		EziFacebookFriend* fbFriend = dynamic_cast<EziFacebookFriend*>(m_arrHighScores->objectAtIndex(i));
-		if (NULL != fbFriend)
+		EziFacebookFriend* fbFriend = dynamic_cast<EziFacebookFriend*>(it);
+		if (NULL != it)
 		{
-			std::string profileID = fbFriend->getFBID();
-			if(profileID == myProfileID)
-			{
-				fbFriend->setScore(DataManager::sharedDataManager()->GetHighScore());
-				break;
-			}
+			string fbId = fbFriend->getFBID();
+			string fbName = fbFriend->getName();
+			FacebookAccount* acc = new FacebookAccount(fbId, fbName, string(), -1);
+
+			arrFriends->addObject(acc);
 		}
 	}
 
-	SortEziFriendScoreList(m_arrHighScores);
-
-	for (int i = 0; i < count; ++i)
-	{
-		EziFacebookFriend* fbFriend = dynamic_cast<EziFacebookFriend*>(m_arrHighScores->objectAtIndex(i));
-		if (NULL != fbFriend)
-		{
- 			std::string profileID = fbFriend->getFBID();
-// 
-// 			if(profileID == myProfileID)
-// 			{
-// 				//////////////////////////////////////////////////////////////////////////
-// 				//get the next friend to post message
-// 				if (i+1 < count)
-// 				{
-// 					EziFacebookFriend* fbLoser = dynamic_cast<EziFacebookFriend*>(m_arrHighScores->objectAtIndex(i+1));
-// 					if (fbLoser != NULL)
-// 					{
-// 						postMessageToLoser(std::string(fbLoser->getName()),
-// 							std::string(fbLoser->getFBID()),
-// 							DataManager::sharedDataManager()->GetHighScore());
-// 					}
-// 				}
-// 			}
-
-			//get avatar
-			EziSocialObject::sharedObject()->getProfilePicForID(this, profileID.c_str(), // Profile ID of current user
-				G_AVATAR_SIZE, G_AVATAR_SIZE, // Size of the image
-				false // force download it from server
-				);
-		}
-	}
-
-
-	m_sprWaiting->setVisible(false);
-
-	m_tableXephang->reloadData();
-	m_tableQuatang->reloadData();
+	GameClientManager::sharedGameClientManager()->sendFriendList(DataManager::sharedDataManager()->GetFbID(), arrFriends);
 	
+	if (count > 0)
+	{
+		ScoreScene::s_beginFriendInd += G_MAX_FRIENDS;
+		ScoreScene::s_endFriendInd += G_MAX_FRIENDS;
+		EziSocialObject::sharedObject()->getFriends(EziSocialWrapperNS::FB_FRIEND_SEARCH::ALL_FRIENDS, s_beginFriendInd, s_endFriendInd);
+	}
 #endif
 }
 
@@ -962,7 +983,6 @@ void ScoreScene::postMessageToLoser( std::string loserName, std::string loserUse
 		"https://play.google.com/store/apps/details?id=com.rovio.croods");	//deepLinkURL
 #endif
 }
-
 
 void ScoreScene::fbMessageCallback(int responseCode, const char* responseMessage)
 {
@@ -1070,6 +1090,7 @@ void ScoreScene::fbIncomingRequestCallback(int responseCode, const char* respons
 
 CCTableViewCell* ScoreScene::getTableCellXepHangAtIndex( CCTableView *table, unsigned int idx )
 {
+	CCLOG("getTableCellXepHangAtIndex: %d", idx);
 	bool isMyScore = false;
 	CCString *strOrder = CCString::createWithFormat("%d", idx + 1);
 	CCString *strScore = CCString::create("0");
@@ -1087,25 +1108,24 @@ CCTableViewCell* ScoreScene::getTableCellXepHangAtIndex( CCTableView *table, uns
 	int _sendLifeWaitTime = 0;
 	CCString* strSendLifeTimer = CCString::create("00:00:00");
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	if(m_arrHighScores == NULL)
 	{
 		CCLOG("m_arrHighScores == NULL");
 	}
 	else
 	{
-		EziFacebookFriend* fbFriend = dynamic_cast<EziFacebookFriend*>(m_arrHighScores->objectAtIndex(idx));
+		FacebookAccount* fbFriend = (FacebookAccount*) (m_arrHighScores->objectAtIndex(idx));
+		
+		strScore = CCString::createWithFormat("%d", fbFriend->score);
 
-		strScore = CCString::createWithFormat("%d", (int)fbFriend->getScore());
-
-		std::string sname = std::string(fbFriend->getName());
+		std::string sname = std::string(fbFriend->fbName);
 		if (sname.length() > 18) {
 			sname = sname.substr(0, 15);
 			sname.append("...");
 		}			
 		strName  = CCString::create(sname);
 
-		strFriendId = std::string(fbFriend->getFBID());
+		strFriendId = std::string(fbFriend->fbId);
 
 		//get boom
 		_lastTimeGetBoom = DataManager::sharedDataManager()->GetTimeBoomFriend(strFriendId.c_str());
@@ -1168,16 +1188,16 @@ CCTableViewCell* ScoreScene::getTableCellXepHangAtIndex( CCTableView *table, uns
 		//////////////////////////////////////////////////////////////////////////
 
 
-		if (strlen(fbFriend->getPhotoPath()) > 1)
+		if (fbFriend->photoPath.length() > 1)
 		{
-			strPhoto  = CCString::createWithFormat("%s", fbFriend->getPhotoPath());
+			strPhoto  = CCString::create(fbFriend->photoPath);
 		}
-		if(fbFriend->getFBID() == DataManager::sharedDataManager()->GetFbID())
+
+		if(fbFriend->fbId == DataManager::sharedDataManager()->GetFbID())
 		{
 			isMyScore = true;
 		}
 	}
-#endif
 
 	CCTableViewCell *cell = table->cellAtIndex(idx);
 	if (!cell) 
@@ -1235,7 +1255,7 @@ CCTableViewCell* ScoreScene::getTableCellXepHangAtIndex( CCTableView *table, uns
 
 		CCLabelTTF *lbScore = CCLabelTTF::create(strScore->getCString(), "Roboto-Medium.ttf", 42);
 		lbScore->setFontFillColor(ccc3(0, 0, 0));
-		lbScore->setPosition(ccp(210, m_sprCell->getContentSize().height * 3/8)); //0.25 * m_sprCell->getContentSize().width, m_sprCell->getContentSize().height/2));
+		lbScore->setPosition(ccp(210, m_sprCell->getContentSize().height * 3/8));
 		lbScore->setAnchorPoint(ccp(0.0f, 0.5f));
 		lbScore->setTag(5);
 		cell->addChild(lbScore);
@@ -1359,10 +1379,11 @@ CCTableViewCell* ScoreScene::getTableCellXepHangAtIndex( CCTableView *table, uns
 
 CCTableViewCell* ScoreScene::getTableCellQuatangAtIndex( CCTableView *table, unsigned int idx )
 {
+	CCLOG("getTableCellQuatangAtIndex: %d", idx);
 	CCString* strName = CCString::create(G_DEFAULT_NAME);
 	CCString* strPhoto = CCString::create("fb-profile.png");
 	std::string strFriendId;
-	
+
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	EziFBIncomingRequest* request = (EziFBIncomingRequest*)m_arrRequests->objectAtIndex(idx);
 	if (NULL != request)
@@ -1392,15 +1413,15 @@ CCTableViewCell* ScoreScene::getTableCellQuatangAtIndex( CCTableView *table, uns
 			CCObject* it = NULL;
 			CCARRAY_FOREACH(m_arrHighScores, it)
 			{
-				EziFacebookFriend* fr = (EziFacebookFriend*)(it);
+				FacebookAccount* fr = (FacebookAccount*) (it);
 
-				if (NULL != fr && fr->getFBID() == strFriendId)
+				if (NULL != fr && fr->fbId == strFriendId)
 				{
-					if (strlen(fr->getPhotoPath()) > 1)
+					if (fr->photoPath.length() > 1)
 					{
 						CCLOG("FOREACH TO GET PHOTOPATH: --- OK");
-						strPhoto = CCString::createWithFormat("%s", fr->getPhotoPath());
-						fbFriend->setPhotoPath(fr->getPhotoPath());
+						strPhoto = CCString::create(fr->photoPath);
+						fbFriend->setPhotoPath(fr->photoPath.c_str());
 						break;
 					}
 				}
@@ -1482,8 +1503,5 @@ CCTableViewCell* ScoreScene::getTableCellQuatangAtIndex( CCTableView *table, uns
 	return NULL;
 #endif
 }
-
-
-
 
 // Facebook //=========================================
