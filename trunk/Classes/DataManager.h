@@ -21,14 +21,17 @@ public:
 	std::string GetPhotoPath();
 	void SetPhotoPath(const char* path);
 
-	std::string GetProfileID();
-	void SetProfileID(const char* profileID);
+	std::string GetFbID();
+	void SetFbProfileID(const char* profileID);
 
 	std::string GetFbUserName();
 	void SetFbUserName(const char* fbusernam);
 
 	std::string GetFbFullName();
 	void SetFbFullName(const char* fbusernam);
+
+	std::string GetFbEmail();
+	void SetFbEmail(const char* fbemail);
 
 	//facebook
 

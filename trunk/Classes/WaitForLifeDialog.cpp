@@ -133,7 +133,7 @@ void WaitForLifeDialog::fbUserDetailCallback( int responseCode, const char* resp
 		std::string fullName = fbUser->getFullName();
 
 		DataManager::sharedDataManager()->SetName(firstname.c_str());
-		DataManager::sharedDataManager()->SetProfileID(profileID.c_str());
+		DataManager::sharedDataManager()->SetFbProfileID(profileID.c_str());
 		DataManager::sharedDataManager()->SetFbUserName(userName.c_str());
 		DataManager::sharedDataManager()->SetFbFullName(fullName.c_str());
 
@@ -161,7 +161,7 @@ void WaitForLifeDialog::fbUserPhotoCallback(const char *userPhotoPath, const cha
 	if ((strcmp(userPhotoPath, "") != 0))
 	{
 		CCLOG("fbUserPhotoCallback: userPhotoPath != NULL");
-		if(sid == DataManager::sharedDataManager()->GetProfileID())
+		if(sid == DataManager::sharedDataManager()->GetFbID())
 		{
 			CCLOG("fbUserPhotoCallback: this user");
 			//CCLOG("Gotten avatar for user");

@@ -188,12 +188,12 @@ void DataManager::RefreshPlayerLife()
 	}
 }
 
-std::string DataManager::GetProfileID()
+std::string DataManager::GetFbID()
 {
 	return CCUserDefault::sharedUserDefault()->getStringForKey("G_PROFILE_ID", std::string("NULL"));
 }
 
-void DataManager::SetProfileID( const char* profileID )
+void DataManager::SetFbProfileID( const char* profileID )
 {
 	CCUserDefault::sharedUserDefault()->setStringForKey("G_PROFILE_ID", std::string(profileID));
 	CCUserDefault::sharedUserDefault()->flush();
@@ -219,6 +219,18 @@ std::string DataManager::GetFbFullName()
 void DataManager::SetFbFullName( const char* fbusernam )
 {
 	CCUserDefault::sharedUserDefault()->setStringForKey("G_FB_FULL_NAME", std::string(fbusernam));
+	CCUserDefault::sharedUserDefault()->flush();
+}
+
+
+std::string DataManager::GetFbEmail()
+{
+	return CCUserDefault::sharedUserDefault()->getStringForKey("G_FB_EMAIL", std::string("NULL"));
+}
+
+void DataManager::SetFbEmail( const char* fbemail )
+{
+	CCUserDefault::sharedUserDefault()->setStringForKey("G_FB_EMAIL", std::string(fbemail));
 	CCUserDefault::sharedUserDefault()->flush();
 }
 

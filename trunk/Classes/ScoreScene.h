@@ -4,6 +4,9 @@
 #include "cocos2d.h"
 #include "cocos-ext.h"
 #include "CustomTableViewCell.h"
+#include "GameClientManager.h"
+#include "GameClientDelegate.h"
+#include "GameClientObjects.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #include "EziSocialObject.h"
@@ -17,8 +20,11 @@
 
 USING_NS_CC;
 USING_NS_CC_EXT;
+using namespace std;
+
 
 class ScoreScene : public cocos2d::CCLayer, 
+	public GameClientDelegate,
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	public EziFacebookDelegate,
 #endif
@@ -28,33 +34,23 @@ class ScoreScene : public cocos2d::CCLayer,
 public:
 	virtual bool init();
 	CREATE_FUNC(ScoreScene);
-
 	static CCScene* scene() {
 		CCScene *scene = CCScene::create();
 		scene->addChild(ScoreScene::create());
 		return scene;
 	}
 
-	//Xephang
-	CCMenuItemToggle* m_xephangToggle;
-	CCMenuItemToggle* m_quatangToggle;
-	void xephangCallback(CCObject* pSender);
-	void quatangCallback(CCObject* pSender);
-	
-
-
-	//
-
-	CCMenuItemImage *m_fbLogOutItem;
-	void fbLogOutCallback(CCObject* pSender);
-
-	void fbLogInCallback(CCObject* pSender);
-
+	void itXephangCallback(CCObject* pSender);
+	void itQuatangCallback(CCObject* pSender);
+	void itFbLogOutCallback(CCObject* pSender);
+	void itFbLogInCallback(CCObject* pSender);
+	void itMenuCallback(CCObject* pSender);
 	virtual void keyBackClicked();
-	void menuCallback(CCObject* pSender);
-	void addFriendCallback(CCObject* pSender);
+	void itAddFriendCallback(CCObject* pSender);
+	void itGetBoomCallback(CCObject* pSender);
+	void itSendLifeCallback(CCObject* pSender);
 
-	static int MyMoreScoreFunction(const CCObject* p1, const CCObject* p2)
+	static int CompareEziFriendScore(const CCObject* p1, const CCObject* p2)
 	{
 		#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 			EziFacebookFriend* f1 = (EziFacebookFriend*)(p1);
@@ -65,42 +61,39 @@ public:
 			return true;
 		#endif
 	}
-
-	void MySortHighScore()
+	static void SortEziFriendScoreList(CCArray* arr)
 	{
-		std::sort(m_arrHighScores->data->arr, 
-			m_arrHighScores->data->arr + m_arrHighScores->data->num, MyMoreScoreFunction);
+		std::sort(arr->data->arr, 
+			arr->data->arr + arr->data->num, CompareEziFriendScore);
 	}
 
-	//new delegate
-
+	//table delegate
 	virtual void scrollViewDidScroll(cocos2d::extension::CCScrollView* view) {};
 	virtual void scrollViewDidZoom(cocos2d::extension::CCScrollView* view) {};
 	virtual void tableCellTouched(cocos2d::extension::CCTableView* table, cocos2d::extension::CCTableViewCell* cell);
 	virtual cocos2d::CCSize tableCellSizeForIndex(cocos2d::extension::CCTableView *table, unsigned int idx);
 	virtual cocos2d::extension::CCTableViewCell* tableCellAtIndex(cocos2d::extension::CCTableView *table, unsigned int idx);
 	virtual unsigned int numberOfCellsInTableView(cocos2d::extension::CCTableView *table);
+	//table delegate
 
-	//my function
-	CCTableViewCell* tableCellXepHangAtIndex(CCTableView *table, unsigned int idx);
-	CCTableViewCell* tableCellQuatangAtIndex(CCTableView *table, unsigned int idx);
-
-
-	void getBoomCallback(CCObject* pSender);
-	void sendLifeCallback(CCObject* pSender);
-
-	bool m_isXepHangView;
+	CCTableViewCell* getTableCellXepHangAtIndex(CCTableView *table, unsigned int idx);
+	CCTableViewCell* getTableCellQuatangAtIndex(CCTableView *table, unsigned int idx);
+	
 	void refreshView();
 	void refreshUserDetail();
-
 	void scheduleTimer(float dt);
 
-	//end new delegate
-
-private:
+public:
 	bool m_isLoggedIn;
+	bool m_isXepHangView;
 	int m_tableXepHangSize;
 	int m_tableQuatangSize;
+
+	//UI
+	CCMenuItemToggle* m_itXephangToggle;
+	CCMenuItemToggle* m_itQuatangToggle;
+	CCMenuItemImage *m_itFbLogOutItem;
+	CCMenuItemImage* m_itFbLogInItem;
 
 	CCLabelTTF* m_lbInviteQuatang;
 	CCLabelTTF* m_lbInvite;
@@ -108,7 +101,6 @@ private:
 	CCLabelTTF* m_lbName;
 	CCLabelTTF* m_lbScore;
 	CCSprite* m_sprCell;
-
 
 	CCTableView* m_tableXephang;
 	CCTableView* m_tableQuatang;
@@ -118,37 +110,33 @@ private:
 
 	CustomTableViewCell* m_friendCell;
 
-public:
 	// Facebook //=========================================
+	
 	CCSprite* m_userAvatar;
-
 	CCSprite* m_sprLife;
 	CCSprite* m_sprBoom;
 	CCLabelTTF* m_lbLife;
 	CCLabelTTF* m_lbBoom;
-
-	CCMenuItem* m_fbLogInItem;
 	CCArray* m_friendList;
-
-
-	void callSubmitScore();
-	void callGetHighScores();
-	virtual void fbHighScoresCallback(int responseCode, const char* responseMessage, cocos2d::CCArray* highScores);
+		
+	void submitScore();
+	void getHighScores();
+	virtual void onGetFriendListCompleted(bool isSuccess, CCArray* arrFriends);
+	void sendUserProfileToServer(string fbId, string fbName, string email);
+	virtual void onSendPlayerFbProfileCompleted( bool isSuccess ){}
 	void postMessageToLoser(std::string loserName, std::string loserUserName, int yourScore);
-	virtual void fbMessageCallback(int responseCode, const char* responseMessage);
 
-	// Facebook Callback methods...
+	//Ezibyte
+	virtual void fbHighScoresCallback(int responseCode, const char* responseMessage, cocos2d::CCArray* highScores);
+	virtual void fbMessageCallback(int responseCode, const char* responseMessage);
 	virtual void fbSessionCallback(int responseCode, const char* responseMessage);
 	virtual void fbUserPhotoCallback(const char *userPhotoPath, const char* fbID);
+	virtual void fbSendRequestCallback(int responseCode, const char* responseMessage, cocos2d::CCArray* friendsGotRequests);
+	virtual void fbIncomingRequestCallback(int responseCode, const char* responseMessage, int totalIncomingRequests);
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	virtual void fbUserDetailCallback(int responseCode, const char* responseMessage, EziFacebookUser* fbUser);
 #endif
-
-	virtual void fbSendRequestCallback(int responseCode, const char* responseMessage, cocos2d::CCArray* friendsGotRequests);
-
-	//check incomming request
-	void fbIncomingRequestCallback(int responseCode, const char* responseMessage, int totalIncomingRequests);
 	// Facebook //=========================================
 };
 

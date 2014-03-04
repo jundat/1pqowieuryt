@@ -10,6 +10,8 @@
 
 USING_NS_CC;
 USING_NS_CC_EXT;
+using namespace std;
+
 
 bool ScoreScene::init()
 {
@@ -116,17 +118,17 @@ bool ScoreScene::init()
 
 	CCMenuItem* xephangOn = CCMenuItemImage::create("xephang.png", NULL, NULL);
 	CCMenuItem* xephangOff = CCMenuItemImage::create("xephang1.png", NULL, NULL);
-	m_xephangToggle = CCMenuItemToggle::createWithTarget(this,  menu_selector(ScoreScene::xephangCallback), xephangOn, xephangOff, NULL);
-	m_xephangToggle->setSelectedIndex(0);
-	m_xephangToggle->setPosition(ccp(202, 1280-351));
+	m_itXephangToggle = CCMenuItemToggle::createWithTarget(this,  menu_selector(ScoreScene::itXephangCallback), xephangOn, xephangOff, NULL);
+	m_itXephangToggle->setSelectedIndex(0);
+	m_itXephangToggle->setPosition(ccp(202, 1280-351));
 
 	//Qua tang
 
 	CCMenuItem* quatangOn = CCMenuItemImage::create("quatang.png", NULL, NULL);
 	CCMenuItem* quatangOff = CCMenuItemImage::create("quatang1.png", NULL, NULL);
-	m_quatangToggle = CCMenuItemToggle::createWithTarget(this,  menu_selector(ScoreScene::quatangCallback), quatangOn, quatangOff, NULL);
-	m_quatangToggle->setSelectedIndex(1);
-	m_quatangToggle->setPosition(ccp(600, 1280-351));
+	m_itQuatangToggle = CCMenuItemToggle::createWithTarget(this,  menu_selector(ScoreScene::itQuatangCallback), quatangOn, quatangOff, NULL);
+	m_itQuatangToggle->setSelectedIndex(1);
+	m_itQuatangToggle->setPosition(ccp(600, 1280-351));
 	
 
 	//
@@ -134,34 +136,34 @@ bool ScoreScene::init()
 		"back.png",
 		"back1.png",
 		this,
-		menu_selector(ScoreScene::menuCallback));
+		menu_selector(ScoreScene::itMenuCallback));
 	backItem->setPosition(ccp(92, 1280-1201));
 
 
 	//add more friends
-	CCMenuItemImage* itAddFriend = CCMenuItemImage::create("add_friend.png", "add_friend_hover.png", this, menu_selector(ScoreScene::addFriendCallback));
+	CCMenuItemImage* itAddFriend = CCMenuItemImage::create("add_friend.png", "add_friend_hover.png", this, menu_selector(ScoreScene::itAddFriendCallback));
 	itAddFriend->setPosition(ccp(255, 1280-1198)); //382, 1280-1205));
 	
 
 	//
-	m_fbLogOutItem = CCMenuItemImage::create(
+	m_itFbLogOutItem = CCMenuItemImage::create(
 		"disconnect_facebook.png",
 		"disconnect_facebook.png",
 		this,
-		menu_selector(ScoreScene::fbLogOutCallback));
-	m_fbLogOutItem->setPosition(ccp(611, 1280-1205));
-	this->addChild(m_fbLogOutItem);
+		menu_selector(ScoreScene::itFbLogOutCallback));
+	m_itFbLogOutItem->setPosition(ccp(611, 1280-1205));
+	this->addChild(m_itFbLogOutItem);
 
 	//Facebook button
 	
 
 	m_isLoggedIn = true;
-	m_fbLogInItem = CCMenuItemImage::create(
+	m_itFbLogInItem = CCMenuItemImage::create(
 		"connect_facebook.png", 
 		"connect_facebook.png", 
 		this,  
-		menu_selector(ScoreScene::fbLogInCallback));
-	m_fbLogInItem->setPosition(ccp(400, 1280-805));
+		menu_selector(ScoreScene::itFbLogInCallback));
+	m_itFbLogInItem->setPosition(ccp(400, 1280-805));
 
 	m_lbInvite = CCLabelTTF::create("Liên kết Facebook\nthêm niềm vui", "Roboto-Medium.ttf", 48);
 	m_lbInvite->setFontFillColor(ccc3(0, 0, 0));
@@ -169,7 +171,7 @@ bool ScoreScene::init()
 	this->addChild(m_lbInvite, 1); //samw menu
 
 
-	CCMenu* pMenu = CCMenu::create(backItem, m_fbLogInItem, m_fbLogOutItem, m_xephangToggle, m_quatangToggle, itAddFriend, NULL);
+	CCMenu* pMenu = CCMenu::create(backItem, m_itFbLogInItem, m_itFbLogOutItem, m_itXephangToggle, m_itQuatangToggle, itAddFriend, NULL);
 	pMenu->setPosition(CCPointZero);
 	this->addChild(pMenu, 1);
 
@@ -242,24 +244,24 @@ bool ScoreScene::init()
 
 	if(EziSocialObject::sharedObject()->isFacebookSessionActive()) //logged in state
 	{
-		callSubmitScore();
+		submitScore();
 
 		//check incoming request
 		EziSocialObject::sharedObject()->checkIncomingRequest();
 
 
 		m_isLoggedIn = true;
-		m_fbLogInItem->setVisible(false);
+		m_itFbLogInItem->setVisible(false);
 		m_lbInvite->setVisible(false);
-		m_fbLogOutItem->setVisible(true);
+		m_itFbLogOutItem->setVisible(true);
 
 		//get avatar
-		EziSocialObject::sharedObject()->getProfilePicForID(this, DataManager::sharedDataManager()->GetProfileID().c_str(), // Profile ID of current user
+		EziSocialObject::sharedObject()->getProfilePicForID(this, DataManager::sharedDataManager()->GetFbID().c_str(), // Profile ID of current user
 			G_AVATAR_SIZE, G_AVATAR_SIZE, // Size of the image
 			false // force download it from server
 			);
 
-		callGetHighScores();
+		getHighScores();
 	}
 	else //logged out stated
 	{
@@ -269,9 +271,9 @@ bool ScoreScene::init()
 		m_tableQuatang->setVisible(false);
 		m_sprWaiting->setVisible(false);
 
-		m_fbLogInItem->setVisible(true);
+		m_itFbLogInItem->setVisible(true);
 		m_lbInvite->setVisible(true);
-		m_fbLogOutItem->setVisible(false);
+		m_itFbLogOutItem->setVisible(false);
 	}
 #endif
 	
@@ -280,7 +282,7 @@ bool ScoreScene::init()
 	return true;
 }
 
-void ScoreScene::menuCallback(CCObject* pSender)
+void ScoreScene::itMenuCallback(CCObject* pSender)
 {
 	PLAY_BUTTON_EFFECT;
 
@@ -288,7 +290,7 @@ void ScoreScene::menuCallback(CCObject* pSender)
 	CCDirector::sharedDirector()->replaceScene(pScene);
 }
 
-void ScoreScene::addFriendCallback( CCObject* pSender )
+void ScoreScene::itAddFriendCallback( CCObject* pSender )
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	if(EziSocialObject::sharedObject()->isFacebookSessionActive()) //logged in state
@@ -311,19 +313,19 @@ void ScoreScene::addFriendCallback( CCObject* pSender )
 
 void ScoreScene::keyBackClicked()
 {
-	menuCallback(NULL);
+	itMenuCallback(NULL);
 }
 
 
 
-void ScoreScene::xephangCallback( CCObject* pSender )
+void ScoreScene::itXephangCallback( CCObject* pSender )
 {
 	PLAY_BUTTON_EFFECT;
 	m_isXepHangView = true;
 	refreshView();
 }
 
-void ScoreScene::quatangCallback( CCObject* pSender )
+void ScoreScene::itQuatangCallback( CCObject* pSender )
 {
 	PLAY_BUTTON_EFFECT;
 	m_isXepHangView = false;
@@ -405,11 +407,11 @@ CCTableViewCell* ScoreScene::tableCellAtIndex(CCTableView *table, unsigned int i
 {
 	if (table == m_tableXephang)
 	{
-		return tableCellXepHangAtIndex(table, idx);
+		return getTableCellXepHangAtIndex(table, idx);
 	} 
 	else
 	{
-		return tableCellQuatangAtIndex(table, idx);
+		return getTableCellQuatangAtIndex(table, idx);
 	}
 }
 
@@ -439,7 +441,7 @@ unsigned int ScoreScene::numberOfCellsInTableView(CCTableView *table)
 
 
 
-void ScoreScene::getBoomCallback( CCObject* pSender )
+void ScoreScene::itGetBoomCallback( CCObject* pSender )
 {
 	int tag = ((CCMenuItemImage*)pSender)->getTag();
 	int idx = tag - 1000;
@@ -474,7 +476,7 @@ void ScoreScene::getBoomCallback( CCObject* pSender )
 	}
 }
 
-void ScoreScene::sendLifeCallback( CCObject* pSender )
+void ScoreScene::itSendLifeCallback( CCObject* pSender )
 {
 	PLAY_BUTTON_EFFECT;
 
@@ -510,8 +512,8 @@ void ScoreScene::refreshView()
 {
 	if (m_isXepHangView) //left
 	{
-		m_xephangToggle->setSelectedIndex(0);
-		m_quatangToggle->setSelectedIndex(1);
+		m_itXephangToggle->setSelectedIndex(0);
+		m_itQuatangToggle->setSelectedIndex(1);
 
 		m_tableXephang->setVisible(true);
 		m_tableQuatang->setVisible(false);
@@ -520,8 +522,8 @@ void ScoreScene::refreshView()
 	} 
 	else //right
 	{
-		m_xephangToggle->setSelectedIndex(1);
-		m_quatangToggle->setSelectedIndex(0);
+		m_itXephangToggle->setSelectedIndex(1);
+		m_itQuatangToggle->setSelectedIndex(0);
 
 		m_tableXephang->setVisible(false);
 		m_tableQuatang->setVisible(true);
@@ -659,8 +661,9 @@ void ScoreScene::scheduleTimer( float dt )
 
 // Facebook //=========================================
 
+//MY FUNCTION
 
-void ScoreScene::fbLogInCallback( CCObject* pSender )
+void ScoreScene::itFbLogInCallback( CCObject* pSender )
 {
 	PLAY_BUTTON_EFFECT;
 
@@ -671,7 +674,7 @@ void ScoreScene::fbLogInCallback( CCObject* pSender )
 #endif
 }
 
-void ScoreScene::fbLogOutCallback( CCObject* pSender )
+void ScoreScene::itFbLogOutCallback( CCObject* pSender )
 {
 	PLAY_BUTTON_EFFECT;
 
@@ -680,8 +683,48 @@ void ScoreScene::fbLogOutCallback( CCObject* pSender )
 #endif
 }
 
+void ScoreScene::submitScore()
+{
+	CCLOG("callSubmitScore");
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+	if(EziSocialObject::sharedObject()->isFacebookSessionActive()) //logged in state
+	{
+		EziSocialObject::sharedObject()->postScore(DataManager::sharedDataManager()->GetHighScore());
+	}
+#endif
+
+	GameClientManager::sharedGameClientManager()->sendScore(string(G_APP_ID), )
+}
+
+void ScoreScene::getHighScores()
+{
+	CCLOG("callGetHighScores");
+// #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+// 	if(EziSocialObject::sharedObject()->isFacebookSessionActive()) //logged in state
+// 	{
+// 		EziSocialObject::sharedObject()->getHighScores();
+// 	}
+// #endif
+
+	GameClientManager::sharedGameClientManager()->getFriendList(string(G_APP_ID), DataManager::sharedDataManager()->GetFbID());
+}
+
+void ScoreScene::onGetFriendListCompleted(bool isSuccess, CCArray* arrFriends)
+{
+	
+}
+
+void ScoreScene::sendUserProfileToServer(string fbId, string fbName, string email)
+{
+	GameClientManager::sharedGameClientManager()->sendPlayerFbProfile(fbId, fbName, email);
+}
 
 
+
+
+//END MY FUNCTION
+
+//when did Logged In  || Logged Out
 void ScoreScene::fbSessionCallback(int responseCode, const char *responseMessage)
 {
 	CCLOG("fbSessionCallback");
@@ -691,13 +734,13 @@ void ScoreScene::fbSessionCallback(int responseCode, const char *responseMessage
 		CCLOG("fbSessionCallback: SUCCESSFUL");
 		m_isLoggedIn = true;
 
-		m_fbLogInItem->setVisible(false);
+		m_itFbLogInItem->setVisible(false);
 		m_lbInvite->setVisible(false);
-		m_fbLogOutItem->setVisible(true);
+		m_itFbLogOutItem->setVisible(true);
 
 		refreshView();
 
-		callSubmitScore();
+		submitScore();
 		
 		//Auto fetchFBUserDetails, do not call it again
 		//It make exception
@@ -713,9 +756,9 @@ void ScoreScene::fbSessionCallback(int responseCode, const char *responseMessage
 		m_tableXephang->setVisible(false);
 		m_tableQuatang->setVisible(false);
 
-		m_fbLogInItem->setVisible(true);
+		m_itFbLogInItem->setVisible(true);
 		m_lbInvite->setVisible(true);
-		m_fbLogOutItem->setVisible(false);
+		m_itFbLogOutItem->setVisible(false);
 
 		if (m_lbInviteQuatang != NULL)
 		{
@@ -739,12 +782,16 @@ void ScoreScene::fbUserDetailCallback( int responseCode, const char* responseMes
 		std::string firstname = fbUser->getFirstName(); //getFirstName //getFullName
 		std::string userName = fbUser->getUserName();
 		std::string profileID = fbUser->getProfileID();
-		std::string fullName = fbUser->getFullName();
+		std::string fullName = fbUser->getFullName(); //getEmailID
+		std::string emailID = fbUser->getEmailID();
 
 		DataManager::sharedDataManager()->SetName(firstname.c_str());
-		DataManager::sharedDataManager()->SetProfileID(profileID.c_str());
+		DataManager::sharedDataManager()->SetFbProfileID(profileID.c_str());
 		DataManager::sharedDataManager()->SetFbUserName(userName.c_str());
 		DataManager::sharedDataManager()->SetFbFullName(fullName.c_str());
+		DataManager::sharedDataManager()->SetFbEmail(emailID.c_str());
+
+		sendUserProfileToServer(profileID, fullName, emailID);
 
 		m_lbName->setString(firstname.c_str());
 
@@ -754,7 +801,7 @@ void ScoreScene::fbUserDetailCallback( int responseCode, const char* responseMes
 			false // force download it from server
 		);
 
-		callGetHighScores();
+		getHighScores();
 
 		//check incoming request
 		EziSocialObject::sharedObject()->checkIncomingRequest();
@@ -772,7 +819,7 @@ void ScoreScene::fbUserPhotoCallback(const char *userPhotoPath, const char* fbID
 	if ((strcmp(userPhotoPath, "") != 0))
 	{
 		CCLOG("fbUserPhotoCallback: userPhotoPath != NULL");
-		if(sid == DataManager::sharedDataManager()->GetProfileID())
+		if(sid == DataManager::sharedDataManager()->GetFbID())
 		{
 			CCLOG("fbUserPhotoCallback: this user");
 			//CCLOG("Gotten avatar for user");
@@ -821,28 +868,6 @@ void ScoreScene::fbUserPhotoCallback(const char *userPhotoPath, const char* fbID
 #endif
 }
 
-void ScoreScene::callSubmitScore()
-{
-	CCLOG("callSubmitScore");
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-	if(EziSocialObject::sharedObject()->isFacebookSessionActive()) //logged in state
-	{
-		EziSocialObject::sharedObject()->postScore(DataManager::sharedDataManager()->GetHighScore());
-	}
-#endif
-}
-
-void ScoreScene::callGetHighScores()
-{
-	CCLOG("callGetHighScores");
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-	if(EziSocialObject::sharedObject()->isFacebookSessionActive()) //logged in state
-	{
-		EziSocialObject::sharedObject()->getHighScores();
-	}
-#endif
-}
-
 void ScoreScene::fbHighScoresCallback( int responseCode, const char* responseMessage, cocos2d::CCArray* highScores )
 {
 	CCLOG("fbHighScoresCallback");
@@ -857,7 +882,7 @@ void ScoreScene::fbHighScoresCallback( int responseCode, const char* responseMes
 	m_arrHighScores->retain();
 
 	m_tableXepHangSize = m_arrHighScores->count();
-	std::string myProfileID = DataManager::sharedDataManager()->GetProfileID();
+	std::string myProfileID = DataManager::sharedDataManager()->GetFbID();
 	int count = m_arrHighScores->count();
 
 
@@ -876,7 +901,7 @@ void ScoreScene::fbHighScoresCallback( int responseCode, const char* responseMes
 		}
 	}
 
-	MySortHighScore();
+	SortEziFriendScoreList(m_arrHighScores);
 
 	for (int i = 0; i < count; ++i)
 	{
@@ -1043,7 +1068,7 @@ void ScoreScene::fbIncomingRequestCallback(int responseCode, const char* respons
 #endif
 }
 
-CCTableViewCell* ScoreScene::tableCellXepHangAtIndex( CCTableView *table, unsigned int idx )
+CCTableViewCell* ScoreScene::getTableCellXepHangAtIndex( CCTableView *table, unsigned int idx )
 {
 	bool isMyScore = false;
 	CCString *strOrder = CCString::createWithFormat("%d", idx + 1);
@@ -1147,7 +1172,7 @@ CCTableViewCell* ScoreScene::tableCellXepHangAtIndex( CCTableView *table, unsign
 		{
 			strPhoto  = CCString::createWithFormat("%s", fbFriend->getPhotoPath());
 		}
-		if(fbFriend->getFBID() == DataManager::sharedDataManager()->GetProfileID())
+		if(fbFriend->getFBID() == DataManager::sharedDataManager()->GetFbID())
 		{
 			isMyScore = true;
 		}
@@ -1217,12 +1242,12 @@ CCTableViewCell* ScoreScene::tableCellXepHangAtIndex( CCTableView *table, unsign
 
 		if (isMyScore == false)
 		{
-			CCMenuItemImage* itGetBoom = CCMenuItemImage::create("boomgift.png", "boomgift1.png", "boomgift1.png", this, menu_selector(ScoreScene::getBoomCallback));
+			CCMenuItemImage* itGetBoom = CCMenuItemImage::create("boomgift.png", "boomgift1.png", "boomgift1.png", this, menu_selector(ScoreScene::itGetBoomCallback));
 			itGetBoom->setPosition(ccp(600, m_sprCell->getContentSize().height/2 + 10));
 			itGetBoom->setTag(1000 + idx);
 			((CustomTableViewCell*)cell)->m_itGetBoom = itGetBoom;
 
-			CCMenuItemImage* itSendLife = CCMenuItemImage::create("oil.png", "oil_blur.png", "oil_blur.png", this, menu_selector(ScoreScene::sendLifeCallback));
+			CCMenuItemImage* itSendLife = CCMenuItemImage::create("oil.png", "oil_blur.png", "oil_blur.png", this, menu_selector(ScoreScene::itSendLifeCallback));
 			itSendLife->setPosition(ccp(725, m_sprCell->getContentSize().height/2 + 15));
 			itSendLife->setTag(2000 + idx);
 			((CustomTableViewCell*)cell)->m_itSendLife = itSendLife;
@@ -1332,7 +1357,7 @@ CCTableViewCell* ScoreScene::tableCellXepHangAtIndex( CCTableView *table, unsign
 	return cell;
 }
 
-CCTableViewCell* ScoreScene::tableCellQuatangAtIndex( CCTableView *table, unsigned int idx )
+CCTableViewCell* ScoreScene::getTableCellQuatangAtIndex( CCTableView *table, unsigned int idx )
 {
 	CCString* strName = CCString::create(G_DEFAULT_NAME);
 	CCString* strPhoto = CCString::create("fb-profile.png");

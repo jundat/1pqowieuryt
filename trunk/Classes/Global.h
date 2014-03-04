@@ -11,7 +11,7 @@
 
 
 //GAME CONSTANT
-
+#define G_APP_ID				"DBPTK"
 #define G_DEFAULT_NAME			"Việt Nam"
 #define G_AVATAR_SIZE			128
 #define G_FRIEND_AVATAR_SIZE	110
