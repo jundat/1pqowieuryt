@@ -188,7 +188,7 @@ void GameClientManager::_onSendDeviceProfileCompleted( CCHttpClient *sender, CCH
 
 //
 
-void GameClientManager::sendScore( std::string appId, std::string fbId, int score, long time )
+void GameClientManager::sendScore( std::string appId, std::string fbId, int score )
 {
 	CCHttpRequest* request = new CCHttpRequest();
 	request->setRequestType(CCHttpRequest::kHttpPost);
@@ -198,11 +198,10 @@ void GameClientManager::sendScore( std::string appId, std::string fbId, int scor
 	request->setResponseCallback(this, httpresponse_selector(GameClientManager::_onSendScoreCompleted));
 
 	// write the post data
-	CCString* strData = CCString::createWithFormat("data={appId: \"%s\", fbId: \"%s\", score: %d, time: %ld }&method=set",
+	CCString* strData = CCString::createWithFormat("data={appId: \"%s\", fbId: \"%s\", score: %d }&method=set",
 		appId.c_str(),
 		fbId.c_str(),
-		score,
-		time
+		score
 		);
 
 
@@ -284,7 +283,7 @@ void GameClientManager::_onGetScoreCompleted( CCHttpClient *sender, CCHttpRespon
 	if (!response->isSucceed())
 	{
 		CCLOG("Request failed: %s", response->getErrorBuffer());
-		m_clientDelegate->onGetScoreCompleted(false, -1);
+		m_clientDelegate->onGetScoreCompleted(false, -1, std::string());
 	}
 	else
 	{
@@ -296,11 +295,14 @@ void GameClientManager::_onGetScoreCompleted( CCHttpClient *sender, CCHttpRespon
 		//get score from response
 		json_t *root;
 		json_error_t error;
-		json_t *result;
+		json_t *score;
+		json_t *time;
 
 		root = json_loads(str.c_str(), strlen(str.c_str()), &error);
-		result = json_object_get(root, "score");
-		m_clientDelegate->onGetScoreCompleted(true, (int)json_integer_value(result));
+		score = json_object_get(root, "score");
+		time = json_object_get(root, "time");
+
+		m_clientDelegate->onGetScoreCompleted(true, (int)atof(json_string_value(score)), json_string_value(time));
 	}
 
 	CCLOG("------- END %s -------", response->getHttpRequest()->getTag());
@@ -355,6 +357,7 @@ void GameClientManager::_onGetFriendListCompleted( CCHttpClient *sender, CCHttpR
 		std::string str(buffer->begin(), buffer->end());
 
 		CCLOG("Content: %s", str.c_str());
+		
 
 		//get score from response
 		json_t *root;
@@ -375,17 +378,20 @@ void GameClientManager::_onGetFriendListCompleted( CCHttpClient *sender, CCHttpR
 
 			json_t* fbId;
 			json_t* fbName;
+			//json_t* email;
 			json_t* score;
 
 
 			fbId = json_object_get(fbFriend, "fbId");
 			fbName = json_object_get(fbFriend, "fbName");
+			//email = json_object_get(fbFriend, "email");
 			score = json_object_get(fbFriend, "score");
 
-			FacebookAccount* acc = new FacebookAccount(json_string_value(fbId), json_string_value(fbName), (int)json_integer_value(score));
+			FacebookAccount* acc = new FacebookAccount(json_string_value(fbId), json_string_value(fbName), std::string(), (int)atof(json_string_value(score)));
 			arrFriends->addObject(acc);
 		}
 
+		SortFriendScore(arrFriends);
 		m_clientDelegate->onGetFriendListCompleted(true, arrFriends);
 	}
 
@@ -442,36 +448,23 @@ void GameClientManager::_onGetPlayerFbProfileCompleted( CCHttpClient *sender, CC
 		CCLOG("Content: %s", str.c_str());
 
 		//get score from response
-// 		json_t *root;
-// 		json_error_t error;
-// 		json_t *friendList;
-// 
-// 		root = json_loads(str.c_str(), strlen(str.c_str()), &error);
-// 		friendList = json_object_get(root, "list");
-// 
-// 		//foreach to get all friend, insert to list
-// 		int count = json_array_size(friendList);
-// 		CCArray* arrFriends = new CCArray();
-// 		arrFriends->retain();
-// 
-// 		for(int i = 0; i < count; i++)
-// 		{
-// 			json_t *fbFriend = json_array_get(friendList, i);
-// 
-// 			json_t* fbId;
-// 			json_t* fbName;
-// 			json_t* score;
-// 
-// 
-// 			fbId = json_object_get(fbFriend, "fbId");
-// 			fbName = json_object_get(fbFriend, "fbName");
-// 			score = json_object_get(fbFriend, "score");
-// 
-// 			FacebookAccount* acc = new FacebookAccount(json_string_value(fbId), json_string_value(fbName), (int)json_integer_value(score));
-// 			arrFriends->addObject(acc);
-// 		}
-// 
-// 		m_clientDelegate->onGetPlayerFbProfileCompleted(true, arrFriends);
+		json_t *root;
+		json_error_t error;
+		json_t *fbId;
+		json_t *fbName;
+		json_t *email;
+		//json_t *score;
+
+
+		root = json_loads(str.c_str(), strlen(str.c_str()), &error);
+		fbId = json_object_get(root, "fbId");
+		fbName = json_object_get(root, "fbName");
+		email = json_object_get(root, "email");
+		//score = json_object_get(root, "score");
+
+		FacebookAccount* acc = new FacebookAccount(json_string_value(fbId), json_string_value(fbName), std::string(json_string_value(email)), -1);
+
+		m_clientDelegate->onGetPlayerFbProfileCompleted(true, acc);
 
 	}
 
@@ -480,7 +473,7 @@ void GameClientManager::_onGetPlayerFbProfileCompleted( CCHttpClient *sender, CC
 
 
 
-void GameClientManager::getDeviceProfile(std::string fbId )
+void GameClientManager::getDeviceProfile(std::string fbId, std::string deviceId )
 {
 	CCHttpRequest* request = new CCHttpRequest();
 	request->setRequestType(CCHttpRequest::kHttpPost);
@@ -490,8 +483,9 @@ void GameClientManager::getDeviceProfile(std::string fbId )
 	request->setResponseCallback(this, httpresponse_selector(GameClientManager::_onGetDeviceProfileCompleted));
 
 	// write the post data
-	CCString* strData = CCString::createWithFormat("data={ fbId: \"%s\" }&method=get",
-		fbId.c_str()
+	CCString* strData = CCString::createWithFormat("data={ fbId: \"%s\", deviceId: \"%s\" }&method=get",
+		fbId.c_str(),
+		deviceId.c_str()
 		);
 
 
@@ -528,36 +522,29 @@ void GameClientManager::_onGetDeviceProfileCompleted( CCHttpClient *sender, CCHt
 		CCLOG("Content: %s", str.c_str());
 
 		//get score from response
-		// 		json_t *root;
-		// 		json_error_t error;
-		// 		json_t *friendList;
-		// 
-		// 		root = json_loads(str.c_str(), strlen(str.c_str()), &error);
-		// 		friendList = json_object_get(root, "list");
-		// 
-		// 		//foreach to get all friend, insert to list
-		// 		int count = json_array_size(friendList);
-		// 		CCArray* arrFriends = new CCArray();
-		// 		arrFriends->retain();
-		// 
-		// 		for(int i = 0; i < count; i++)
-		// 		{
-		// 			json_t *fbFriend = json_array_get(friendList, i);
-		// 
-		// 			json_t* fbId;
-		// 			json_t* fbName;
-		// 			json_t* score;
-		// 
-		// 
-		// 			fbId = json_object_get(fbFriend, "fbId");
-		// 			fbName = json_object_get(fbFriend, "fbName");
-		// 			score = json_object_get(fbFriend, "score");
-		// 
-		// 			FacebookAccount* acc = new FacebookAccount(json_string_value(fbId), json_string_value(fbName), (int)json_integer_value(score));
-		// 			arrFriends->addObject(acc);
-		// 		}
-		// 
-		// 		m_clientDelegate->onGetPlayerFbProfileCompleted(true, arrFriends);
+		json_t *root;
+		json_error_t error;
+		json_t *fbId;
+		json_t *deviceId;
+		json_t *deviceToken;
+		json_t *devicePhoneNumber;
+		json_t *deviceConfig;
+
+		root = json_loads(str.c_str(), strlen(str.c_str()), &error);
+
+		fbId = json_object_get(root, "fbId");
+		deviceId = json_object_get(root, "deviceId");
+		deviceToken = json_object_get(root, "deviceToken");
+		deviceConfig = json_object_get(root, "deviceConfig");
+		devicePhoneNumber = json_object_get(root, "devicePhoneNumber");
+
+		DeviceProfile* acc = new DeviceProfile(
+			json_string_value(deviceId), 
+			json_string_value(deviceToken), 
+			json_string_value(deviceConfig),
+			json_string_value(devicePhoneNumber));
+
+		m_clientDelegate->onGetDeviceProfileCompleted(true, acc);
 
 	}
 

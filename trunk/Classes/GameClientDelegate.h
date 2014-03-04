@@ -35,17 +35,8 @@ public:
 
 	virtual void onGetScoreCompleted(
 		bool isSuccess,
-		int score
-		){}
-
-	virtual void onGetFriendLeaderboardCompleted(
-		bool isSuccess,
-		CCArray* arrHighScore //array of FacebookAccount (our code)
-		){}
-
-	virtual void onGetWorldLeaderboardCompleted(
-		bool isSuccess,
-		CCArray* arrHighScore //array of FacebookAccount (our code)
+		int score,
+		std::string time
 		){}
 
 	virtual void onGetFriendListCompleted(

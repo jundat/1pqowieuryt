@@ -97,8 +97,7 @@ public:
 	void sendScore(
 		std::string appId,
 		std::string fbId,
-		int score,
-		long time
+		int score
 		);
 
 	void _onSendScoreCompleted(CCHttpClient *sender, CCHttpResponse *response);
@@ -117,6 +116,22 @@ public:
 
 	//////////////////////////////////////////////////////////////////////////
 
+	//compare score in facebook account
+	static int CompareFriendScore(const CCObject* p1, const CCObject* p2)
+	{
+		FacebookAccount* acc1 = (FacebookAccount*) p1;
+		FacebookAccount* acc2 = (FacebookAccount*) p2;
+
+		return (acc1->score > acc2->score);
+	}
+
+	//array of FacebookAccount
+	void SortFriendScore(CCArray* arrFriends)
+	{
+		std::sort(arrFriends->data->arr, 
+			arrFriends->data->arr + arrFriends->data->num, CompareFriendScore);
+	}
+
 	void getFriendList(
 		std::string appId,
 		std::string fbId
@@ -132,7 +147,7 @@ public:
 
 	//////////////////////////////////////////////////////////////////////////
 
-	void getDeviceProfile(std::string fbId );
+	void getDeviceProfile(std::string fbId, std::string deviceId );
 
 	void _onGetDeviceProfileCompleted( CCHttpClient *sender, CCHttpResponse *response );
 

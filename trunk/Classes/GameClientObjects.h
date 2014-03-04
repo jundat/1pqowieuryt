@@ -13,19 +13,23 @@ class FacebookAccount : public CCNode
 public:
 	std::string fbId;
 	std::string fbName; //get the fullname
+	std::string email;
 	int score;
 
 public:
-	FacebookAccount(std::string _fbId, std::string _fbName, int _score)
+	FacebookAccount(){}
+
+	FacebookAccount(std::string _fbId, std::string _fbName, std::string _email, int _score)
 	{
 		fbId = _fbId;
 		fbName = _fbName;
+		email = _email;
 		score = _score;
 	}
 
 	std::string toJson()
 	{
-		CCString* s = CCString::createWithFormat("{fbId: \"%s\", fbName: \"%s\", score: %d}", fbId.c_str(), fbName.c_str(), score);
+		CCString* s = CCString::createWithFormat("{fbId: \"%s\", fbName: \"%s\", email: \"%s\", score: %d}", fbId.c_str(), fbName.c_str(), email.c_str(), score);
 		return std::string(s->getCString());
 	}
 };
@@ -40,6 +44,23 @@ public:
 	std::string deviceToken;
 	std::string deviceConfig;
 	std::string devicePhoneNumber;
+
+	DeviceProfile(){}
+
+	DeviceProfile(std::string _deviceId, std::string _deviceToken, std::string _deviceConfig, std::string _devicePhoneNumber)
+	{
+		deviceId = _deviceId;
+		deviceToken = _deviceToken;
+		deviceConfig = _deviceConfig;
+		devicePhoneNumber = _devicePhoneNumber;
+	}
+
+	std::string toJson()
+	{
+		CCString* s = CCString::createWithFormat("{deviceId: \"%s\", deviceToken: \"%s\", deviceConfig: \"%s\", devicePhoneNumber: \"%s\" }", 
+			deviceId.c_str(), deviceToken.c_str(), deviceConfig.c_str(), devicePhoneNumber.c_str());
+		return std::string(s->getCString());
+	}
 };
 
 
