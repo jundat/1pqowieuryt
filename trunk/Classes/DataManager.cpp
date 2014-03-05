@@ -29,7 +29,7 @@ int DataManager::GetHighScore()
 
 
 //Default value = 0
-void DataManager::SetCurrentHighScore(int score)
+void DataManager::SetHighScore(int score)
 {
 	if(score > this->GetHighScore() ) {
 		CCUserDefault::sharedUserDefault()->setIntegerForKey("CURRENT_HIGHSCORE", score);

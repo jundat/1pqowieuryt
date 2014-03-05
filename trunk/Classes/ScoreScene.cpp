@@ -248,7 +248,7 @@ bool ScoreScene::init()
 
 	if(EziSocialObject::sharedObject()->isFacebookSessionActive()) //logged in state
 	{
-		submitScore();
+		syncScore();
 
 		//check incoming request
 		EziSocialObject::sharedObject()->checkIncomingRequest();
@@ -698,10 +698,25 @@ void ScoreScene::submitScore()
 		DataManager::sharedDataManager()->GetHighScore());
 }
 
+void ScoreScene::syncScore()
+{
+	//get score from server
+	GameClientManager::sharedGameClientManager()->getScore(string(G_APP_ID), DataManager::sharedDataManager()->GetFbID());
+}
+
 void ScoreScene::getHighScores()
 {
 	CCLOG("getHighScores");
 	GameClientManager::sharedGameClientManager()->getFriendList(string(G_APP_ID), DataManager::sharedDataManager()->GetFbID());
+}
+
+void ScoreScene::getFacebookFriends()
+{
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+	ScoreScene::s_beginFriendInd = 0;
+	ScoreScene::s_endFriendInd = G_MAX_FRIENDS - 1;
+	EziSocialObject::sharedObject()->getFriends(EziSocialWrapperNS::FB_FRIEND_SEARCH::ALL_FRIENDS, s_beginFriendInd, s_endFriendInd);
+#endif
 }
 
 //get highscore list completed
@@ -763,6 +778,41 @@ void ScoreScene::sendUserProfileToServer(string fbId, string fbName, string emai
 	CCLOG("sendUserProfileToServer");
 	GameClientManager::sharedGameClientManager()->sendPlayerFbProfile(fbId, fbName, email);
 }
+
+void ScoreScene::onGetScoreCompleted( bool isSuccess, int score, std::string time )
+{
+	CCLOG("onGetScoreCompleted");
+
+	if (isSuccess)
+	{
+		int deviceScore = DataManager::sharedDataManager()->GetHighScore();
+		if (deviceScore < score) // server -> device
+		{
+			DataManager::sharedDataManager()->SetHighScore(score);
+
+			//score
+			CCString* str = CCString::createWithFormat("%d", DataManager::sharedDataManager()->GetHighScore());
+			m_lbScore->setString(str->getCString());
+			
+			PLAY_GET_BOMB_EFFECT;
+
+			//animation
+			m_lbScore->runAction(CCSequence::createWithTwoActions(
+				CCScaleTo::create(0.2f, 1.25f),
+				CCScaleTo::create(0.2f, 1.0f)
+				));
+		} 
+		else // device -> server
+		{
+			submitScore();
+		}
+	} 
+	else
+	{
+		CCLOG("FAILED TO GET SCORE");
+	}	
+}
+
 
 
 
@@ -837,17 +887,11 @@ void ScoreScene::fbUserDetailCallback( int responseCode, const char* responseMes
 
 		sendUserProfileToServer(profileID, fullName, emailID);
 		
-		submitScore();
+		syncScore();
 
-		ScoreScene::s_beginFriendInd = 0;
-		ScoreScene::s_endFriendInd = G_MAX_FRIENDS - 1;
-		EziSocialObject::sharedObject()->getFriends(EziSocialWrapperNS::FB_FRIEND_SEARCH::ALL_FRIENDS, s_beginFriendInd, s_endFriendInd);
+		getFacebookFriends();
 		
-		CCLOG("call: getProfilePicForID");
-		EziSocialObject::sharedObject()->getProfilePicForID(this, fbUser->getProfileID(), // Profile ID of current user
-			G_AVATAR_SIZE, G_AVATAR_SIZE, // Size of the image
-			false // force download it from server
-		);
+		EziSocialObject::sharedObject()->getProfilePicForID(this, fbUser->getProfileID(), G_AVATAR_SIZE, G_AVATAR_SIZE, false);
 
 		//check incoming request
 		EziSocialObject::sharedObject()->checkIncomingRequest();
@@ -916,34 +960,33 @@ void ScoreScene::fbFriendsCallback( int responseCode, const char* responseMessag
 	CCLOG("fbFriendsCallback");
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	int count = friends->count();
-	CCLOG("ALL FRIENDS: %d", count);
 
-	CCArray* arrFriends = new CCArray();
-	arrFriends->retain();
-
-	CCObject* it;
-	CCARRAY_FOREACH(friends, it)
-	{
-		EziFacebookFriend* fbFriend = dynamic_cast<EziFacebookFriend*>(it);
-		if (NULL != it)
-		{
-			string fbId = fbFriend->getFBID();
-			string fbName = fbFriend->getName();
-			FacebookAccount* acc = new FacebookAccount(fbId, fbName, string(), -1);
-
-			arrFriends->addObject(acc);
-		}
-	}
-
-	GameClientManager::sharedGameClientManager()->sendFriendList(DataManager::sharedDataManager()->GetFbID(), arrFriends);
-	
 	if (count > 0)
 	{
+		CCArray* arrFriends = new CCArray();
+		arrFriends->retain();
+
+		CCObject* it;
+		CCARRAY_FOREACH(friends, it)
+		{
+			EziFacebookFriend* fbFriend = dynamic_cast<EziFacebookFriend*>(it);
+			if (NULL != it)
+			{
+				string fbId = fbFriend->getFBID();
+				string fbName = fbFriend->getName();
+				FacebookAccount* acc = new FacebookAccount(fbId, fbName, string(), -1);
+
+				arrFriends->addObject(acc);
+			}
+		}
+
+		GameClientManager::sharedGameClientManager()->sendFriendList(DataManager::sharedDataManager()->GetFbID(), arrFriends);
+
 		ScoreScene::s_beginFriendInd += G_MAX_FRIENDS;
 		ScoreScene::s_endFriendInd += G_MAX_FRIENDS;
 		EziSocialObject::sharedObject()->getFriends(EziSocialWrapperNS::FB_FRIEND_SEARCH::ALL_FRIENDS, s_beginFriendInd, s_endFriendInd);
 	}
-	else
+	else //finish get friends
 	{
 		//get highscore after send all friend to server
 		getHighScores();
@@ -1482,5 +1525,6 @@ CCTableViewCell* ScoreScene::getTableCellQuatangAtIndex( CCTableView *table, uns
 	return NULL;
 #endif
 }
+
 
 // Facebook //=========================================

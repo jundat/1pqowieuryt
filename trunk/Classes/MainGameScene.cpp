@@ -125,10 +125,9 @@ void MainGameScene::showEndGame( int score, int killedEnemies )
 	this->addChild(dialog);
 
 	//save highscore after show dialog
-	DataManager::sharedDataManager()->SetCurrentHighScore(score);
+	DataManager::sharedDataManager()->SetHighScore(score);
 
 	//submit score
-	
 	if (DataManager::sharedDataManager()->GetFbID().compare("NULL") != 0)
 	{
 		GameClientManager::sharedGameClientManager()->sendScore(

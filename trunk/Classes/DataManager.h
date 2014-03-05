@@ -43,7 +43,7 @@ public:
 	void	SetPassword(const char* pass);
 
 	int	GetHighScore();
-	void	SetCurrentHighScore(int currentScore);
+	void	SetHighScore(int currentScore);
 
 	tm*		GetLastDeadTime();
 	void	SetLastDeadTime(tm* time); //int hour, int min, int sec, int mday, int mon, int year);

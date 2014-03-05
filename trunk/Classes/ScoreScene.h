@@ -123,12 +123,15 @@ public:
 	CCArray* m_friendList;
 	
 	void submitScore();
+	void syncScore();
 	void getHighScores();
+	void getFacebookFriends();
 	virtual void onGetFriendListCompleted(bool isSuccess, CCArray* arrFriends);
 	void sendUserProfileToServer(string fbId, string fbName, string email);
 	virtual void onSendPlayerFbProfileCompleted( bool isSuccess ){ CCLOG("onSendPlayerFbProfileCompleted"); if(isSuccess) CCLOG("TRUE"); else CCLOG("FALSE"); }
 	void postMessageToLoser(std::string loserName, std::string loserUserName, int yourScore);
 	virtual void onSendFriendListCompleted( bool isSuccess ){ CCLOG("onSendFriendListCompleted"); if(isSuccess) CCLOG("TRUE"); else CCLOG("FALSE"); }
+	virtual void onGetScoreCompleted( bool isSuccess, int score, std::string time );
 
 	//Ezibyte
 	virtual void fbFriendsCallback(int responseCode, const char* responseMessage, cocos2d::CCArray* friends);
