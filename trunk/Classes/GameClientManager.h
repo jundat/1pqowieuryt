@@ -21,6 +21,10 @@ class GameClientManager : public CCObject
 	//////////////////////////////////////////////////////////////////////////
 private:
 	static GameClientManager* s_instance;
+	static string s_urlProfile;
+	static string s_urlDevice;
+	static string s_urlFriend;
+	static string s_urlScore;
 
 	//object will receive all response
 	GameClientDelegate* m_clientDelegate;
@@ -40,16 +44,15 @@ public:
 		return s_instance;
 	}
 	
+	void setUrls(string urlProfile, string urlDevice, string urlFriend, string urlScore);
 	std::string encodeBeforeSend(std::string strData)
 	{
 		return strData;
 	}
-
 	void setDelegate(GameClientDelegate* clientDelegate)
 	{
 		this->m_clientDelegate = clientDelegate;
 	}
-
 	GameClientDelegate* getDelegate()
 	{
 		return m_clientDelegate;

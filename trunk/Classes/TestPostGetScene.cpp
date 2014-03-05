@@ -82,6 +82,9 @@ bool TestPostGetScene::init()
 	itemPost8->setPosition(ccp(20, 800));
 	menuRequest->addChild(itemPost8);
 
+	this->setKeypadEnabled(true);
+
+
 	GameClientManager::sharedGameClientManager()->setDelegate(this);
     return true;
 }

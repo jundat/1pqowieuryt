@@ -36,6 +36,12 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	ConfigLoader::shareConfigLoader();
 	LevelLoader::shareLevelLoader();
 
+	GameClientManager::sharedGameClientManager()->setUrls(
+		G_URL_PLAYER_FB_PROFILE,
+		G_URL_DEVICE_PROFILE,
+		G_URL_FRIEND_LIST,
+		G_URL_SCORE
+		);
 
 	//check if first time install
 	DataManager* DM = DataManager::sharedDataManager();
@@ -77,7 +83,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	AudioManager::sharedAudioManager()->SetVolumeFX(G_DEFAULT_VOLUME);
 
 
-    CCScene *pScene = MenuScene::scene(); //TestPostGetScene::scene(); // IntroScene::scene(); //  MenuScene::scene(); //  MainGameScene::scene(); //
+    CCScene *pScene = TestPostGetScene::scene(); // IntroScene::scene(); //  MenuScene::scene(); //  MainGameScene::scene(); //
 	pDirector->runWithScene(pScene);
 
     return true;

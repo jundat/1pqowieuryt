@@ -6,6 +6,7 @@
 #include "cocos-ext.h"
 #include "GameClientDelegate.h"
 #include "GameClientManager.h"
+#include "MenuScene.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -16,6 +17,14 @@ public:
     virtual bool init();
     static cocos2d::CCScene* scene();
 	CREATE_FUNC(TestPostGetScene);
+
+	virtual void keyBackClicked()
+	{
+		GameClientManager::sharedGameClientManager()->setDelegate(NULL);
+
+		CCScene *pScene = CCTransitionFade::create(0.5, MenuScene::scene());
+		CCDirector::sharedDirector()->replaceScene(pScene);
+	}
 
 	void testPost1(CCObject *sender);
 	void testPost2(CCObject *sender);

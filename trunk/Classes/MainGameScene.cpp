@@ -135,7 +135,7 @@ void MainGameScene::showEndGame( int score, int killedEnemies )
 			string(G_APP_ID), 
 			DataManager::sharedDataManager()->GetFbID(), 
 			DataManager::sharedDataManager()->GetHighScore());
-	}	
+	}
 }
 
 //revived just 1 time for 1 life

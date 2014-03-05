@@ -36,26 +36,7 @@ public:
 	EziFBIncomingRequest* m_request;
 #endif
 	
-	CustomTableViewCell()
-	{
-		//get boom
-		m_lastTimeGetBoom = NULL;
-		m_lbGetBoomTimer = NULL;
-		m_lbGetBoom = NULL;
-		m_itGetBoom = NULL;
-
-		//send life
-		m_lastTimeSendLife = NULL;
-		m_lbSendLifeTimer = NULL;
-		m_lbSendLife = NULL;
-		m_itSendLife = NULL;
-
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-		m_request = NULL;
-#endif
-	}
-
-	virtual void draw();
+	CustomTableViewCell();
 };
 
 #endif /* __CUSTOMTABELVIEWCELL_H__ */

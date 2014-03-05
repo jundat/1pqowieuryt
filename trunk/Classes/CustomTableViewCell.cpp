@@ -2,18 +2,21 @@
 
 USING_NS_CC;
 
-void CustomTableViewCell::draw()
+CustomTableViewCell::CustomTableViewCell()
 {
-	CCTableViewCell::draw();
-	// draw bounding box
-// 	CCPoint pos = getPosition();
-// 	CCSize size = CCSizeMake(178, 200);
-// 	CCPoint vertices[4]={
-// 		ccp(pos.x+1, pos.y+1),
-// 		ccp(pos.x+size.width-1, pos.y+1),
-// 		ccp(pos.x+size.width-1, pos.y+size.height-1),
-// 		ccp(pos.x+1, pos.y+size.height-1),
-// 	};
-// 	ccDrawColor4B(0, 0, 255, 255);
-// 	ccDrawPoly(vertices, 4, true);
+	//get boom
+	m_lastTimeGetBoom = NULL;
+	m_lbGetBoomTimer = NULL;
+	m_lbGetBoom = NULL;
+	m_itGetBoom = NULL;
+
+	//send life
+	m_lastTimeSendLife = NULL;
+	m_lbSendLifeTimer = NULL;
+	m_lbSendLife = NULL;
+	m_itSendLife = NULL;
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+	m_request = NULL;
+#endif
 }
