@@ -2,7 +2,6 @@
 #define __INTRO_SCENE_H__
 
 #include "cocos2d.h"
-
 USING_NS_CC;
 
 

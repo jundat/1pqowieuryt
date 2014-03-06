@@ -12,7 +12,6 @@ USING_NS_CC;
 USING_NS_CC_EXT;
 using namespace std;
 
-#define G_MAX_FRIENDS	100
 int ScoreScene::s_beginFriendInd = 0;
 int ScoreScene::s_endFriendInd = 0;
 
@@ -248,6 +247,8 @@ bool ScoreScene::init()
 
 	if(EziSocialObject::sharedObject()->isFacebookSessionActive()) //logged in state
 	{
+		checkRefreshFriendList();
+
 		syncScore();
 
 		//check incoming request
@@ -689,6 +690,37 @@ void ScoreScene::itFbLogOutCallback( CCObject* pSender )
 #endif
 }
 
+
+
+void ScoreScene::checkRefreshFriendList()
+{
+	CCLOG("checkRefreshFriendList");
+	//check
+	//get boom
+	tm* _lastTimeRefreshFriend = DataManager::sharedDataManager()->GetTimeRefreshFriend();
+	if (_lastTimeRefreshFriend == NULL)
+	{
+		CCLOG("checkRefreshFriendList == first time");
+		getFacebookFriends();
+	}
+	else
+	{
+		time_t lastTime = mktime(_lastTimeRefreshFriend);
+		time_t curTime = time(NULL);
+		double elapsedTime = difftime(curTime, lastTime);
+		
+		if (elapsedTime > G_TIME_TO_REFRESH_FRIENDS)
+		{
+			CCLOG("checkRefreshFriendList == true");
+			getFacebookFriends();
+		}
+		else
+		{
+			CCLOG("NOT ENOUGH TIME TO REFRESH");
+		}
+	}
+}
+
 void ScoreScene::submitScore()
 {
 	CCLOG("callSubmitScore");
@@ -712,10 +744,13 @@ void ScoreScene::getHighScores()
 
 void ScoreScene::getFacebookFriends()
 {
+	CCLOG("getFacebookFriends");
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	ScoreScene::s_beginFriendInd = 0;
-	ScoreScene::s_endFriendInd = G_MAX_FRIENDS - 1;
+	ScoreScene::s_endFriendInd = G_NUMBER_FRIEND_TO_GET - 1;
 	EziSocialObject::sharedObject()->getFriends(EziSocialWrapperNS::FB_FRIEND_SEARCH::ALL_FRIENDS, s_beginFriendInd, s_endFriendInd);
+
+	DataManager::sharedDataManager()->SetTimeRefreshFriendNow();
 #endif
 }
 
@@ -982,8 +1017,8 @@ void ScoreScene::fbFriendsCallback( int responseCode, const char* responseMessag
 
 		GameClientManager::sharedGameClientManager()->sendFriendList(DataManager::sharedDataManager()->GetFbID(), arrFriends);
 
-		ScoreScene::s_beginFriendInd += G_MAX_FRIENDS;
-		ScoreScene::s_endFriendInd += G_MAX_FRIENDS;
+		ScoreScene::s_beginFriendInd += G_NUMBER_FRIEND_TO_GET;
+		ScoreScene::s_endFriendInd += G_NUMBER_FRIEND_TO_GET;
 		EziSocialObject::sharedObject()->getFriends(EziSocialWrapperNS::FB_FRIEND_SEARCH::ALL_FRIENDS, s_beginFriendInd, s_endFriendInd);
 	}
 	else //finish get friends

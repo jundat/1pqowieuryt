@@ -1,8 +1,10 @@
+#include "Global.h"
 #include "MenuScene.h"
 #include "IntroScene.h"
-#include "Global.h"
+#include "DataManager.h"
 
 USING_NS_CC;
+
 
 CCScene* IntroScene::scene()
 {
@@ -29,6 +31,7 @@ bool IntroScene::init()
 	this->addChild(sprLogo);
 
 	CCScene *pScene = MenuScene::scene();
+
     return true;
 }
 

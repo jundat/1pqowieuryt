@@ -100,7 +100,8 @@ ConfigLoader::ConfigLoader(void)
 	G_WAIT_TO_REVIVE = GetValue(std::string("G_WAIT_TO_REVIVE"))->floatValue();
 
 	G_POINTS_PER_SECOND = GetValue(std::string("G_POINTS_PER_SECOND"))->intValue();
-	
+
+	G_TIME_TO_REFRESH_FRIENDS = GetValue(std::string("G_TIME_TO_REFRESH_FRIENDS"))->floatValue();	
 }
 
 ConfigLoader::~ConfigLoader(void)

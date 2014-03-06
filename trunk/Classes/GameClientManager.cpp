@@ -1,4 +1,5 @@
 #include "GameClientManager.h"
+#include "DataManager.h"
 
 GameClientManager* GameClientManager::s_instance = NULL;
 
@@ -457,7 +458,7 @@ void GameClientManager::sendScore( std::string appId, std::string fbId, int scor
 	request->setResponseCallback(this, httpresponse_selector(GameClientManager::_onSendScoreCompleted));
 
 	// write the post data
-	CCString* strData = CCString::createWithFormat("data={appId: \"%s\", fbId: \"%s\", score: %d }&method=set",
+	CCString* strData = CCString::createWithFormat("data={appId: \"%s\", fbId: \"%s\", score: \"%d\" }&method=set",
 		appId.c_str(),
 		fbId.c_str(),
 		score
@@ -487,7 +488,7 @@ void GameClientManager::_onSendScoreCompleted( CCHttpClient *sender, CCHttpRespo
 	if (!response->isSucceed())
 	{
 		CCLOG("Request failed: %s", response->getErrorBuffer());
-		m_clientDelegate->onSendScoreCompleted(false);
+		m_clientDelegate->onSendScoreCompleted(false, -1);
 	}
 	else
 	{
@@ -495,7 +496,26 @@ void GameClientManager::_onSendScoreCompleted( CCHttpClient *sender, CCHttpRespo
 		std::string str(buffer->begin(), buffer->end());
 
 		CCLOG("Content: %s", str.c_str());
-		m_clientDelegate->onSendScoreCompleted(true);
+
+		//get score from response
+		json_t *root;
+		json_error_t error;
+		json_t *isSuccess;
+		json_t *score;
+
+		root = json_loads(str.c_str(), strlen(str.c_str()), &error);
+		isSuccess = json_object_get(root, "isSuccess");
+		bool success = CCString::create(json_string_value(isSuccess))->boolValue();
+
+		if (success)
+		{
+			m_clientDelegate->onSendScoreCompleted(success, DataManager::sharedDataManager()->GetHighScore());
+		} 
+		else
+		{
+			score = json_object_get(root, "score");
+			m_clientDelegate->onSendScoreCompleted(success, (int)atof(json_string_value(score)));
+		}
 	}
 
 	CCLOG("------- END %s -------", response->getHttpRequest()->getTag());

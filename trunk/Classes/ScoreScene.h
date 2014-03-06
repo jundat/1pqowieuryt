@@ -122,6 +122,7 @@ public:
 	CCLabelTTF* m_lbBoom;
 	CCArray* m_friendList;
 	
+	void checkRefreshFriendList();
 	void submitScore();
 	void syncScore();
 	void getHighScores();

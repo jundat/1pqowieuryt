@@ -134,5 +134,8 @@
 		<key>G_POINTS_PER_SECOND</key> <!-- Số điểm trên 1s -->
 		    <string>10</string>
 
+		<key>G_TIME_TO_REFRESH_FRIENDS</key> <!-- Thời gian để refresh friend, đơn vị Giây -->
+		    <string>86400</string>
+
     </dict>
 </plist>

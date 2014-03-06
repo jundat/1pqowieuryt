@@ -406,3 +406,23 @@ void DataManager::SetDiamon( int diamon )
 	CCUserDefault::sharedUserDefault()->flush();
 }
 
+
+
+void DataManager::SetTimeRefreshFriend( tm* time )
+{
+	SetTime("LAST_REFRESH_FRIEND", time);
+}
+
+tm* DataManager::GetTimeRefreshFriend()
+{
+	return GetTime("LAST_REFRESH_FRIEND");
+}
+
+void DataManager::SetTimeRefreshFriendNow()
+{
+	time_t curTime = time(NULL);
+	tm* _tm = localtime(&curTime);
+
+	DataManager::sharedDataManager()->SetTimeRefreshFriend(_tm);
+}
+

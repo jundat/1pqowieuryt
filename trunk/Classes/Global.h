@@ -9,6 +9,7 @@
 #define G_FONT_NORMAL			"Roboto-Medium.ttf"
 #define G_FONT_LEADERBOARD		"Villa.ttf"
 
+#define G_NUMBER_FRIEND_TO_GET	100
 
 //GAME CONSTANT
 #define G_APP_ID				"DBPTK"
@@ -111,5 +112,6 @@ extern float G_WAIT_TO_REVIVE;
 
 extern int G_POINTS_PER_SECOND;
 
+extern float G_TIME_TO_REFRESH_FRIENDS;
 
 #endif //__GLOBAL_H__

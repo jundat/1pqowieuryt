@@ -84,6 +84,9 @@ public:
 	int		GetDiamon();
 	void	SetDiamon(int diamon);
 	
+	tm*		GetTimeRefreshFriend();
+	void	SetTimeRefreshFriend(tm* time);
+	void	SetTimeRefreshFriendNow();
 	
 	~DataManager(void);
 };
