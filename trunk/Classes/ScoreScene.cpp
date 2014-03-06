@@ -237,6 +237,12 @@ bool ScoreScene::init()
 	m_sprWaiting->runAction(CCRepeatForever::create(CCRotateBy::create(1.0f, -360.0f)));
 
 
+	m_lbLostConnection = CCLabelTTF::create("Không thể kết nối máy chủ", G_FONT_NORMAL, 48);
+	m_lbLostConnection->setFontFillColor(ccBLACK);
+	m_lbLostConnection->setPosition(m_sprWaiting->getPosition());
+	this->addChild(m_lbLostConnection, m_sprWaiting->getZOrder());
+	m_lbLostConnection->setVisible(false);
+
 
 	//////////////////////////////////////////////////////////////////////////
 	GameClientManager::sharedGameClientManager()->setDelegate(this);
@@ -535,7 +541,7 @@ void ScoreScene::refreshView()
 		m_tableXephang->setVisible(false);
 		m_tableQuatang->setVisible(true);
 
-		if (m_tableQuatangSize <= 0)
+		if (m_tableQuatangSize <= 0 && m_lbLostConnection->isVisible() == false)
 		{
 			m_lbInviteQuatang->setVisible(true);
 		}
@@ -845,6 +851,10 @@ void ScoreScene::onGetScoreCompleted( bool isSuccess, int score, std::string tim
 	else
 	{
 		CCLOG("FAILED TO GET SCORE");
+
+		this->m_sprWaiting->setVisible(false);
+		m_lbLostConnection->setVisible(true);
+		m_lbInviteQuatang->setVisible(false);
 	}	
 }
 
@@ -890,6 +900,11 @@ void ScoreScene::fbSessionCallback(int responseCode, const char *responseMessage
 		if (m_lbInviteQuatang != NULL)
 		{
 			m_lbInviteQuatang->setVisible(false);
+		}
+
+		if (m_lbLostConnection != NULL)
+		{
+			m_lbLostConnection->setVisible(false);
 		}
 	}
 #endif
