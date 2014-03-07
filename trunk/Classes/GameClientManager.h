@@ -101,7 +101,7 @@ public:
 		FacebookAccount* acc1 = (FacebookAccount*) p1;
 		FacebookAccount* acc2 = (FacebookAccount*) p2;
 
-		return (acc1->score > acc2->score);
+		return (acc1->m_score > acc2->m_score);
 	}
 
 	//array of FacebookAccount

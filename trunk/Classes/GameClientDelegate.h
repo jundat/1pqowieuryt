@@ -22,6 +22,9 @@ public:
 
 	virtual void onSendScoreCompleted( bool isSuccess, int newScore ){}
 	virtual void onGetScoreCompleted( bool isSuccess, int score, std::string time ){}
+
+// 	virtual void onSendItemsCompleted( bool isSuccess, int newScore ){}
+// 	virtual void onGetItemsCompleted(bool isSuccess, CCArray* arrGameItems){}
 };
 
 

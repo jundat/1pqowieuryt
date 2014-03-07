@@ -169,7 +169,7 @@ void GameClientManager::sendFriendList(std::string fbId, CCArray* arrFriends )
 		FacebookAccount* fbFriend = (FacebookAccount*)arrFriends->objectAtIndex(i);
 
 		strFriendList.append("\"");
-		strFriendList.append(fbFriend->fbId);
+		strFriendList.append(fbFriend->m_fbId);
 		strFriendList.append("\"");
 		if (i != count - 1)
 		{

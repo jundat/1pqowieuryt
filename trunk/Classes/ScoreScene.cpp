@@ -798,7 +798,7 @@ void ScoreScene::onGetFriendListCompleted(bool isSuccess, CCArray* arrFriends)
 		FacebookAccount* fbFriend = (FacebookAccount*) (m_arrHighScores->objectAtIndex(i));
 		if (NULL != fbFriend)
 		{
-			std::string profileID = fbFriend->fbId;
+			std::string profileID = fbFriend->m_fbId;
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 			EziSocialObject::sharedObject()->getProfilePicForID(this, profileID.c_str(), // Profile ID of current user
@@ -990,9 +990,9 @@ void ScoreScene::fbUserPhotoCallback(const char *userPhotoPath, const char* fbID
 				if (NULL != fbFriend)
 				{
 					//CCLOG("%s => %s", sid.c_str(), userPhotoPath);
-					if(fbFriend->fbId == sid)
+					if(fbFriend->m_fbId == sid)
 					{
-						fbFriend->photoPath = userPhotoPath;
+						fbFriend->m_photoPath = userPhotoPath;
 						//CCLOG("Set photo path ok --- ");
 					}
 				}
@@ -1196,16 +1196,16 @@ CCTableViewCell* ScoreScene::getTableCellXepHangAtIndex( CCTableView *table, uns
 	{
 		FacebookAccount* fbFriend = (FacebookAccount*) (m_arrHighScores->objectAtIndex(idx));
 		
-		strScore = CCString::createWithFormat("%d", fbFriend->score);
+		strScore = CCString::createWithFormat("%d", fbFriend->m_score);
 
-		std::string sname = std::string(fbFriend->fbName);
+		std::string sname = std::string(fbFriend->m_fbName);
 		if (sname.length() > 18) {
 			sname = sname.substr(0, 15);
 			sname.append("...");
 		}			
 		strName  = CCString::create(sname);
 
-		strFriendId = std::string(fbFriend->fbId);
+		strFriendId = std::string(fbFriend->m_fbId);
 
 		//get boom
 		_lastTimeGetBoom = DataManager::sharedDataManager()->GetTimeBoomFriend(strFriendId.c_str());
@@ -1268,12 +1268,12 @@ CCTableViewCell* ScoreScene::getTableCellXepHangAtIndex( CCTableView *table, uns
 		//////////////////////////////////////////////////////////////////////////
 
 
-		if (fbFriend->photoPath.length() > 1)
+		if (fbFriend->m_photoPath.length() > 1)
 		{
-			strPhoto  = CCString::create(fbFriend->photoPath);
+			strPhoto  = CCString::create(fbFriend->m_photoPath);
 		}
 
-		if(fbFriend->fbId == DataManager::sharedDataManager()->GetFbID())
+		if(fbFriend->m_fbId == DataManager::sharedDataManager()->GetFbID())
 		{
 			isMyScore = true;
 		}
@@ -1494,13 +1494,13 @@ CCTableViewCell* ScoreScene::getTableCellQuatangAtIndex( CCTableView *table, uns
 			{
 				FacebookAccount* fr = (FacebookAccount*) (it);
 
-				if (NULL != fr && fr->fbId == strFriendId)
+				if (NULL != fr && fr->m_fbId == strFriendId)
 				{
-					if (fr->photoPath.length() > 1)
+					if (fr->m_photoPath.length() > 1)
 					{
 						CCLOG("FOREACH TO GET PHOTOPATH: --- OK");
-						strPhoto = CCString::create(fr->photoPath);
-						fbFriend->setPhotoPath(fr->photoPath.c_str());
+						strPhoto = CCString::create(fr->m_photoPath);
+						fbFriend->setPhotoPath(fr->m_photoPath.c_str());
 						break;
 					}
 				}
