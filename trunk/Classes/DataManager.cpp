@@ -1,6 +1,8 @@
 #include "DataManager.h"
 #include "Global.h"
 #include "MyMacro.h"
+#include "jansson/jansson.h"
+#include "GameClientObjects.h"
 
 
 DataManager* DataManager::_instance = 0;
@@ -426,3 +428,74 @@ void DataManager::SetTimeRefreshFriendNow()
 	DataManager::sharedDataManager()->SetTimeRefreshFriend(_tm);
 }
 
+
+
+CCArray* DataManager::GetHigherFriends()
+{
+	string str = CCUserDefault::sharedUserDefault()->getStringForKey("HIGHER_FRIENDS", string("{list:[]}")); //empty list
+
+	//get score from response
+	json_t *root;
+	json_error_t error;
+	json_t *friendList;
+
+	root = json_loads(str.c_str(), strlen(str.c_str()), &error);
+	friendList = json_object_get(root, "list");
+
+	//foreach to get all friend, insert to list
+	int count = json_array_size(friendList);
+	CCArray* arrFriends = CCArray::create();
+
+	for(int i = 0; i < count; i++)
+	{
+		json_t *fbFriend = json_array_get(friendList, i);
+
+		json_t* fbId;
+		json_t* fbName;
+		json_t* email;
+		json_t* score;
+
+
+		fbId = json_object_get(fbFriend, "fbId");
+		fbName = json_object_get(fbFriend, "fbName");
+		email = json_object_get(fbFriend, "email");
+		score = json_object_get(fbFriend, "score");
+
+		FacebookAccount* acc = new FacebookAccount(
+			json_string_value(fbId),
+			json_string_value(fbName), 
+			std::string(json_string_value(email)), 
+			(int)json_number_value(score));
+		arrFriends->addObject(acc);
+	}
+
+	return arrFriends;
+}
+
+void DataManager::SetHigherFriends( CCArray* arrFriends )
+{
+	//parse arrFriendList to json
+	std::string strFriendList = std::string("");
+	int count = arrFriends->count();
+
+	for (int i = 0; i < count; ++i)
+	{
+		FacebookAccount* fbFriend = (FacebookAccount*)arrFriends->objectAtIndex(i);
+
+		//strFriendList.append("\"");
+		//strFriendList.append(fbFriend->m_fbId);
+		//strFriendList.append("\"");
+		strFriendList.append(fbFriend->toJson());
+
+		if (i != count - 1)
+		{
+			strFriendList.append(",");
+		}
+	}	
+
+	CCString* strData = CCString::createWithFormat("{list: [%s]}", strFriendList.c_str());
+	CCLOG("SAVE: %s", strData->getCString());
+
+	CCUserDefault::sharedUserDefault()->setStringForKey("HIGHER_FRIENDS", strData->getCString());
+	CCUserDefault::sharedUserDefault()->flush();
+}

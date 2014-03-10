@@ -1,4 +1,4 @@
-#include "MainGameScene.h"
+﻿#include "MainGameScene.h"
 #include "AudioManager.h"
 #include "MenuScene.h"
 #include "LoseDialog.h"
@@ -7,6 +7,7 @@
 #include <time.h>
 #include "PauseDialog.h"
 #include "GameClientManager.h"
+#include "BreakLeaderboardDialog.h"
 
 USING_NS_CC;
 
@@ -31,6 +32,8 @@ bool MainGameScene::init()
 	m_isShowingPause = false;
 	m_isShowingLose = false;
 
+	CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, 0, true);
+	this->setTouchEnabled(true);
 	this->setKeypadEnabled(true);
 
 	CCSpriteFrameCache* sprcache = CCSpriteFrameCache::sharedSpriteFrameCache();
@@ -38,7 +41,6 @@ bool MainGameScene::init()
 	
 
     m_BackgroundLayer = BackgroundLayer::create();
-	//m_BackgroundLayer->unscheduleUpdate();
 	this->addChild(m_BackgroundLayer);
 
 	m_ObjLayer = ObjectLayer::create();
@@ -119,11 +121,8 @@ void MainGameScene::showEndGame( int score, int killedEnemies )
 		DataManager::sharedDataManager()->SetLastDeadTimeNow();
 	}
 
-	AudioManager::sharedAudioManager()->PlayEffect("game_over.wav");
+	PLAY_GAME_OVER;	
 	
-	LoseDialog* dialog = LoseDialog::create(score, killedEnemies);
-	this->addChild(dialog);
-
 	//save highscore after show dialog
 	DataManager::sharedDataManager()->SetHighScore(score);
 
@@ -135,6 +134,9 @@ void MainGameScene::showEndGame( int score, int killedEnemies )
 			DataManager::sharedDataManager()->GetFbID(), 
 			DataManager::sharedDataManager()->GetHighScore());
 	}
+
+	LoseDialog* dialog = LoseDialog::create(score, killedEnemies);
+	this->addChild(dialog);
 }
 
 //revived just 1 time for 1 life

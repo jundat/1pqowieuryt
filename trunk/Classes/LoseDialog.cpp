@@ -3,8 +3,12 @@
 #include "MenuScene.h"
 #include "AudioManager.h"
 #include "DataManager.h"
+#include "cocos-ext.h"
+#include "GameClientObjects.h"
+#include "BreakLeaderboardDialog.h"
 
 USING_NS_CC;
+USING_NS_CC_EXT;
 
 bool LoseDialog::init()
 {
@@ -24,8 +28,9 @@ bool LoseDialog::init()
 
 	float BUTTON_SCALE = 0.6722f;
 
-	CCSprite* bg = CCSprite::create("dialog.png");
+	CCScale9Sprite* bg = CCScale9Sprite::create("dialog.png");
 	bg->setPosition(ccp(400, 640));
+	bg->setContentSize(CCSizeMake(680, 480));
 	this->addChild(bg, -2);
 	
 
@@ -135,8 +140,41 @@ void LoseDialog::menuCallBack( CCObject* pSender )
 	//revive set to false
 	DataManager::sharedDataManager()->SetIsJustRevived(false);
 
-	CCScene *pScene = CCTransitionFade::create(0.5, MenuScene::scene());
-	CCDirector::sharedDirector()->replaceScene(pScene);
+	//////////////////////////////////////////////////////////////////////////
+
+	//DEBUG
+// 	FacebookAccount* acc = new FacebookAccount("123456789", "Đinh Công Mạnh", "dkm@gmail.com", 9000);
+// 	BreakLeaderboardDialog* dialog = BreakLeaderboardDialog::create(acc);	
+// 	this->addChild(dialog);
+
+
+	//check if breakout leaderboard
+	CCArray* arrHigherFriends = DataManager::sharedDataManager()->GetHigherFriends();
+	int count = arrHigherFriends->count();
+	bool isBreakoutLeaderboard = false;
+
+	for (int i = 0; i < count; ++i)
+	{
+		FacebookAccount* acc = dynamic_cast<FacebookAccount*>(arrHigherFriends->objectAtIndex(i));
+		if(acc && acc->m_score < m_score)
+		{
+			isBreakoutLeaderboard = true;
+			//post status
+			
+			BreakLeaderboardDialog* dialog = BreakLeaderboardDialog::create(acc);
+			this->addChild(dialog);
+
+			break;
+		}
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+	//NO BreakLeaderboard
+	if (!isBreakoutLeaderboard)
+	{
+		CCScene *pScene = CCTransitionFade::create(0.5, MenuScene::scene());
+		CCDirector::sharedDirector()->replaceScene(pScene);
+	}
 }
 
 void LoseDialog::reviveCallBack( CCObject* pSender )

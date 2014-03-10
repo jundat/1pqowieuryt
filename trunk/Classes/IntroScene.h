@@ -9,7 +9,7 @@ USING_NS_CC;
 #define G_LOGO_POSITION						ccp(400, 640)
 #define G_INTRO_FADE_IN_TIME				1.5f
 #define G_INTRO_DELAY_TIME					2.0f
-#define G_INTRO_TRANSITION_MENU_TIME		1.5f
+#define G_INTRO_TRANSITION_MENU_TIME		1.0f
 
 
 class IntroScene : public cocos2d::CCLayerColor

@@ -21,6 +21,7 @@
 #define		PLAY_GET_BOMB_EFFECT			AudioManager::sharedAudioManager()->PlayEffect("get_bomb.wav")
 #define		PLAY_GET_DOUBLE_LAZER_EFFECT	AudioManager::sharedAudioManager()->PlayEffect("get_double_laser.wav")
 #define		PLAY_OUT_PORP_EFFECT			AudioManager::sharedAudioManager()->PlayEffect("out_porp.wav")
+#define		PLAY_GAME_OVER					AudioManager::sharedAudioManager()->PlayEffect("game_over.wav")
 
 #define		PLAY_ENEMY1_DOWN_EFFECT			AudioManager::sharedAudioManager()->PlayEffect("enemy1_down.wav")
 #define		PLAY_ENEMY2_DOWN_EFFECT			AudioManager::sharedAudioManager()->PlayEffect("enemy2_down.wav")

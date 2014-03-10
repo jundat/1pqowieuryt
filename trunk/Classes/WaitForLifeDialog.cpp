@@ -3,8 +3,10 @@
 #include "MenuScene.h"
 #include "DataManager.h"
 #include <time.h>
+#include "cocos-ext.h"
 
 USING_NS_CC;
+USING_NS_CC_EXT;
 
 bool WaitForLifeDialog::init()
 {
@@ -17,10 +19,12 @@ bool WaitForLifeDialog::init()
 	CCPoint pask = ccp(G_DESIGN_WIDTH-250, G_DESIGN_HEIGHT - 760);
 	float textScale = 0.6f;
 
-	CCSprite* bg = CCSprite::create("dialog.png");
-	bg->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2));
-	this->addChild(bg, -2);
 
+	CCScale9Sprite* dialog = CCScale9Sprite::create("dialog.png");
+	dialog->setPosition(ccp(400, 640));
+	dialog->setContentSize(CCSizeMake(680, 480));
+	this->addChild(dialog, -2);
+	
 	CCMenuItemImage* exitButton = CCMenuItemImage::create(
 		"exit_button.png",
 		"exit_button_press.png",

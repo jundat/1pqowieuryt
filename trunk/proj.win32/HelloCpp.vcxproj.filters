@@ -132,6 +132,12 @@
     <ClCompile Include="..\Classes\GameClientObjects.cpp">
       <Filter>Classes</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\BreakLeaderboardDialog.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\QuitDialog.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -243,6 +249,12 @@
       <Filter>Classes\jansson</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\GameClientObjects.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\BreakLeaderboardDialog.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\QuitDialog.h">
       <Filter>Classes</Filter>
     </ClInclude>
   </ItemGroup>

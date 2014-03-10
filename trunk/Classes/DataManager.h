@@ -42,7 +42,7 @@ public:
 	std::string	GetPassword();
 	void	SetPassword(const char* pass);
 
-	int	GetHighScore();
+	int		GetHighScore();
 	void	SetHighScore(int currentScore);
 
 	tm*		GetLastDeadTime();
@@ -87,6 +87,10 @@ public:
 	tm*		GetTimeRefreshFriend();
 	void	SetTimeRefreshFriend(tm* time);
 	void	SetTimeRefreshFriendNow();
+
+
+	CCArray*	GetHigherFriends();
+	void		SetHigherFriends(CCArray* arrFriends);
 	
 	~DataManager(void);
 };

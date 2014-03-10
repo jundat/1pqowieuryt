@@ -779,21 +779,39 @@ void ScoreScene::onGetFriendListCompleted(bool isSuccess, CCArray* arrFriends)
 	m_arrHighScores = CCArray::createWithArray(arrFriends);
 	m_arrHighScores->retain();
 
+	int score = DataManager::sharedDataManager()->GetHighScore();
 	//add current user to list
 	FacebookAccount* curUser = new FacebookAccount(
 		DataManager::sharedDataManager()->GetFbID(),
 		DataManager::sharedDataManager()->GetFbFullName(),
 		DataManager::sharedDataManager()->GetFbEmail(),
-		DataManager::sharedDataManager()->GetHighScore());
+		score);
 	m_arrHighScores->addObject(curUser);
 
 	m_tableXepHangSize = m_arrHighScores->count();
 	std::string myProfileID = DataManager::sharedDataManager()->GetFbID();
-	int count = m_arrHighScores->count();
 
 	GameClientManager::SortFriendScore(m_arrHighScores);
 
-	for (int i = 0; i < count; ++i)
+	//////////////////////////////////////////////////////////////////////////
+	//save higher friend than you
+	CCArray* arrHigherFriends = CCArray::create();
+
+	for (int i = 0; i < m_tableXepHangSize; ++i)
+	{
+		FacebookAccount* acc = dynamic_cast<FacebookAccount*>( m_arrHighScores->objectAtIndex(i));
+		if(acc->m_score > score)
+		{
+			arrHigherFriends->addObject(acc);
+		}
+	}
+
+	DataManager::sharedDataManager()->SetHigherFriends(arrFriends);
+
+	//////////////////////////////////////////////////////////////////////////
+
+
+	for (int i = 0; i < m_tableXepHangSize; ++i)
 	{
 		FacebookAccount* fbFriend = (FacebookAccount*) (m_arrHighScores->objectAtIndex(i));
 		if (NULL != fbFriend)

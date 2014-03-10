@@ -4,6 +4,7 @@
 #include "AudioManager.h"
 #include "DataManager.h"
 #include "WaitForLifeDialog.h"
+#include "QuitDialog.h"
 #include <time.h>
 
 USING_NS_CC;
@@ -254,9 +255,9 @@ void MenuScene::scoreCallback( CCObject* pSender )
 
 void MenuScene::keyBackClicked()
 {
-	//PLAY_BUTTON_EFFECT;
-	//
-	//CCDirector::sharedDirector()->end();
+	QuitDialog* dialog = QuitDialog::create();
+	this->addChild(dialog, 10);
+	this->onShowDialog();
 }
 
 void MenuScene::onShowDialog()
