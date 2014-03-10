@@ -92,7 +92,7 @@ bool TestPostGetScene::init()
 //user profile
 void TestPostGetScene::testPost1(CCObject *sender)
 {
-	GameClientManager::sharedGameClientManager()->sendPlayerFbProfile("Fb1", "PhamLong", "PhamLong@gmail.com");
+	GameClientManager::sharedGameClientManager()->sendPlayerFbProfile("Fb1", "PhamLong", "PhamLong@gmail.com", string(G_APP_ID));
 // 	GameClientManager::sharedGameClientManager()->sendPlayerFbProfile("Fb2", "DinhDung", "DinhDung@gmail.com");
 // 	GameClientManager::sharedGameClientManager()->sendPlayerFbProfile("Fb3", "BuiHieu", "BuiHieu@gmail.com");
 // 	GameClientManager::sharedGameClientManager()->sendPlayerFbProfile("Fb4", "DangTran", "DangTran@gmail.com");

@@ -21,7 +21,7 @@ void GameClientManager::setUrls( string urlProfile, string urlDevice, string url
 
 //
 
-void GameClientManager::sendPlayerFbProfile( std::string fbId, std::string fbName, std::string email )
+void GameClientManager::sendPlayerFbProfile( std::string fbId, std::string fbName, std::string email, string appId )
 {
 	CCAssert(s_urlProfile.length() > 0, "Not set s_urlProfile yet");
 	CCHttpRequest* request = new CCHttpRequest();
@@ -32,10 +32,11 @@ void GameClientManager::sendPlayerFbProfile( std::string fbId, std::string fbNam
 	request->setResponseCallback(this, httpresponse_selector(GameClientManager::_onSendPlayerFbProfileCompleted));
 
 	// write the post data
-	CCString* strData = CCString::createWithFormat("data={ fbId: \"%s\", fbName: \"%s\", email: \"%s\" }&method=set",
+	CCString* strData = CCString::createWithFormat("data={ fbId: \"%s\", fbName: \"%s\", email: \"%s\", appId: \"%s\" }&method=set",
 		fbId.c_str(),
 		fbName.c_str(),
-		email.c_str());
+		email.c_str(),
+		appId.c_str());
 
 	CCLOG("Data: %s", strData->getCString());
 	std::string s = encodeBeforeSend(strData->getCString());
@@ -132,7 +133,7 @@ void GameClientManager::_onGetPlayerFbProfileCompleted( CCHttpClient *sender, CC
 
 
 		root = json_loads(str.c_str(), strlen(str.c_str()), &error);
-		fbId = json_object_get(root, "fbId");
+		fbId = json_object_get(root, "id");
 		fbName = json_object_get(root, "fbName");
 		email = json_object_get(root, "email");
 		//score = json_object_get(root, "score");
@@ -291,7 +292,7 @@ void GameClientManager::_onGetFriendListCompleted( CCHttpClient *sender, CCHttpR
 			json_t* score;
 
 
-			fbId = json_object_get(fbFriend, "fbId");
+			fbId = json_object_get(fbFriend, "id");
 			fbName = json_object_get(fbFriend, "fbName");
 			//email = json_object_get(fbFriend, "email");
 			score = json_object_get(fbFriend, "score");
@@ -426,7 +427,7 @@ void GameClientManager::_onGetDeviceProfileCompleted( CCHttpClient *sender, CCHt
 
 		root = json_loads(str.c_str(), strlen(str.c_str()), &error);
 
-		fbId = json_object_get(root, "fbId");
+		fbId = json_object_get(root, "id");
 		deviceId = json_object_get(root, "deviceId");
 		deviceToken = json_object_get(root, "deviceToken");
 		deviceConfig = json_object_get(root, "deviceConfig");

@@ -835,7 +835,7 @@ void ScoreScene::onGetFriendListCompleted(bool isSuccess, CCArray* arrFriends)
 void ScoreScene::sendUserProfileToServer(string fbId, string fbName, string email)
 {
 	CCLOG("sendUserProfileToServer");
-	GameClientManager::sharedGameClientManager()->sendPlayerFbProfile(fbId, fbName, email);
+	GameClientManager::sharedGameClientManager()->sendPlayerFbProfile(fbId, fbName, email, string(G_APP_ID));
 }
 
 void ScoreScene::onGetScoreCompleted( bool isSuccess, int score, std::string time )

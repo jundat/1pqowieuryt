@@ -433,6 +433,7 @@ void DataManager::SetTimeRefreshFriendNow()
 CCArray* DataManager::GetHigherFriends()
 {
 	string str = CCUserDefault::sharedUserDefault()->getStringForKey("HIGHER_FRIENDS", string("{list:[]}")); //empty list
+	CCLOG("GET: %s", str.c_str());
 
 	//get score from response
 	json_t *root;
@@ -444,6 +445,7 @@ CCArray* DataManager::GetHigherFriends()
 
 	//foreach to get all friend, insert to list
 	int count = json_array_size(friendList);
+	CCLOG("COUNT: %d", count);
 	CCArray* arrFriends = CCArray::create();
 
 	for(int i = 0; i < count; i++)
@@ -460,6 +462,8 @@ CCArray* DataManager::GetHigherFriends()
 		fbName = json_object_get(fbFriend, "fbName");
 		email = json_object_get(fbFriend, "email");
 		score = json_object_get(fbFriend, "score");
+
+		CCLOG("ADD: %s", json_string_value(fbName));
 
 		FacebookAccount* acc = new FacebookAccount(
 			json_string_value(fbId),
@@ -481,10 +485,6 @@ void DataManager::SetHigherFriends( CCArray* arrFriends )
 	for (int i = 0; i < count; ++i)
 	{
 		FacebookAccount* fbFriend = (FacebookAccount*)arrFriends->objectAtIndex(i);
-
-		//strFriendList.append("\"");
-		//strFriendList.append(fbFriend->m_fbId);
-		//strFriendList.append("\"");
 		strFriendList.append(fbFriend->toJson());
 
 		if (i != count - 1)
@@ -493,7 +493,7 @@ void DataManager::SetHigherFriends( CCArray* arrFriends )
 		}
 	}	
 
-	CCString* strData = CCString::createWithFormat("{list: [%s]}", strFriendList.c_str());
+	CCString* strData = CCString::createWithFormat("{\"list\": [%s]}", strFriendList.c_str());
 	CCLOG("SAVE: %s", strData->getCString());
 
 	CCUserDefault::sharedUserDefault()->setStringForKey("HIGHER_FRIENDS", strData->getCString());

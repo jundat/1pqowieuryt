@@ -187,3 +187,8 @@ void BreakLeaderboardDialog::onExitTransitionDidStart()
 	EziSocialObject::sharedObject()->setFacebookDelegate(NULL);
 #endif
 }
+
+void BreakLeaderboardDialog::fbUserPhotoCallback( const char *userPhotoPath, const char* fbID )
+{
+
+}

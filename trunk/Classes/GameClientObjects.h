@@ -70,7 +70,7 @@ public:
 
 	string toJson()
 	{
-		CCString* s = CCString::createWithFormat("{fbId: \"%s\", fbName: \"%s\", email: \"%s\", score: %d}", m_fbId.c_str(), m_fbName.c_str(), m_email.c_str(), m_score);
+		CCString* s = CCString::createWithFormat("{\"fbId\": \"%s\", \"fbName\": \"%s\", \"email\": \"%s\", \"score\": %d}", m_fbId.c_str(), m_fbName.c_str(), m_email.c_str(), m_score);
 		return string(s->getCString());
 	}
 };
@@ -124,7 +124,7 @@ public:
 	
 	string toJson()
 	{
-		CCString* s = CCString::createWithFormat("{deviceId: \"%s\", deviceToken: \"%s\", deviceConfig: \"%s\", devicePhoneNumber: \"%s\" }", 
+		CCString* s = CCString::createWithFormat("{\"deviceId\": \"%s\", \"deviceToken\": \"%s\", \"deviceConfig\": \"%s\", \"devicePhoneNumber\": \"%s\" }", 
 			m_deviceId.c_str(), m_deviceToken.c_str(), m_deviceConfig.c_str(), m_devicePhoneNumber.c_str());
 		return string(s->getCString());
 	}
@@ -174,7 +174,7 @@ public:
 
 	string toJson()
 	{
-		CCString* s = CCString::createWithFormat("{itemId: \"%s\", itemNumber: \"%d\"}", m_id.c_str(), m_number);
+		CCString* s = CCString::createWithFormat("{\"itemId\": \"%s\", \"itemNumber\": \"%d\"}", m_id.c_str(), m_number);
 		return string(s->getCString());
 	}
 };

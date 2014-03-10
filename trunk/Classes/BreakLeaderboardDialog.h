@@ -46,6 +46,7 @@ public:
 	virtual void onEnterTransitionDidFinish();
 	virtual void onExitTransitionDidStart();
 	virtual void fbMessageCallback(int responseCode, const char* responseMessage);
+	virtual void fbUserPhotoCallback(const char *userPhotoPath, const char* fbID);
 };
 
 #endif // __BREAK_LEADERBOARD_DIALOG_H__

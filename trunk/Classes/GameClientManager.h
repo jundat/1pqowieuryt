@@ -62,7 +62,7 @@ public:
 	//////////////////////////////////////////////////////////////////////////
 	//main functions
 public:
-	void sendPlayerFbProfile(std::string fbId, std::string fbName, std::string email);
+	void sendPlayerFbProfile(std::string fbId, std::string fbName, std::string email, string appId);
 	void _onSendPlayerFbProfileCompleted(CCHttpClient *sender, CCHttpResponse *response);
 
 	void getPlayerFbProfile(std::string fbId );
