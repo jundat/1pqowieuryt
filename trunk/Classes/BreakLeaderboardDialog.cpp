@@ -27,9 +27,9 @@ bool BreakLeaderboardDialog::init()
 	CCSprite* nodeLoser = CCSprite::create();
 	this->addChild(nodeLoser);
 
-	CCSprite* sprAvatarLoser = CCSprite::create("fb-profile.png");
-	sprAvatarLoser->setPosition(ccp(148, 1280-495));
-	nodeLoser->addChild(sprAvatarLoser);
+	m_loserAvatar = CCSprite::create("fb-profile.png");
+	m_loserAvatar->setPosition(ccp(148, 1280-495));
+	nodeLoser->addChild(m_loserAvatar);
 
 	CCLabelTTF* lbLoserName = CCLabelTTF::create(m_loser->m_fbName.c_str(), G_FONT_NORMAL, 48);
 	lbLoserName->setFontFillColor(ccBLACK);
@@ -51,6 +51,14 @@ bool BreakLeaderboardDialog::init()
 	this->addChild(nodeUser);
 
 	CCSprite* sprAvatarUser = CCSprite::create("fb-profile.png");
+	string userPhotopath = DataManager::sharedDataManager()->GetPhotoPath();
+	
+	if(userPhotopath.length() > 0) 
+	{
+		CCSprite* spr = CCSprite::create(userPhotopath.c_str());
+		spr->setPosition(ccp(sprAvatarUser->getContentSize().width/2, sprAvatarUser->getContentSize().height/2));
+		sprAvatarUser->addChild(spr);
+	}
 	sprAvatarUser->setPosition(ccp(148, 1280-649));
 	nodeUser->addChild(sprAvatarUser);
 
@@ -71,7 +79,7 @@ bool BreakLeaderboardDialog::init()
 	//////////////////////////////////////////////////////////////////////////
 	//Action
 	CCPoint userpos = sprAvatarUser->getPosition();
-	CCPoint loserpos = sprAvatarLoser->getPosition();
+	CCPoint loserpos = m_loserAvatar->getPosition();
 	
 	nodeUser->runAction(CCSequence::createWithTwoActions(
 		CCDelayTime::create(0.25f), 
@@ -178,6 +186,8 @@ void BreakLeaderboardDialog::onEnterTransitionDidFinish()
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	EziSocialObject::sharedObject()->setFacebookDelegate(this);
+
+	EziSocialObject::sharedObject()->getProfilePicForID(this, m_loser->m_fbId.c_str(), G_AVATAR_SIZE, G_AVATAR_SIZE, false);
 #endif
 }
 
@@ -190,5 +200,18 @@ void BreakLeaderboardDialog::onExitTransitionDidStart()
 
 void BreakLeaderboardDialog::fbUserPhotoCallback( const char *userPhotoPath, const char* fbID )
 {
+	if ((strcmp(userPhotoPath, "") != 0))
+	{
+		CCSprite* userPhoto = CCSprite::create(userPhotoPath);
+		userPhoto->setPosition(ccp(m_loserAvatar->getContentSize().width/2, m_loserAvatar->getContentSize().height/2));
 
+		if (m_loserAvatar)
+		{
+			m_loserAvatar->addChild(userPhoto);
+		}
+		else
+		{
+			CCLOG("ERROR: m_loserAvatar == NULL");
+		}
+	}
 }

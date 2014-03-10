@@ -35,6 +35,7 @@ public:
 
 public:
 	FacebookAccount* m_loser;
+	CCSprite* m_loserAvatar;
 
 public:
 	void menuCallBack(CCObject* pSender);

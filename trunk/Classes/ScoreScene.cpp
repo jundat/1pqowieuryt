@@ -56,7 +56,7 @@ bool ScoreScene::init()
 
 	//avatar
 	m_userAvatar = CCSprite::create("fb-profile.png");
-	if(DataManager::sharedDataManager()->GetPhotoPath() != "NULL")
+	if(DataManager::sharedDataManager()->GetPhotoPath().length() > 0)
 	{
 		CCSprite* userPhoto = CCSprite::create(DataManager::sharedDataManager()->GetPhotoPath().c_str());
 		userPhoto->setPosition(ccp(m_userAvatar->getContentSize().width/2, m_userAvatar->getContentSize().height/2));

@@ -236,10 +236,10 @@ void DataManager::SetFbEmail( const char* fbemail )
 	CCUserDefault::sharedUserDefault()->flush();
 }
 
-
+//return ""
 std::string DataManager::GetPhotoPath()
 {
-	return CCUserDefault::sharedUserDefault()->getStringForKey("G_PHOTO_PATH", std::string("NULL"));
+	return CCUserDefault::sharedUserDefault()->getStringForKey("G_PHOTO_PATH", std::string(""));
 }
 
 void DataManager::SetPhotoPath( const char* path )
