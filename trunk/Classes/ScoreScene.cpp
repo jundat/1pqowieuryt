@@ -239,7 +239,7 @@ bool ScoreScene::init()
 
 	m_lbLostConnection = CCLabelTTF::create("Không thể kết nối máy chủ", G_FONT_NORMAL, 48);
 	m_lbLostConnection->setFontFillColor(ccBLACK);
-	m_lbLostConnection->setPosition(m_sprWaiting->getPosition());
+	m_lbLostConnection->setPosition(ccpSub(m_sprWaiting->getPosition(), ccp(0, 50)));
 	this->addChild(m_lbLostConnection, m_sprWaiting->getZOrder());
 	m_lbLostConnection->setVisible(false);
 
