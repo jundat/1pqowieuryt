@@ -37,11 +37,19 @@ public:
 	FacebookAccount* m_loser;
 	CCSprite* m_loserAvatar;
 
+	CCSprite* m_nodeUser;
+	CCSprite* m_nodeLoser;
+
+	CCSprite* m_sprBreak;
+
 public:
 	void menuCallBack(CCObject* pSender);
 	void shareCallBack(CCObject* pSender);
 	void postMessageToLoser( string loserName, int yourScore );
-	void onBreakLeaderboardFinish();
+	void afterMoveLoser();
+
+	//
+	void afterMovePlane(CCNode* pSender);
 
 	//facebook
 	virtual void onEnterTransitionDidFinish();

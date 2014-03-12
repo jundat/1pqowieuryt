@@ -6,6 +6,12 @@
 
 USING_NS_CC;
 
+
+#define BreakLeaderboardDialog_AVATAR_Z		2
+#define BreakLeaderboardDialog_PLANE_Z		1
+#define BreakLeaderboardDialog_NAME_SIZE	11
+
+
 bool BreakLeaderboardDialog::init()
 {
     if ( !CCLayer::init() )
@@ -25,29 +31,36 @@ bool BreakLeaderboardDialog::init()
 
 	//////////////////////////////////////////////////////////////////////////
 	//loser
-	CCSprite* nodeLoser = CCSprite::create();
-	this->addChild(nodeLoser);
+	m_nodeLoser = CCSprite::create();
+	this->addChild(m_nodeLoser, BreakLeaderboardDialog_AVATAR_Z);
 
 	m_loserAvatar = CCSprite::create("fb-profile.png");
-	m_loserAvatar->setPosition(ccp(610, 1280-535));
-	nodeLoser->addChild(m_loserAvatar);
+	m_loserAvatar->setPosition(ccp(610, 1280-505));
+	m_nodeLoser->addChild(m_loserAvatar);
 
-	CCLabelTTF* lbLoserName = CCLabelTTF::create(m_loser->m_fbName.c_str(), G_FONT_NORMAL, 42);
+	string _tempName = string(m_loser->m_fbName);
+	_tempName = MY_LIMIT_STR(_tempName, BreakLeaderboardDialog_NAME_SIZE, "");
+
+	CCLabelTTF* lbLoserName = CCLabelTTF::create(_tempName.c_str(), G_FONT_NORMAL, 42);
 	lbLoserName->setFontFillColor(ccBLACK);
-	lbLoserName->setPosition(ccp(610, 1280-638));
-	nodeLoser->addChild(lbLoserName);
+	//lbLoserName->setAnchorPoint(ccp(1.0f, 0.5f));
+	//lbLoserName->setPosition(ccp(686, 1280-638));
+	lbLoserName->setPosition(ccp(610, 1280-608));
+	m_nodeLoser->addChild(lbLoserName);
 
 	CCString* strTemp = CCString::createWithFormat("%d", m_loser->m_score);
 	CCLabelTTF* lbLoserScore = CCLabelTTF::create(strTemp->getCString(), G_FONT_NORMAL, 42);
 	lbLoserScore->setFontFillColor(ccBLACK);
-	lbLoserScore->setPosition(ccp(610, 1280-680));
-	nodeLoser->addChild(lbLoserScore);
+// 	lbLoserScore->setAnchorPoint(ccp(1.0f, 0.5f));
+// 	lbLoserScore->setPosition(ccp(686, 1280-680));
+	lbLoserScore->setPosition(ccp(610, 1280-650));
+	m_nodeLoser->addChild(lbLoserScore);
 
 
 	//////////////////////////////////////////////////////////////////////////
 	//user
-	CCSprite* nodeUser = CCSprite::create();
-	this->addChild(nodeUser);
+	m_nodeUser = CCSprite::create();
+	this->addChild(m_nodeUser, BreakLeaderboardDialog_AVATAR_Z);
 
 	CCSprite* sprAvatarUser = CCSprite::create("fb-profile.png");
 	string userPhotopath = DataManager::sharedDataManager()->GetPhotoPath();
@@ -58,35 +71,45 @@ bool BreakLeaderboardDialog::init()
 		spr->setPosition(ccp(sprAvatarUser->getContentSize().width/2, sprAvatarUser->getContentSize().height/2));
 		sprAvatarUser->addChild(spr);
 	}
-	sprAvatarUser->setPosition(ccp(188, 1280-535));
-	nodeUser->addChild(sprAvatarUser);
+	sprAvatarUser->setPosition(ccp(188, 1280-505));
+	m_nodeUser->addChild(sprAvatarUser);
 
-	CCLabelTTF* lbUserName = CCLabelTTF::create(DataManager::sharedDataManager()->GetName().c_str(), G_FONT_NORMAL, 42);
+	_tempName = DataManager::sharedDataManager()->GetName();
+	_tempName = MY_LIMIT_STR(_tempName, BreakLeaderboardDialog_NAME_SIZE, "");
+
+	CCLabelTTF* lbUserName = CCLabelTTF::create(_tempName.c_str(), G_FONT_NORMAL, 42);
 	lbUserName->setFontFillColor(ccBLACK);
-	lbUserName->setPosition(ccp(190, 1280-638));
-	nodeUser->addChild(lbUserName);
+// 	lbUserName->setAnchorPoint(ccp(0.0f, 0.5f));
+// 	lbUserName->setPosition(ccp(112, 1280-638));
+	lbUserName->setPosition(ccp(188, 1280-608));
+	m_nodeUser->addChild(lbUserName);
 
 	strTemp = CCString::createWithFormat("%d", DataManager::sharedDataManager()->GetHighScore());
 	CCLabelTTF* lbUserScore = CCLabelTTF::create(strTemp->getCString(), G_FONT_NORMAL, 42);
 	lbUserScore->setFontFillColor(ccBLACK);
-	lbUserScore->setPosition(ccp(190, 1280-680));
-	nodeUser->addChild(lbUserScore);
+// 	lbUserScore->setAnchorPoint(ccp(0.0f, 0.5f));
+// 	lbUserScore->setPosition(ccp(112, 1280-680));
+	lbUserScore->setPosition(ccp(188, 1280-650));
+	m_nodeUser->addChild(lbUserScore);
 
 
 	//////////////////////////////////////////////////////////////////////////
 	//Action
 	CCPoint userpos = sprAvatarUser->getPosition();
 	CCPoint loserpos = m_loserAvatar->getPosition();
-	
-	nodeUser->runAction(CCSequence::createWithTwoActions(
-		CCDelayTime::create(0.25f), 
-		CCMoveBy::create(0.5f, ccpSub(loserpos, userpos))));
-	nodeLoser->runAction(CCSequence::create(
-		CCDelayTime::create(0.25f),
-		CCMoveBy::create(0.5f, ccpSub(userpos, loserpos)),
-		CCCallFunc::create(this, callfunc_selector( BreakLeaderboardDialog::onBreakLeaderboardFinish)),
-		NULL)
-		);
+
+	CCSprite* sprplane = CCSprite::create("oil.png");
+	sprplane->setRotation(90);
+	sprplane->setPosition(userpos);
+	this->addChild(sprplane, BreakLeaderboardDialog_PLANE_Z);
+
+	sprplane->runAction(CCSequence::create(
+		CCDelayTime::create(0.5f),
+		CCEaseIn::create(CCMoveTo::create(0.3f, loserpos), 2),
+		CCCallFuncN::create(this, callfuncN_selector(BreakLeaderboardDialog::afterMovePlane)),
+		NULL));
+
+
 
 	//////////////////////////////////////////////////////////////////////////
 
@@ -114,6 +137,39 @@ bool BreakLeaderboardDialog::init()
 
 	PLAY_GET_BOMB_EFFECT;
     return true;
+}
+
+void BreakLeaderboardDialog::afterMovePlane( CCNode* pSender )
+{
+	PLAY_ENEMY3_DOWN_EFFECT;
+
+	this->removeChild(pSender);
+
+	m_sprBreak = CCSprite::create("break.png");
+	m_sprBreak->setAnchorPoint(ccp(1.0f, 0.5f));
+	m_sprBreak->setPosition(ccp(538, 1280-532));
+	this->addChild(m_sprBreak);
+	m_sprBreak->runAction(CCSequence::createWithTwoActions(
+		CCDelayTime::create(0.25f),
+		CCFadeOut::create(0.1f)
+		));
+
+	m_nodeLoser->runAction(CCSequence::create(
+		CCDelayTime::create(0.5f),
+		CCEaseElasticOut::create(CCMoveBy::create(0.7f, ccp(0, -80))),
+		CCDelayTime::create(0.5f),
+		CCCallFunc::create(this, callfunc_selector( BreakLeaderboardDialog::afterMoveLoser)),
+		NULL)
+		);
+}
+
+void BreakLeaderboardDialog::afterMoveLoser()
+{
+	CCSprite* sprVuotMat = CCSprite::create("vuotmat.png");
+	sprVuotMat->setPosition(ccp(400, 700));
+	sprVuotMat->setScale(6.0f);
+	sprVuotMat->runAction(CCScaleTo::create(0.15f, 2.0f));
+	this->addChild(sprVuotMat, BreakLeaderboardDialog_AVATAR_Z);
 }
 
 void BreakLeaderboardDialog::menuCallBack( CCObject* pSender )
@@ -151,11 +207,6 @@ void BreakLeaderboardDialog::postMessageToLoser( string loserName, int yourScore
 			"");	//deepLinkURL
 	}
 #endif
-}
-
-void BreakLeaderboardDialog::onBreakLeaderboardFinish()
-{
-
 }
 
 void BreakLeaderboardDialog::fbMessageCallback(int responseCode, const char* responseMessage)
