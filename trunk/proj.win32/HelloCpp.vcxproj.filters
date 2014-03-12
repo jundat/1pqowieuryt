@@ -10,6 +10,9 @@
     <Filter Include="Classes\jansson">
       <UniqueIdentifier>{c9a33ac2-5e46-485b-b6fd-79369a184462}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Classes\NDKHelper">
+      <UniqueIdentifier>{7ce010ee-641c-4ef5-b6df-6654d395eb1c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -138,6 +141,12 @@
     <ClCompile Include="..\Classes\QuitDialog.cpp">
       <Filter>Classes</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\NDKHelper\NDKCallbackNode.cpp">
+      <Filter>Classes\NDKHelper</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\NDKHelper\NDKHelper.cpp">
+      <Filter>Classes\NDKHelper</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -256,6 +265,12 @@
     </ClInclude>
     <ClInclude Include="..\Classes\QuitDialog.h">
       <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\NDKHelper\NDKCallbackNode.h">
+      <Filter>Classes\NDKHelper</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\NDKHelper\NDKHelper.h">
+      <Filter>Classes\NDKHelper</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

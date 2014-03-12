@@ -161,6 +161,8 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
     <ClCompile Include="..\Classes\LoseDialog.cpp" />
     <ClCompile Include="..\Classes\MainGameScene.cpp" />
     <ClCompile Include="..\Classes\MenuScene.cpp" />
+    <ClCompile Include="..\Classes\NDKHelper\NDKCallbackNode.cpp" />
+    <ClCompile Include="..\Classes\NDKHelper\NDKHelper.cpp" />
     <ClCompile Include="..\Classes\ObjectLayer.cpp" />
     <ClCompile Include="..\Classes\PauseDialog.cpp" />
     <ClCompile Include="..\Classes\QuitDialog.cpp" />
@@ -202,6 +204,8 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
     <ClInclude Include="..\Classes\MainGameScene.h" />
     <ClInclude Include="..\Classes\MenuScene.h" />
     <ClInclude Include="..\Classes\MyMacro.h" />
+    <ClInclude Include="..\Classes\NDKHelper\NDKCallbackNode.h" />
+    <ClInclude Include="..\Classes\NDKHelper\NDKHelper.h" />
     <ClInclude Include="..\Classes\ObjectLayer.h" />
     <ClInclude Include="..\Classes\PauseDialog.h" />
     <ClInclude Include="..\Classes\QuitDialog.h" />

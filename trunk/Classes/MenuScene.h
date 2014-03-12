@@ -3,6 +3,7 @@
 
 #include "cocos2d.h"
 #include "MyMacro.h"
+#include "NDKHelper/NDKHelper.h"
 
 USING_NS_CC;
 
@@ -51,6 +52,8 @@ public:
     void playCallback(CCObject* pSender);
 	void scoreCallback(CCObject* pSender);
 	void soundCallback(CCObject* pSender);
+	void rateCallback(CCObject* pSender);
+	void exitCallback(CCObject* pSender);
 	
 	void onEnterTransitionDidFinish()
 	{

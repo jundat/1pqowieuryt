@@ -35,14 +35,40 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.Signature;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 
+//NEW
+import org.json.JSONException;
+import org.json.JSONObject;
+
+
+//END NEW
+
+import com.chimgokien.phicongbutchi.classes.AndroidNDKHelper;
 // EziSocial Plugin
 import com.ezibyte.social.EziSocialManager;
 
 public class PhiCongButChi extends Cocos2dxActivity{
+	String TAG = "JAVA_CALL";
+	
+	public void Rate(JSONObject prms)
+	{
+		String link = null;
+    	
+    	try {
+			link = prms.getString("link");
+			Log.i(TAG, "link: " + link);
+			
+			Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
+			startActivity(browserIntent);
+		} catch (JSONException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+	}
 	
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -64,6 +90,8 @@ public class PhiCongButChi extends Cocos2dxActivity{
         catch (NoSuchAlgorithmException e)
         {
 		}
+        
+        AndroidNDKHelper.SetNDKReciever(this);
         
         // Initialize EziSocial Plugin Manager for Android.
         // ToDo Make sure you add the Facebook App ID in strings.xml file.

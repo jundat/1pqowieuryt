@@ -29,6 +29,7 @@ ConfigLoader::ConfigLoader(void)
 	G_URL_DEVICE_PROFILE = std::string(GetValue(std::string("G_URL_DEVICE_PROFILE"))->getCString());
 	G_URL_SCORE = std::string(GetValue(std::string("G_URL_SCORE"))->getCString());
 
+	G_URL_RATE = std::string(GetValue(std::string("G_URL_RATE"))->getCString());
 
 	//////////////////////////////////////////////////////////////////////////
 

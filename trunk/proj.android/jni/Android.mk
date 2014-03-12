@@ -17,6 +17,9 @@ CLASSES_FILES := $(wildcard $(LOCAL_PATH)/../../Classes/*.cpp)
 CLASSES_FILES += $(wildcard $(LOCAL_PATH)/../../Classes/jansson/*.cpp)
 CLASSES_FILES += $(wildcard $(LOCAL_PATH)/../../Classes/jansson/*.c)
 
+CLASSES_FILES += $(wildcard $(LOCAL_PATH)/../../Classes/NDKHelper/*.cpp)
+CLASSES_FILES += $(wildcard $(LOCAL_PATH)/../../Classes/NDKHelper/*.c)
+
 
 
 CLASSES_FILES := $(CLASSES_FILES:$(LOCAL_PATH)/%=%)
@@ -27,6 +30,7 @@ LOCAL_SRC_FILES += $(CLASSES_FILES)
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../Classes \
 					$(LOCAL_PATH)/../../Classes/jansson \
+					$(LOCAL_PATH)/../../Classes/NDKHelper \
 
 LOCAL_WHOLE_STATIC_LIBRARIES += cocos2dx_static
 LOCAL_WHOLE_STATIC_LIBRARIES += cocosdenshion_static

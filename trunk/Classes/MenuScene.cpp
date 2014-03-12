@@ -96,8 +96,23 @@ bool MenuScene::init()
 	}
 	soundToggle->setPosition(ccp(121, 1280-1176));
 
+	//rate
+	CCMenuItemImage *itRate = CCMenuItemImage::create(
+		"rate.png",
+		"rateDown.png",
+		this,
+		menu_selector(MenuScene::rateCallback));
+	itRate->setPosition(ccp(548, 1280-1181));
 
-    m_menu = CCMenu::create(m_playItem, scoreItem, soundToggle, NULL);
+	//exit
+	CCMenuItemImage *itExit = CCMenuItemImage::create(
+		"exit.png",
+		"exitDown.png",
+		this,
+		menu_selector(MenuScene::exitCallback));
+	itExit->setPosition(ccp(692, 1280-1181));
+
+    m_menu = CCMenu::create(m_playItem, scoreItem, soundToggle, itRate, itExit, NULL);
     m_menu->setPosition(CCPointZero);
     this->addChild(m_menu, 1);
 
@@ -255,9 +270,7 @@ void MenuScene::scoreCallback( CCObject* pSender )
 
 void MenuScene::keyBackClicked()
 {
-	QuitDialog* dialog = QuitDialog::create();
-	this->addChild(dialog, 10);
-	this->onShowDialog();
+	exitCallback(NULL);
 }
 
 void MenuScene::onShowDialog()
@@ -315,6 +328,21 @@ void MenuScene::soundCallback( CCObject* pSender )
 		AudioManager::sharedAudioManager()->SetEnableBackground(true);
 		AudioManager::sharedAudioManager()->SetEnableEffect(true);
 	}
+}
+
+void MenuScene::rateCallback( CCObject* pSender )
+{
+	CCDictionary* prms = CCDictionary::create();
+	prms->setObject(CCString::create(G_URL_RATE), "link");
+
+	SendMessageWithParams(string("Rate"), prms);
+}
+
+void MenuScene::exitCallback( CCObject* pSender )
+{
+	QuitDialog* dialog = QuitDialog::create();
+	this->addChild(dialog, 10);
+	this->onShowDialog();
 }
 
 void MenuScene::ScheduleTick( float dt )

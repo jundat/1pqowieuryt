@@ -87,8 +87,9 @@ bool ObjectLayer::init()
 
 	CCString* sBoom = CCString::createWithFormat("x%d", DataManager::sharedDataManager()->GetBoom());
 	m_labelBoom = CCLabelTTF::create(sBoom->getCString(), "Roboto-Medium.ttf", 52);
+	m_labelBoom->setAnchorPoint(ccp(0.0f, 0.5f));
 	m_labelBoom->setFontFillColor(ccc3(0, 0, 0));
-	m_labelBoom->setPosition(ccp(m_itemBoom->getContentSize().width + m_labelBoom->getContentSize().width,
+	m_labelBoom->setPosition(ccp(m_itemBoom->getContentSize().width,
 		m_itemBoom->getContentSize().height/4 + m_labelBoom->getContentSize().height/4));
 	this->addChild(m_labelBoom, 10);
 

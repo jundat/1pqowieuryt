@@ -2,18 +2,21 @@
     <dict>
     	<!---------------- SEND DATA --------------->
 		<key>G_URL_PLAYER_FB_PROFILE</key>
-		    <string>192.168.0.102:8025/profile</string>
+		    <string>dbp.cgkstudio.com:8025/profile</string>
 
 	    <key>G_URL_FRIEND_LIST</key>
-		    <string>192.168.0.102:8025/friend</string>
+		    <string>dbp.cgkstudio.com:8025/friend</string>
 
 	    <key>G_URL_DEVICE_PROFILE</key>
-		    <string>192.168.0.102:8025/device</string>
+		    <string>dbp.cgkstudio.com:8025/device</string>
 
 	    <key>G_URL_SCORE</key>
-		    <string>192.168.0.102:8025/score</string>
+		    <string>dbp.cgkstudio.com:8025/score</string>
 
 
+		<!-- rate game link -->
+		<key>G_URL_RATE</key>
+		    <string>https://play.google.com/store/apps/details?id=com.supercell.hayday</string>
 
 
       	<key>G_DESIGN_WIDTH</key> <!-- Chiều rộng màn hình, ko nên sửa -->

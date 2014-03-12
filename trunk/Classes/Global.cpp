@@ -11,7 +11,7 @@ std::string G_URL_FRIEND_LIST;
 std::string G_URL_DEVICE_PROFILE;
 std::string G_URL_SCORE;
 
-
+std::string G_URL_RATE;
 
 
 //////////////////////////////////////////////////////////////////////////

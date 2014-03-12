@@ -147,31 +147,36 @@ void LoseDialog::menuCallBack( CCObject* pSender )
 
 	int count = arrHigherFriends->count();
 	CCLOG(" --------------------- GET HIGHER FRIENDS ---- %d -----------------", count);
-	bool isBreakoutLeaderboard = false;
+	bool isBreakoutLeaderboard = true; //DEBUG
 
-	for (int i = 0; i < count; ++i)
-	{
-		CCObject* obj = arrHigherFriends->objectAtIndex(i);
-		FacebookAccount* acc = dynamic_cast<FacebookAccount*>(obj);
-		CCLOG("%s: %s: %d", acc->m_fbId.c_str(), acc->m_fbName.c_str(), acc->m_score);
+	//DEBUG
+	FacebookAccount* acc = new FacebookAccount("10104234868767", "CHAU CHO", "chochau@gmail.com", 1001001);
+	BreakLeaderboardDialog* dialog = BreakLeaderboardDialog::create(acc);
+	this->addChild(dialog);
 
-		if(acc && acc->m_score < m_score)
-		{
-			isBreakoutLeaderboard = true;
-			
-			//remove from list and save again
-			arrHigherFriends->removeObject(obj);
-			DataManager::sharedDataManager()->SetHigherFriends(arrHigherFriends);
-
-			//post status
-			CCLOG("GET HIM: %s, %s, %d", acc->m_fbId.c_str(), acc->m_fbName.c_str(), acc->m_score);
-			BreakLeaderboardDialog* dialog = BreakLeaderboardDialog::create(acc);
-			this->addChild(dialog);
-
-			break;
-		}
-	}
-	CCLOG(" >>>>>>>>>>>>>>>>>> GET HIGHER FRIENDS <<<<<<<<<<<<<<<<<<");
+// 	for (int i = 0; i < count; ++i)
+// 	{
+// 		CCObject* obj = arrHigherFriends->objectAtIndex(i);
+// 		FacebookAccount* acc = dynamic_cast<FacebookAccount*>(obj);
+// 		CCLOG("%s: %s: %d", acc->m_fbId.c_str(), acc->m_fbName.c_str(), acc->m_score);
+// 
+// 		if(acc && acc->m_score < m_score)
+// 		{
+// 			isBreakoutLeaderboard = true;
+// 			
+// 			//remove from list and save again
+// 			arrHigherFriends->removeObject(obj);
+// 			DataManager::sharedDataManager()->SetHigherFriends(arrHigherFriends);
+// 
+// 			//post status
+// 			CCLOG("GET HIM: %s, %s, %d", acc->m_fbId.c_str(), acc->m_fbName.c_str(), acc->m_score);
+// 			BreakLeaderboardDialog* dialog = BreakLeaderboardDialog::create(acc);
+// 			this->addChild(dialog);
+// 
+// 			break;
+// 		}
+// 	}
+// 	CCLOG(" >>>>>>>>>>>>>>>>>> GET HIGHER FRIENDS <<<<<<<<<<<<<<<<<<");
 	//////////////////////////////////////////////////////////////////////////
 	//NO BreakLeaderboard
 	if (!isBreakoutLeaderboard)
@@ -228,7 +233,7 @@ void LoseDialog::reviveCallBack( CCObject* pSender )
 	{
 		PLAY_OUT_PORP_EFFECT;
 
-		CCMessageBox("Thông tin", "Bạn đã hết kim cương!");
+		CCMessageBox("Bạn đã hết kim cương!", "Thông tin");
 
 		//visitble
 		m_itExitButton->setVisible(true);

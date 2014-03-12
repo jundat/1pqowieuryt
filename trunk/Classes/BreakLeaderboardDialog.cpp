@@ -15,6 +15,7 @@ bool BreakLeaderboardDialog::init()
 
 	CCPoint pExit = ccp(233, 1280-813);
 	CCPoint pRevive = ccp(561, 1280-813);
+	CCPoint pVuotMat = ccp(610, 1280-610);
 	float BUTTON_SCALE = 0.6722f;
 	
 	CCScale9Sprite* dialog = CCScale9Sprite::create("dialog.png");
@@ -28,20 +29,18 @@ bool BreakLeaderboardDialog::init()
 	this->addChild(nodeLoser);
 
 	m_loserAvatar = CCSprite::create("fb-profile.png");
-	m_loserAvatar->setPosition(ccp(148, 1280-495));
+	m_loserAvatar->setPosition(ccp(610, 1280-535));
 	nodeLoser->addChild(m_loserAvatar);
 
-	CCLabelTTF* lbLoserName = CCLabelTTF::create(m_loser->m_fbName.c_str(), G_FONT_NORMAL, 48);
+	CCLabelTTF* lbLoserName = CCLabelTTF::create(m_loser->m_fbName.c_str(), G_FONT_NORMAL, 42);
 	lbLoserName->setFontFillColor(ccBLACK);
-	lbLoserName->setAnchorPoint(ccp(0.0f, 0.5f));
-	lbLoserName->setPosition(ccp(246, 1280-468));
+	lbLoserName->setPosition(ccp(610, 1280-638));
 	nodeLoser->addChild(lbLoserName);
 
 	CCString* strTemp = CCString::createWithFormat("%d", m_loser->m_score);
-	CCLabelTTF* lbLoserScore = CCLabelTTF::create(strTemp->getCString(), G_FONT_NORMAL, 48);
+	CCLabelTTF* lbLoserScore = CCLabelTTF::create(strTemp->getCString(), G_FONT_NORMAL, 42);
 	lbLoserScore->setFontFillColor(ccBLACK);
-	lbLoserScore->setAnchorPoint(ccp(0.0f, 0.5f));
-	lbLoserScore->setPosition(ccp(246, 1280-522));
+	lbLoserScore->setPosition(ccp(610, 1280-680));
 	nodeLoser->addChild(lbLoserScore);
 
 
@@ -59,20 +58,18 @@ bool BreakLeaderboardDialog::init()
 		spr->setPosition(ccp(sprAvatarUser->getContentSize().width/2, sprAvatarUser->getContentSize().height/2));
 		sprAvatarUser->addChild(spr);
 	}
-	sprAvatarUser->setPosition(ccp(148, 1280-649));
+	sprAvatarUser->setPosition(ccp(188, 1280-535));
 	nodeUser->addChild(sprAvatarUser);
 
-	CCLabelTTF* lbUserName = CCLabelTTF::create(DataManager::sharedDataManager()->GetName().c_str(), G_FONT_NORMAL, 48);
+	CCLabelTTF* lbUserName = CCLabelTTF::create(DataManager::sharedDataManager()->GetName().c_str(), G_FONT_NORMAL, 42);
 	lbUserName->setFontFillColor(ccBLACK);
-	lbUserName->setAnchorPoint(ccp(0.0f, 0.5f));
-	lbUserName->setPosition(ccp(246, 1280-626));
+	lbUserName->setPosition(ccp(190, 1280-638));
 	nodeUser->addChild(lbUserName);
 
 	strTemp = CCString::createWithFormat("%d", DataManager::sharedDataManager()->GetHighScore());
-	CCLabelTTF* lbUserScore = CCLabelTTF::create(strTemp->getCString(), G_FONT_NORMAL, 48);
+	CCLabelTTF* lbUserScore = CCLabelTTF::create(strTemp->getCString(), G_FONT_NORMAL, 42);
 	lbUserScore->setFontFillColor(ccBLACK);
-	lbUserScore->setAnchorPoint(ccp(0.0f, 0.5f));
-	lbUserScore->setPosition(ccp(246, 1280-680));
+	lbUserScore->setPosition(ccp(190, 1280-680));
 	nodeUser->addChild(lbUserScore);
 
 
@@ -139,19 +136,19 @@ void BreakLeaderboardDialog::postMessageToLoser( string loserName, int yourScore
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	if(EziSocialObject::sharedObject()->isFacebookSessionActive()) //logged in state
 	{
-		CCString* strMessage = CCString::createWithFormat("Hey, i just got %d points in The Croods, following me is %s! Kaka :v", yourScore, loserName.c_str());
+		CCString* strMessage = CCString::createWithFormat("Ta vừa đạt %d điểm trong game Điện Biên Phủ trên không, qua mặt %s rồi nhé! Kaka :v", yourScore, loserName.c_str());
 
 		//let try to post message
 		//postMessageOnWall
 		//autoPostMessageOnWall
 
 		EziSocialObject::sharedObject()->postMessageOnWall(
-			"The Croods",					//heading => Điện Biên Phủ Trên Không
-			"Let got it!",					//caption
+			"Điện Biên Phủ trên không -- Game bắn máy bay hot nhất 2014!",		//heading => Điện Biên Phủ Trên Không
+			"Thử thách cùng bạn bè",			//caption
 			strMessage->getCString(),		//message => Status
-			"From the creators of Angry Birds and the creative minds at DreamWorks Animation: a FREE new game based on the motion picture phenomenon!",	//descripton
-			"http://www.reelmama.com/wp-content/uploads/2013/04/Grug-from-THE-CROODS.jpg", //badgeIconURL
-			"https://play.google.com/store/apps/details?id=com.rovio.croods");	//deepLinkURL
+			"Cùng sống lại những giây phút hào hùng của dân tộc trong chiến thắng vẻ vang của \"12 ngày đêm\". Thử thách cùng bạn bè, vượt lên bảng xếp hạng. Click ngay để tải!",	//descripton
+			"https://dl.dropboxusercontent.com/u/41829250/DienBienPhuTrenKhong/DienBienPhuTrenKhong.jpg", //badgeIconURL
+			"");	//deepLinkURL
 	}
 #endif
 }
@@ -174,7 +171,7 @@ void BreakLeaderboardDialog::fbMessageCallback(int responseCode, const char* res
 	}
 	else
 	{
-		CCMessageBox("Không thể chia sẻ", "Lỗi");
+		CCMessageBox("Không thể chia sẻ!", "Thông tin");
 
 		CCScene *pScene = CCTransitionFade::create(0.5, MenuScene::scene());
 		CCDirector::sharedDirector()->replaceScene(pScene);
