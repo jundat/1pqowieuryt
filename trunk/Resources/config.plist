@@ -17,9 +17,7 @@
 		<!-- rate game link -->
 		<key>G_URL_RATE</key>
 		    <string>https://play.google.com/store/apps/details?id=com.supercell.hayday</string>
-
-		<key>G_TEST_SERVER</key>
-		    <string>true</string>
+		    
 
       	<key>G_DESIGN_WIDTH</key> <!-- Chiều rộng màn hình, ko nên sửa -->
 		    <string>800</string>

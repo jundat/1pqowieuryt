@@ -144,18 +144,18 @@ void TestPostGetScene::testPost3(CCObject *sender)
 //sendScore
 void TestPostGetScene::testPost4(CCObject *sender)
 {
-	GameClientManager::sharedGameClientManager()->sendScore("App1", "Fb1", 250);
-// 	GameClientManager::sharedGameClientManager()->sendScore("App1", "Fb2", 2222);
-// 	GameClientManager::sharedGameClientManager()->sendScore("App1", "Fb3", 3333);
-// 	GameClientManager::sharedGameClientManager()->sendScore("App1", "Fb4", 4444);
-// 	GameClientManager::sharedGameClientManager()->sendScore("App1", "Fb5", 5555);
-// 	GameClientManager::sharedGameClientManager()->sendScore("App1", "Fb6", 6666);
+	GameClientManager::sharedGameClientManager()->sendScore(G_APP_ID, "Fb1", 250);
+	GameClientManager::sharedGameClientManager()->sendScore(G_APP_ID, "Fb2", 2222);
+	GameClientManager::sharedGameClientManager()->sendScore(G_APP_ID, "Fb3", 3333);
+	GameClientManager::sharedGameClientManager()->sendScore(G_APP_ID, "Fb4", 4444);
+	GameClientManager::sharedGameClientManager()->sendScore(G_APP_ID, "Fb5", 5555);
+	GameClientManager::sharedGameClientManager()->sendScore(G_APP_ID, "Fb6", 6666);
 }
 
 //getScore
 void TestPostGetScene::testPost5(CCObject *sender)
 {
-	GameClientManager::sharedGameClientManager()->getScore("App1", "Fb1");
+	GameClientManager::sharedGameClientManager()->getScore(G_APP_ID, "Fb1");
 }
 
 //getPlayerFbProfile
@@ -173,5 +173,5 @@ void TestPostGetScene::testPost7(CCObject *sender)
 //getFriendList
 void TestPostGetScene::testPost8(CCObject *sender)
 {
-	GameClientManager::sharedGameClientManager()->getFriendList("App1", "Fb1");
+	GameClientManager::sharedGameClientManager()->getFriendList(G_APP_ID, "Fb1");
 }

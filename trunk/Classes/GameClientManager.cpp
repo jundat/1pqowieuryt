@@ -133,7 +133,7 @@ void GameClientManager::_onGetPlayerFbProfileCompleted( CCHttpClient *sender, CC
 
 
 		root = json_loads(str.c_str(), strlen(str.c_str()), &error);
-		fbId = json_object_get(root, "id");
+		fbId = json_object_get(root, "fbId");
 		fbName = json_object_get(root, "fbName");
 		email = json_object_get(root, "email");
 		//score = json_object_get(root, "score");
@@ -427,7 +427,7 @@ void GameClientManager::_onGetDeviceProfileCompleted( CCHttpClient *sender, CCHt
 
 		root = json_loads(str.c_str(), strlen(str.c_str()), &error);
 
-		fbId = json_object_get(root, "id");
+		fbId = json_object_get(root, "fbId");
 		deviceId = json_object_get(root, "deviceId");
 		deviceToken = json_object_get(root, "deviceToken");
 		deviceConfig = json_object_get(root, "deviceConfig");
