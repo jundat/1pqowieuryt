@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package com.google.android.gcm.demo.app;
+package com.chimgokien.phicongbutchi;
 
-import com.chimgokien.phicongbutchi.PhiCongButChi;
 import com.chimgokien.phicongbutchi.R;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
@@ -79,7 +78,32 @@ public class GcmIntentService extends IntentService {
                 Log.i(TAG, "Completed work @ " + SystemClock.elapsedRealtime());
                 // Post notification of received message.
                 sendNotification("Received: " + extras.toString());
-                Log.i(TAG, "Received: " + extras.toString());
+                
+                /*
+                 * [
+						{
+							fbId=100006639370902, 
+							meId=, 
+							score=1000000000, 
+							android.support.content.wakelockid=3, 
+							collapse_key=do_not_collapse, 
+							from=1063175715204, 
+							name=Ku Ju
+						}
+					]
+                 * */
+                
+                String fbId = extras.getString("fbId");
+                String meId = extras.getString("meId");
+                int score = Integer.getInteger(extras.getString("score")).intValue();
+                String name = extras.getString("name");
+                
+                Log.i(TAG, "fbId: " + fbId);
+                Log.i(TAG, "meId: " + meId);
+                Log.i(TAG, "score: " + score);
+                Log.i(TAG, "name: " + name);
+                
+                //Log.i(TAG, "Received: " + extras.toString());
             }
         }
         // Release the wake lock provided by the WakefulBroadcastReceiver.
