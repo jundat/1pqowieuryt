@@ -93,11 +93,11 @@ bool TestPostGetScene::init()
 void TestPostGetScene::testPost1(CCObject *sender)
 {
 	GameClientManager::sharedGameClientManager()->sendPlayerFbProfile("Fb1", "PhamLong", "PhamLong@gmail.com", string(G_APP_ID));
-// 	GameClientManager::sharedGameClientManager()->sendPlayerFbProfile("Fb2", "DinhDung", "DinhDung@gmail.com");
-// 	GameClientManager::sharedGameClientManager()->sendPlayerFbProfile("Fb3", "BuiHieu", "BuiHieu@gmail.com");
-// 	GameClientManager::sharedGameClientManager()->sendPlayerFbProfile("Fb4", "DangTran", "DangTran@gmail.com");
-// 	GameClientManager::sharedGameClientManager()->sendPlayerFbProfile("Fb5", "TrinhLinh", "TrinhLinh@gmail.com");
-// 	GameClientManager::sharedGameClientManager()->sendPlayerFbProfile("Fb6", "NguyenChau", "NguyenChau@gmail.com");
+	GameClientManager::sharedGameClientManager()->sendPlayerFbProfile("Fb2", "DinhDung", "DinhDung@gmail.com", string(G_APP_ID));
+	GameClientManager::sharedGameClientManager()->sendPlayerFbProfile("Fb3", "BuiHieu", "BuiHieu@gmail.com", string(G_APP_ID));
+	GameClientManager::sharedGameClientManager()->sendPlayerFbProfile("Fb4", "DangTran", "DangTran@gmail.com", string(G_APP_ID));
+	GameClientManager::sharedGameClientManager()->sendPlayerFbProfile("Fb5", "TrinhLinh", "TrinhLinh@gmail.com", string(G_APP_ID));
+	GameClientManager::sharedGameClientManager()->sendPlayerFbProfile("Fb6", "NguyenChau", "NguyenChau@gmail.com", string(G_APP_ID));
 }
 
 //friendlist
@@ -106,13 +106,28 @@ void TestPostGetScene::testPost2(CCObject *sender)
 	CCArray* arrFr = new CCArray();
 	arrFr->retain();
 
-	arrFr->addObject(new FacebookAccount("Fb2", "DinhDung", std::string("DinhDung@gmail.com"), 1));
-	arrFr->addObject(new FacebookAccount("Fb3", "BuiHieu", std::string("BuiHieu@gmail.com"), 2));
-	arrFr->addObject(new FacebookAccount("Fb4", "DangTran", std::string("DangTran@gmail.com"), 3));
-	arrFr->addObject(new FacebookAccount("Fb5", "TrinhLinh", std::string("TrinhLinh@gmail.com"), 4));
-	arrFr->addObject(new FacebookAccount("Fb6", "NguyenChau", std::string("NguyenChau@gmail.com"), 5));
+	arrFr->addObject(new FacebookAccount("Fb2", "DinhDung", std::string("DinhDung@gmail.com"), 100));
+	arrFr->addObject(new FacebookAccount("Fb3", "BuiHieu", std::string("BuiHieu@gmail.com"), 200));
+	arrFr->addObject(new FacebookAccount("Fb4", "DangTran", std::string("DangTran@gmail.com"), 300));
+	arrFr->addObject(new FacebookAccount("Fb5", "TrinhLinh", std::string("TrinhLinh@gmail.com"), 400));
+	arrFr->addObject(new FacebookAccount("Fb6", "NguyenChau", std::string("NguyenChau@gmail.com"), 500));
 
+	CCLOG("SEND FRIEND FOR: Fb1");
 	GameClientManager::sharedGameClientManager()->sendFriendList("Fb1", arrFr);
+
+
+	CCArray* arrNotFr = new CCArray();
+	arrNotFr->retain();
+
+	arrNotFr->addObject(new FacebookAccount("Fb1", "PhamLong", std::string("PhamLong@gmail.com"), 500));
+	arrNotFr->addObject(new FacebookAccount("Fb11", "ABC", std::string("ABC@gmail.com"), 110));
+	arrNotFr->addObject(new FacebookAccount("Fb12", "DEF", std::string("DEF@gmail.com"), 220));
+	arrNotFr->addObject(new FacebookAccount("Fb13", "GHI", std::string("GHI@gmail.com"), 330));
+	arrNotFr->addObject(new FacebookAccount("Fb14", "JKL", std::string("JKL@gmail.com"), 440));
+	arrNotFr->addObject(new FacebookAccount("Fb15", "MNO", std::string("MNO@gmail.com"), 550));
+	
+	CCLOG("SEND FRIEND FOR: Fb2");
+	GameClientManager::sharedGameClientManager()->sendFriendList("Fb2", arrNotFr);
 }
 
 //sendDeviceProfile
@@ -129,7 +144,7 @@ void TestPostGetScene::testPost3(CCObject *sender)
 //sendScore
 void TestPostGetScene::testPost4(CCObject *sender)
 {
-	GameClientManager::sharedGameClientManager()->sendScore("App1", "Fb1", 2222);
+	GameClientManager::sharedGameClientManager()->sendScore("App1", "Fb1", 250);
 // 	GameClientManager::sharedGameClientManager()->sendScore("App1", "Fb2", 2222);
 // 	GameClientManager::sharedGameClientManager()->sendScore("App1", "Fb3", 3333);
 // 	GameClientManager::sharedGameClientManager()->sendScore("App1", "Fb4", 4444);

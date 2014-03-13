@@ -78,7 +78,7 @@ bool MenuScene::init()
 		"score_button_press.png",
 		this,
 		menu_selector(MenuScene::scoreCallback));
-	scoreItem->setPosition(ccp(329, 1280-1175));
+	scoreItem->setPosition(ccp(400, 1280-1175));
 
 	
 	//
@@ -112,7 +112,7 @@ bool MenuScene::init()
 		menu_selector(MenuScene::exitCallback));
 	itExit->setPosition(ccp(692, 1280-1181));
 
-    m_menu = CCMenu::create(m_playItem, scoreItem, soundToggle, itRate, itExit, NULL);
+    m_menu = CCMenu::create(m_playItem, scoreItem, soundToggle, /*itRate,*/ itExit, NULL);
     m_menu->setPosition(CCPointZero);
     this->addChild(m_menu, 1);
 
