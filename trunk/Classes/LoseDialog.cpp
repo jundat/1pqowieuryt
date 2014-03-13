@@ -20,6 +20,7 @@ bool LoseDialog::init()
 	m_timerBar = NULL;
 	m_timerNode = NULL;
 	m_lbTimer = NULL;
+	m_isBreakRecord = false;
 
 	CCPoint pExit = ccp(400, 1280-813); // ccp(233, 1280-813);
 	CCPoint pRevive = ccp(400, 1280-813); //ccp(565, 1280-813);
@@ -124,7 +125,7 @@ bool LoseDialog::init()
 	if (m_score > curScore)
 	{
 		PLAY_GET_BOMB_EFFECT;
-
+		m_isBreakRecord = true;
 		breakRecord();
 	}
 
@@ -142,40 +143,47 @@ void LoseDialog::menuCallBack( CCObject* pSender )
 
 	//////////////////////////////////////////////////////////////////////////
 
-	//check if breakout leaderboard
-	CCArray* arrHigherFriends = DataManager::sharedDataManager()->GetHigherFriends();
-
-	int count = arrHigherFriends->count();
-	CCLOG(" --------------------- GET HIGHER FRIENDS ---- %d -----------------", count);
 	bool isBreakoutLeaderboard = false; //true;
 
-// 	FacebookAccount* acc = new FacebookAccount("100000770031652", "Dũng Đinh Nguyễn Anh", "dungdna@gmail.com", 123456);
-// 	BreakLeaderboardDialog* dialog = BreakLeaderboardDialog::create(acc);
-// 	this->addChild(dialog);
-
-	for (int i = 0; i < count; ++i)
+	if (m_isBreakRecord)
 	{
-		CCObject* obj = arrHigherFriends->objectAtIndex(i);
-		FacebookAccount* acc = dynamic_cast<FacebookAccount*>(obj);
-		CCLOG("%s: %s: %d", acc->m_fbId.c_str(), acc->m_fbName.c_str(), acc->m_score);
+		//check if breakout leaderboard
+		CCArray* arrHigherFriends = DataManager::sharedDataManager()->GetHigherFriends();
+		int highscore = DataManager::sharedDataManager()->GetHighScore();
 
-		if(acc && acc->m_score < m_score)
+		int count = arrHigherFriends->count();
+		CCLOG(" --------------------- GET HIGHER FRIENDS ---- %d -----------------", count);
+
+		// 	FacebookAccount* acc = new FacebookAccount("100000770031652", "Dũng Đinh Nguyễn Anh", "dungdna@gmail.com", 123456);
+		// 	BreakLeaderboardDialog* dialog = BreakLeaderboardDialog::create(acc);
+		// 	this->addChild(dialog);
+
+		for (int i = 0; i < count; ++i)
 		{
-			isBreakoutLeaderboard = true;
-			
-			//remove from list and save again
-			arrHigherFriends->removeObject(obj);
-			DataManager::sharedDataManager()->SetHigherFriends(arrHigherFriends);
+			CCObject* obj = arrHigherFriends->objectAtIndex(i);
+			FacebookAccount* acc = dynamic_cast<FacebookAccount*>(obj);
+			CCLOG("%s: %s: %d", acc->m_fbId.c_str(), acc->m_fbName.c_str(), acc->m_score);
 
-			//post status
-			CCLOG("GET HIM: %s, %s, %d", acc->m_fbId.c_str(), acc->m_fbName.c_str(), acc->m_score);
-			BreakLeaderboardDialog* dialog = BreakLeaderboardDialog::create(acc);
-			this->addChild(dialog);
+			if(acc && acc->m_score < highscore)
+			{
+				isBreakoutLeaderboard = true;
 
-			break;
+				//remove from list and save again
+				arrHigherFriends->removeObject(obj);
+				DataManager::sharedDataManager()->SetHigherFriends(arrHigherFriends);
+
+				//post status
+				CCLOG("GET HIM: %s, %s, %d", acc->m_fbId.c_str(), acc->m_fbName.c_str(), acc->m_score);
+				BreakLeaderboardDialog* dialog = BreakLeaderboardDialog::create(acc);
+				this->addChild(dialog);
+
+				break;
+			}
 		}
+		CCLOG(" >>>>>>>>>>>>>>>>>> GET HIGHER FRIENDS <<<<<<<<<<<<<<<<<<");
 	}
-	CCLOG(" >>>>>>>>>>>>>>>>>> GET HIGHER FRIENDS <<<<<<<<<<<<<<<<<<");
+
+	
 	//////////////////////////////////////////////////////////////////////////
 	//NO BreakLeaderboard
 	if (!isBreakoutLeaderboard)

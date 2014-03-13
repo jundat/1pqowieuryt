@@ -23,6 +23,7 @@ private:
 	int m_score;
 	int m_killedEnemies;
 	float m_elapsedTime;
+	bool m_isBreakRecord;
 
 	CCLabelTTF* m_lbTimer;
 	CCLabelTTF* m_lbDiamon;

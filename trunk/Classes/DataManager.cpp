@@ -380,18 +380,14 @@ void DataManager::SetBoom( int boom )
 
 void DataManager::IncreaseBoom()
 {
-	CCUserDefault::sharedUserDefault()->setIntegerForKey("BOOM", 
-		DataManager::sharedDataManager()->GetBoom() + 1);
-
-	CCUserDefault::sharedUserDefault()->flush();
+	int oldBoom = DataManager::sharedDataManager()->GetBoom();
+	SetBoom(oldBoom + 1);
 }
 
 void DataManager::DecreaseBoom()
 {
-	CCUserDefault::sharedUserDefault()->setIntegerForKey("BOOM", 
-		DataManager::sharedDataManager()->GetBoom() - 1);
-
-	CCUserDefault::sharedUserDefault()->flush();
+	int oldBoom = DataManager::sharedDataManager()->GetBoom();
+	SetBoom(oldBoom - 1);
 }
 
 
