@@ -54,6 +54,8 @@ public:
 	void soundCallback(CCObject* pSender);
 	void rateCallback(CCObject* pSender);
 	void exitCallback(CCObject* pSender);
+	void addScoreCallback(CCObject* pSender);
+	void subScoreCallback(CCObject* pSender);
 	
 	void onEnterTransitionDidFinish()
 	{

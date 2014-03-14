@@ -215,7 +215,7 @@ void WaitForLifeDialog::fbSendRequestCallback( int responseCode, const char* res
 
 	if (EziSocialWrapperNS::RESPONSE_CODE::FB_REQUEST_SENT == responseCode)
 	{
-		//int numFriends = friendsGotRequests->count();
+		int numFriends = friendsGotRequests->count();
 
 		CCLOG("Request sent successfully to %d friends", numFriends);
 

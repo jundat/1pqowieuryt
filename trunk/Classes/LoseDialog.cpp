@@ -20,7 +20,6 @@ bool LoseDialog::init()
 	m_timerBar = NULL;
 	m_timerNode = NULL;
 	m_lbTimer = NULL;
-	m_isBreakRecord = false;
 
 	CCPoint pExit = ccp(400, 1280-813); // ccp(233, 1280-813);
 	CCPoint pRevive = ccp(400, 1280-813); //ccp(565, 1280-813);
@@ -121,11 +120,9 @@ bool LoseDialog::init()
 	this->addChild(lbScore);
 
 	//BREAK THE RECORD ///////////////////////////////////////////////////////
-	int curScore = DataManager::sharedDataManager()->GetHighScore();
-	if (m_score > curScore)
+	if (m_isBreakRecord)
 	{
 		PLAY_GET_BOMB_EFFECT;
-		m_isBreakRecord = true;
 		breakRecord();
 	}
 
@@ -171,6 +168,9 @@ void LoseDialog::menuCallBack( CCObject* pSender )
 				//remove from list and save again
 				arrHigherFriends->removeObject(obj);
 				DataManager::sharedDataManager()->SetHigherFriends(arrHigherFriends);
+
+				//remove all image
+				this->removeAllChildren();
 
 				//post status
 				CCLOG("GET HIM: %s, %s, %d", acc->m_fbId.c_str(), acc->m_fbName.c_str(), acc->m_score);

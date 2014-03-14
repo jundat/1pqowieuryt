@@ -121,9 +121,17 @@ void MainGameScene::showEndGame( int score, int killedEnemies )
 		DataManager::sharedDataManager()->SetLastDeadTimeNow();
 	}
 
-	PLAY_GAME_OVER;	
+	PLAY_GAME_OVER;
 
-	LoseDialog* dialog = LoseDialog::create(score, killedEnemies);
+	int oldScore = DataManager::sharedDataManager()->GetHighScore();
+	bool isBreakRecord = false;
+
+	if (oldScore < score)
+	{
+		isBreakRecord = true;
+	}
+	
+	LoseDialog* dialog = LoseDialog::create(score, isBreakRecord);
 	this->addChild(dialog);
 	
 	//save highscore after show dialog

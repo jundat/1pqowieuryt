@@ -7,13 +7,13 @@ USING_NS_CC;
 class LoseDialog : public cocos2d::CCLayer
 {
 public:
-	LoseDialog(int score, int killedEnemies):CCLayer(){
+	LoseDialog(int score, bool isBreakrecord):CCLayer(){
 		this->m_score = score;
-		this->m_killedEnemies = killedEnemies;
+		this->m_isBreakRecord = isBreakrecord;
 	};
     virtual bool init();
-	static LoseDialog* create(int score, int killedEnemies) {
-		LoseDialog* dig = new LoseDialog(score, killedEnemies);
+	static LoseDialog* create(int score, bool isBreakrecord) {
+		LoseDialog* dig = new LoseDialog(score, isBreakrecord);
 		dig->init();
 		dig->autorelease();
 		return dig;
@@ -21,10 +21,9 @@ public:
 
 private:
 	int m_score;
-	int m_killedEnemies;
+
 	float m_elapsedTime;
 	bool m_isBreakRecord;
-
 	CCLabelTTF* m_lbTimer;
 	CCLabelTTF* m_lbDiamon;
 

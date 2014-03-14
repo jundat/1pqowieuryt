@@ -112,9 +112,33 @@ bool MenuScene::init()
 		menu_selector(MenuScene::exitCallback));
 	itExit->setPosition(ccp(692, 1280-1181));
 
+
     m_menu = CCMenu::create(m_playItem, scoreItem, soundToggle, /*itRate,*/ itExit, NULL);
     m_menu->setPosition(CCPointZero);
     this->addChild(m_menu, 1);
+
+
+
+	//////////////////////////////////////////////////////////////////////////
+
+	// testSendPlayerProfile
+	CCLabelTTF *labelPost1 = CCLabelTTF::create("AddScore", "Arial", 48);
+	labelPost1->setFontFillColor(ccc3(0,0,0));
+	CCMenuItemLabel *itemPost1 = CCMenuItemLabel::create(labelPost1, this, menu_selector(MenuScene::addScoreCallback));
+	itemPost1->setAnchorPoint(ccp(0.0f, 0.5f));
+	itemPost1->setPosition(ccp(20, 1220));
+	//m_menu->addChild(itemPost1); //DEBUG
+
+	// testSendPlayerProfile
+	CCLabelTTF *labelPost2 = CCLabelTTF::create("SubScore", "Arial", 48);
+	labelPost2->setFontFillColor(ccc3(0,0,0));
+	CCMenuItemLabel *itemPost2 = CCMenuItemLabel::create(labelPost2, this, menu_selector(MenuScene::subScoreCallback));
+	itemPost2->setAnchorPoint(ccp(0.0f, 0.5f));
+	itemPost2->setPosition(ccp(20, 1160));
+	//m_menu->addChild(itemPost2); //DEBUG
+
+	//////////////////////////////////////////////////////////////////////////
+
 
 	//check if life = 0 to show
 
@@ -421,4 +445,34 @@ void MenuScene::initTimer()
 	this->addChild(m_lbTime);
 
 	this->schedule(schedule_selector(MenuScene::ScheduleTick), 1);
+}
+
+void MenuScene::addScoreCallback( CCObject* pSender )
+{
+	//submit score
+	if (DataManager::sharedDataManager()->GetFbID().compare("NULL") != 0)
+	{
+		int old = DataManager::sharedDataManager()->GetHighScore();
+		DataManager::sharedDataManager()->SetHighScore(old + 1000);
+
+		GameClientManager::sharedGameClientManager()->sendScore(
+			string(G_APP_ID), 
+			DataManager::sharedDataManager()->GetFbID(), 
+			DataManager::sharedDataManager()->GetHighScore());
+	}	
+}
+
+void MenuScene::subScoreCallback( CCObject* pSender )
+{
+	//submit score
+	if (DataManager::sharedDataManager()->GetFbID().compare("NULL") != 0)
+	{
+		int old = DataManager::sharedDataManager()->GetHighScore();
+		DataManager::sharedDataManager()->SetHighScore(old - 1000);
+
+		GameClientManager::sharedGameClientManager()->sendScore(
+			string(G_APP_ID), 
+			DataManager::sharedDataManager()->GetFbID(), 
+			DataManager::sharedDataManager()->GetHighScore());
+	}	
 }

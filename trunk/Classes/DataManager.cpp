@@ -459,7 +459,7 @@ CCArray* DataManager::GetHigherFriends()
 		email = json_object_get(fbFriend, "email");
 		score = json_object_get(fbFriend, "score");
 
-		CCLOG("ADD: %s", json_string_value(fbName));
+		CCLOG("%s : %s", json_string_value(fbName), json_string_value(score));
 
 		FacebookAccount* acc = new FacebookAccount(
 			json_string_value(fbId),
