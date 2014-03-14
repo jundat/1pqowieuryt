@@ -59,11 +59,11 @@ bool MenuScene::init()
 	//////////////////////////////////////////////////////////////////////////
 
 	//
-// 	s = CCString::createWithFormat("v%d", G_VERSION);
-// 	CCLabelTTF* labelVersion = CCLabelTTF::create(s->getCString(), G_FONT_NORMAL, G_MENU_VERSION_TEXT_SIZE);
-// 	labelVersion->setColor(G_MENU_VERSION_TEXT_COLOR);
-// 	labelVersion->setPosition(G_MENU_VERSION_TEXT_POS);
-// 	this->addChild(labelVersion);
+	s = CCString::createWithFormat("v%d", G_VERSION);
+	CCLabelTTF* labelVersion = CCLabelTTF::create(s->getCString(), G_FONT_NORMAL, G_MENU_VERSION_TEXT_SIZE);
+	labelVersion->setColor(G_MENU_VERSION_TEXT_COLOR);
+	labelVersion->setPosition(G_MENU_VERSION_TEXT_POS);
+	this->addChild(labelVersion);
 
 	//
     m_playItem = CCMenuItemImage::create(
