@@ -122,6 +122,9 @@ void MainGameScene::showEndGame( int score, int killedEnemies )
 	}
 
 	PLAY_GAME_OVER;	
+
+	LoseDialog* dialog = LoseDialog::create(score, killedEnemies);
+	this->addChild(dialog);
 	
 	//save highscore after show dialog
 	DataManager::sharedDataManager()->SetHighScore(score);
@@ -134,9 +137,6 @@ void MainGameScene::showEndGame( int score, int killedEnemies )
 			DataManager::sharedDataManager()->GetFbID(), 
 			DataManager::sharedDataManager()->GetHighScore());
 	}
-
-	LoseDialog* dialog = LoseDialog::create(score, killedEnemies);
-	this->addChild(dialog);
 }
 
 //revived just 1 time for 1 life
