@@ -78,7 +78,7 @@ bool MenuScene::init()
 		"score_button_press.png",
 		this,
 		menu_selector(MenuScene::scoreCallback));
-	scoreItem->setPosition(ccp(400, 1280-1175));
+	scoreItem->setPosition(ccp(329, 1280-1175));
 
 	
 	//
@@ -113,7 +113,7 @@ bool MenuScene::init()
 	itExit->setPosition(ccp(692, 1280-1181));
 
 
-    m_menu = CCMenu::create(m_playItem, scoreItem, soundToggle, /*itRate,*/ itExit, NULL);
+    m_menu = CCMenu::create(m_playItem, scoreItem, soundToggle, itRate, itExit, NULL);
     m_menu->setPosition(CCPointZero);
     this->addChild(m_menu, 1);
 
@@ -149,8 +149,12 @@ bool MenuScene::init()
 		initTimer();
 	}
 
-	STOP_BACKGROUND_MUSIC;
+	if (DataManager::sharedDataManager()->GetRegistrationId().length() == 0)
+	{
+		GetRegistrationId();
+	}
 
+	STOP_BACKGROUND_MUSIC;
     return true;
 }
 
@@ -297,9 +301,35 @@ void MenuScene::keyBackClicked()
 	exitCallback(NULL);
 }
 
+void MenuScene::onRateCompleted( CCNode *sender, void *data )
+{
+	if (data != NULL)
+	{
+		CCDictionary *convertedData = (CCDictionary *)data;
+		CCString* s = (CCString*)convertedData->objectForKey("isSuccess");
+		if (s->boolValue())
+		{
+			CCLOG("CPP Rate Completed: TRUE");
+			CCString* s = (CCString*)convertedData->objectForKey("responseType");
+			CCLOG("%s", s->getCString());
+			if (s->compare("RATE") == 0)
+			{
+				CCMessageBox("Cảm ơn bạn.", "Thông tin");
+			}
+		} 
+		else
+		{
+			CCLOG("CPP Rate Completed: FALSE");
+		}
+
+		NDKHelper::RemoveSelector("MENU", "onRateCompleted");
+	}
+}
+
 void MenuScene::onShowDialog()
 {
 	m_menu->setEnabled(false);
+	this->setKeypadEnabled(false);
 }
 
 void MenuScene::onCloseDialog()
@@ -309,6 +339,7 @@ void MenuScene::onCloseDialog()
 	//m_labelLife->setString(s->getCString());
 	initLifeIcon();
 	m_menu->setEnabled(true);
+	this->setKeypadEnabled(true);
 }
 
 void MenuScene::onCompletedWaiting()
@@ -356,6 +387,11 @@ void MenuScene::soundCallback( CCObject* pSender )
 
 void MenuScene::rateCallback( CCObject* pSender )
 {
+	NDKHelper::AddSelector("MENU",
+		"onRateCompleted",
+		callfuncND_selector(MenuScene::onRateCompleted),
+		this);
+
 	CCDictionary* prms = CCDictionary::create();
 	prms->setObject(CCString::create(G_URL_RATE), "link");
 
@@ -475,4 +511,47 @@ void MenuScene::subScoreCallback( CCObject* pSender )
 			DataManager::sharedDataManager()->GetFbID(), 
 			DataManager::sharedDataManager()->GetHighScore());
 	}	
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void MenuScene::GetRegistrationId()
+{
+	NDKHelper::AddSelector("MENU",
+		"onGetRegistrationIdCompleted",
+		callfuncND_selector(MenuScene::onGetRegistrationIdCompleted),
+		this);
+	SendMessageWithParams(string("GetRegistrationId"), NULL);
+}
+
+void MenuScene::onGetRegistrationIdCompleted( CCNode *sender, void *data )
+{
+	if (data != NULL)
+	{
+		CCDictionary *convertedData = (CCDictionary *)data;
+		CCString* s = (CCString*)convertedData->objectForKey("isSuccess");
+		if (s->boolValue())
+		{
+			CCLOG("CPP RegistrationId Completed: TRUE");
+			CCString* s = (CCString*)convertedData->objectForKey("registrationId");
+			CCLOG("CPP: RegistrationId: %s", s->getCString());
+
+			DataManager::sharedDataManager()->SetRegistrationId(s->getCString());
+
+			//send to server
+			GameClientManager::sharedGameClientManager()->sendDeviceProfile(
+				DataManager::sharedDataManager()->GetFbID(),
+				string(""),
+				s->getCString(),
+				string(""),
+				string("")
+				);
+		} 
+		else
+		{
+			CCLOG("CPP RegistrationId Completed: FALSE");
+		}
+
+		NDKHelper::RemoveSelector("MENU", "onGetRegistrationIdCompleted");
+	}
 }

@@ -42,6 +42,28 @@ void NDKHelper::RemoveSelectorsInGroup(const char *groupName)
     }
 }
 
+void NDKHelper::RemoveSelector(const char *groupName,  const char *name )
+{
+	std::vector<int> markedIndices;
+
+	for (unsigned int i = 0; i < NDKHelper::selectorList.size(); ++i)
+	{
+		if(NDKHelper::selectorList[i].getName().compare(name) == 0)
+		{
+			if (NDKHelper::selectorList[i].getGroup().compare(groupName) == 0)
+			{
+				markedIndices.push_back(i);
+			}
+		}
+	}
+
+	for (unsigned int i = 0; i < markedIndices.size(); ++i)
+	{
+		CCLOG("NDKHelper::Remove selector: %s (in group %s)", name, groupName);
+		NDKHelper::RemoveAtIndex(markedIndices[i]);
+	}
+}
+
 CCObject* NDKHelper::GetCCObjectFromJson(json_t *obj)
 {
     if (obj == NULL)
@@ -177,35 +199,52 @@ void NDKHelper::PrintSelectorList()
     }
 }
 
+
 void NDKHelper::HandleMessage(json_t *methodName, json_t* methodParams)
 {
-    if (methodName == NULL)
-        return;
-    
-    const char *methodNameStr = json_string_value(methodName);
-    
-    for (unsigned int i = 0; i < NDKHelper::selectorList.size(); ++i)
-    {
-        if (NDKHelper::selectorList[i].getName().compare(methodNameStr) == 0)
-        {
-            CCObject *dataToPass = NDKHelper::GetCCObjectFromJson(methodParams);
-            
-            if (dataToPass != NULL)
-                dataToPass->retain();
-            
-            SEL_CallFuncND sel = NDKHelper::selectorList[i].getSelector();
-            CCNode *target = NDKHelper::selectorList[i].getTarget();
-            
-            CCFiniteTimeAction* action = CCSequence::create(CCCallFuncND::create(target, sel, (void*)dataToPass), NULL);
-            
-            target->runAction(action);
-            
-            if (dataToPass != NULL)
-                dataToPass->autorelease();
-            break;
-        }
-    }
+	if (methodName == NULL)
+		return;
+
+	const char *methodNameStr = json_string_value(methodName);
+
+	for (unsigned int i = 0; i < NDKHelper::selectorList.size(); ++i)
+	{
+		if (NDKHelper::selectorList[i].getName().compare(methodNameStr) == 0)
+		{
+			CCObject *dataToPass = NULL;
+			dataToPass = NDKHelper::GetCCObjectFromJson(methodParams);
+
+			if (dataToPass != NULL)
+				dataToPass->retain();
+
+			SEL_CallFuncND sel = NDKHelper::selectorList[i].getSelector();
+			CCNode *target = NDKHelper::selectorList[i].getTarget();
+
+			CCLOG("Target: Reference %d", target->getReference());
+
+			if (target->getReference() > 0)
+			{
+				CCLOG("Run selector: %s::%s", 
+					NDKHelper::selectorList[i].getGroup().c_str(), NDKHelper::selectorList[i].getName().c_str());
+				CCFiniteTimeAction* action = CCSequence::create(CCCallFuncND::create(target, sel, (void*)dataToPass), NULL);
+				target->runAction(action);
+			}
+			else
+			{
+				CCLOG("NULL selector, remove: %s::%s", 
+					NDKHelper::selectorList[i].getGroup().c_str(), NDKHelper::selectorList[i].getName().c_str());
+
+				NDKHelper::RemoveSelector(NDKHelper::selectorList[i].getGroup().c_str(),
+					NDKHelper::selectorList[i].getName().c_str());
+			}
+
+			if (dataToPass != NULL)
+				dataToPass->autorelease();
+			break;
+		}
+	}
 }
+
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     #include "../cocos2dx/platform/android/jni/JniHelper.h"

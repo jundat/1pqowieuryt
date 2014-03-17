@@ -35,6 +35,13 @@ public:
 
 	//facebook
 
+	//device
+
+	std::string	GetRegistrationId();
+	void	SetRegistrationId(const char* regid);
+
+	//device
+
 	std::string	GetName();
 	void	SetName(const char* name);
 	std::string	GetUsername();

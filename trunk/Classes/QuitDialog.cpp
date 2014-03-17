@@ -15,8 +15,8 @@ bool QuitDialog::init()
         return false;
     }
 
-	CCPoint pexit = ccp(250, G_DESIGN_HEIGHT - 760);
-	CCPoint pask = ccp(G_DESIGN_WIDTH-250, G_DESIGN_HEIGHT - 760);
+	CCPoint pexit = ccp(250, G_DESIGN_HEIGHT - 810);
+	CCPoint pask = ccp(G_DESIGN_WIDTH-250, G_DESIGN_HEIGHT - 810);
 	float textScale = 0.6f;
 
 
@@ -48,9 +48,10 @@ bool QuitDialog::init()
 
 	CCLabelTTF* labelTitle = CCLabelTTF::create("Bạn có muốn\nthoát game?", "Roboto-Medium.ttf", 48);
 	labelTitle->setFontFillColor(ccc3(56, 56, 56));
-	labelTitle->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2 + 120));
+	labelTitle->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2 + 50));
 	this->addChild(labelTitle);
 
+	this->setKeypadEnabled(true);
     return true;
 }
 
@@ -66,4 +67,10 @@ void QuitDialog::noCallback( CCObject* pSender )
 	parent->setTouchEnabled(true);
 	parent->onCloseDialog();
 	this->removeFromParent();
+}
+
+
+void QuitDialog::keyBackClicked()
+{
+	noCallback(NULL);
 }

@@ -13,6 +13,7 @@ public:
 public:
 	void yesCallback(CCObject* pSender);
 	void noCallback( CCObject* pSender );
+	void keyBackClicked();
 };
 
 #endif // __QUIT_DIALOG_H__

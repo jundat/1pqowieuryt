@@ -495,3 +495,16 @@ void DataManager::SetHigherFriends( CCArray* arrFriends )
 	CCUserDefault::sharedUserDefault()->setStringForKey("HIGHER_FRIENDS", strData->getCString());
 	CCUserDefault::sharedUserDefault()->flush();
 }
+
+
+
+std::string DataManager::GetRegistrationId()
+{
+	return CCUserDefault::sharedUserDefault()->getStringForKey("G_REGISTRATION_ID", std::string());
+}
+
+void DataManager::SetRegistrationId( const char* regid )
+{
+	CCUserDefault::sharedUserDefault()->setStringForKey("G_REGISTRATION_ID", std::string(regid));
+	CCUserDefault::sharedUserDefault()->flush();
+}

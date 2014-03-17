@@ -28,6 +28,7 @@ class NDKHelper
     public :
         static void AddSelector(const char *groupName, const char *name, SEL_CallFuncND selector, CCNode* target);
         static void RemoveSelectorsInGroup(const char *groupName);
+		static void RemoveSelector(const char *groupName,  const char *name );
         static void PrintSelectorList();
         static CCObject* GetCCObjectFromJson(json_t *obj);
         static json_t* GetJsonFromCCObject(CCObject* obj);

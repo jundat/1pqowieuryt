@@ -56,7 +56,6 @@ bool AppDelegate::applicationDidFinishLaunching() {
 		DM->SetBoom(G_DEFAULT_BOOM);
 	}	
 
-
     CCDirector* pDirector = CCDirector::sharedDirector();
     CCEGLView* pEGLView = CCEGLView::sharedOpenGLView();
 	

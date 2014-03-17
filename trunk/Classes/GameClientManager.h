@@ -60,6 +60,11 @@ public:
 
 
 	//////////////////////////////////////////////////////////////////////////
+
+	void sendRequest(const char* url, CCObject* callbackObject, SEL_HttpResponse pSelector, const char* data);
+
+
+	//////////////////////////////////////////////////////////////////////////
 	//main functions
 public:
 	void sendPlayerFbProfile(std::string fbId, std::string fbName, std::string email, string appId);

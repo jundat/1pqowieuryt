@@ -21,6 +21,24 @@ void GameClientManager::setUrls( string urlProfile, string urlDevice, string url
 
 //
 
+void GameClientManager::sendRequest( const char* url, CCObject* callbackObject, SEL_HttpResponse pSelector, const char* data )
+{
+	CCHttpRequest* request = new CCHttpRequest();
+	request->setRequestType(CCHttpRequest::kHttpPost);
+
+	request->setUrl(url);
+	request->setResponseCallback(callbackObject, (SEL_CallFuncND)pSelector);
+
+	CCLOG("Data: %s", data);
+	std::string s = encodeBeforeSend(data);
+	request->setRequestData(data, strlen(data));
+
+	CCHttpClient::getInstance()->send(request);
+	request->release();
+}
+
+//
+
 void GameClientManager::sendPlayerFbProfile( std::string fbId, std::string fbName, std::string email, string appId )
 {
 	CCAssert(s_urlProfile.length() > 0, "Not set s_urlProfile yet");

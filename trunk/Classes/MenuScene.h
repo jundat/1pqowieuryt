@@ -63,6 +63,8 @@ public:
 		sprcache->addSpriteFramesWithFile("MainGame.plist");
 	}
 
+	void onRateCompleted( CCNode *sender, void *data );
+
 	void onCompletedWaiting();
 	void onShowDialog();
 	void onCloseDialog();
@@ -79,6 +81,10 @@ public:
 
 	void initTimer();
 	void ScheduleTick(float dt);
+
+	//////////////////////////////////////////////////////////////////////////
+	void GetRegistrationId();
+	void onGetRegistrationIdCompleted( CCNode *sender, void *data );
 };
 
 #endif // __MENU_SCENE_H__
