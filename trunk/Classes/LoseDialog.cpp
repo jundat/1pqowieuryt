@@ -169,7 +169,7 @@ void LoseDialog::menuCallBack( CCObject* pSender )
 				arrHigherFriends->removeObject(obj);
 				DataManager::sharedDataManager()->SetHigherFriends(arrHigherFriends);
 
-				//remove all image
+				//remove all image to show BreakLeaderboard dialog
 				this->removeAllChildren();
 
 				//post status

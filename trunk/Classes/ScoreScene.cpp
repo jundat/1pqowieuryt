@@ -806,7 +806,7 @@ void ScoreScene::onGetFriendListCompleted(bool isSuccess, CCArray* arrFriends)
 		}
 	}
 
-	DataManager::sharedDataManager()->SetHigherFriends(arrFriends);
+	DataManager::sharedDataManager()->SetHigherFriends(arrHigherFriends);
 
 	//////////////////////////////////////////////////////////////////////////
 
