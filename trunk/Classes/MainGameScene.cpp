@@ -57,6 +57,28 @@ bool MainGameScene::init()
 	pMenu->setPosition(CCPointZero);
 	this->addChild(pMenu);
 	
+
+	//////////////////////////////////////////////////////////////////////////
+
+	// testSendPlayerProfile
+	CCLabelTTF *labelPost1 = CCLabelTTF::create("AddScore", "Arial", 72);
+	labelPost1->setFontFillColor(ccc3(0,0,0));
+	CCMenuItemLabel *itemPost1 = CCMenuItemLabel::create(labelPost1, this, menu_selector(MainGameScene::addScoreCallback));
+	itemPost1->setAnchorPoint(ccp(0.0f, 0.5f));
+	itemPost1->setPosition(ccp(20, 1220));
+	//pMenu->addChild(itemPost1); //DEBUG
+
+	// testSendPlayerProfile
+	CCLabelTTF *labelPost2 = CCLabelTTF::create("SubScore", "Arial", 72);
+	labelPost2->setFontFillColor(ccc3(0,0,0));
+	CCMenuItemLabel *itemPost2 = CCMenuItemLabel::create(labelPost2, this, menu_selector(MainGameScene::subScoreCallback));
+	itemPost2->setAnchorPoint(ccp(0.0f, 0.5f));
+	itemPost2->setPosition(ccp(20, 1160));
+	//pMenu->addChild(itemPost2); //DEBUG
+
+	//////////////////////////////////////////////////////////////////////////
+
+
 	//////////////////////////////////////////////////////////////////////////
 
 	PLAY_BACKGROUND_MUSIC;
@@ -186,4 +208,14 @@ void MainGameScene::keyBackClicked()
 void MainGameScene::cheatCallback( CCObject* pSender )
 {
 	m_ObjLayer->setScore(m_ObjLayer->getScore() + 100000);
+}
+
+void MainGameScene::addScoreCallback( CCObject* pSender )
+{
+	m_ObjLayer->setScore(m_ObjLayer->getScore() + 100000);
+}
+
+void MainGameScene::subScoreCallback( CCObject* pSender )
+{
+	m_ObjLayer->setScore(m_ObjLayer->getScore() - 100000);
 }

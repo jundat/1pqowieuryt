@@ -51,7 +51,7 @@ private:
 	void ScheduleGenerateItem(float dt);
 	void ScheduleCheckCollision(float dt);
 
-private:
+public:
 	CC_SYNTHESIZE(float, m_playedTime, PlayedTime);
 	CC_SYNTHESIZE(int, m_killedEnemies, KilledEnemies);
 	CC_SYNTHESIZE(int, m_score, Score);

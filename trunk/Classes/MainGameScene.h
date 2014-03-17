@@ -25,6 +25,10 @@ public:
 	void resumeCallback();
 	virtual void keyBackClicked();
 
+	//DEBUG
+	void addScoreCallback(CCObject* pSender);
+	void subScoreCallback(CCObject* pSender);
+
 	void onEnterTransitionDidFinish();
 
 	//cheat

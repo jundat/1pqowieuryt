@@ -144,12 +144,12 @@ void TestPostGetScene::testPost3(CCObject *sender)
 //sendScore
 void TestPostGetScene::testPost4(CCObject *sender)
 {
-	GameClientManager::sharedGameClientManager()->sendScore(G_APP_ID, "Fb1", 250);
-	GameClientManager::sharedGameClientManager()->sendScore(G_APP_ID, "Fb2", 2222);
-	GameClientManager::sharedGameClientManager()->sendScore(G_APP_ID, "Fb3", 3333);
-	GameClientManager::sharedGameClientManager()->sendScore(G_APP_ID, "Fb4", 4444);
-	GameClientManager::sharedGameClientManager()->sendScore(G_APP_ID, "Fb5", 5555);
-	GameClientManager::sharedGameClientManager()->sendScore(G_APP_ID, "Fb6", 6666);
+	GameClientManager::sharedGameClientManager()->sendScore(G_APP_ID, "Fb1", 5000);
+	GameClientManager::sharedGameClientManager()->sendScore(G_APP_ID, "Fb2", 10000);
+	GameClientManager::sharedGameClientManager()->sendScore(G_APP_ID, "Fb3", 15000);
+	GameClientManager::sharedGameClientManager()->sendScore(G_APP_ID, "Fb4", 20000);
+	GameClientManager::sharedGameClientManager()->sendScore(G_APP_ID, "Fb5", 25000);
+	GameClientManager::sharedGameClientManager()->sendScore(G_APP_ID, "Fb6", 30000);
 }
 
 //getScore
