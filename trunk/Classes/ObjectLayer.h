@@ -13,6 +13,8 @@
 
 USING_NS_CC;
 
+#define CROSS_NUMBER  3
+
 class ObjectLayer : public cocos2d::CCLayer
 {
 public:
@@ -42,6 +44,8 @@ public:
 	void Restart();
 	void Pause();
 	void Resume();
+	void resetCrosses();
+	void IncreaseCross();
 
 public:
 	void AfterDeadEffectCallback();
@@ -60,12 +64,14 @@ public:
 	CC_SYNTHESIZE(bool, m_isPauseGame, IsPauseGame);
 	CC_SYNTHESIZE(bool, m_isActiveBoom, IsActiveBoom);
 	CC_SYNTHESIZE(Ship*, m_player, Player);
+	CC_SYNTHESIZE(int, m_crossCount, CrossCount);
 
 	void ScheduleStopLazer(float dt);
 	CCLabelTTF* m_labelScore;
 	CCLabelTTF* m_labelBoom;
 	CCMenuItemImage* m_itemBoom;
 	CCSprite* m_sprLazer;
+	CCSprite* m_arrSprCrosses[CROSS_NUMBER];
 
 	
 	CCPoint m_lastPoint;

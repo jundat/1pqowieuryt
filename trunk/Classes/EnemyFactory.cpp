@@ -24,10 +24,10 @@ static float getVy(int id) {
 		-0.57f,
 		-0.75f,
 
-		-0.20f,
 		-0.22f,
-		-0.30f,
-		-0.34f
+		-0.22f,
+		-0.22f,
+		-0.22f
 	};
 
 	return vy[id];

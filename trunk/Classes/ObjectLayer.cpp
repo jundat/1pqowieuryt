@@ -41,6 +41,7 @@ bool ObjectLayer::init()
 	m_score = 0;
 	m_playedTime = 0;
 	m_difficulty = 0;
+	m_crossCount = 0;
 
 
 	m_sprLazer = CCSprite::createWithSpriteFrameName("lazer.png");
@@ -98,6 +99,21 @@ bool ObjectLayer::init()
 		m_itemBoom->setVisible(false);
 		m_labelBoom->setVisible(false);
 	}
+
+	//Cross
+	CCSprite* sprCross = CCSprite::create("cross.png");
+	int wCross = sprCross->getContentSize().width;
+	int hCross = sprCross->getContentSize().height;
+	int totalW = sprCross->getContentSize().width * CROSS_NUMBER;
+
+	for (int i = 0; i < CROSS_NUMBER; ++i)
+	{
+		m_arrSprCrosses[i] = CCSprite::create("cross.png");
+		m_arrSprCrosses[i]->setPosition(ccp(800 + wCross/2 - (CROSS_NUMBER - i) * wCross, 1280 - hCross/2));
+		this->addChild(m_arrSprCrosses[i], 10);
+	}
+
+	resetCrosses();
 
 	m_EffectLayer = EffectLayer::create();
 	this->addChild(m_EffectLayer, 10);
@@ -443,6 +459,12 @@ void ObjectLayer::update( float delta )
 			{
 				this->RemoveEnemy(enemy);
 				m_arrEnemies->removeObject(enemy);
+
+				//Cross
+				if (enemy->getEnemyType() == 3) //BIG
+				{
+					IncreaseCross();
+				}
 			}
 		}
 	}
@@ -465,6 +487,8 @@ void ObjectLayer::Revive()
 	//	player's Position
 	//reset:
 	//	player's HP
+
+	resetCrosses();
 
 	m_isEndGame = false;
 	m_isPauseGame = false;
@@ -533,6 +557,7 @@ void ObjectLayer::Restart()
 	m_labelScore->setString("0");
 	m_labelScore->setHorizontalAlignment(kCCTextAlignmentLeft);
 	
+	resetCrosses();
 
 	this->schedule(schedule_selector(ObjectLayer::ScheduleGenerateItem), G_TIME_TO_GENERATE_ITEM);
 	this->schedule(schedule_selector(ObjectLayer::ScheduleCheckCollision), CCDirector::sharedDirector()->getAnimationInterval());
@@ -696,5 +721,36 @@ void ObjectLayer::Resume()
 		{
 			item->scheduleUpdate();
 		}
+	}
+}
+
+void ObjectLayer::IncreaseCross()
+{
+	CCLOG("CROSS INCREASE ------- ");
+	m_crossCount++;
+
+	//show
+	CCSprite* spr = CCSprite::create("crossActive.png");
+	m_arrSprCrosses[m_crossCount - 1]->setTexture(spr->getTexture());
+	m_arrSprCrosses[m_crossCount - 1]->runAction(CCSequence::createWithTwoActions(
+		CCScaleTo::create(0.2f, 1.5f),
+		CCScaleTo::create(0.2f, 1.0f)
+		));
+
+	//check if lose game
+	if (m_crossCount >= CROSS_NUMBER)
+	{
+		m_player->HitBullet(1000); //die
+	}
+}
+
+void ObjectLayer::resetCrosses()
+{
+	m_crossCount = 0;
+
+	for (int i = 0; i < CROSS_NUMBER; ++i)
+	{
+		CCSprite* spr = CCSprite::create("cross.png");
+		m_arrSprCrosses[i]->setTexture(spr->getTexture());
 	}
 }

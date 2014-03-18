@@ -145,7 +145,7 @@ bool ScoreScene::init()
 
 	//add more friends
 	CCMenuItemImage* itAddFriend = CCMenuItemImage::create("add_friend.png", "add_friend_hover.png", this, menu_selector(ScoreScene::itAddFriendCallback));
-	itAddFriend->setPosition(ccp(255, 1280-1198)); //382, 1280-1205));
+	itAddFriend->setPosition(ccp(720, 1280-1198)); //382, 1280-1205));
 	
 	//Facebook button
 	
