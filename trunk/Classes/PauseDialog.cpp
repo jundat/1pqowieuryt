@@ -18,8 +18,8 @@ bool PauseDialog::init()
 	float textScale = 0.8f;
 
 	CCMenuItemImage* exitButton = CCMenuItemImage::create(
-		"exit_button.png",
-		"exit_button_press.png",
+		"ketthuc.png",
+		"ketthuc1.png",
 		this,
 		menu_selector(PauseDialog::menuCallback));
 	exitButton->setScale(textScale);

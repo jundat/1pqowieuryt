@@ -129,7 +129,7 @@
    		<key>G_DEFAULT_DIAMON</key> <!-- Mới vào có bao nhiêu kim cương -->
 		    <string>30</string>
 	    <key>G_DIAMON_PER_LIFE</key> <!-- Số kim cương cần cho 1 mạng hồi sinh -->
-		    <string>10</string>
+		    <string>20</string>
 
 		<key>G_WAIT_TO_REVIVE</key> <!-- Thời gian nút revive hiển thị khi thua -->
 		    <string>5</string>

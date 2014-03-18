@@ -17,7 +17,6 @@
 #define		PLAY_BUTTON_EFFECT				AudioManager::sharedAudioManager()->PlayEffect("button.wav")
 #define		PLAY_BACKGROUND_MUSIC			AudioManager::sharedAudioManager()->PlayBackground("game_music.ogg")
 #define		STOP_BACKGROUND_MUSIC			AudioManager::sharedAudioManager()->StopBackground()
-//#define		PLAY_USE_BOMB_EFFECT			AudioManager::sharedAudioManager()->PlayEffect("use_bomb.wav")
 #define		PLAY_GET_BOMB_EFFECT			AudioManager::sharedAudioManager()->PlayEffect("get_bomb.wav")
 #define		PLAY_GET_DOUBLE_LAZER_EFFECT	AudioManager::sharedAudioManager()->PlayEffect("get_double_laser.wav")
 #define		PLAY_OUT_PORP_EFFECT			AudioManager::sharedAudioManager()->PlayEffect("out_porp.wav")
@@ -27,10 +26,10 @@
 #define		PLAY_ENEMY2_DOWN_EFFECT			AudioManager::sharedAudioManager()->PlayEffect("enemy2_down.wav")
 #define		PLAY_ENEMY3_DOWN_EFFECT			AudioManager::sharedAudioManager()->PlayEffect("enemy3_down.wav")
 
-//#define		PLAY_BIG_SHIP_FLYING_EFFECT		AudioManager::sharedAudioManager()->PlayEffect("big_spaceship_flying.wav", true)
 #define		STOP_BIG_SHIP_FLYING_EFFECT		AudioManager::sharedAudioManager()->StopLoopEffect("big_spaceship_flying.wav")
 
 #define		PLAY_LAZER_EFFECT				AudioManager::sharedAudioManager()->PlayEffect("lazer.wav")
+#define		PLAY_CROSS_EFFECT				AudioManager::sharedAudioManager()->PlayEffect("cross.wav")
 
 
 class AudioManager

@@ -50,8 +50,8 @@ bool LoseDialog::init()
 	//////////////////////////////////////////////////////////////////////////
 
 	m_itExitButton = CCMenuItemImage::create(
-		"exit_button.png",
-		"exit_button_press.png",
+		"ketthuc.png",
+		"ketthuc1.png",
 		this,
 		menu_selector(LoseDialog::menuCallBack));
 	m_itExitButton->setScale(BUTTON_SCALE);

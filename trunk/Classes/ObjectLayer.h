@@ -47,6 +47,7 @@ public:
 	void resetCrosses();
 	void IncreaseCross();
 	void ShowTutorial();
+	void Vibrate();
 
 public:
 	void AfterDeadEffectCallback();

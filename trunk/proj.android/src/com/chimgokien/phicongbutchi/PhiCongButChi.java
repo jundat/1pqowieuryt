@@ -43,6 +43,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.Signature;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -122,6 +123,14 @@ public class PhiCongButChi extends Cocos2dxActivity {
         
     	AndroidNDKHelper.SendMessageWithParameters("onGetRegistrationIdCompleted", prmsToSend);
 	}
+	
+	public void Vibrate(JSONObject prms) {
+		Vibrator v = (Vibrator) this.context.getSystemService(Context.VIBRATOR_SERVICE);
+		// Vibrate for 500 milliseconds
+		v.vibrate(300);
+	}
+	
+	///////////////////////////////////////////////////////////////
 	
     protected void onCreate(Bundle savedInstanceState)
     {

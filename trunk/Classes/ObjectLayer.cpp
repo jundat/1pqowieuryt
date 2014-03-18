@@ -7,6 +7,7 @@
 #include "MainGameScene.h"
 #include "DataManager.h"
 #include "InGameTutorial.h"
+#include "NDKHelper/NDKHelper.h"
 
 USING_NS_CC;
 
@@ -748,9 +749,11 @@ void ObjectLayer::Resume()
 
 void ObjectLayer::IncreaseCross()
 {
-	CCLOG("CROSS INCREASE ------- ");
-	m_crossCount++;
+	PLAY_CROSS_EFFECT;
+	Vibrate();
 
+	m_crossCount++;
+	
 	//show
 	CCSprite* spr = CCSprite::create("crossActive.png");
 	m_arrSprCrosses[m_crossCount - 1]->setTexture(spr->getTexture());
@@ -762,6 +765,9 @@ void ObjectLayer::IncreaseCross()
 	//check if lose game
 	if (m_crossCount >= CROSS_NUMBER)
 	{
+		//sound
+		PLAY_ENEMY2_DOWN_EFFECT;
+
 		m_player->HitBullet(1000); //die
 	}
 }
@@ -783,4 +789,10 @@ void ObjectLayer::ShowTutorial()
 
 	InGameTutorial* tut = InGameTutorial::create();
 	this->addChild(tut, 11);
+}
+
+void ObjectLayer::Vibrate()
+{
+	CCLOG("Vibrate");
+	SendMessageWithParams(string("Vibrate"), NULL);
 }
