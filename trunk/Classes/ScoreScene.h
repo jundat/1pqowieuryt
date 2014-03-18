@@ -95,7 +95,6 @@ public:
 	//UI
 	CCMenuItemToggle* m_itXephangToggle;
 	CCMenuItemToggle* m_itQuatangToggle;
-	CCMenuItemImage *m_itFbLogOutItem;
 	CCMenuItemImage* m_itFbLogInItem;
 
 	CCLabelTTF* m_lbInviteQuatang;

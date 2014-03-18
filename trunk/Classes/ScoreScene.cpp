@@ -147,16 +147,6 @@ bool ScoreScene::init()
 	CCMenuItemImage* itAddFriend = CCMenuItemImage::create("add_friend.png", "add_friend_hover.png", this, menu_selector(ScoreScene::itAddFriendCallback));
 	itAddFriend->setPosition(ccp(255, 1280-1198)); //382, 1280-1205));
 	
-
-	//
-	m_itFbLogOutItem = CCMenuItemImage::create(
-		"disconnect_facebook.png",
-		"disconnect_facebook.png",
-		this,
-		menu_selector(ScoreScene::itFbLogOutCallback));
-	m_itFbLogOutItem->setPosition(ccp(611, 1280-1205));
-	this->addChild(m_itFbLogOutItem);
-
 	//Facebook button
 	
 
@@ -174,7 +164,7 @@ bool ScoreScene::init()
 	this->addChild(m_lbInvite, 1); //samw menu
 
 
-	CCMenu* pMenu = CCMenu::create(backItem, m_itFbLogInItem, m_itFbLogOutItem, m_itXephangToggle, m_itQuatangToggle, itAddFriend, NULL);
+	CCMenu* pMenu = CCMenu::create(backItem, m_itFbLogInItem, m_itXephangToggle, m_itQuatangToggle, itAddFriend, NULL);
 	pMenu->setPosition(CCPointZero);
 	this->addChild(pMenu, 1);
 
@@ -264,7 +254,6 @@ bool ScoreScene::init()
 		m_isLoggedIn = true;
 		m_itFbLogInItem->setVisible(false);
 		m_lbInvite->setVisible(false);
-		m_itFbLogOutItem->setVisible(true);
 
 		//get avatar
 		EziSocialObject::sharedObject()->getProfilePicForID(this, DataManager::sharedDataManager()->GetFbID().c_str(), // Profile ID of current user
@@ -284,7 +273,6 @@ bool ScoreScene::init()
 
 		m_itFbLogInItem->setVisible(true);
 		m_lbInvite->setVisible(true);
-		m_itFbLogOutItem->setVisible(false);
 	}
 #endif
 	
@@ -893,7 +881,6 @@ void ScoreScene::fbSessionCallback(int responseCode, const char *responseMessage
 
 		m_itFbLogInItem->setVisible(false);
 		m_lbInvite->setVisible(false);
-		m_itFbLogOutItem->setVisible(true);
 
 		refreshView();
 
@@ -913,7 +900,6 @@ void ScoreScene::fbSessionCallback(int responseCode, const char *responseMessage
 
 		m_itFbLogInItem->setVisible(true);
 		m_lbInvite->setVisible(true);
-		m_itFbLogOutItem->setVisible(false);
 
 		if (m_lbInviteQuatang != NULL)
 		{

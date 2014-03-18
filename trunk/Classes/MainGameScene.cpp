@@ -61,19 +61,19 @@ bool MainGameScene::init()
 	//////////////////////////////////////////////////////////////////////////
 
 	// testSendPlayerProfile
-	CCLabelTTF *labelPost1 = CCLabelTTF::create("AddScore", "Arial", 72);
+	CCLabelTTF *labelPost1 = CCLabelTTF::create("AddScore", "Arial", 48);
 	labelPost1->setFontFillColor(ccc3(0,0,0));
 	CCMenuItemLabel *itemPost1 = CCMenuItemLabel::create(labelPost1, this, menu_selector(MainGameScene::addScoreCallback));
 	itemPost1->setAnchorPoint(ccp(0.0f, 0.5f));
-	itemPost1->setPosition(ccp(20, 1220));
+	itemPost1->setPosition(ccp(20, 1100));
 	//pMenu->addChild(itemPost1); //DEBUG
 
 	// testSendPlayerProfile
-	CCLabelTTF *labelPost2 = CCLabelTTF::create("SubScore", "Arial", 72);
+	CCLabelTTF *labelPost2 = CCLabelTTF::create("SubScore", "Arial", 48);
 	labelPost2->setFontFillColor(ccc3(0,0,0));
 	CCMenuItemLabel *itemPost2 = CCMenuItemLabel::create(labelPost2, this, menu_selector(MainGameScene::subScoreCallback));
 	itemPost2->setAnchorPoint(ccp(0.0f, 0.5f));
-	itemPost2->setPosition(ccp(20, 1160));
+	itemPost2->setPosition(ccp(20, 1000));
 	//pMenu->addChild(itemPost2); //DEBUG
 
 	//////////////////////////////////////////////////////////////////////////

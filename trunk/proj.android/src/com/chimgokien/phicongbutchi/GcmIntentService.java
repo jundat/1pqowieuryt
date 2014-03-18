@@ -84,7 +84,7 @@ public class GcmIntentService extends IntentService {
 							android.support.content.wakelockid=3, 
 							collapse_key=do_not_collapse, 
 							from=1063175715204, 
-							name=Ku Ju
+							fbName=Ku Ju
 						}
 					]
                  * */
@@ -107,13 +107,13 @@ public class GcmIntentService extends IntentService {
         String meId = extras.getString("meId");
         String scoreStr = extras.getString("score");
         long score = Long.parseLong(scoreStr);
-        String name = extras.getString("name");
+        String name = extras.getString("fbName");
         String note = name + " vượt mặt bạn với " + score + " điểm!";
         
         Log.i(TAG, "fbId: " + fbId);
         Log.i(TAG, "meId: " + meId);
         Log.i(TAG, "score: " + score);
-        Log.i(TAG, "name: " + name);
+        Log.i(TAG, "fbName: " + name);
     	
         mNotificationManager = (NotificationManager)
                 this.getSystemService(Context.NOTIFICATION_SERVICE);
