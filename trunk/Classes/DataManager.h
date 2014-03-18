@@ -98,6 +98,10 @@ public:
 
 	CCArray*	GetHigherFriends();
 	void		SetHigherFriends(CCArray* arrFriends);
+
+	bool	GetFirstTimeViewTutorial();
+	void	SetFirstTimeViewTutorial(bool isFirstTime);
+
 	
 	~DataManager(void);
 };

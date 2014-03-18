@@ -6,6 +6,7 @@
 #include "EffectLayer.h"
 #include "MainGameScene.h"
 #include "DataManager.h"
+#include "InGameTutorial.h"
 
 USING_NS_CC;
 
@@ -42,7 +43,8 @@ bool ObjectLayer::init()
 	m_playedTime = 0;
 	m_difficulty = 0;
 	m_crossCount = 0;
-
+	m_isFirstViewTut = DataManager::sharedDataManager()->GetFirstTimeViewTutorial();
+	m_firstB52 = NULL;
 
 	m_sprLazer = CCSprite::createWithSpriteFrameName("lazer.png");
 	m_sprLazer->setVisible(false);
@@ -165,6 +167,26 @@ void ObjectLayer::AddEmemy( Enemy* enemy )
 
 	m_arrEnemies->addObject(enemy);
 	this->addChild(enemy);
+
+	//
+	if (enemy->getEnemyType() == 3 && m_isFirstViewTut == true)
+	{
+		m_firstB52 = enemy;
+
+		m_isFirstViewTut = false;
+		DataManager::sharedDataManager()->SetFirstTimeViewTutorial(false);
+		
+		//ShowTutorial();
+	}
+
+	if (m_firstB52 != NULL)
+	{
+		if (m_firstB52->getPositionY() <= 1280 - m_firstB52->boundingBox().size.height/4)
+		{
+			ShowTutorial();
+			m_firstB52 = NULL;
+		}
+	}
 }
 
 void ObjectLayer::ScheduleGenerateItem( float dt )
@@ -753,4 +775,12 @@ void ObjectLayer::resetCrosses()
 		CCSprite* spr = CCSprite::create("cross.png");
 		m_arrSprCrosses[i]->setTexture(spr->getTexture());
 	}
+}
+
+void ObjectLayer::ShowTutorial()
+{
+	this->Pause();
+
+	InGameTutorial* tut = InGameTutorial::create();
+	this->addChild(tut, 11);
 }

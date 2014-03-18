@@ -198,6 +198,7 @@ void MainGameScene::restartCallback()
 
 	DataManager::sharedDataManager()->SetIsJustRevived(false);
 	m_ObjLayer->Restart();
+	m_BackgroundLayer->Resume();
 }
 
 void MainGameScene::keyBackClicked()

@@ -508,3 +508,17 @@ void DataManager::SetRegistrationId( const char* regid )
 	CCUserDefault::sharedUserDefault()->setStringForKey("G_REGISTRATION_ID", std::string(regid));
 	CCUserDefault::sharedUserDefault()->flush();
 }
+
+
+
+//default = true
+bool DataManager::GetFirstTimeViewTutorial()
+{
+	return CCUserDefault::sharedUserDefault()->getBoolForKey("G_IS_FIRST_TIME_VIEW_TUTORIAL", true);
+}
+
+void DataManager::SetFirstTimeViewTutorial(bool isFirstTime)
+{
+	CCUserDefault::sharedUserDefault()->setBoolForKey("G_IS_FIRST_TIME_VIEW_TUTORIAL", isFirstTime);
+	CCUserDefault::sharedUserDefault()->flush();
+}

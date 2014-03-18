@@ -46,6 +46,7 @@ public:
 	void Resume();
 	void resetCrosses();
 	void IncreaseCross();
+	void ShowTutorial();
 
 public:
 	void AfterDeadEffectCallback();
@@ -65,6 +66,9 @@ public:
 	CC_SYNTHESIZE(bool, m_isActiveBoom, IsActiveBoom);
 	CC_SYNTHESIZE(Ship*, m_player, Player);
 	CC_SYNTHESIZE(int, m_crossCount, CrossCount);
+	CC_SYNTHESIZE(bool, m_isFirstViewTut, IsFirstViewTut);
+	CC_SYNTHESIZE(Enemy*, m_firstB52, FirstB52);
+
 
 	void ScheduleStopLazer(float dt);
 	CCLabelTTF* m_labelScore;

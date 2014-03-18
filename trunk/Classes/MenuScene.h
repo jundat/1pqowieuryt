@@ -8,7 +8,7 @@
 USING_NS_CC;
 
 
-#define G_VERSION			66
+#define G_VERSION			67
 #define G_MENU_BG_COLOR		ccc4(195, 200, 201, 255)
 #define G_MENU_BG			"bg_menu.png"
 #define G_MENU_BG_ANCHORPOINT	ccp(0.0f, 0.0f)

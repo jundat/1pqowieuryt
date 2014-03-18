@@ -57,7 +57,7 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 //END NEW
 // EziSocial Plugin
 
-public class PhiCongButChi extends Cocos2dxActivity{
+public class PhiCongButChi extends Cocos2dxActivity {
 
     public static final String EXTRA_MESSAGE = "message";
     public static final String PROPERTY_REG_ID = "registration_id";
