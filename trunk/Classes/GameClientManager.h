@@ -45,10 +45,8 @@ public:
 	}
 	
 	void setUrls(string urlProfile, string urlDevice, string urlFriend, string urlScore);
-	std::string encodeBeforeSend(std::string strData)
-	{
-		return strData;
-	}
+	std::string encodeBeforeSend(std::string src);
+	std::string decodeBeforeProcess(std::string src);
 	void setDelegate(GameClientDelegate* clientDelegate)
 	{
 		this->m_clientDelegate = clientDelegate;
@@ -57,11 +55,6 @@ public:
 	{
 		return m_clientDelegate;
 	}
-
-
-	//////////////////////////////////////////////////////////////////////////
-
-	void sendRequest(const char* url, CCObject* callbackObject, SEL_HttpResponse pSelector, const char* data);
 
 
 	//////////////////////////////////////////////////////////////////////////

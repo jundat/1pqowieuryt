@@ -1,5 +1,8 @@
-#include "GameClientManager.h"
+﻿#include "GameClientManager.h"
 #include "DataManager.h"
+#include "Base64.h"
+
+#define ENCODE_BUFFER_SIZE		2048
 
 GameClientManager* GameClientManager::s_instance = NULL;
 
@@ -19,25 +22,21 @@ void GameClientManager::setUrls( string urlProfile, string urlDevice, string url
 	GameClientManager::s_urlScore = string(urlScore);
 }
 
-//
-
-void GameClientManager::sendRequest( const char* url, CCObject* callbackObject, SEL_HttpResponse pSelector, const char* data )
+std::string GameClientManager::encodeBeforeSend( std::string src )
 {
-	CCHttpRequest* request = new CCHttpRequest();
-	request->setRequestType(CCHttpRequest::kHttpPost);
-
-	request->setUrl(url);
-	request->setResponseCallback(callbackObject, (SEL_CallFuncND)pSelector);
-
-	CCLOG("Data: %s", data);
-	std::string s = encodeBeforeSend(data);
-	request->setRequestData(data, strlen(data));
-
-	CCHttpClient::getInstance()->send(request);
-	request->release();
+	int len = src.length() * 2;
+	unsigned char m_Test[ENCODE_BUFFER_SIZE];
+	std::copy(src.c_str(), src.c_str() + len, m_Test);
+	string result = Base64::encode(m_Test, len);
+	return result;
 }
 
-//
+std::string GameClientManager::decodeBeforeProcess( std::string src )
+{
+	return Base64::decode(src);
+}
+
+
 
 void GameClientManager::sendPlayerFbProfile( std::string fbId, std::string fbName, std::string email, string appId )
 {
@@ -86,6 +85,8 @@ void GameClientManager::_onSendPlayerFbProfileCompleted( CCHttpClient *sender, C
 		std::vector<char> *buffer = response->getResponseData();
 		std::string str(buffer->begin(), buffer->end());
 		
+		str = decodeBeforeProcess(str);
+
 		CCLOG("Content: %s", str.c_str());
 		m_clientDelegate->onSendPlayerFbProfileCompleted(true);
 	}
@@ -138,6 +139,8 @@ void GameClientManager::_onGetPlayerFbProfileCompleted( CCHttpClient *sender, CC
 	{
 		std::vector<char> *buffer = response->getResponseData();
 		std::string str(buffer->begin(), buffer->end());
+
+		str = decodeBeforeProcess(str);
 
 		CCLOG("Content: %s", str.c_str());
 
@@ -231,6 +234,8 @@ void GameClientManager::_onSendFriendListCompleted( CCHttpClient *sender, CCHttp
 		std::vector<char> *buffer = response->getResponseData();
 		std::string str(buffer->begin(), buffer->end());
 
+		str = decodeBeforeProcess(str);
+
 		CCLOG("Content: %s", str.c_str());
 		m_clientDelegate->onSendFriendListCompleted(true);		
 	}
@@ -284,6 +289,8 @@ void GameClientManager::_onGetFriendListCompleted( CCHttpClient *sender, CCHttpR
 	{
 		std::vector<char> *buffer = response->getResponseData();
 		std::string str(buffer->begin(), buffer->end());
+
+		str = decodeBeforeProcess(str);
 
 		CCLOG("Content: %s", str.c_str());
 
@@ -378,6 +385,8 @@ void GameClientManager::_onSendDeviceProfileCompleted( CCHttpClient *sender, CCH
 		std::vector<char> *buffer = response->getResponseData();
 		std::string str(buffer->begin(), buffer->end());
 
+		str = decodeBeforeProcess(str);
+
 		CCLOG("Content: %s", str.c_str());
 		m_clientDelegate->onSendDeviceProfileCompleted(true);
 	}
@@ -431,6 +440,8 @@ void GameClientManager::_onGetDeviceProfileCompleted( CCHttpClient *sender, CCHt
 	{
 		std::vector<char> *buffer = response->getResponseData();
 		std::string str(buffer->begin(), buffer->end());
+
+		str = decodeBeforeProcess(str);
 
 		CCLOG("Content: %s", str.c_str());
 
@@ -514,6 +525,8 @@ void GameClientManager::_onSendScoreCompleted( CCHttpClient *sender, CCHttpRespo
 		std::vector<char> *buffer = response->getResponseData();
 		std::string str(buffer->begin(), buffer->end());
 
+		str = decodeBeforeProcess(str);
+
 		CCLOG("Content: %s", str.c_str());
 
 		//get score from response
@@ -586,6 +599,8 @@ void GameClientManager::_onGetScoreCompleted( CCHttpClient *sender, CCHttpRespon
 	{
 		std::vector<char> *buffer = response->getResponseData();
 		std::string str(buffer->begin(), buffer->end());
+
+		str = decodeBeforeProcess(str);
 
 		CCLOG("Content: %s", str.c_str());
 

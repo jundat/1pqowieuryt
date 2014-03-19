@@ -93,11 +93,11 @@ bool TestPostGetScene::init()
 void TestPostGetScene::testPost1(CCObject *sender)
 {
 	GameClientManager::sharedGameClientManager()->sendPlayerFbProfile("Fb1", "PhamLong", "PhamLong@gmail.com", string(G_APP_ID));
-	GameClientManager::sharedGameClientManager()->sendPlayerFbProfile("Fb2", "DinhDung", "DinhDung@gmail.com", string(G_APP_ID));
-	GameClientManager::sharedGameClientManager()->sendPlayerFbProfile("Fb3", "BuiHieu", "BuiHieu@gmail.com", string(G_APP_ID));
-	GameClientManager::sharedGameClientManager()->sendPlayerFbProfile("Fb4", "DangTran", "DangTran@gmail.com", string(G_APP_ID));
-	GameClientManager::sharedGameClientManager()->sendPlayerFbProfile("Fb5", "TrinhLinh", "TrinhLinh@gmail.com", string(G_APP_ID));
-	GameClientManager::sharedGameClientManager()->sendPlayerFbProfile("Fb6", "NguyenChau", "NguyenChau@gmail.com", string(G_APP_ID));
+// 	GameClientManager::sharedGameClientManager()->sendPlayerFbProfile("Fb2", "DinhDung", "DinhDung@gmail.com", string(G_APP_ID));
+// 	GameClientManager::sharedGameClientManager()->sendPlayerFbProfile("Fb3", "BuiHieu", "BuiHieu@gmail.com", string(G_APP_ID));
+// 	GameClientManager::sharedGameClientManager()->sendPlayerFbProfile("Fb4", "DangTran", "DangTran@gmail.com", string(G_APP_ID));
+// 	GameClientManager::sharedGameClientManager()->sendPlayerFbProfile("Fb5", "TrinhLinh", "TrinhLinh@gmail.com", string(G_APP_ID));
+// 	GameClientManager::sharedGameClientManager()->sendPlayerFbProfile("Fb6", "NguyenChau", "NguyenChau@gmail.com", string(G_APP_ID));
 }
 
 //friendlist
@@ -116,18 +116,18 @@ void TestPostGetScene::testPost2(CCObject *sender)
 	GameClientManager::sharedGameClientManager()->sendFriendList("Fb1", arrFr);
 
 
-	CCArray* arrNotFr = new CCArray();
-	arrNotFr->retain();
-
-	arrNotFr->addObject(new FacebookAccount("Fb1", "PhamLong", std::string("PhamLong@gmail.com"), 500));
-	arrNotFr->addObject(new FacebookAccount("Fb11", "ABC", std::string("ABC@gmail.com"), 110));
-	arrNotFr->addObject(new FacebookAccount("Fb12", "DEF", std::string("DEF@gmail.com"), 220));
-	arrNotFr->addObject(new FacebookAccount("Fb13", "GHI", std::string("GHI@gmail.com"), 330));
-	arrNotFr->addObject(new FacebookAccount("Fb14", "JKL", std::string("JKL@gmail.com"), 440));
-	arrNotFr->addObject(new FacebookAccount("Fb15", "MNO", std::string("MNO@gmail.com"), 550));
-	
-	CCLOG("SEND FRIEND FOR: Fb2");
-	GameClientManager::sharedGameClientManager()->sendFriendList("Fb2", arrNotFr);
+// 	CCArray* arrNotFr = new CCArray();
+// 	arrNotFr->retain();
+// 
+// 	arrNotFr->addObject(new FacebookAccount("Fb1", "PhamLong", std::string("PhamLong@gmail.com"), 500));
+// 	arrNotFr->addObject(new FacebookAccount("Fb11", "ABC", std::string("ABC@gmail.com"), 110));
+// 	arrNotFr->addObject(new FacebookAccount("Fb12", "DEF", std::string("DEF@gmail.com"), 220));
+// 	arrNotFr->addObject(new FacebookAccount("Fb13", "GHI", std::string("GHI@gmail.com"), 330));
+// 	arrNotFr->addObject(new FacebookAccount("Fb14", "JKL", std::string("JKL@gmail.com"), 440));
+// 	arrNotFr->addObject(new FacebookAccount("Fb15", "MNO", std::string("MNO@gmail.com"), 550));
+// 	
+// 	CCLOG("SEND FRIEND FOR: Fb2");
+// 	GameClientManager::sharedGameClientManager()->sendFriendList("Fb2", arrNotFr);
 }
 
 //sendDeviceProfile
@@ -145,11 +145,11 @@ void TestPostGetScene::testPost3(CCObject *sender)
 void TestPostGetScene::testPost4(CCObject *sender)
 {
 	GameClientManager::sharedGameClientManager()->sendScore(G_APP_ID, "Fb1", 5000);
-	GameClientManager::sharedGameClientManager()->sendScore(G_APP_ID, "Fb2", 10000);
-	GameClientManager::sharedGameClientManager()->sendScore(G_APP_ID, "Fb3", 15000);
-	GameClientManager::sharedGameClientManager()->sendScore(G_APP_ID, "Fb4", 20000);
-	GameClientManager::sharedGameClientManager()->sendScore(G_APP_ID, "Fb5", 25000);
-	GameClientManager::sharedGameClientManager()->sendScore(G_APP_ID, "Fb6", 30000);
+// 	GameClientManager::sharedGameClientManager()->sendScore(G_APP_ID, "Fb2", 10000);
+// 	GameClientManager::sharedGameClientManager()->sendScore(G_APP_ID, "Fb3", 15000);
+// 	GameClientManager::sharedGameClientManager()->sendScore(G_APP_ID, "Fb4", 20000);
+// 	GameClientManager::sharedGameClientManager()->sendScore(G_APP_ID, "Fb5", 25000);
+// 	GameClientManager::sharedGameClientManager()->sendScore(G_APP_ID, "Fb6", 30000);
 }
 
 //getScore

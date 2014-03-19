@@ -150,6 +150,9 @@
     <ClCompile Include="..\Classes\InGameTutorial.cpp">
       <Filter>Classes</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\Base64.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -276,6 +279,9 @@
       <Filter>Classes\NDKHelper</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\InGameTutorial.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Base64.h">
       <Filter>Classes</Filter>
     </ClInclude>
   </ItemGroup>
