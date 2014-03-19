@@ -44,22 +44,22 @@ bool MenuScene::init()
 	initLifeIcon();	
 
 	//diamon
-	CCString* s = CCString::createWithFormat("%d", DataManager::sharedDataManager()->GetDiamon());
-	CCLabelTTF* lbDiamon = CCLabelTTF::create(s->getCString(), G_FONT_NORMAL, G_MENU_DIAMON_TEXT_SIZE);
-	lbDiamon->setColor(G_MENU_DIAMON_TEXT_COLOR);
-	lbDiamon->setAnchorPoint(G_MENU_DIAMON_TEXT_ANCHOR);
-	lbDiamon->setPosition(G_MENU_DIAMON_TEXT_POS);
-	this->addChild(lbDiamon);
-
-
-	CCSprite* sprDiamon = CCSprite::create("diamond.png");
-	sprDiamon->setPosition(ccp(lbDiamon->getPositionX() - lbDiamon->getContentSize().width - sprDiamon->getContentSize().width/1.5f, lbDiamon->getPositionY()));
-	this->addChild(sprDiamon);
+// 	CCString* s = CCString::createWithFormat("%d", DataManager::sharedDataManager()->GetDiamon());
+// 	CCLabelTTF* lbDiamon = CCLabelTTF::create(s->getCString(), G_FONT_NORMAL, G_MENU_DIAMON_TEXT_SIZE);
+// 	lbDiamon->setColor(G_MENU_DIAMON_TEXT_COLOR);
+// 	lbDiamon->setAnchorPoint(G_MENU_DIAMON_TEXT_ANCHOR);
+// 	lbDiamon->setPosition(G_MENU_DIAMON_TEXT_POS);
+// 	this->addChild(lbDiamon);
+// 
+// 
+// 	CCSprite* sprDiamon = CCSprite::create("diamond.png");
+// 	sprDiamon->setPosition(ccp(lbDiamon->getPositionX() - lbDiamon->getContentSize().width - sprDiamon->getContentSize().width/1.5f, lbDiamon->getPositionY()));
+// 	this->addChild(sprDiamon);
 
 	//////////////////////////////////////////////////////////////////////////
 
 	//
-	s = CCString::createWithFormat("v%d", G_VERSION);
+	CCString* s = CCString::createWithFormat("v%d", G_VERSION);
 	CCLabelTTF* labelVersion = CCLabelTTF::create(s->getCString(), G_FONT_NORMAL, G_MENU_VERSION_TEXT_SIZE);
 	labelVersion->setColor(G_MENU_VERSION_TEXT_COLOR);
 	labelVersion->setPosition(G_MENU_VERSION_TEXT_POS);
