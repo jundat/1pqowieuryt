@@ -8,6 +8,7 @@
 #include "PauseDialog.h"
 #include "GameClientManager.h"
 #include "BreakLeaderboardDialog.h"
+#include "InGameTutorial.h"
 
 USING_NS_CC;
 
@@ -77,6 +78,16 @@ bool MainGameScene::init()
 	//pMenu->addChild(itemPost2); //DEBUG
 
 	//////////////////////////////////////////////////////////////////////////
+
+	//////////////////////////////////////////////////////////////////////////
+	//View tut first time
+	bool isFirstTimeViewTut = DataManager::sharedDataManager()->GetFirstTimeViewTutorial();
+	if (isFirstTimeViewTut)
+	{
+		DataManager::sharedDataManager()->SetFirstTimeViewTutorial(false);
+
+		this->ShowTutorial();
+	}
 
 
 	//////////////////////////////////////////////////////////////////////////
@@ -219,4 +230,15 @@ void MainGameScene::addScoreCallback( CCObject* pSender )
 void MainGameScene::subScoreCallback( CCObject* pSender )
 {
 	m_ObjLayer->setScore(m_ObjLayer->getScore() - 100000);
+}
+
+void MainGameScene::ShowTutorial()
+{
+	InGameTutorial* tut = InGameTutorial::create();
+	this->addChild(tut, 11);
+
+	//this->setKeypadEnabled(false);
+	m_isShowingPause = true;
+	m_BackgroundLayer->Pause();
+	m_ObjLayer->Pause();
 }

@@ -41,6 +41,7 @@ public:
 	void showEndGame(int score, int killedEnemies);
 	void reviveCallback();
 	void restartCallback();
+	void ShowTutorial();
 
 private:
 	BackgroundLayer* m_BackgroundLayer;
