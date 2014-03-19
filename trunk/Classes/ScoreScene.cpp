@@ -474,6 +474,14 @@ void ScoreScene::itGetBoomCallback( CCObject* pSender )
 	else
 	{
 		PLAY_OUT_PORP_EFFECT;
+		
+		m_sprBoom->runAction(CCSequence::createWithTwoActions(
+			CCScaleTo::create(0.2f, 1.0f),
+			CCScaleTo::create(0.2f, 0.75f)
+			));
+
+		CCMessageBox(CCString::createWithFormat("Chỉ được giữ tối đa %d lazer", G_MAX_BOOM)->getCString(), 
+			"Thông tin");
 	}
 }
 
@@ -1348,7 +1356,7 @@ CCTableViewCell* ScoreScene::getTableCellXepHangAtIndex( CCTableView *table, uns
 		if (isMyScore == false)
 		{
 			CCMenuItemImage* itGetBoom = CCMenuItemImage::create("boomgift.png", "boomgift1.png", "boomgift1.png", this, menu_selector(ScoreScene::itGetBoomCallback));
-			itGetBoom->setPosition(ccp(600, m_sprCell->getContentSize().height/2 + 10));
+			itGetBoom->setPosition(ccp(600, m_sprCell->getContentSize().height/2 + 10 - 8));
 			itGetBoom->setTag(1000 + idx);
 			((CustomTableViewCell*)cell)->m_itGetBoom = itGetBoom;
 
@@ -1390,19 +1398,27 @@ CCTableViewCell* ScoreScene::getTableCellXepHangAtIndex( CCTableView *table, uns
 			CCLabelTTF* lbGetBoomTimer = CCLabelTTF::create(strGetBoomTimer->getCString(), "Roboto-Medium.ttf", 28); //32
 			lbGetBoomTimer->setFontFillColor(ccc3(0, 0, 0));
 			lbGetBoomTimer->setAnchorPoint(ccp(0.5f, 0.75f));
-			lbGetBoomTimer->setPosition(ccp(600, m_sprCell->getContentSize().height/4));
-			lbGetBoomTimer->setTag(3000 + idx);
+			lbGetBoomTimer->setPosition(ccp(600, m_sprCell->getContentSize().height/4 - 5));
+			lbGetBoomTimer->setTag(5000 + idx);
 			cell->addChild(lbGetBoomTimer);
 			((CustomTableViewCell*)cell)->m_lbGetBoomTimer = lbGetBoomTimer;
 
 			CCLabelTTF* lbGetBoom = CCLabelTTF::create("Nhận", "Roboto-Medium.ttf", 28);
 			lbGetBoom->setFontFillColor(ccc3(0, 0, 0));
 			lbGetBoom->setAnchorPoint(ccp(0.5f, 0.75f));
-			lbGetBoom->setPosition(ccp(600, m_sprCell->getContentSize().height/4));
-			lbGetBoom->setTag(4000 + idx);
+			lbGetBoom->setPosition(ccp(600, m_sprCell->getContentSize().height/4 - 5));
+			lbGetBoom->setTag(6000 + idx);
 			cell->addChild(lbGetBoom);
 			((CustomTableViewCell*)cell)->m_lbGetBoom = lbGetBoom;
 
+
+// 			CCLabelTTF* lbGetBoomNow = CCLabelTTF::create("Nhận ngay", "Roboto-Medium.ttf", 28);
+// 			lbGetBoomNow->setFontFillColor(ccc3(0, 0, 0));
+// 			lbGetBoomNow->setAnchorPoint(ccp(0.5f, 0.75f));
+// 			lbGetBoomNow->setPosition(ccp(600, 3 * m_sprCell->getContentSize().height/4 + 5));
+// 			lbGetBoomNow->setTag(7000 + idx);
+// 			cell->addChild(lbGetBoomNow);
+// 			((CustomTableViewCell*)cell)->m_lbGetBoom = lbGetBoomNow;
 
 			//////////////////////////////////////////////////////////////////////////
 

@@ -12,9 +12,9 @@ bool PauseDialog::init()
 		return false;
 	}
 
-	CCPoint  presume = ccp(400, G_DESIGN_HEIGHT/2 + 200);
-	CCPoint prestart = ccp(400, G_DESIGN_HEIGHT/2);
-	CCPoint  pexit= ccp(400, G_DESIGN_HEIGHT/2 - 200);
+	CCPoint  presume = ccp(400, G_DESIGN_HEIGHT/2 + 100); //ccp(400, G_DESIGN_HEIGHT/2 + 200);
+	//CCPoint prestart = ccp(400, G_DESIGN_HEIGHT/2);
+	CCPoint  pexit= ccp(400, G_DESIGN_HEIGHT/2 - 100); //ccp(400, G_DESIGN_HEIGHT/2 - 200);
 	float textScale = 0.8f;
 
 	CCMenuItemImage* exitButton = CCMenuItemImage::create(
@@ -33,15 +33,15 @@ bool PauseDialog::init()
 	resumeButton->setScale(textScale);
 	resumeButton->setPosition(presume);
 
-	CCMenuItemImage* restartButton = CCMenuItemImage::create(
-		"restart.png",
-		"restart1.png",
-		this,
-		menu_selector(PauseDialog::restartCallBack));
-	restartButton->setScale(textScale);
-	restartButton->setPosition(prestart);
+// 	CCMenuItemImage* restartButton = CCMenuItemImage::create(
+// 		"restart.png",
+// 		"restart1.png",
+// 		this,
+// 		menu_selector(PauseDialog::restartCallBack));
+// 	restartButton->setScale(textScale);
+// 	restartButton->setPosition(prestart);
 
-	CCMenu* menu = CCMenu::create(exitButton, resumeButton, restartButton, NULL);
+	CCMenu* menu = CCMenu::create(exitButton, resumeButton, /*restartButton,*/ NULL);
 	menu->setPosition(CCPointZero);
 	this->addChild(menu);
 

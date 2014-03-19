@@ -112,7 +112,7 @@ bool ObjectLayer::init()
 	for (int i = 0; i < CROSS_NUMBER; ++i)
 	{
 		m_arrSprCrosses[i] = CCSprite::create("cross.png");
-		m_arrSprCrosses[i]->setPosition(ccp(800 + wCross/2 - (CROSS_NUMBER - i) * wCross, 1280 - hCross/2));
+		m_arrSprCrosses[i]->setPosition(ccp(800 - 10 + wCross/2 - (CROSS_NUMBER - i) * wCross, 1280 - hCross/2 - 10));
 		this->addChild(m_arrSprCrosses[i], 10);
 	}
 

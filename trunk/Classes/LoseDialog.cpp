@@ -240,7 +240,7 @@ void LoseDialog::reviveCallBack( CCObject* pSender )
 	{
 		PLAY_OUT_PORP_EFFECT;
 
-		CCMessageBox("Bạn đã hết kim cương!", "Thông tin");
+		CCMessageBox("Bạn không đủ kim cương!", "Thông tin");
 
 		//visitble
 		m_itExitButton->setVisible(true);
