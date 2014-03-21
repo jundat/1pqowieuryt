@@ -1,6 +1,7 @@
 ﻿#include "GameClientManager.h"
 #include "DataManager.h"
 #include "Base64.h"
+#include "Md5.h"`
 
 #define ENCODE_BUFFER_SIZE		2048
 
@@ -24,16 +25,41 @@ void GameClientManager::setUrls( string urlProfile, string urlDevice, string url
 
 std::string GameClientManager::encodeBeforeSend( std::string src )
 {
-	int len = src.length() * 2;
-	unsigned char m_Test[ENCODE_BUFFER_SIZE];
-	std::copy(src.c_str(), src.c_str() + len, m_Test);
-	string result = Base64::encode(m_Test, len);
-	return result;
+	CCLOG("BEFORE:\n%s", src.c_str());
+
+	if (G_IS_ENCODE)
+	{
+		int len = src.length() * 2;
+		unsigned char m_Test[ENCODE_BUFFER_SIZE];
+		std::copy(src.c_str(), src.c_str() + len, m_Test);
+		string result = "data=";
+		result.append(Base64::encode(m_Test, len));
+
+		CCLOG("AFTER:\n%s", result.c_str());
+
+		return result;
+	}
+	else
+	{
+		string result = "data=";
+		result.append(src);
+
+		CCLOG("AFTER:\n%s", result.c_str());
+
+		return result;
+	}
 }
 
 std::string GameClientManager::decodeBeforeProcess( std::string src )
 {
-	return Base64::decode(src);
+	if (G_IS_ENCODE)
+	{
+		return Base64::decode(src);
+	} 
+	else
+	{
+		return src;
+	}
 }
 
 
@@ -48,14 +74,23 @@ void GameClientManager::sendPlayerFbProfile( std::string fbId, std::string fbNam
 	request->setTag("sendPlayerFbProfile");
 	request->setResponseCallback(this, httpresponse_selector(GameClientManager::_onSendPlayerFbProfileCompleted));
 
+	string srcMd5 = "";
+	srcMd5.append(G_APP_ID);
+	srcMd5.append(KEY); //Key
+	srcMd5.append(fbId);
+	srcMd5.append(""); //meId
+	string md5 = MD5::createMd5(srcMd5);
+
 	// write the post data
-	CCString* strData = CCString::createWithFormat("data={ fbId: \"%s\", fbName: \"%s\", email: \"%s\", appId: \"%s\" }&method=set",
+	CCString* strData = CCString::createWithFormat(
+"{ method: \"set\", data: { fbId: \"%s\", fbName: \"%s\", email: \"%s\", appId: \"%s\" }, sign: \"%s\", appId: \"%s\" }",
 		fbId.c_str(),
 		fbName.c_str(),
 		email.c_str(),
-		appId.c_str());
+		G_APP_ID,
+		md5.c_str(),
+		G_APP_ID);
 
-	CCLOG("Data: %s", strData->getCString());
 	std::string s = encodeBeforeSend(strData->getCString());
 	request->setRequestData(s.c_str(), strlen(s.c_str()));
 
@@ -104,13 +139,21 @@ void GameClientManager::getPlayerFbProfile(std::string fbId )
 	request->setTag("getPlayerFbProfile");
 	request->setResponseCallback(this, httpresponse_selector(GameClientManager::_onGetPlayerFbProfileCompleted));
 
+
+	string srcMd5 = "";
+	srcMd5.append(G_APP_ID);
+	srcMd5.append(KEY); //Key
+	srcMd5.append(fbId);
+	srcMd5.append(""); //meId
+	string md5 = MD5::createMd5(srcMd5);
+
 	// write the post data
-	CCString* strData = CCString::createWithFormat("data={ fbId: \"%s\" }&method=get",
-		fbId.c_str()
-		);
+	CCString* strData = CCString::createWithFormat(
+		"{ method: \"get\", data: { fbId: \"%s\" }, sign: \"%s\", appId: \"%s\" }",
+		fbId.c_str(),
+		md5.c_str(),
+		G_APP_ID);
 
-
-	CCLOG("Data: %s", strData->getCString());
 	std::string s = encodeBeforeSend(strData->getCString());
 	request->setRequestData(s.c_str(), strlen(s.c_str()));
 
@@ -197,14 +240,26 @@ void GameClientManager::sendFriendList(std::string fbId, CCArray* arrFriends )
 		{
 			strFriendList.append(",");
 		}
-	}	
+	}
 
-	CCString* strData = CCString::createWithFormat("data={ fbId: \"%s\", list: [%s]}&method=set",
+	//////////////////////////////////////////////////////////////////////////
+	string srcMd5 = "";
+	srcMd5.append(G_APP_ID);
+	srcMd5.append(KEY); //Key
+	srcMd5.append(fbId);
+	srcMd5.append(""); //meId
+	string md5 = MD5::createMd5(srcMd5);
+
+	// write the post data
+	CCString* strData = CCString::createWithFormat(
+		"{ method: \"set\", data: { fbId: \"%s\", list: [%s] }, sign: \"%s\", appId: \"%s\" }",
 		fbId.c_str(),
-		strFriendList.c_str());
+		strFriendList.c_str(),
+		md5.c_str(),
+		G_APP_ID);
 
+	//////////////////////////////////////////////////////////////////////////
 
-	CCLOG("Data: %s", strData->getCString());
 	std::string s = encodeBeforeSend(strData->getCString());
 	request->setRequestData(s.c_str(), strlen(s.c_str()));
 
@@ -253,14 +308,24 @@ void GameClientManager::getFriendList( std::string appId, std::string fbId )
 	request->setTag("getFriendList");
 	request->setResponseCallback(this, httpresponse_selector(GameClientManager::_onGetFriendListCompleted));
 
+	//////////////////////////////////////////////////////////////////////////
+	string srcMd5 = "";
+	srcMd5.append(G_APP_ID);
+	srcMd5.append(KEY); //Key
+	srcMd5.append(fbId);
+	srcMd5.append(""); //meId
+	string md5 = MD5::createMd5(srcMd5);
+
 	// write the post data
-	CCString* strData = CCString::createWithFormat("data={appId: \"%s\", fbId: \"%s\" }&method=get",
-		appId.c_str(),
-		fbId.c_str()
-		);
+	CCString* strData = CCString::createWithFormat(
+		"{ method: \"get\", data: { fbId: \"%s\", appId: \"%s\" }, sign: \"%s\", appId: \"%s\" }",
+		fbId.c_str(),
+		G_APP_ID,
+		md5.c_str(),
+		G_APP_ID);
 
+	//////////////////////////////////////////////////////////////////////////
 
-	CCLOG("Data: %s", strData->getCString());
 	std::string s = encodeBeforeSend(strData->getCString());
 	request->setRequestData(s.c_str(), strlen(s.c_str()));
 
@@ -345,17 +410,27 @@ void GameClientManager::sendDeviceProfile( std::string fbId, std::string deviceI
 	request->setTag("sendDeviceProfile");
 	request->setResponseCallback(this, httpresponse_selector(GameClientManager::_onSendDeviceProfileCompleted));
 
+	//////////////////////////////////////////////////////////////////////////
+	string srcMd5 = "";
+	srcMd5.append(G_APP_ID);
+	srcMd5.append(KEY); //Key
+	srcMd5.append(fbId);
+	srcMd5.append(""); //meId
+	string md5 = MD5::createMd5(srcMd5);
+
 	// write the post data
-	CCString* strData = CCString::createWithFormat("data={ fbId: \"%s\", deviceId: \"%s\", deviceToken: \"%s\", deviceConfig: \"%s\", devicePhoneNumber: \"%s\" }&method=set",
+	CCString* strData = CCString::createWithFormat(
+"{ method: \"set\", data: { fbId: \"%s\", deviceId: \"%s\", deviceToken: \"%s\", deviceConfig: \"%s\", devicePhoneNumber: \"%s\" }, sign: \"%s\", appId: \"%s\" }",
 		fbId.c_str(),
 		deviceId.c_str(),
 		deviceToken.c_str(),
 		deviceConfig.c_str(),
-		devicePhoneNumber.c_str()
-		);
+		devicePhoneNumber.c_str(),
+		md5.c_str(),
+		G_APP_ID);
 
+	//////////////////////////////////////////////////////////////////////////
 
-	CCLOG("Data: %s", strData->getCString());
 	std::string s = encodeBeforeSend(strData->getCString());
 	request->setRequestData(s.c_str(), strlen(s.c_str()));
 
@@ -404,14 +479,22 @@ void GameClientManager::getDeviceProfile(std::string fbId, std::string deviceId 
 	request->setTag("getDeviceProfile");
 	request->setResponseCallback(this, httpresponse_selector(GameClientManager::_onGetDeviceProfileCompleted));
 
+	string srcMd5 = "";
+	srcMd5.append(G_APP_ID);
+	srcMd5.append(KEY); //Key
+	srcMd5.append(fbId);
+	srcMd5.append(""); //meId
+	string md5 = MD5::createMd5(srcMd5);
+
 	// write the post data
-	CCString* strData = CCString::createWithFormat("data={ fbId: \"%s\", deviceId: \"%s\" }&method=get",
+	CCString* strData = CCString::createWithFormat(
+		"{ method: \"get\", data: { fbId: \"%s\", deviceId: \"%s\" }, sign: \"%s\", appId: \"%s\" }",
 		fbId.c_str(),
-		deviceId.c_str()
-		);
+		deviceId.c_str(),
+		md5.c_str(),
+		G_APP_ID);
 
 
-	CCLOG("Data: %s", strData->getCString());
 	std::string s = encodeBeforeSend(strData->getCString());
 	request->setRequestData(s.c_str(), strlen(s.c_str()));
 
@@ -479,27 +562,35 @@ void GameClientManager::_onGetDeviceProfileCompleted( CCHttpClient *sender, CCHt
 
 void GameClientManager::sendScore( std::string appId, std::string fbId, int score )
 {
+	CCLOG("URL: %s", s_urlScore.c_str());
 	CCAssert(s_urlScore.length() > 0, "Not set s_urlScore yet");
 	CCHttpRequest* request = new CCHttpRequest();
+	request->setUrl(s_urlScore.c_str());
 	request->setRequestType(CCHttpRequest::kHttpPost);
 
-	request->setUrl(s_urlScore.c_str());
 	request->setTag("sendScore");
 	request->setResponseCallback(this, httpresponse_selector(GameClientManager::_onSendScoreCompleted));
 
+	string srcMd5 = "";
+	srcMd5.append(G_APP_ID);
+	srcMd5.append(KEY); //Key
+	srcMd5.append(fbId);
+	srcMd5.append(""); //meId
+	string md5 = MD5::createMd5(srcMd5);
+
 	// write the post data
-	CCString* strData = CCString::createWithFormat("data={appId: \"%s\", fbId: \"%s\", score: \"%d\" }&method=set",
-		appId.c_str(),
+	CCString* strData = CCString::createWithFormat(
+		"{ method: \"set\", data: { appId: \"%s\", fbId: \"%s\", score: \"%d\" }, sign: \"%s\", appId: \"%s\" }",
+		G_APP_ID,
 		fbId.c_str(),
-		score
-		);
+		score,
+		md5.c_str(),
+		G_APP_ID);
 
 
-	CCLOG("Data: %s", strData->getCString());
 	std::string s = encodeBeforeSend(strData->getCString());
 	request->setRequestData(s.c_str(), strlen(s.c_str()));
-
-
+	
 	CCHttpClient::getInstance()->send(request);
 	request->release();
 }
@@ -562,15 +653,23 @@ void GameClientManager::getScore( std::string appId, std::string fbId )
 	request->setUrl(s_urlScore.c_str());
 	request->setTag("getScore");
 	request->setResponseCallback(this, httpresponse_selector(GameClientManager::_onGetScoreCompleted));
+	
+	string srcMd5 = "";
+	srcMd5.append(G_APP_ID);
+	srcMd5.append(KEY); //Key
+	srcMd5.append(fbId);
+	srcMd5.append(""); //meId
+	string md5 = MD5::createMd5(srcMd5);
 
 	// write the post data
-	CCString* strData = CCString::createWithFormat("data={appId: \"%s\", fbId: \"%s\" }&method=get",
-		appId.c_str(),
-		fbId.c_str()
-		);
+	CCString* strData = CCString::createWithFormat(
+		"{ method: \"get\", data: { appId: \"%s\", fbId: \"%s\" }, sign: \"%s\", appId: \"%s\" }",
+		G_APP_ID,
+		fbId.c_str(),
+		md5.c_str(),
+		G_APP_ID);
 
 
-	CCLOG("Data: %s", strData->getCString());
 	std::string s = encodeBeforeSend(strData->getCString());
 	request->setRequestData(s.c_str(), strlen(s.c_str()));
 

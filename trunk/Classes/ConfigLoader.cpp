@@ -103,6 +103,9 @@ ConfigLoader::ConfigLoader(void)
 	G_POINTS_PER_SECOND = GetValue(std::string("G_POINTS_PER_SECOND"))->intValue();
 
 	G_TIME_TO_REFRESH_FRIENDS = GetValue(std::string("G_TIME_TO_REFRESH_FRIENDS"))->floatValue();	
+
+	G_IS_ENCODE = GetValue(std::string("G_IS_ENCODE"))->boolValue();	
+	
 }
 
 ConfigLoader::~ConfigLoader(void)

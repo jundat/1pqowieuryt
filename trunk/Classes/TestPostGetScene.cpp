@@ -25,7 +25,7 @@ bool TestPostGetScene::init()
 	
 	// testSendPlayerProfile
 	CCLabelTTF *labelPost1 = CCLabelTTF::create("Send User Profile", "Arial", 48);
-	labelPost1->setFontFillColor(ccc3(0,0,0));
+	labelPost1->setColor(ccc3(0,0,0));
 	CCMenuItemLabel *itemPost1 = CCMenuItemLabel::create(labelPost1, this, menu_selector(TestPostGetScene::testPost1));
 	itemPost1->setAnchorPoint(ccp(0.0f, 0.5f));
 	itemPost1->setPosition(ccp(20, 1220));

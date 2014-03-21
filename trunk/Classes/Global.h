@@ -116,4 +116,6 @@ extern int G_POINTS_PER_SECOND;
 
 extern float G_TIME_TO_REFRESH_FRIENDS;
 
+extern bool G_IS_ENCODE;
+
 #endif //__GLOBAL_H__

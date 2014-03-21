@@ -11,6 +11,7 @@
 #include <time.h>
 #include "TestPostGetScene.h"
 #include "Base64.h"
+#include "Md5.h"
 
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
