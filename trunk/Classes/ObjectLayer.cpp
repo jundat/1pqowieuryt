@@ -74,7 +74,7 @@ bool ObjectLayer::init()
 	float h = temp->getContentSize().height;
 	
 	m_labelScore = CCLabelTTF::create("0", "Roboto-Medium.ttf", 52);
-	m_labelScore->setFontFillColor(ccc3(0, 0, 0));
+	m_labelScore->setColor(ccc3(0, 0, 0));
 	m_labelScore->setAnchorPoint(ccp(0.0f, 0.5f));
 	m_labelScore->setPosition(ccp(1.2f * w, G_DESIGN_HEIGHT - h/2));
 
@@ -90,7 +90,7 @@ bool ObjectLayer::init()
 	CCString* sBoom = CCString::createWithFormat("x%d", DataManager::sharedDataManager()->GetBoom());
 	m_labelBoom = CCLabelTTF::create(sBoom->getCString(), "Roboto-Medium.ttf", 52);
 	m_labelBoom->setAnchorPoint(ccp(0.0f, 0.5f));
-	m_labelBoom->setFontFillColor(ccc3(0, 0, 0));
+	m_labelBoom->setColor(ccc3(0, 0, 0));
 	m_labelBoom->setPosition(ccp(m_itemBoom->getContentSize().width,
 		m_itemBoom->getContentSize().height/4 + m_labelBoom->getContentSize().height/4));
 	this->addChild(m_labelBoom, 10);

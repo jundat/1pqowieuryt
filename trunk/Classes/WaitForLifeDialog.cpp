@@ -47,7 +47,7 @@ bool WaitForLifeDialog::init()
 	this->addChild(menu);
 
 	CCLabelTTF* labelTitle = CCLabelTTF::create("Không đủ số mạng\nHãy chờ thêm", "Roboto-Medium.ttf", 48);
-	labelTitle->setFontFillColor(ccc3(56, 56, 56));
+	labelTitle->setColor(ccc3(56, 56, 56));
 	labelTitle->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2 + 120));
 	this->addChild(labelTitle);
 

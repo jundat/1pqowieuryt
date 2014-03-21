@@ -85,7 +85,7 @@ bool LoseDialog::init()
 
 		s = CCString::createWithFormat("%d", (int)G_WAIT_TO_REVIVE);
 		m_lbTimer = CCLabelTTF::create(s->getCString(), "Roboto-Medium.ttf", 48);
-		m_lbTimer->setFontFillColor(ccc3(0, 0, 0));
+		m_lbTimer->setColor(ccc3(0, 0, 0));
 		m_lbTimer->setPosition(pTimer);
 		m_lbTimer->setAnchorPoint(ccp(0.5f, 0.5f));
 		this->addChild(m_lbTimer);
@@ -109,7 +109,7 @@ bool LoseDialog::init()
 	this->addChild(menu);
 
 	CCLabelTTF* labelTitle = CCLabelTTF::create("Điểm", "Roboto-Medium.ttf", 64);
-	labelTitle->setFontFillColor(ccc3(56, 56, 56));
+	labelTitle->setColor(ccc3(56, 56, 56));
 	labelTitle->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2 + 160)); //+40
 	this->addChild(labelTitle);
 

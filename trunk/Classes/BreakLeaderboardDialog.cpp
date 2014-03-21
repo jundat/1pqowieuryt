@@ -42,7 +42,7 @@ bool BreakLeaderboardDialog::init()
 	_tempName = MY_LIMIT_STR(_tempName, BreakLeaderboardDialog_NAME_SIZE, "");
 
 	CCLabelTTF* lbLoserName = CCLabelTTF::create(_tempName.c_str(), G_FONT_NORMAL, 42);
-	lbLoserName->setFontFillColor(ccBLACK);
+	lbLoserName->setColor(ccBLACK);
 	//lbLoserName->setAnchorPoint(ccp(1.0f, 0.5f));
 	//lbLoserName->setPosition(ccp(686, 1280-638));
 	lbLoserName->setPosition(ccp(610, 1280-608));
@@ -50,7 +50,7 @@ bool BreakLeaderboardDialog::init()
 
 	CCString* strTemp = CCString::createWithFormat("%d", m_loser->m_score);
 	CCLabelTTF* lbLoserScore = CCLabelTTF::create(strTemp->getCString(), G_FONT_NORMAL, 42);
-	lbLoserScore->setFontFillColor(ccBLACK);
+	lbLoserScore->setColor(ccBLACK);
 // 	lbLoserScore->setAnchorPoint(ccp(1.0f, 0.5f));
 // 	lbLoserScore->setPosition(ccp(686, 1280-680));
 	lbLoserScore->setPosition(ccp(610, 1280-650));
@@ -78,7 +78,7 @@ bool BreakLeaderboardDialog::init()
 	_tempName = MY_LIMIT_STR(_tempName, BreakLeaderboardDialog_NAME_SIZE, "");
 
 	CCLabelTTF* lbUserName = CCLabelTTF::create(_tempName.c_str(), G_FONT_NORMAL, 42);
-	lbUserName->setFontFillColor(ccBLACK);
+	lbUserName->setColor(ccBLACK);
 // 	lbUserName->setAnchorPoint(ccp(0.0f, 0.5f));
 // 	lbUserName->setPosition(ccp(112, 1280-638));
 	lbUserName->setPosition(ccp(188, 1280-608));
@@ -86,7 +86,7 @@ bool BreakLeaderboardDialog::init()
 
 	strTemp = CCString::createWithFormat("%d", DataManager::sharedDataManager()->GetHighScore());
 	CCLabelTTF* lbUserScore = CCLabelTTF::create(strTemp->getCString(), G_FONT_NORMAL, 42);
-	lbUserScore->setFontFillColor(ccBLACK);
+	lbUserScore->setColor(ccBLACK);
 // 	lbUserScore->setAnchorPoint(ccp(0.0f, 0.5f));
 // 	lbUserScore->setPosition(ccp(112, 1280-680));
 	lbUserScore->setPosition(ccp(188, 1280-650));

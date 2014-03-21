@@ -77,7 +77,7 @@ bool ScoreScene::init()
 		name.append("..");
 	}
 	m_lbName = CCLabelTTF::create(name.c_str(), "Roboto-Medium.ttf", 52);
-	m_lbName->setFontFillColor(ccc3(0, 0, 0));
+	m_lbName->setColor(ccc3(0, 0, 0));
 	m_lbName->setPosition(ccp(174, 1280-173));
 	m_lbName->setAnchorPoint(ccp(0.0f, 0.5f));
 	this->addChild(m_lbName);
@@ -85,7 +85,7 @@ bool ScoreScene::init()
 	//score
 	CCString* str = CCString::createWithFormat("%d", DataManager::sharedDataManager()->GetHighScore());
 	m_lbScore = CCLabelTTF::create(str->getCString(), "Roboto-Medium.ttf", 48);
-	m_lbScore->setFontFillColor(ccc3(0, 0, 0));
+	m_lbScore->setColor(ccc3(0, 0, 0));
 	m_lbScore->setPosition(ccp(174, 1280-239));
 	m_lbScore->setAnchorPoint(ccp(0.0f, 0.5f));
 	this->addChild(m_lbScore);
@@ -98,7 +98,7 @@ bool ScoreScene::init()
 
 	str = CCString::createWithFormat("x%d", DataManager::sharedDataManager()->GetLastPlayerLife());
 	m_lbLife = CCLabelTTF::create(str->getCString(), "Roboto-Medium.ttf", 48);
-	m_lbLife->setFontFillColor(ccc3(0, 0, 0));
+	m_lbLife->setColor(ccc3(0, 0, 0));
 	m_lbLife->setPosition(ccp(650, 1280-164));
 	m_lbLife->setAnchorPoint(ccp(0.0f, 0.5f));
 	this->addChild(m_lbLife);
@@ -111,7 +111,7 @@ bool ScoreScene::init()
 
 	str = CCString::createWithFormat("x%d", DataManager::sharedDataManager()->GetBoom());
 	m_lbBoom = CCLabelTTF::create(str->getCString(), "Roboto-Medium.ttf", 48);
-	m_lbBoom->setFontFillColor(ccc3(0, 0, 0));
+	m_lbBoom->setColor(ccc3(0, 0, 0));
 	m_lbBoom->setPosition(ccp(650, 1280-245));
 	m_lbBoom->setAnchorPoint(ccp(0.0f, 0.5f));
 	this->addChild(m_lbBoom);
@@ -159,7 +159,7 @@ bool ScoreScene::init()
 	m_itFbLogInItem->setPosition(ccp(400, 1280-805));
 
 	m_lbInvite = CCLabelTTF::create("Liên kết Facebook\nthêm niềm vui", "Roboto-Medium.ttf", 48);
-	m_lbInvite->setFontFillColor(ccc3(0, 0, 0));
+	m_lbInvite->setColor(ccc3(0, 0, 0));
 	m_lbInvite->setPosition(ccp(400, 1280-672)); //320
 	this->addChild(m_lbInvite, 1); //samw menu
 
@@ -197,7 +197,7 @@ bool ScoreScene::init()
 	// table view QuaTang //////////////////////////////////////////////////////////////////////////
 
 	m_lbInviteQuatang = CCLabelTTF::create("Bạn không có quà nào cả\nHãy kết nối với bạn bè\nđể có đầy quà mỗi ngày nhé!", "Roboto-Medium.ttf", 48);
-	m_lbInviteQuatang->setFontFillColor(ccc3(0, 0, 0));
+	m_lbInviteQuatang->setColor(ccc3(0, 0, 0));
 	m_lbInviteQuatang->setPosition(ccp(400, 1280-672)); //320
 	m_lbInviteQuatang->setVisible(false);
 	this->addChild(m_lbInviteQuatang, 1);
@@ -228,7 +228,7 @@ bool ScoreScene::init()
 
 
 	m_lbLostConnection = CCLabelTTF::create("Không thể kết nối máy chủ", G_FONT_NORMAL, 48);
-	m_lbLostConnection->setFontFillColor(ccBLACK);
+	m_lbLostConnection->setColor(ccBLACK);
 	m_lbLostConnection->setPosition(ccpSub(m_sprWaiting->getPosition(), ccp(0, 50)));
 	this->addChild(m_lbLostConnection, m_sprWaiting->getZOrder());
 	m_lbLostConnection->setVisible(false);
@@ -1329,7 +1329,7 @@ CCTableViewCell* ScoreScene::getTableCellXepHangAtIndex( CCTableView *table, uns
 			lbOrder = CCLabelTTF::create(strOrder->getCString(), "Roboto-Medium.ttf", 42);
 		}
 
-		lbOrder->setFontFillColor(ccc3(0, 0, 0));
+		lbOrder->setColor(ccc3(0, 0, 0));
 		lbOrder->setHorizontalAlignment(kCCTextAlignmentLeft); //cocos2d::CCTextAlignment::
 		lbOrder->setPosition(ccp(30, m_sprCell->getContentSize().height/2));
 		lbOrder->setTag(3);
@@ -1340,14 +1340,14 @@ CCTableViewCell* ScoreScene::getTableCellXepHangAtIndex( CCTableView *table, uns
 		//21
 
 		CCLabelTTF *lbName = CCLabelTTF::create(strName->getCString(), "Roboto-Medium.ttf", 42);
-		lbName->setFontFillColor(ccc3(0,0,0));
+		lbName->setColor(ccc3(0,0,0));
 		lbName->setPosition(ccp(210, m_sprCell->getContentSize().height * 3/4));
 		lbName->setAnchorPoint(ccp(0.0f, 0.5f));
 		lbName->setTag(4);
 		cell->addChild(lbName);
 
 		CCLabelTTF *lbScore = CCLabelTTF::create(strScore->getCString(), "Roboto-Medium.ttf", 42);
-		lbScore->setFontFillColor(ccc3(0, 0, 0));
+		lbScore->setColor(ccc3(0, 0, 0));
 		lbScore->setPosition(ccp(210, m_sprCell->getContentSize().height * 3/8));
 		lbScore->setAnchorPoint(ccp(0.0f, 0.5f));
 		lbScore->setTag(5);
@@ -1375,7 +1375,7 @@ CCTableViewCell* ScoreScene::getTableCellXepHangAtIndex( CCTableView *table, uns
 
 			//Send life
 			CCLabelTTF* lbSendLifeTimer = CCLabelTTF::create(strSendLifeTimer->getCString(), "Roboto-Medium.ttf", 28); //32
-			lbSendLifeTimer->setFontFillColor(ccc3(0, 0, 0));
+			lbSendLifeTimer->setColor(ccc3(0, 0, 0));
 			lbSendLifeTimer->setAnchorPoint(ccp(0.5f, 0.75f));
 			lbSendLifeTimer->setPosition(ccp(725, m_sprCell->getContentSize().height/4));
 			lbSendLifeTimer->setTag(3000 + idx);
@@ -1383,7 +1383,7 @@ CCTableViewCell* ScoreScene::getTableCellXepHangAtIndex( CCTableView *table, uns
 			((CustomTableViewCell*)cell)->m_lbSendLifeTimer = lbSendLifeTimer;
 
 			CCLabelTTF* lbSendLife = CCLabelTTF::create("Gửi", "Roboto-Medium.ttf", 28);
-			lbSendLife->setFontFillColor(ccc3(0, 0, 0));
+			lbSendLife->setColor(ccc3(0, 0, 0));
 			lbSendLife->setAnchorPoint(ccp(0.5f, 0.75f));
 			lbSendLife->setPosition(ccp(725, m_sprCell->getContentSize().height/4));
 			lbSendLife->setTag(4000 + idx);
@@ -1396,7 +1396,7 @@ CCTableViewCell* ScoreScene::getTableCellXepHangAtIndex( CCTableView *table, uns
 
 			//Get boom
 			CCLabelTTF* lbGetBoomTimer = CCLabelTTF::create(strGetBoomTimer->getCString(), "Roboto-Medium.ttf", 28); //32
-			lbGetBoomTimer->setFontFillColor(ccc3(0, 0, 0));
+			lbGetBoomTimer->setColor(ccc3(0, 0, 0));
 			lbGetBoomTimer->setAnchorPoint(ccp(0.5f, 0.75f));
 			lbGetBoomTimer->setPosition(ccp(600, m_sprCell->getContentSize().height/4 - 5));
 			lbGetBoomTimer->setTag(5000 + idx);
@@ -1404,7 +1404,7 @@ CCTableViewCell* ScoreScene::getTableCellXepHangAtIndex( CCTableView *table, uns
 			((CustomTableViewCell*)cell)->m_lbGetBoomTimer = lbGetBoomTimer;
 
 			CCLabelTTF* lbGetBoom = CCLabelTTF::create("Nhận", "Roboto-Medium.ttf", 28);
-			lbGetBoom->setFontFillColor(ccc3(0, 0, 0));
+			lbGetBoom->setColor(ccc3(0, 0, 0));
 			lbGetBoom->setAnchorPoint(ccp(0.5f, 0.75f));
 			lbGetBoom->setPosition(ccp(600, m_sprCell->getContentSize().height/4 - 5));
 			lbGetBoom->setTag(6000 + idx);
@@ -1413,7 +1413,7 @@ CCTableViewCell* ScoreScene::getTableCellXepHangAtIndex( CCTableView *table, uns
 
 
 // 			CCLabelTTF* lbGetBoomNow = CCLabelTTF::create("Nhận ngay", "Roboto-Medium.ttf", 28);
-// 			lbGetBoomNow->setFontFillColor(ccc3(0, 0, 0));
+// 			lbGetBoomNow->setColor(ccc3(0, 0, 0));
 // 			lbGetBoomNow->setAnchorPoint(ccp(0.5f, 0.75f));
 // 			lbGetBoomNow->setPosition(ccp(600, 3 * m_sprCell->getContentSize().height/4 + 5));
 // 			lbGetBoomNow->setTag(7000 + idx);
@@ -1562,7 +1562,7 @@ CCTableViewCell* ScoreScene::getTableCellQuatangAtIndex( CCTableView *table, uns
 
 
 		CCLabelTTF *lbName = CCLabelTTF::create(strName->getCString(), "Roboto-Medium.ttf", 42);
-		lbName->setFontFillColor(ccc3(0,0,0));
+		lbName->setColor(ccc3(0,0,0));
 		lbName->setPosition(ccp(0.75f * G_FRIEND_AVATAR_SIZE + 60, m_sprCell->getContentSize().height/2));
 		lbName->setAnchorPoint(ccp(0.0f, 0.5f));
 		lbName->setTag(4);
@@ -1575,7 +1575,7 @@ CCTableViewCell* ScoreScene::getTableCellQuatangAtIndex( CCTableView *table, uns
 
 		//lable nhận
 		CCLabelTTF* lbGetBoom = CCLabelTTF::create("Nhận", "Roboto-Medium.ttf", 28);
-		lbGetBoom->setFontFillColor(ccc3(0, 0, 0));
+		lbGetBoom->setColor(ccc3(0, 0, 0));
 		lbGetBoom->setAnchorPoint(ccp(0.5f, 0.75f));
 		lbGetBoom->setPosition(ccp(600, m_sprCell->getContentSize().height/4));
 		cell->addChild(lbGetBoom);
