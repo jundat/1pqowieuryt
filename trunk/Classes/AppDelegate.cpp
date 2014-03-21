@@ -34,6 +34,11 @@ AppDelegate::~AppDelegate()
 }
 
 bool AppDelegate::applicationDidFinishLaunching() {
+// 
+// 	string src = string(".Phạm Tấn Long A Ă Â Ư Ơ.");
+// 	string dest = GameClientManager::sharedGameClientManager()->encodeBeforeSend(src);
+// 	string dest2 = GameClientManager::sharedGameClientManager()->decodeBeforeProcess(dest);
+// 	CCLOG("%s", dest2.c_str());
 
 	ConfigLoader::shareConfigLoader();
 	LevelLoader::shareLevelLoader();
@@ -84,7 +89,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	AudioManager::sharedAudioManager()->SetVolumeFX(G_DEFAULT_VOLUME);
 
 
-    CCScene *pScene = TestPostGetScene::scene(); //MenuScene::scene(); //  MainGameScene::scene(); //TestPostGetScene::scene(); // IntroScene::scene(); // 
+    CCScene *pScene = TestPostGetScene::scene(); // MenuScene::scene(); //  MainGameScene::scene(); //TestPostGetScene::scene(); // IntroScene::scene(); // 
 	pDirector->runWithScene(pScene);
 
     return true;

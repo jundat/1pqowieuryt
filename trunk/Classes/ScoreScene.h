@@ -84,8 +84,6 @@ public:
 	void scheduleTimer(float dt);
 
 public:
-	static int s_beginFriendInd;
-	static int s_endFriendInd;
 
 	bool m_isLoggedIn;
 	bool m_isXepHangView;

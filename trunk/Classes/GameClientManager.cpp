@@ -26,10 +26,10 @@ void GameClientManager::setUrls( string urlProfile, string urlDevice, string url
 std::string GameClientManager::encodeBeforeSend( std::string src )
 {
 	CCLOG("BEFORE:\n%s", src.c_str());
-
+	
 	if (G_IS_ENCODE)
 	{
-		int len = src.length() * 2;
+		int len = src.length();
 		unsigned char m_Test[ENCODE_BUFFER_SIZE];
 		std::copy(src.c_str(), src.c_str() + len, m_Test);
 		string result = "data=";

@@ -11,6 +11,8 @@ USING_NS_CC;
 USING_NS_CC_EXT;
 
 
+
+
 CCScene* MenuScene::scene()
 {
     CCScene *scene = CCScene::create();
@@ -34,6 +36,17 @@ bool MenuScene::init()
 	m_isShowDialog = false;
 	this->setKeypadEnabled(true);
 
+	//////////////////////////////////////////////////////////////////////////
+	m_isLoggedIn = false;
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+	EziSocialObject::sharedObject()->setFacebookDelegate(this);
+	if(EziSocialObject::sharedObject()->isFacebookSessionActive()) //logged in state
+	{
+		m_isLoggedIn = true;
+	}
+#endif
+
     /////////////////////////////
 
 	CCSprite* bg = CCSprite::create(G_MENU_BG);
@@ -42,19 +55,6 @@ bool MenuScene::init()
 	this->addChild(bg, G_MENU_BG_Z);
 	
 	initLifeIcon();	
-
-	//diamon
-// 	CCString* s = CCString::createWithFormat("%d", DataManager::sharedDataManager()->GetDiamon());
-// 	CCLabelTTF* lbDiamon = CCLabelTTF::create(s->getCString(), G_FONT_NORMAL, G_MENU_DIAMON_TEXT_SIZE);
-// 	lbDiamon->setColor(G_MENU_DIAMON_TEXT_COLOR);
-// 	lbDiamon->setAnchorPoint(G_MENU_DIAMON_TEXT_ANCHOR);
-// 	lbDiamon->setPosition(G_MENU_DIAMON_TEXT_POS);
-// 	this->addChild(lbDiamon);
-// 
-// 
-// 	CCSprite* sprDiamon = CCSprite::create("diamond.png");
-// 	sprDiamon->setPosition(ccp(lbDiamon->getPositionX() - lbDiamon->getContentSize().width - sprDiamon->getContentSize().width/1.5f, lbDiamon->getPositionY()));
-// 	this->addChild(sprDiamon);
 
 	//////////////////////////////////////////////////////////////////////////
 
@@ -81,20 +81,57 @@ bool MenuScene::init()
 	scoreItem->setPosition(ccp(329, 1280-1175));
 
 	
-	//
+	//////////////////////////////////////////////////////////////////////////
+	//Setting Bar
+	CCMenuItem* facebookOn = CCMenuItemImage::create("facebook_icon.png", NULL, NULL);
+	CCMenuItem* facebookOff = CCMenuItemImage::create("facebook_icon_off.png", NULL, NULL);
+	m_facebookItem = CCMenuItemToggle::createWithTarget(this,  menu_selector(MenuScene::facebookCallback), facebookOn, facebookOff, NULL);
+	m_facebookItem->setPosition(ccp(76, 386-81));
+	if (m_isLoggedIn)
+	{
+		m_facebookItem->setSelectedIndex(1);
+	} 
+	else
+	{
+		m_facebookItem->setSelectedIndex(0);
+	}
 
 	CCMenuItem* soundOn = CCMenuItemImage::create("sound_on.png", NULL, NULL);
 	CCMenuItem* soundOff = CCMenuItemImage::create("sound_off.png", NULL, NULL);
-	CCMenuItemToggle* soundToggle = CCMenuItemToggle::createWithTarget(this,  menu_selector(MenuScene::soundCallback), soundOn, soundOff, NULL);
+	m_soundItem = CCMenuItemToggle::createWithTarget(this,  menu_selector(MenuScene::soundCallback), soundOn, soundOff, NULL);
+	m_soundItem->setPosition(ccp(76, 386-227));
 	if(AudioManager::sharedAudioManager()->IsEnableBackground())
 	{
-		soundToggle->setSelectedIndex(0);
+		m_soundItem->setSelectedIndex(0);
 	}
 	else
 	{
-		soundToggle->setSelectedIndex(1);
+		m_soundItem->setSelectedIndex(1);
 	}
-	soundToggle->setPosition(ccp(121, 1280-1176));
+
+	CCMenu* settingMenu = CCMenu::create(m_facebookItem, m_soundItem, NULL);
+	settingMenu->setPosition(CCPointZero);
+	
+	m_settingBarW = 151;
+	m_settingBarH = 386;
+	m_sprSettingBar = CCSprite::create("seting_bar.png");
+	m_sprSettingBar->setAnchorPoint(ccp(0.5f, 0.0f));
+	m_sprSettingBar->setPosition(ccp(98, 1280-1188));
+	m_sprSettingBar->setVisible(false);
+	m_sprSettingBar->addChild(settingMenu);
+
+	this->addChild(m_sprSettingBar, 2);
+
+	CCMenuItem* settingOn = CCMenuItemImage::create("setting.png", NULL, NULL);
+	CCMenuItem* settingOff = CCMenuItemImage::create("settingDown.png", NULL, NULL);
+	m_settingItem = CCMenuItemToggle::createWithTarget(this,  menu_selector(MenuScene::settingCallback), settingOn, settingOff, NULL);
+	m_settingItem->setPosition(ccp(98, 1280-1181));
+
+	CCMenu* menuForSetting = CCMenu::create(m_settingItem, NULL);
+	menuForSetting->setPosition(CCPointZero);
+	this->addChild(menuForSetting, 3);
+	//////////////////////////////////////////////////////////////////////////
+	
 
 	//rate
 	CCMenuItemImage *itRate = CCMenuItemImage::create(
@@ -113,7 +150,7 @@ bool MenuScene::init()
 	itExit->setPosition(ccp(692, 1280-1181));
 
 
-    m_menu = CCMenu::create(m_playItem, scoreItem, soundToggle, itRate, itExit, NULL);
+    m_menu = CCMenu::create(m_playItem, scoreItem, itRate, itExit, NULL);
     m_menu->setPosition(CCPointZero);
     this->addChild(m_menu, 1);
 
@@ -377,6 +414,37 @@ void MenuScene::rateCallback( CCObject* pSender )
 	SendMessageWithParams(string("Rate"), prms);
 }
 
+void MenuScene::settingCallback( CCObject* pSender )
+{
+	if (m_sprSettingBar->isVisible())
+	{
+		m_sprSettingBar->setVisible(false);
+	} 
+	else
+	{
+		m_sprSettingBar->setVisible(true);
+	}
+}
+
+void MenuScene::facebookCallback( CCObject* pSender )
+{
+	PLAY_BUTTON_EFFECT;
+
+	if (m_isLoggedIn)
+	{
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+		EziSocialObject::sharedObject()->perfromLogoutFromFacebook();
+#endif
+	} 
+	else
+	{
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+		bool needPublicPermission = true;
+		EziSocialObject::sharedObject()->performLoginUsingFacebook(needPublicPermission); // Pass true if you need publish permission also
+#endif
+	}
+}
+
 void MenuScene::exitCallback( CCObject* pSender )
 {
 	QuitDialog* dialog = QuitDialog::create();
@@ -503,4 +571,121 @@ void MenuScene::onGetRegistrationIdCompleted( CCNode *sender, void *data )
 
 		NDKHelper::RemoveSelector("MENU", "onGetRegistrationIdCompleted");
 	}
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+
+//END MY FUNCTION
+
+//when did Logged In  || Logged Out
+void MenuScene::fbSessionCallback(int responseCode, const char *responseMessage)
+{
+	CCLOG("fbSessionCallback");
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+	if (responseCode == EziSocialWrapperNS::RESPONSE_CODE::FB_LOGIN_SUCCESSFUL)
+	{
+		CCLOG("fbSessionCallback: SUCCESSFUL");
+		m_isLoggedIn = true;
+	}
+	else
+	{
+		CCLOG("fbSessionCallback: FAILED");
+		m_isLoggedIn = false;
+	}
+
+	/////////////refresh view ///////////////
+	if (m_isLoggedIn)
+	{
+		m_facebookItem->setSelectedIndex(1);
+	} 
+	else
+	{
+		m_facebookItem->setSelectedIndex(0);
+	}
+#endif
+}
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS) // fbUserDetailCallback
+
+void MenuScene::fbUserDetailCallback( int responseCode, const char* responseMessage, EziFacebookUser* fbUser )
+{
+	CCLOG("fbUserDetailCallback");
+	if (fbUser != NULL)
+	{
+		CCLOG("fbUserDetailCallback: user != NULL");
+		EziSocialObject::sharedObject()->setCurrentFacebookUser(fbUser);
+
+		//save data
+		std::string firstname = fbUser->getFirstName(); //getFirstName //getFullName
+		std::string userName = fbUser->getUserName();
+		std::string profileID = fbUser->getProfileID();
+		std::string fullName = fbUser->getFullName(); //getEmailID
+		std::string emailID = fbUser->getEmailID();
+
+		DataManager::sharedDataManager()->SetName(firstname.c_str());
+		DataManager::sharedDataManager()->SetFbProfileID(profileID.c_str());
+		DataManager::sharedDataManager()->SetFbUserName(userName.c_str());
+		DataManager::sharedDataManager()->SetFbFullName(fullName.c_str());
+		DataManager::sharedDataManager()->SetFbEmail(emailID.c_str());
+
+		sendUserProfileToServer(profileID, fullName, emailID);
+
+		getFacebookFriends();
+
+		EziSocialObject::sharedObject()->getProfilePicForID(this, fbUser->getProfileID(), G_AVATAR_SIZE, G_AVATAR_SIZE, false);
+	}
+}
+#endif
+
+void MenuScene::fbUserPhotoCallback(const char *userPhotoPath, const char* fbID)
+{
+	CCLOG("fbUserPhotoCallback");
+	std::string sid = std::string(fbID);
+
+	if ((strcmp(userPhotoPath, "") != 0))
+	{
+		DataManager::sharedDataManager()->SetPhotoPath(userPhotoPath);
+	}
+}
+
+void MenuScene::sendUserProfileToServer(string fbId, string fbName, string email)
+{
+	CCLOG("sendUserProfileToServer");
+	GameClientManager::sharedGameClientManager()->sendPlayerFbProfile(fbId, fbName, email, string(G_APP_ID));
+}
+
+void MenuScene::getFacebookFriends()
+{
+	CCLOG("getFacebookFriends");
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+	EziSocialObject::sharedObject()->getFriends(EziSocialWrapperNS::FB_FRIEND_SEARCH::ONLY_INSTALLED, 0, 1000);
+	DataManager::sharedDataManager()->SetTimeRefreshFriendNow();
+#endif
+}
+
+void MenuScene::fbFriendsCallback( int responseCode, const char* responseMessage, cocos2d::CCArray* friends )
+{
+	CCLOG("fbFriendsCallback");
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+
+	CCArray* arrFriends = new CCArray();
+	arrFriends->retain();
+
+	CCObject* it;
+	CCARRAY_FOREACH(friends, it)
+	{
+		EziFacebookFriend* fbFriend = dynamic_cast<EziFacebookFriend*>(it);
+		if (NULL != it)
+		{
+			string fbId = fbFriend->getFBID();
+			string fbName = fbFriend->getName();
+			FacebookAccount* acc = new FacebookAccount(fbId, fbName, string(), -1);
+
+			arrFriends->addObject(acc);
+		}
+	}
+
+	GameClientManager::sharedGameClientManager()->sendFriendList(DataManager::sharedDataManager()->GetFbID(), arrFriends);
+#endif
 }
