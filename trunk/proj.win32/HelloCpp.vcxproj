@@ -173,6 +173,7 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
     <ClCompile Include="..\Classes\SendRequestScene.cpp" />
     <ClCompile Include="..\Classes\Ship.cpp" />
     <ClCompile Include="..\Classes\TestPostGetScene.cpp" />
+    <ClCompile Include="..\Classes\TextLoader.cpp" />
     <ClCompile Include="..\Classes\WaitForLifeDialog.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
@@ -219,6 +220,7 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
     <ClInclude Include="..\Classes\SendRequestScene.h" />
     <ClInclude Include="..\Classes\Ship.h" />
     <ClInclude Include="..\Classes\TestPostGetScene.h" />
+    <ClInclude Include="..\Classes\TextLoader.h" />
     <ClInclude Include="..\Classes\WaitForLifeDialog.h" />
     <ClInclude Include="main.h" />
   </ItemGroup>

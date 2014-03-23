@@ -1,0 +1,29 @@
+<plist>
+<dict>
+
+	<key>Id</key>
+	<dict>
+		<key>Hello</key>
+		<string>Hello</string>
+		<key>Intro</key>
+		<string>Intro</string>
+	</dict>
+
+	<key>English</key>
+	<dict>
+		<key>Hello</key>
+		<string>Hello</string>
+		<key>Intro</key>
+		<string>Introduction</string>
+	</dict>
+
+	<key>Vietnamese</key>
+	<dict>
+		<key>Hello</key>
+		<string>Xin chào</string>
+		<key>Intro</key>
+		<string>Giới thiệu</string>
+	</dict>
+
+</dict>
+</plist>

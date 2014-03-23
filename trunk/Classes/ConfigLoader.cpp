@@ -19,9 +19,8 @@ ConfigLoader::ConfigLoader(void)
 	{
 		CCString* val = (CCString*)pElement->getObject();
 		std::string key = pElement->getStrKey();
-		//CCLOG("%s : %s", key.c_str(), val->getCString());
+		CCLOG("%s : %s", key.c_str(), val->getCString());
 	}
-	//CCLOG("------------CONFIG-----------");
 
 	//SEND DATA
 	G_URL_PLAYER_FB_PROFILE = std::string(GetValue(std::string("G_URL_PLAYER_FB_PROFILE"))->getCString());

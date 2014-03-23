@@ -14,7 +14,7 @@
 USING_NS_CC;
 USING_NS_CC_EXT;
 
-#define KEY		"PhamTanLong"
+#define KEY		"cGk@proJectDBPtkkEy-askdjhsakdhajakshdwi"
 
 class GameClientManager : public CCObject
 {

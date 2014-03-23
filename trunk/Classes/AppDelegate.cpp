@@ -6,6 +6,7 @@
 #include "DataManager.h"
 #include "ConfigLoader.h"
 #include "LevelLoader.h"
+#include "TextLoader.h"
 #include "AudioManager.h"
 #include "IntroScene.h"
 #include <time.h>
@@ -34,14 +35,14 @@ AppDelegate::~AppDelegate()
 }
 
 bool AppDelegate::applicationDidFinishLaunching() {
-// 
-// 	string src = string(".Phạm Tấn Long A Ă Â Ư Ơ.");
-// 	string dest = GameClientManager::sharedGameClientManager()->encodeBeforeSend(src);
-// 	string dest2 = GameClientManager::sharedGameClientManager()->decodeBeforeProcess(dest);
-// 	CCLOG("%s", dest2.c_str());
 
 	ConfigLoader::shareConfigLoader();
 	LevelLoader::shareLevelLoader();
+	TextLoader::shareTextLoader()->setCurrentLanguage(LANGUAGE_VIETNAMESE);
+	TextLoader* tl = TextLoader::shareTextLoader();
+	
+	CCLOG("%s -> %s", "Hello", TXT("Hello"));
+	CCLOG("%s -> %s", "Intro", TXT("Intro"));
 
 	GameClientManager::sharedGameClientManager()->setUrls(
 		G_URL_PLAYER_FB_PROFILE,
