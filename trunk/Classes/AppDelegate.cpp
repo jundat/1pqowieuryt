@@ -39,11 +39,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	ConfigLoader::shareConfigLoader();
 	LevelLoader::shareLevelLoader();
 	TextLoader::shareTextLoader()->setCurrentLanguage(LANGUAGE_VIETNAMESE);
-	TextLoader* tl = TextLoader::shareTextLoader();
 	
-	CCLOG("%s -> %s", "Hello", TXT("Hello"));
-	CCLOG("%s -> %s", "Intro", TXT("Intro"));
-
 	GameClientManager::sharedGameClientManager()->setUrls(
 		G_URL_PLAYER_FB_PROFILE,
 		G_URL_DEVICE_PROFILE,

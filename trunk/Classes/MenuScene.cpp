@@ -6,6 +6,7 @@
 #include "WaitForLifeDialog.h"
 #include "QuitDialog.h"
 #include <time.h>
+#include "TextLoader.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -330,7 +331,7 @@ void MenuScene::onRateCompleted( CCNode *sender, void *data )
 			CCLOG("%s", s->getCString());
 			if (s->compare("RATE") == 0)
 			{
-				CCMessageBox("Cảm ơn bạn.", "Thông tin");
+				CCMessageBox(TXT("menu_thank_rate"), TXT("menu_thank_caption"));
 			}
 		} 
 		else
@@ -351,8 +352,6 @@ void MenuScene::onShowDialog()
 void MenuScene::onCloseDialog()
 {
 	DataManager::sharedDataManager()->RefreshPlayerLife();
-	//CCString* s = CCString::createWithFormat("%d", DataManager::sharedDataManager()->GetLastPlayerLife());
-	//m_labelLife->setString(s->getCString());
 	initLifeIcon();
 	m_menu->setEnabled(true);
 	this->setKeypadEnabled(true);

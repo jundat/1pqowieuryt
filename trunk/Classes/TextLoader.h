@@ -24,13 +24,6 @@ using namespace std;
 #define LANGUAGE_JAPANESE		"Japanese"
 #define LANGUAGE_CHINESE		"Chinese"
 
-//////////////////////////////////////////////////////////////////////////
-//MACRO
-
-#define TXT(key)		(TextLoader::shareTextLoader()->getText(key))
-
-//////////////////////////////////////////////////////////////////////////
-
 
 class TextLoader
 {
@@ -42,7 +35,7 @@ public:
 public:
 	void setCurrentLanguage(string curlanguage);
 	string getCurrentLanguage();
-	const char* getText(const std::string id);
+	const char* getText(const char* id);
 
 protected:
 	string m_currentLanguage;
@@ -51,6 +44,15 @@ protected:
 
 	static TextLoader* s_instance;
 };
+
+
+static const char* TXT(const char* id)
+{
+	const char* text = TextLoader::shareTextLoader()->getText(id);
+	CCLOG("TXT: %s => %s", id, text);
+	return text;
+}
+
 
 
 #endif //__TEXT_LOADER_H__

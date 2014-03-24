@@ -12,6 +12,7 @@ TextLoader::TextLoader(void)
 {
 	std::string fullPath = CCFileUtils::sharedFileUtils()->fullPathForFilename(TEXT_FILE);
 	m_allLanguageDict = CCDictionary::createWithContentsOfFile(fullPath.c_str());
+	m_allLanguageDict->retain();
 }
 
 TextLoader::~TextLoader(void)
@@ -29,19 +30,17 @@ TextLoader* TextLoader::shareTextLoader()
 	return s_instance;
 }
 
-const char* TextLoader::getText(const std::string id )
+const char* TextLoader::getText(const char* id )
 {
-	string text;
-
-	text = m_currentLanguageDict->valueForKey(id)->getCString();
-	
-	return text.c_str();
+	const char* text = m_currentLanguageDict->valueForKey(string(id))->getCString();
+	return text;
 }
 
 void TextLoader::setCurrentLanguage( string curlanguage )
 {
 	m_currentLanguage = string(curlanguage);
 	m_currentLanguageDict = (CCDictionary*)m_allLanguageDict->objectForKey(m_currentLanguage);
+	m_currentLanguageDict->retain();
 }
 
 std::string TextLoader::getCurrentLanguage()

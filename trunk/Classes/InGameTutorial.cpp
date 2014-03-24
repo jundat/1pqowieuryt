@@ -6,6 +6,7 @@
 #include "cocos-ext.h"
 #include "GameClientObjects.h"
 #include "BreakLeaderboardDialog.h"
+#include "TextLoader.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -26,7 +27,7 @@ bool InGameTutorial::init()
 	this->addChild(bg);
 
 	//main content
-	string content = "....1972 Cuộc tập kích của địch diễn ra liên tục nhiều ngày với trọng tâm là các cuộc ném bom của B-52 vào ban đêm....";
+	string content = string(TXT("tut_content"));
 
 	CCLabelTTF* lbContent = CCLabelTTF::create(content.c_str(), 
 		"Roboto-Medium.ttf", 
@@ -39,7 +40,7 @@ bool InGameTutorial::init()
 	bg->addChild(lbContent);
 
 	//misson
-	string msg = "Không được để lọt lưới trên 3 chiếc B-52 !!!";
+	string msg = string(TXT("tut_mission"));
 
 	CCLabelTTF* lbMsg = CCLabelTTF::create(msg.c_str(), 
 		"Roboto-Medium.ttf", 
@@ -59,27 +60,9 @@ bool InGameTutorial::init()
 	m_itExitButton->setScale(BUTTON_SCALE);
 	m_itExitButton->setPosition(pExit);
 	
-
 	CCMenu* menu = CCMenu::create(m_itExitButton, NULL);
 	menu->setPosition(CCPointZero);
 	bg->addChild(menu);
-
-	//////////////////////////////////////////////////////////////////////////
-// 	bg->runAction(
-// 		CCSequence::create(
-// 		CCFadeIn::create(0.2f),
-// 		CCDelayTime::create(0.2f),
-// 		CCBlink::create(0.5f, 4),
-// 		CCDelayTime::create(0.25f),
-// 		CCBlink::create(0.6f, 6),
-// 		CCDelayTime::create(0.1f),
-// 		CCBlink::create(0.8f, 7),
-// 		CCFadeOut::create(0.01f),
-// 		CCDelayTime::create(2.0f),
-// 		CCFadeIn::create(1.0f),
-// 		NULL)
-// 		);
-
 
     return true;
 }
@@ -89,8 +72,5 @@ void InGameTutorial::menuCallBack( CCObject* pSender )
 	PLAY_BUTTON_EFFECT;
 	MainGameScene* maingame = (MainGameScene*) this->getParent();
 	maingame->resumeCallback();
-	//maingame->setKeypadEnabled(true);
-
-	//remove dialog after animation
 	this->removeFromParent();
 }

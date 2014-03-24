@@ -3,6 +3,7 @@
 #include "MenuScene.h"
 #include "AudioManager.h"
 #include "DataManager.h"
+#include "TextLoader.h"
 
 USING_NS_CC;
 
@@ -192,19 +193,19 @@ void BreakLeaderboardDialog::postMessageToLoser( string loserName, int yourScore
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	if(EziSocialObject::sharedObject()->isFacebookSessionActive()) //logged in state
 	{
-		CCString* strMessage = CCString::createWithFormat("Ta vừa đạt %d điểm trong game Điện Biên Phủ trên không, qua mặt %s rồi nhé! Kaka :v", yourScore, loserName.c_str());
+		CCString* strMessage = CCString::createWithFormat(TXT("feed_msg"), yourScore, loserName.c_str());
 
 		//let try to post message
 		//postMessageOnWall
 		//autoPostMessageOnWall
 
 		EziSocialObject::sharedObject()->postMessageOnWall(
-			"Điện Biên Phủ trên không -- Game bắn máy bay hot nhất 2014!",		//heading => Điện Biên Phủ Trên Không
-			"Thử thách cùng bạn bè",			//caption
-			strMessage->getCString(),		//message => Status
-			"Cùng sống lại những giây phút hào hùng của dân tộc trong chiến thắng vẻ vang của \"12 ngày đêm\". Thử thách cùng bạn bè, vượt lên bảng xếp hạng. Click ngay để tải!",	//descripton
-			"https://dl.dropboxusercontent.com/u/41829250/DienBienPhuTrenKhong/DienBienPhuTrenKhong.jpg", //badgeIconURL
-			"");	//deepLinkURL
+			TXT("feed_heading"),		//heading => Điện Biên Phủ Trên Không
+			TXT("feed_caption"),		//caption
+			strMessage->getCString(),	//message => Status
+			TXT("feed_description"),	//descripton
+			TXT("feed_badge_icon"),		//badgeIconURL
+			TXT("feed_deep_link"));		//deepLinkURL
 	}
 #endif
 }
@@ -222,7 +223,7 @@ void BreakLeaderboardDialog::fbMessageCallback(int responseCode, const char* res
 	}
 	else
 	{
-		CCMessageBox("Không thể chia sẻ!", "Thông tin");
+		CCMessageBox(TXT("feed_error"), TXT("feed_error_caption"));
 
 		CCScene *pScene = CCTransitionFade::create(0.5, MenuScene::scene());
 		CCDirector::sharedDirector()->replaceScene(pScene);

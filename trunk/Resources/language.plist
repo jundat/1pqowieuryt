@@ -3,26 +3,176 @@
 
 	<key>Id</key>
 	<dict>
-		<key>Hello</key>
-		<string>Hello</string>
-		<key>Intro</key>
-		<string>Intro</string>
+		<key>game_name</key>
+		<string>game_name</string>
+		<key>feed_heading</key>
+		<string>feed_heading</string>
+		<key>feed_caption</key>
+		<string>feed_caption</string>
+		<key>feed_msg</key>
+		<string>feed_msg</string>
+		<key>feed_description</key>
+		<string>feed_description</string>
+		<key>feed_badge_icon</key>
+		<string>feed_badge_icon</string>
+		<key>feed_deep_link</key>
+		<string>feed_deep_link</string>
+		<key>feed_error_caption</key>
+		<string>feed_error_caption</string>
+		<key>feed_error</key>
+		<string>feed_error</string>
+		<key>tut_content</key>
+		<string>tut_content</string>
+		<key>tut_misson</key>
+		<string>tut_misson</string>
+		<key>lose_score</key>
+		<string>lose_score</string>
+		<key>lose_error</key>
+		<string>lose_error</string>
+		<key>lose_error_caption</key>
+		<string>lose_error_caption</string>
+		<key>menu_thank_rate</key>
+		<string>menu_thank_rate</string>
+		<key>menu_thank_caption</key>
+		<string>menu_thank_caption</string>
+		<key>quit_ask</key>
+		<string>quit_ask</string>
+		<key>score_invite_to_facebook</key>
+		<string>score_invite_to_facebook</string>
+		<key>score_no_gift</key>
+		<string>score_no_gift</string>
+		<key>score_server_error</key>
+		<string>score_server_error</string>
+		<key>score_invite_friend</key>
+		<string>score_invite_friend</string>
+		<key>score_limit_lazer</key>
+		<string>score_limit_lazer</string>
+		<key>score_popup_caption</key>
+		<string>score_popup_caption</string>
+		<key>score_send_life_msg</key>
+		<string>score_send_life_msg</string>
+		<key>score_get</key>
+		<string>score_get</string>
+		<key>score_send_life</key>
+		<string>score_send_life</string>
+		<key>wait_lack_of_life</key>
+		<string>wait_lack_of_life</string>
 	</dict>
 
 	<key>English</key>
 	<dict>
-		<key>Hello</key>
-		<string>Hello</string>
-		<key>Intro</key>
-		<string>Introduction</string>
+		<key>game_name</key>
+		<string>Điện Biên Phủ trên không</string>
+		<key>feed_heading</key>
+		<string>Điện Biên Phủ trên không -- the best space shooting game in 2014</string>
+		<key>feed_caption</key>
+		<string>Dare your all friend</string>
+		<key>feed_msg</key>
+		<string>I've got %d pts in Điện Biên Phủ trên không, follow me is %s. Kaka :v</string>
+		<key>feed_description</key>
+		<string>Live in the lagend of 12-days </string>
+		<key>feed_badge_icon</key>
+		<string>https://dl.dropboxusercontent.com/u/41829250/DienBienPhuTrenKhong/DienBienPhuTrenKhong.jpg</string>
+		<key>feed_deep_link</key>
+		<string>https://play.google.com/store/apps/details?id=com.chimgokien.phicongbutchi</string>
+		<key>feed_error_caption</key>
+		<string>Error</string>
+		<key>feed_error</key>
+		<string>Couldn't share</string>
+		<key>tut_content</key>
+		<string>1972 .... The enemy ambush ongoing for several days with a focus on the B-52 bomber at night ....</string>
+		<key>tut_misson</key>
+		<string>Do not let more than 3 B-52 go over you !!!</string>
+		<key>lose_score</key>
+		<string>Score</string>
+		<key>lose_error</key>
+		<string>You have not enough diamond!</string>
+		<key>lose_error_caption</key>
+		<string>Information</string>
+		<key>menu_thank_rate</key>
+		<string>Thank you!</string>
+		<key>menu_thank_caption</key>
+		<string>Information</string>
+		<key>quit_ask</key>
+		<string>Do you want to exit!</string>
+		<key>score_invite_to_facebook</key>
+		<string>Connect  facebook for more friend, more gift!</string>
+		<key>score_no_gift</key>
+		<string>You have no gift. Call your friends to get more every day!</string>
+		<key>score_server_error</key>
+		<string>Can not connect to server</string>
+		<key>score_invite_friend</key>
+		<string>%s is fighting to kill enemies in Điện Biên Phủ trên không. Come in to help your friend now!</string>
+		<key>score_limit_lazer</key>
+		<string>Max lazer is %d</string>
+		<key>score_popup_caption</key>
+		<string>Information</string>
+		<key>score_send_life_msg</key>
+		<string>Give you 1 life</string>
+		<key>score_get</key>
+		<string>Get</string>
+		<key>score_send_life</key>
+		<string>Send</string>
+		<key>wait_lack_of_life</key>
+		<string>You have not enough life. Please wait!</string>
 	</dict>
 
 	<key>Vietnamese</key>
 	<dict>
-		<key>Hello</key>
-		<string>Xin chào</string>
-		<key>Intro</key>
-		<string>Giới thiệu</string>
+		<key>game_name</key>
+		<string>Điện Biên Phủ trên không</string>
+		<key>feed_heading</key>
+		<string>Điện Biên Phủ trên không -- Game bắn máy bay hot nhất 2014</string>
+		<key>feed_caption</key>
+		<string>Thử thách cùng bạn bè</string>
+		<key>feed_msg</key>
+		<string>Ta vừa đạt %d điểm trong game Điện Biên Phủ trên không, vượt qua %s. Kaka :v</string>
+		<key>feed_description</key>
+		<string>Cùng sống lại những giây phút hào hùng của dân tộc trong chiến thắng vẻ vang của "12 ngày đêm". Thử thách cùng bạn bè, vượt lên bảng xếp hạng. Click ngay để tải!</string>
+		<key>feed_badge_icon</key>
+		<string>https://dl.dropboxusercontent.com/u/41829250/DienBienPhuTrenKhong/DienBienPhuTrenKhong.jpg</string>
+		<key>feed_deep_link</key>
+		<string>https://play.google.com/store/apps/details?id=com.chimgokien.phicongbutchi</string>
+		<key>feed_error_caption</key>
+		<string>Lỗi</string>
+		<key>feed_error</key>
+		<string>Không thể chia sẻ</string>
+		<key>tut_content</key>
+		<string>....1972 Cuộc tập kích của địch diễn ra liên tục nhiều ngày với trọng tâm là các cuộc ném bom của B-52 vào ban đêm....</string>
+		<key>tut_misson</key>
+		<string>Không được để lọt lưới trên 3 chiếc B-52 !!!</string>
+		<key>lose_score</key>
+		<string>Điểm</string>
+		<key>lose_error</key>
+		<string>Bạn không đủ số kim cương!</string>
+		<key>lose_error_caption</key>
+		<string>Thông tin</string>
+		<key>menu_thank_rate</key>
+		<string>Cảm ơn bạn!</string>
+		<key>menu_thank_caption</key>
+		<string>Thông tin</string>
+		<key>quit_ask</key>
+		<string>Bạn có muốn thoát game!</string>
+		<key>score_invite_to_facebook</key>
+		<string>Liên kết Facebook để thêm bạn, thêm quà!</string>
+		<key>score_no_gift</key>
+		<string>Bạn không có quà nào cả. Hãy kết nối với bạn bè để có đầy quà mỗi ngày nhé!</string>
+		<key>score_server_error</key>
+		<string>Không thể kết nối máy chủ</string>
+		<key>score_invite_friend</key>
+		<string>%s đang tả xung hữu đột tiêu diệt máy bay địch trong Điện Biên Phủ trên không. Hãy cùng tham chiến nào.</string>
+		<key>score_limit_lazer</key>
+		<string>Chỉ được giữ tối đa %d lazer</string>
+		<key>score_popup_caption</key>
+		<string>Thông tin</string>
+		<key>score_send_life_msg</key>
+		<string>Cho bạn 1 mạng nè!</string>
+		<key>score_get</key>
+		<string>Nhận</string>
+		<key>score_send_life</key>
+		<string>Gửi</string>
+		<key>wait_lack_of_life</key>
+		<string>Bạn không đủ số mạng. Hãy chờ thêm!</string>
 	</dict>
 
 </dict>

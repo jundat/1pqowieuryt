@@ -4,6 +4,7 @@
 #include "DataManager.h"
 #include <time.h>
 #include "cocos-ext.h"
+#include "TextLoader.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -46,21 +47,16 @@ bool WaitForLifeDialog::init()
 	menu->setPosition(CCPointZero);
 	this->addChild(menu);
 
-	CCLabelTTF* labelTitle = CCLabelTTF::create("Không đủ số mạng\nHãy chờ thêm", "Roboto-Medium.ttf", 48);
+	CCLabelTTF* labelTitle = CCLabelTTF::create(TXT("wait_lack_of_life"), 
+		"Roboto-Medium.ttf", 
+		48, 
+		CCSizeMake(600, 0), 
+		kCCTextAlignmentCenter, 
+		kCCVerticalTextAlignmentCenter);
+
 	labelTitle->setColor(ccc3(56, 56, 56));
 	labelTitle->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2 + 120));
 	this->addChild(labelTitle);
-
-// 	int mins = (int)m_waitTime/60;
-// 	int seconds = (int)m_waitTime%60;
-// 
-// 	CCString* s = CCString::createWithFormat("0%d:%d", mins, seconds);
-// 	m_lbTime = CCLabelTTF::create(s->getCString(), "Roboto-Medium", 48);
-// 	m_lbTime->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2));
-// 	m_lbTime->setColor(ccc3(56, 56, 56));
-// 	this->addChild(m_lbTime);
-// 
-// 	this->schedule(schedule_selector(WaitForLifeDialog::ScheduleTick), 1);
 
     return true;
 }
@@ -268,7 +264,7 @@ void WaitForLifeDialog::ScheduleTick( float dt )
 void WaitForLifeDialog::inviteFriends()
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-	CCString* str = CCString::createWithFormat("%s đang tả xung hữu đột tiêu diệt máy bay địch trong Điện Biên Phủ trên không. Hãy cùng tham chiến nào.", 
+	CCString* str = CCString::createWithFormat(TXT("score_invite_friend"), 
 		DataManager::sharedDataManager()->GetFbFullName().c_str());
 
 	//invite friends
@@ -277,7 +273,7 @@ void WaitForLifeDialog::inviteFriends()
 		str->getCString(), 
 		NULL,
 		NULL,
-		"Điện Biên Phủ Trên Không");
+		TXT("game_name"));
 #endif
 }
 

@@ -4,6 +4,7 @@
 #include "DataManager.h"
 #include <time.h>
 #include "cocos-ext.h"
+#include "TextLoader.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -46,7 +47,7 @@ bool QuitDialog::init()
 	menu->setPosition(CCPointZero);
 	this->addChild(menu);
 
-	CCLabelTTF* labelTitle = CCLabelTTF::create("Bạn có muốn\nthoát game?", "Roboto-Medium.ttf", 48);
+	CCLabelTTF* labelTitle = CCLabelTTF::create(TXT("quit_ask"), "Roboto-Medium.ttf", 48);
 	labelTitle->setColor(ccc3(56, 56, 56));
 	labelTitle->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2 + 50));
 	this->addChild(labelTitle);

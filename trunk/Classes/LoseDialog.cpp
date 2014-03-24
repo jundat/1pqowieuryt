@@ -6,6 +6,7 @@
 #include "cocos-ext.h"
 #include "GameClientObjects.h"
 #include "BreakLeaderboardDialog.h"
+#include "TextLoader.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -108,7 +109,7 @@ bool LoseDialog::init()
 	menu->setPosition(CCPointZero);
 	this->addChild(menu);
 
-	CCLabelTTF* labelTitle = CCLabelTTF::create("Điểm", "Roboto-Medium.ttf", 64);
+	CCLabelTTF* labelTitle = CCLabelTTF::create(TXT("lose_score"), "Roboto-Medium.ttf", 64);
 	labelTitle->setColor(ccc3(56, 56, 56));
 	labelTitle->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2 + 160)); //+40
 	this->addChild(labelTitle);
@@ -240,7 +241,7 @@ void LoseDialog::reviveCallBack( CCObject* pSender )
 	{
 		PLAY_OUT_PORP_EFFECT;
 
-		CCMessageBox("Bạn không đủ kim cương!", "Thông tin");
+		CCMessageBox(TXT("lose_error"), TXT("lose_error_caption"));
 
 		//visitble
 		m_itExitButton->setVisible(true);

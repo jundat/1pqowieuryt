@@ -1,6 +1,7 @@
 #include "MenuScene.h"
 #include "TestPostGetScene.h"
 #include "Global.h"
+#include "TextLoader.h"
 
 USING_NS_CC;
 
@@ -81,6 +82,13 @@ bool TestPostGetScene::init()
 	itemPost8->setAnchorPoint(ccp(0.0f, 0.5f));
 	itemPost8->setPosition(ccp(20, 800));
 	menuRequest->addChild(itemPost8);
+
+	CCString* s = CCString::createWithFormat(TXT("test"), 100, "JundatPham");
+	CCLabelTTF *labelPost9 = CCLabelTTF::create(s->getCString(), "Arial", 48);
+	labelPost9->setAnchorPoint(ccp(0.0f, 0.5f));
+	labelPost9->setColor(ccc3(0,0,0));
+	labelPost9->setPosition(ccp(20, 600));
+	this->addChild(labelPost9);
 
 	this->setKeypadEnabled(true);
 

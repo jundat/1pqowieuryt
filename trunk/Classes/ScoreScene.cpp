@@ -6,7 +6,7 @@
 #include "MyMacro.h"
 #include "AudioManager.h"
 #include "Global.h"
-
+#include "TextLoader.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -155,7 +155,12 @@ bool ScoreScene::init()
 		menu_selector(ScoreScene::itFbLogInCallback));
 	m_itFbLogInItem->setPosition(ccp(400, 1280-805));
 
-	m_lbInvite = CCLabelTTF::create("Liên kết Facebook\nthêm niềm vui", "Roboto-Medium.ttf", 48);
+	m_lbInvite = CCLabelTTF::create(TXT("score_invite_to_facebook"), 
+		"Roboto-Medium.ttf", 
+		48, 
+		CCSizeMake(600, 0), 
+		kCCTextAlignmentCenter, 
+		kCCVerticalTextAlignmentCenter);
 	m_lbInvite->setColor(ccc3(0, 0, 0));
 	m_lbInvite->setPosition(ccp(400, 1280-672)); //320
 	this->addChild(m_lbInvite, 1); //samw menu
@@ -192,8 +197,13 @@ bool ScoreScene::init()
 
 
 	// table view QuaTang //////////////////////////////////////////////////////////////////////////
+	m_lbInviteQuatang = CCLabelTTF::create(TXT("score_no_gift"), 
+		"Roboto-Medium.ttf", 
+		48, 
+		CCSizeMake(600, 0), 
+		kCCTextAlignmentCenter, 
+		kCCVerticalTextAlignmentCenter);
 
-	m_lbInviteQuatang = CCLabelTTF::create("Bạn không có quà nào cả\nHãy kết nối với bạn bè\nđể có đầy quà mỗi ngày nhé!", "Roboto-Medium.ttf", 48);
 	m_lbInviteQuatang->setColor(ccc3(0, 0, 0));
 	m_lbInviteQuatang->setPosition(ccp(400, 1280-672)); //320
 	m_lbInviteQuatang->setVisible(false);
@@ -224,7 +234,7 @@ bool ScoreScene::init()
 	m_sprWaiting->runAction(CCRepeatForever::create(CCRotateBy::create(1.0f, -360.0f)));
 
 
-	m_lbLostConnection = CCLabelTTF::create("Không thể kết nối máy chủ", G_FONT_NORMAL, 48);
+	m_lbLostConnection = CCLabelTTF::create(TXT("score_server_error"), G_FONT_NORMAL, 48);
 	m_lbLostConnection->setColor(ccBLACK);
 	m_lbLostConnection->setPosition(ccpSub(m_sprWaiting->getPosition(), ccp(0, 50)));
 	this->addChild(m_lbLostConnection, m_sprWaiting->getZOrder());
@@ -295,7 +305,7 @@ void ScoreScene::itAddFriendCallback( CCObject* pSender )
 	{
 		PLAY_BUTTON_EFFECT;
 
-		CCString* str = CCString::createWithFormat("%s đang tả xung hữu đột tiêu diệt máy bay địch trong Điện Biên Phủ trên không. Hãy cùng tham chiến nào.", 
+		CCString* str = CCString::createWithFormat(TXT("score_invite_friend"), 
 			DataManager::sharedDataManager()->GetFbFullName().c_str());
 		
 		//invite friends
@@ -304,7 +314,7 @@ void ScoreScene::itAddFriendCallback( CCObject* pSender )
 			str->getCString(), 
 			NULL,
 			NULL,
-			"Điện Biên Phủ Trên Không");
+			TXT("game_name"));
 	}
 #endif
 }
@@ -477,8 +487,7 @@ void ScoreScene::itGetBoomCallback( CCObject* pSender )
 			CCScaleTo::create(0.2f, 0.75f)
 			));
 
-		CCMessageBox(CCString::createWithFormat("Chỉ được giữ tối đa %d lazer", G_MAX_BOOM)->getCString(), 
-			"Thông tin");
+		CCMessageBox(CCString::createWithFormat(TXT("score_limit_lazer"), G_MAX_BOOM)->getCString(), TXT("score_popup_caption"));
 	}
 }
 
@@ -503,10 +512,10 @@ void ScoreScene::itSendLifeCallback( CCObject* pSender )
 
 	EziSocialObject::sharedObject()->sendRequestToFriends(
 		EziSocialWrapperNS::FB_REQUEST::REQUEST_GIFT,
-		"Cho bạn 1 mạng nè!", 
+		TXT("score_send_life_msg"), 
 		arrFriends,
 		giftDictionary, 
-		"Điện Biên Phủ Trên Không");
+		TXT("game_name"));
 #endif
 
 	m_friendCell = cell;
@@ -1042,22 +1051,23 @@ void ScoreScene::fbFriendsCallback( int responseCode, const char* responseMessag
 
 void ScoreScene::postMessageToLoser( std::string loserName, std::string loserUserName, int yourScore )
 {
-	CCLOG("postMessageToLoser");
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-	CCString* strMessage = CCString::createWithFormat("Hey, i just got %d points in The Croods, following me is %s\nhttps://www.facebook.com/%s! Kaka :v", yourScore, loserName.c_str(), loserUserName.c_str());
-
-	//let try to post message
-	//postMessageOnWall
-	//autoPostMessageOnWall
-
-	EziSocialObject::sharedObject()->postMessageOnWall(
-		"The Croods",					//heading => Điện Biên Phủ Trên Không
-		"Let got it!",					//caption
-		strMessage->getCString(),		//message => Status
-		"From the creators of Angry Birds and the creative minds at DreamWorks Animation: a FREE new game based on the motion picture phenomenon!",	//descripton
-		"http://www.reelmama.com/wp-content/uploads/2013/04/Grug-from-THE-CROODS.jpg", //badgeIconURL
-		"https://play.google.com/store/apps/details?id=com.rovio.croods");	//deepLinkURL
-#endif
+	CCMessageBox("not implement", "");
+// 	CCLOG("postMessageToLoser");
+// #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+// 	CCString* strMessage = CCString::createWithFormat("Hey, i just got %d points in The Croods, following me is %s\nhttps://www.facebook.com/%s! Kaka :v", yourScore, loserName.c_str(), loserUserName.c_str());
+// 
+// 	//let try to post message
+// 	//postMessageOnWall
+// 	//autoPostMessageOnWall
+// 
+// 	EziSocialObject::sharedObject()->postMessageOnWall(
+// 		"The Croods",					//heading => Điện Biên Phủ Trên Không
+// 		"Let got it!",					//caption
+// 		strMessage->getCString(),		//message => Status
+// 		"From the creators of Angry Birds and the creative minds at DreamWorks Animation: a FREE new game based on the motion picture phenomenon!",	//descripton
+// 		"http://www.reelmama.com/wp-content/uploads/2013/04/Grug-from-THE-CROODS.jpg", //badgeIconURL
+// 		"https://play.google.com/store/apps/details?id=com.rovio.croods");	//deepLinkURL
+// #endif
 }
 
 void ScoreScene::fbMessageCallback(int responseCode, const char* responseMessage)
@@ -1366,7 +1376,7 @@ CCTableViewCell* ScoreScene::getTableCellXepHangAtIndex( CCTableView *table, uns
 			cell->addChild(lbSendLifeTimer);
 			((CustomTableViewCell*)cell)->m_lbSendLifeTimer = lbSendLifeTimer;
 
-			CCLabelTTF* lbSendLife = CCLabelTTF::create("Gửi", "Roboto-Medium.ttf", 28);
+			CCLabelTTF* lbSendLife = CCLabelTTF::create(TXT("score_send_life"), "Roboto-Medium.ttf", 28);
 			lbSendLife->setColor(ccc3(0, 0, 0));
 			lbSendLife->setAnchorPoint(ccp(0.5f, 0.75f));
 			lbSendLife->setPosition(ccp(725, m_sprCell->getContentSize().height/4));
@@ -1387,7 +1397,7 @@ CCTableViewCell* ScoreScene::getTableCellXepHangAtIndex( CCTableView *table, uns
 			cell->addChild(lbGetBoomTimer);
 			((CustomTableViewCell*)cell)->m_lbGetBoomTimer = lbGetBoomTimer;
 
-			CCLabelTTF* lbGetBoom = CCLabelTTF::create("Nhận", "Roboto-Medium.ttf", 28);
+			CCLabelTTF* lbGetBoom = CCLabelTTF::create(TXT("score_get"), "Roboto-Medium.ttf", 28);
 			lbGetBoom->setColor(ccc3(0, 0, 0));
 			lbGetBoom->setAnchorPoint(ccp(0.5f, 0.75f));
 			lbGetBoom->setPosition(ccp(600, m_sprCell->getContentSize().height/4 - 5));
@@ -1558,7 +1568,7 @@ CCTableViewCell* ScoreScene::getTableCellQuatangAtIndex( CCTableView *table, uns
 		cell->addChild(iconLife);
 
 		//lable nhận
-		CCLabelTTF* lbGetBoom = CCLabelTTF::create("Nhận", "Roboto-Medium.ttf", 28);
+		CCLabelTTF* lbGetBoom = CCLabelTTF::create(TXT("score_get"), "Roboto-Medium.ttf", 28);
 		lbGetBoom->setColor(ccc3(0, 0, 0));
 		lbGetBoom->setAnchorPoint(ccp(0.5f, 0.75f));
 		lbGetBoom->setPosition(ccp(600, m_sprCell->getContentSize().height/4));
