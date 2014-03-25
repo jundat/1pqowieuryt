@@ -17,8 +17,8 @@ bool WaitForLifeDialog::init()
         return false;
     }
 
-	CCPoint pexit = ccp(250, G_DESIGN_HEIGHT - 760);
-	CCPoint pask = ccp(G_DESIGN_WIDTH-250, G_DESIGN_HEIGHT - 760);
+	CCPoint pexit = ccp(250, G_DESIGN_HEIGHT - 810);
+	CCPoint pask = ccp(G_DESIGN_WIDTH-250, G_DESIGN_HEIGHT - 810);
 
 	CCScale9Sprite* dialog = CCScale9Sprite::create("dialog.png");
 	dialog->setPosition(ccp(400, 640));

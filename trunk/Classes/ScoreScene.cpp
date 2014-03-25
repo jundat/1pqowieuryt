@@ -122,6 +122,11 @@ bool ScoreScene::init()
 	m_itXephangToggle->setSelectedIndex(0);
 	m_itXephangToggle->setPosition(ccp(202, 1280-351));
 
+	CCLabelTTF* lbXepHang = CCLabelTTF::create(TXT("btn_leaderboard"), "Roboto-Medium.ttf", 48);
+	lbXepHang->setPosition(ccp(260, 51));
+	lbXepHang->setColor(ccBLACK);
+	m_itXephangToggle->addChild(lbXepHang, 10);
+
 	//Qua tang
 
 	CCMenuItem* quatangOn = CCMenuItemImage::create("quatang.png", NULL, NULL);
@@ -129,7 +134,11 @@ bool ScoreScene::init()
 	m_itQuatangToggle = CCMenuItemToggle::createWithTarget(this,  menu_selector(ScoreScene::itQuatangCallback), quatangOn, quatangOff, NULL);
 	m_itQuatangToggle->setSelectedIndex(1);
 	m_itQuatangToggle->setPosition(ccp(600, 1280-351));
-	
+
+	CCLabelTTF* lbQuatang = CCLabelTTF::create(TXT("btn_gift"), "Roboto-Medium.ttf", 48);
+	lbQuatang->setPosition(ccp(260, 51));
+	lbQuatang->setColor(ccBLACK);
+	m_itQuatangToggle->addChild(lbQuatang, 10);
 
 	//
 	CCMenuItemImage *backItem = CCMenuItemImage::create(
