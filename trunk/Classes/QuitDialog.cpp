@@ -18,31 +18,18 @@ bool QuitDialog::init()
 
 	CCPoint pexit = ccp(250, G_DESIGN_HEIGHT - 810);
 	CCPoint pask = ccp(G_DESIGN_WIDTH-250, G_DESIGN_HEIGHT - 810);
-	float textScale = 0.6f;
-
 
 	CCScale9Sprite* dialog = CCScale9Sprite::create("dialog.png");
 	dialog->setPosition(ccp(400, 640));
 	dialog->setContentSize(CCSizeMake(680, 480));
 	this->addChild(dialog, -2);
+
+	MY_CREATE_MENU_BUTTON(exitButton, "button.png", "button_down.png", TXT("btn_yes"), 
+		"Roboto-Medium.ttf", 48, ccBLACK, pexit, this, QuitDialog::yesCallback);
+
+	MY_CREATE_MENU_BUTTON(askButton, "button.png", "button_down.png", TXT("btn_no"), 
+		"Roboto-Medium.ttf", 48, ccBLACK, pask, this, QuitDialog::noCallback);
 	
-	CCMenuItemImage* exitButton = CCMenuItemImage::create(
-		"yes.png",
-		"yesDown.png",
-		this,
-		menu_selector(QuitDialog::yesCallback));
-	exitButton->setScale(textScale);
-	exitButton->setPosition(pexit);
-
-
-	CCMenuItemImage* askButton = CCMenuItemImage::create(
-		"no.png",
-		"noDown.png",
-		this,
-		menu_selector(QuitDialog::noCallback));
-	askButton->setScale(textScale);
-	askButton->setPosition(pask);
-
 	CCMenu* menu = CCMenu::create(exitButton, askButton, NULL);
 	menu->setPosition(CCPointZero);
 	this->addChild(menu);

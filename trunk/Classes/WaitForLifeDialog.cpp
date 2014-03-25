@@ -5,6 +5,7 @@
 #include <time.h>
 #include "cocos-ext.h"
 #include "TextLoader.h"
+#include "MyMacro.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -18,30 +19,17 @@ bool WaitForLifeDialog::init()
 
 	CCPoint pexit = ccp(250, G_DESIGN_HEIGHT - 760);
 	CCPoint pask = ccp(G_DESIGN_WIDTH-250, G_DESIGN_HEIGHT - 760);
-	float textScale = 0.6f;
-
 
 	CCScale9Sprite* dialog = CCScale9Sprite::create("dialog.png");
 	dialog->setPosition(ccp(400, 640));
 	dialog->setContentSize(CCSizeMake(680, 480));
 	this->addChild(dialog, -2);
-	
-	CCMenuItemImage* exitButton = CCMenuItemImage::create(
-		"exit_button.png",
-		"exit_button_press.png",
-		this,
-		menu_selector(WaitForLifeDialog::exitCallback));
-	exitButton->setScale(textScale);
-	exitButton->setPosition(pexit);
 
+	MY_CREATE_MENU_BUTTON(exitButton, "button.png", "button_down.png", TXT("btn_exit"), 
+		"Roboto-Medium.ttf", 48, ccBLACK, pexit, this, WaitForLifeDialog::exitCallback);
 
-	CCMenuItemImage* askButton = CCMenuItemImage::create(
-		"ask_button.png",
-		"ask_button_press.png",
-		this,
-		menu_selector(WaitForLifeDialog::askFriendCallback));
-	askButton->setScale(textScale);
-	askButton->setPosition(pask);
+	MY_CREATE_MENU_BUTTON(askButton, "button.png", "button_down.png", TXT("btn_ask_friend"), 
+		"Roboto-Medium.ttf", 48, ccBLACK, pask, this, WaitForLifeDialog::askFriendCallback);
 
 	CCMenu* menu = CCMenu::create(exitButton, askButton, NULL);
 	menu->setPosition(CCPointZero);
@@ -53,7 +41,7 @@ bool WaitForLifeDialog::init()
 		CCSizeMake(600, 0), 
 		kCCTextAlignmentCenter, 
 		kCCVerticalTextAlignmentCenter);
-
+	
 	labelTitle->setColor(ccc3(56, 56, 56));
 	labelTitle->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2 + 120));
 	this->addChild(labelTitle);
@@ -136,13 +124,6 @@ void WaitForLifeDialog::fbUserDetailCallback( int responseCode, const char* resp
 		DataManager::sharedDataManager()->SetFbProfileID(profileID.c_str());
 		DataManager::sharedDataManager()->SetFbUserName(userName.c_str());
 		DataManager::sharedDataManager()->SetFbFullName(fullName.c_str());
-
-// 		CCLOG("call: getProfilePicForID");
-// 		EziSocialObject::sharedObject()->getProfilePicForID(this, fbUser->getProfileID(), // Profile ID of current user
-//			G_AVATAR_SIZE, G_AVATAR_SIZE, // Size of the image
-//			false // force download it from server
-//			);
-
 
 		//send request to friend
 		inviteFriends();

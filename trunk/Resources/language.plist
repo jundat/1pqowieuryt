@@ -23,8 +23,8 @@
 		<string>feed_error</string>
 		<key>tut_content</key>
 		<string>tut_content</string>
-		<key>tut_misson</key>
-		<string>tut_misson</string>
+		<key>tut_mission</key>
+		<string>tut_mission</string>
 		<key>lose_score</key>
 		<string>lose_score</string>
 		<key>lose_error</key>
@@ -57,6 +57,30 @@
 		<string>score_send_life</string>
 		<key>wait_lack_of_life</key>
 		<string>wait_lack_of_life</string>
+		<key>btn_ask_friend</key>
+		<string>btn_ask_friend</string>
+		<key>btn_start</key>
+		<string>btn_start</string>
+		<key>btn_exit</key>
+		<string>btn_exit</string>
+		<key>btn_revive</key>
+		<string>btn_revive</string>
+		<key>btn_end</key>
+		<string>btn_end</string>
+		<key>btn_no</key>
+		<string>btn_no</string>
+		<key>btn_yes</key>
+		<string>btn_yes</string>
+		<key>btn_gift</key>
+		<string>btn_gift</string>
+		<key>btn_restart</key>
+		<string>btn_restart</string>
+		<key>btn_resume</key>
+		<string>btn_resume</string>
+		<key>btn_share</key>
+		<string>btn_share</string>
+		<key>btn_leaderboard</key>
+		<string>btn_leaderboard</string>
 	</dict>
 
 	<key>English</key>
@@ -81,7 +105,7 @@
 		<string>Couldn't share</string>
 		<key>tut_content</key>
 		<string>1972 .... The enemy ambush ongoing for several days with a focus on the B-52 bomber at night ....</string>
-		<key>tut_misson</key>
+		<key>tut_mission</key>
 		<string>Do not let more than 3 B-52 go over you !!!</string>
 		<key>lose_score</key>
 		<string>Score</string>
@@ -115,6 +139,30 @@
 		<string>Send</string>
 		<key>wait_lack_of_life</key>
 		<string>You have not enough life. Please wait!</string>
+		<key>btn_ask_friend</key>
+		<string>Ask friend</string>
+		<key>btn_start</key>
+		<string>Lift up</string>
+		<key>btn_exit</key>
+		<string>Exit</string>
+		<key>btn_revive</key>
+		<string>Revive</string>
+		<key>btn_end</key>
+		<string>End game</string>
+		<key>btn_no</key>
+		<string>No</string>
+		<key>btn_yes</key>
+		<string>Yes</string>
+		<key>btn_gift</key>
+		<string>Gift</string>
+		<key>btn_restart</key>
+		<string>Restart</string>
+		<key>btn_resume</key>
+		<string>Resume</string>
+		<key>btn_share</key>
+		<string>Share</string>
+		<key>btn_leaderboard</key>
+		<string>Leaderboard</string>
 	</dict>
 
 	<key>Vietnamese</key>
@@ -139,7 +187,7 @@
 		<string>Không thể chia sẻ</string>
 		<key>tut_content</key>
 		<string>....1972 Cuộc tập kích của địch diễn ra liên tục nhiều ngày với trọng tâm là các cuộc ném bom của B-52 vào ban đêm....</string>
-		<key>tut_misson</key>
+		<key>tut_mission</key>
 		<string>Không được để lọt lưới trên 3 chiếc B-52 !!!</string>
 		<key>lose_score</key>
 		<string>Điểm</string>
@@ -173,6 +221,30 @@
 		<string>Gửi</string>
 		<key>wait_lack_of_life</key>
 		<string>Bạn không đủ số mạng. Hãy chờ thêm!</string>
+		<key>btn_ask_friend</key>
+		<string>Xin bạn</string>
+		<key>btn_start</key>
+		<string>Cất cánh</string>
+		<key>btn_exit</key>
+		<string>Thoát</string>
+		<key>btn_revive</key>
+		<string>Hồi sinh</string>
+		<key>btn_end</key>
+		<string>Kết thúc</string>
+		<key>btn_no</key>
+		<string>Không</string>
+		<key>btn_yes</key>
+		<string>Có</string>
+		<key>btn_gift</key>
+		<string>Quà tặng</string>
+		<key>btn_restart</key>
+		<string>Chơi lại</string>
+		<key>btn_resume</key>
+		<string>Tiếp tục</string>
+		<key>btn_share</key>
+		<string>Chia sẻ</string>
+		<key>btn_leaderboard</key>
+		<string>Xếp hạng</string>
 	</dict>
 
 </dict>

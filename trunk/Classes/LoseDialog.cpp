@@ -50,25 +50,15 @@ bool LoseDialog::init()
 
 	//////////////////////////////////////////////////////////////////////////
 
-	m_itExitButton = CCMenuItemImage::create(
-		"ketthuc.png",
-		"ketthuc1.png",
-		this,
-		menu_selector(LoseDialog::menuCallBack));
-	m_itExitButton->setScale(BUTTON_SCALE);
-	m_itExitButton->setPosition(pExit);
+	MY_CREATE_MENU_BUTTON(exitButton, "button.png", "button_down.png", TXT("btn_end"), 
+		"Roboto-Medium.ttf", 48, ccBLACK, pExit, this, LoseDialog::menuCallBack);
+	m_itExitButton = exitButton;	
+
+
+	MY_CREATE_MENU_BUTTON(reviveButton, "button.png", "button_down.png", TXT("btn_revive"), 
+		"Roboto-Medium.ttf", 48, ccBLACK, pRevive, this, LoseDialog::reviveCallBack);
+	m_itRevive = reviveButton;
 	
-
-	m_itRevive = CCMenuItemImage::create(
-		"hoisinh1.png",
-		"hoisinh.png",
-		"hoisinh.png",
-		this,
-		menu_selector(LoseDialog::reviveCallBack));
-	m_itRevive->setScale(BUTTON_SCALE);
-	m_itRevive->setPosition(pRevive);
-
-
 	//REVIVE /////////////////////////////////////////////////////////////////
 	//revive_button_press.png
 	bool isJustRevive = DataManager::sharedDataManager()->GetIsJustRevived();

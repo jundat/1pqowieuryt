@@ -34,4 +34,20 @@ do\
 } while(0);
 
 
+#define MY_CREATE_MENU_BUTTON(btnName, spr, sprDown, text, font, fontSize, color, pos, callbackObject, callback)\
+	CCMenuItemImage* btnName = CCMenuItemImage::create(spr, sprDown, callbackObject, menu_selector(callback));\
+	btnName->setPosition(pos);\
+	CCSize btnName##Size = btnName->getContentSize(); \
+	CCLabelTTF* label##btnName = CCLabelTTF::create(text, \
+		font, \
+		fontSize, \
+		CCSizeMake(btnName##Size.width, 0), \
+		kCCTextAlignmentCenter, \
+		kCCVerticalTextAlignmentCenter \
+	); \
+	label##btnName->setPosition(ccp(btnName##Size.width / 2, 3 * btnName##Size.height / 5)); \
+	label##btnName->setColor(color); \
+	btnName->addChild(label##btnName);
+
+
 #endif //__MY_MACRO_H__

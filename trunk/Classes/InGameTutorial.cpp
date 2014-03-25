@@ -51,15 +51,11 @@ bool InGameTutorial::init()
 	lbMsg->setPosition(ccp(395, 1280-931));
 	lbMsg->setColor(ccc3(0,0,0));
 	bg->addChild(lbMsg);
-	
-	m_itExitButton = CCMenuItemImage::create(
-		"catcanh.png",
-		"catcanh1.png",
-		this,
-		menu_selector(InGameTutorial::menuCallBack));
-	m_itExitButton->setScale(BUTTON_SCALE);
-	m_itExitButton->setPosition(pExit);
-	
+
+	MY_CREATE_MENU_BUTTON(exitButton, "button.png", "button_down.png", TXT("btn_start"), 
+		"Roboto-Medium.ttf", 48, ccBLACK, pExit, this, InGameTutorial::menuCallBack);
+	m_itExitButton = exitButton;
+		
 	CCMenu* menu = CCMenu::create(m_itExitButton, NULL);
 	menu->setPosition(CCPointZero);
 	bg->addChild(menu);

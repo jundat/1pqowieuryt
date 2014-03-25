@@ -114,24 +114,13 @@ bool BreakLeaderboardDialog::init()
 
 	//////////////////////////////////////////////////////////////////////////
 
-	CCMenuItemImage* m_itExit = CCMenuItemImage::create(
-		"exit_button.png",
-		"exit_button_press.png",
-		this,
-		menu_selector(BreakLeaderboardDialog::menuCallBack));
-	m_itExit->setScale(BUTTON_SCALE);
-	m_itExit->setPosition(pExit);
+	MY_CREATE_MENU_BUTTON(m_itExit, "button.png", "button_down.png", TXT("btn_exit"), 
+		"Roboto-Medium.ttf", 48, ccBLACK, pExit, this, BreakLeaderboardDialog::menuCallBack);
 
 
-	CCMenuItemImage* m_itRevive = CCMenuItemImage::create(
-		"share.png",
-		"shareDown.png",
-		this,
-		menu_selector(BreakLeaderboardDialog::shareCallBack));
-	m_itRevive->setScale(BUTTON_SCALE);
-	m_itRevive->setPosition(pRevive);
-
-
+	MY_CREATE_MENU_BUTTON(m_itRevive, "button.png", "button_down.png", TXT("btn_share"), 
+		"Roboto-Medium.ttf", 48, ccBLACK, pRevive, this, BreakLeaderboardDialog::shareCallBack);
+	
 	CCMenu* menu = CCMenu::create(m_itExit, m_itRevive, NULL);
 	menu->setPosition(CCPointZero);
 	this->addChild(menu);
