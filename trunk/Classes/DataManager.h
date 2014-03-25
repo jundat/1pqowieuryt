@@ -102,6 +102,10 @@ public:
 	bool	GetFirstTimeViewTutorial();
 	void	SetFirstTimeViewTutorial(bool isFirstTime);
 
+	std::string		GetLanguage();
+	void			SetLanguage(const char* language);
+
+
 	
 	~DataManager(void);
 };

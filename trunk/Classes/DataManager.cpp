@@ -522,3 +522,16 @@ void DataManager::SetFirstTimeViewTutorial(bool isFirstTime)
 	CCUserDefault::sharedUserDefault()->setBoolForKey("G_IS_FIRST_TIME_VIEW_TUTORIAL", isFirstTime);
 	CCUserDefault::sharedUserDefault()->flush();
 }
+
+
+
+std::string DataManager::GetLanguage()
+{
+	return CCUserDefault::sharedUserDefault()->getStringForKey("CURRENT_LANGUAGE", std::string("Vietnamese"));
+}
+
+void DataManager::SetLanguage( const char* language )
+{
+	CCUserDefault::sharedUserDefault()->setStringForKey("CURRENT_LANGUAGE", std::string(language));
+	CCUserDefault::sharedUserDefault()->flush();
+}

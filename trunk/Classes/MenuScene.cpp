@@ -84,10 +84,16 @@ bool MenuScene::init()
 	
 	//////////////////////////////////////////////////////////////////////////
 	//Setting Bar
+
+	m_sprSettingBar = CCSprite::create("seting_bar.png");
+	m_sprSettingBar->setAnchorPoint(ccp(0.5f, 0.0f));
+	m_sprSettingBar->setPosition(ccp(98, 1280-1188));
+	m_sprSettingBar->setVisible(false);
+
 	CCMenuItem* facebookOn = CCMenuItemImage::create("facebook_icon.png", NULL, NULL);
 	CCMenuItem* facebookOff = CCMenuItemImage::create("facebook_icon_off.png", NULL, NULL);
 	m_facebookItem = CCMenuItemToggle::createWithTarget(this,  menu_selector(MenuScene::facebookCallback), facebookOn, facebookOff, NULL);
-	m_facebookItem->setPosition(ccp(76, 386-81));
+	m_facebookItem->setPosition(ccp(76, m_sprSettingBar->getContentSize().height-81));
 	if (m_isLoggedIn)
 	{
 		m_facebookItem->setSelectedIndex(1);
@@ -100,7 +106,7 @@ bool MenuScene::init()
 	CCMenuItem* soundOn = CCMenuItemImage::create("sound_on.png", NULL, NULL);
 	CCMenuItem* soundOff = CCMenuItemImage::create("sound_off.png", NULL, NULL);
 	m_soundItem = CCMenuItemToggle::createWithTarget(this,  menu_selector(MenuScene::soundCallback), soundOn, soundOff, NULL);
-	m_soundItem->setPosition(ccp(76, 386-227));
+	m_soundItem->setPosition(ccp(76, m_sprSettingBar->getContentSize().height-227));
 	if(AudioManager::sharedAudioManager()->IsEnableBackground())
 	{
 		m_soundItem->setSelectedIndex(0);
@@ -113,12 +119,6 @@ bool MenuScene::init()
 	CCMenu* settingMenu = CCMenu::create(m_facebookItem, m_soundItem, NULL);
 	settingMenu->setPosition(CCPointZero);
 	
-	m_settingBarW = 151;
-	m_settingBarH = 386;
-	m_sprSettingBar = CCSprite::create("seting_bar.png");
-	m_sprSettingBar->setAnchorPoint(ccp(0.5f, 0.0f));
-	m_sprSettingBar->setPosition(ccp(98, 1280-1188));
-	m_sprSettingBar->setVisible(false);
 	m_sprSettingBar->addChild(settingMenu);
 
 	this->addChild(m_sprSettingBar, 2);
@@ -131,6 +131,47 @@ bool MenuScene::init()
 	CCMenu* menuForSetting = CCMenu::create(m_settingItem, NULL);
 	menuForSetting->setPosition(CCPointZero);
 	this->addChild(menuForSetting, 3);
+	
+	//setting bar
+	//////////////////////////////////////////////////////////////////////////
+	//Language bar
+
+	m_sprLanguageBar = CCSprite::create("language_bar.png");
+	m_sprLanguageBar->setAnchorPoint(ccp(0.5f, 0.0f));
+	m_sprLanguageBar->setPosition(ccp(703, 1280-1188));
+	m_sprLanguageBar->setVisible(false);
+
+	m_englishItem = CCMenuItemImage::create("flag_english.png", "flag_english.png", "flag_english.png", this, menu_selector(MenuScene::englishCallback));
+	m_englishItem->setPosition(ccp(72, m_sprLanguageBar->getContentSize().height-65)); //(703, 1280-947));
+
+	m_vietnamItem = CCMenuItemImage::create("flag_vietnam.png", "flag_vietnam.png", "flag_vietnam.png", this, menu_selector(MenuScene::vietnamCallback));
+	m_vietnamItem->setPosition(ccp(72, m_sprLanguageBar->getContentSize().height-183)); //703, 1280-1065));
+
+	CCMenu* languageMenu = CCMenu::create(m_englishItem, m_vietnamItem, NULL);
+	languageMenu->setPosition(CCPointZero);
+
+	m_sprLanguageBar->addChild(languageMenu);
+
+	this->addChild(m_sprLanguageBar, 2);
+
+	//check current language before set
+	string lang = DataManager::sharedDataManager()->GetLanguage();
+	if (lang.compare("English") == 0)
+	{
+		m_languageItem = CCMenuItemImage::create("flag_english.png", "flag_english.png", this, menu_selector(MenuScene::languageCallback));
+	} 
+	else
+	{
+		m_languageItem = CCMenuItemImage::create("flag_vietnam.png", "flag_vietnam.png", this, menu_selector(MenuScene::languageCallback));
+	}
+	m_languageItem->setPosition(ccp(703, 1280-1186));
+
+	CCMenu* menuForLanguage = CCMenu::create(m_languageItem, NULL);
+	menuForLanguage->setPosition(CCPointZero);
+	this->addChild(menuForLanguage, 3);
+
+
+	//Language bar
 	//////////////////////////////////////////////////////////////////////////
 	
 
@@ -151,7 +192,7 @@ bool MenuScene::init()
 	itExit->setPosition(ccp(692, 1280-1181));
 
 
-    m_menu = CCMenu::create(m_playItem, scoreItem, itRate, itExit, NULL);
+    m_menu = CCMenu::create(m_playItem, scoreItem, itRate, /*itExit,*/ NULL);
     m_menu->setPosition(CCPointZero);
     this->addChild(m_menu, 1);
 
@@ -692,4 +733,40 @@ void MenuScene::fbFriendsCallback( int responseCode, const char* responseMessage
 
 	GameClientManager::sharedGameClientManager()->sendFriendList(DataManager::sharedDataManager()->GetFbID(), arrFriends);
 #endif
+}
+
+void MenuScene::languageCallback( CCObject* pSender )
+{
+	if (m_sprLanguageBar->isVisible())
+	{
+		m_sprLanguageBar->setVisible(false);
+	} 
+	else
+	{
+		m_sprLanguageBar->setVisible(true);
+	}
+}
+
+void MenuScene::englishCallback( CCObject* pSender )
+{
+	m_languageItem->setNormalImage(m_englishItem->getNormalImage());
+	m_languageItem->setSelectedImage(m_englishItem->getSelectedImage());
+
+	m_sprLanguageBar->setVisible(false);
+	DataManager::sharedDataManager()->SetLanguage("English");
+	TextLoader::shareTextLoader()->setCurrentLanguage(LANGUAGE_ENGLISH);
+
+	//refresh UI
+}
+
+void MenuScene::vietnamCallback( CCObject* pSender )
+{
+	m_languageItem->setNormalImage(m_vietnamItem->getNormalImage());
+	m_languageItem->setSelectedImage(m_vietnamItem->getSelectedImage());
+
+	m_sprLanguageBar->setVisible(false);
+	DataManager::sharedDataManager()->SetLanguage("Vietnamese");
+	TextLoader::shareTextLoader()->setCurrentLanguage(LANGUAGE_VIETNAMESE);
+
+	//refresh UI
 }

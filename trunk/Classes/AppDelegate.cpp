@@ -36,51 +36,19 @@ AppDelegate::~AppDelegate()
 
 bool AppDelegate::applicationDidFinishLaunching() {
 
-	ccLanguageType lang = CCApplication::getCurrentLanguage();
-
-	switch (lang)
-	{
-	case kLanguageChinese:
-		CCLOG("kLanguageChinese");
-		break;
-	case kLanguageEnglish:
-		CCLOG("kLanguageEnglish");
-		break;
-	case kLanguageFrench:
-		CCLOG("kLanguageFrench");
-		break;
-	case kLanguageItalian:
-		CCLOG("kLanguageItalian");
-		break;
-	case kLanguageGerman:
-		CCLOG("kLanguageGerman");
-		break;
-	case kLanguageSpanish:
-		CCLOG("kLanguageSpanish");
-		break;
-	case kLanguageRussian:
-		CCLOG("kLanguageRussian");
-		break;
-	case kLanguageKorean:
-		CCLOG("kLanguageKorean");
-		break;
-	case kLanguageJapanese:
-		CCLOG("kLanguageJapanese");
-		break;
-	case kLanguageHungarian:
-		CCLOG("kLanguageHungarian");
-		break;
-	case kLanguagePortuguese:
-		CCLOG("kLanguagePortuguese");
-		break;
-	case kLanguageArabic:
-		CCLOG("kLanguageArabic");
-		break;
-	}
-
 	ConfigLoader::shareConfigLoader();
 	LevelLoader::shareLevelLoader();
-	TextLoader::shareTextLoader();//->setCurrentLanguage(LANGUAGE_VIETNAMESE);
+	TextLoader::shareTextLoader();
+
+	string lang = DataManager::sharedDataManager()->GetLanguage();
+	if (lang.compare("English") == 0)
+	{
+		TextLoader::shareTextLoader()->setCurrentLanguage(LANGUAGE_ENGLISH);
+	}
+	else
+	{
+		TextLoader::shareTextLoader()->setCurrentLanguage(LANGUAGE_VIETNAMESE);
+	}
 	
 	GameClientManager::sharedGameClientManager()->setUrls(
 		G_URL_PLAYER_FB_PROFILE,

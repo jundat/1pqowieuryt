@@ -59,12 +59,15 @@ public:
 	CCMenuItemToggle *m_soundItem;
 	CCMenuItemToggle *m_facebookItem;
 	CCMenuItemToggle *m_settingItem;
+	CCMenuItemImage *m_languageItem;
+	CCMenuItemImage *m_englishItem;
+	CCMenuItemImage *m_vietnamItem;
+
 	CCMenuItemImage *m_playItem;
 	CCMenu* m_menu;
 
-	int m_settingBarW;
-	int m_settingBarH;
 	CCSprite* m_sprSettingBar;
+	CCSprite* m_sprLanguageBar;
 
 	void initLifeIcon();
 	void refreshLifeIcon();
@@ -80,6 +83,11 @@ public:
 	void facebookCallback(CCObject* pSender);
 	void exitCallback(CCObject* pSender);
 	
+	void languageCallback(CCObject* pSender);
+	void englishCallback(CCObject* pSender);
+	void vietnamCallback(CCObject* pSender);
+
+
 	void onEnterTransitionDidFinish()
 	{
 		CCSpriteFrameCache* sprcache = CCSpriteFrameCache::sharedSpriteFrameCache();
