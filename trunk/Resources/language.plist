@@ -5,6 +5,8 @@
 	<dict>
 		<key>game_name</key>
 		<string>game_name</string>
+		<key>game_package</key>
+		<string>game_package</string>
 		<key>feed_heading</key>
 		<string>feed_heading</string>
 		<key>feed_caption</key>
@@ -81,20 +83,30 @@
 		<string>btn_share</string>
 		<key>btn_leaderboard</key>
 		<string>btn_leaderboard</string>
+		<key>rate_msg</key>
+		<string>rate_msg</string>
+		<key>rate_rate</key>
+		<string>rate_rate</string>
+		<key>rate_later</key>
+		<string>rate_later</string>
+		<key>rate_no</key>
+		<string>rate_no</string>
 	</dict>
 
 	<key>English</key>
 	<dict>
 		<key>game_name</key>
-		<string>Điện Biên Phủ trên không</string>
+		<string>LineBacker</string>
+		<key>game_package</key>
+		<string>com.chimgokien.phicongbutchi</string>
 		<key>feed_heading</key>
-		<string>Điện Biên Phủ trên không -- the best space shooting game in 2014</string>
+		<string>Line Backer -- the best shoot them up game in 2014</string>
 		<key>feed_caption</key>
-		<string>Dare your all friend</string>
+		<string>Challenge your friends</string>
 		<key>feed_msg</key>
-		<string>I've got %d pts in Điện Biên Phủ trên không, follow me is %s. Kaka :v</string>
+		<string>I've got %d pts in Line Backer, follow me is %s. Kaka :v</string>
 		<key>feed_description</key>
-		<string>Live in the lagend of 12-days </string>
+		<string>Live in the legend of 12-days </string>
 		<key>feed_badge_icon</key>
 		<string>https://dl.dropboxusercontent.com/u/41829250/DienBienPhuTrenKhong/DienBienPhuTrenKhong.jpg</string>
 		<key>feed_deep_link</key>
@@ -102,15 +114,15 @@
 		<key>feed_error_caption</key>
 		<string>Error</string>
 		<key>feed_error</key>
-		<string>Couldn't share</string>
+		<string>Failed to share</string>
 		<key>tut_content</key>
-		<string>1972 .... The enemy ambush ongoing for several days with a focus on the B-52 bomber at night ....</string>
+		<string>1972 .... The enemy had attacked for several days mainly using the B-52 bomber at night ....</string>
 		<key>tut_mission</key>
-		<string>Do not let more than 3 B-52 go over you !!!</string>
+		<string>Do not miss more than 3 B-52 bombers !!!</string>
 		<key>lose_score</key>
 		<string>Score</string>
 		<key>lose_error</key>
-		<string>You have not enough diamond!</string>
+		<string>You do not have enough diamond!</string>
 		<key>lose_error_caption</key>
 		<string>Information</string>
 		<key>menu_thank_rate</key>
@@ -118,15 +130,15 @@
 		<key>menu_thank_caption</key>
 		<string>Information</string>
 		<key>quit_ask</key>
-		<string>Do you want to exit!</string>
+		<string>Do you want to exit? </string>
 		<key>score_invite_to_facebook</key>
-		<string>Connect  facebook for more friend, more gift!</string>
+		<string>Connect  facebook for more friends, more gifts!</string>
 		<key>score_no_gift</key>
-		<string>You have no gift. Call your friends to get more every day!</string>
+		<string>You have no gift. Invite your friends to play LineBacker to get more every day!</string>
 		<key>score_server_error</key>
-		<string>Can not connect to server</string>
+		<string>Failed to connect to server</string>
 		<key>score_invite_friend</key>
-		<string>%s is fighting to kill enemies in Điện Biên Phủ trên không. Come in to help your friend now!</string>
+		<string>%s is fighting to shoot down enemie planes in Line Backer. Come in to help your friend now!</string>
 		<key>score_limit_lazer</key>
 		<string>Max lazer is %d</string>
 		<key>score_popup_caption</key>
@@ -138,11 +150,11 @@
 		<key>score_send_life</key>
 		<string>Send</string>
 		<key>wait_lack_of_life</key>
-		<string>You have not enough life. Please wait!</string>
+		<string>You do not have enough live. Please wait !</string>
 		<key>btn_ask_friend</key>
-		<string>Ask friend</string>
+		<string>Request</string>
 		<key>btn_start</key>
-		<string>Lift up</string>
+		<string>Take off</string>
 		<key>btn_exit</key>
 		<string>Exit</string>
 		<key>btn_revive</key>
@@ -162,13 +174,23 @@
 		<key>btn_share</key>
 		<string>Share</string>
 		<key>btn_leaderboard</key>
-		<string>Leaderboard</string>
+		<string>Ranking</string>
+		<key>rate_msg</key>
+		<string>Rate 5 stars for LineBacker!</string>
+		<key>rate_rate</key>
+		<string>Rate</string>
+		<key>rate_later</key>
+		<string>Remind me later</string>
+		<key>rate_no</key>
+		<string>No, thanks</string>
 	</dict>
 
 	<key>Vietnamese</key>
 	<dict>
 		<key>game_name</key>
 		<string>Điện Biên Phủ trên không</string>
+		<key>game_package</key>
+		<string>com.chimgokien.phicongbutchi</string>
 		<key>feed_heading</key>
 		<string>Điện Biên Phủ trên không -- Game bắn máy bay hot nhất 2014</string>
 		<key>feed_caption</key>
@@ -245,6 +267,14 @@
 		<string>Chia sẻ</string>
 		<key>btn_leaderboard</key>
 		<string>Xếp hạng</string>
+		<key>rate_msg</key>
+		<string>Bình chọn Điện Biên Phủ trên không 5 sao nhé!</string>
+		<key>rate_rate</key>
+		<string>Rate</string>
+		<key>rate_later</key>
+		<string>Để sau</string>
+		<key>rate_no</key>
+		<string>Không, cảm ơn</string>
 	</dict>
 
 </dict>

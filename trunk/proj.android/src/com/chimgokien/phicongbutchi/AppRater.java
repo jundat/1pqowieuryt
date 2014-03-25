@@ -14,9 +14,11 @@ import android.widget.TextView;
 
 public class AppRater {
 	
+	//public static String game_name, game_package, msg, rate, later, no;
+	
 	private final static String TAG = "APP_RATER";
-    private final static String APP_TITLE = "Điện Biên Phủ Trên Không";
-    private final static String APP_PNAME = "com.chimgokien.phicongbutchi";
+    //private final static String APP_TITLE = "Điện Biên Phủ Trên Không";
+    //private final static String APP_PNAME = "com.chimgokien.phicongbutchi";
     
     private final static int DAYS_UNTIL_PROMPT = 1; //3
     private final static int LAUNCHES_UNTIL_PROMPT = 1; //7
@@ -42,31 +44,39 @@ public class AppRater {
         if (launch_count >= LAUNCHES_UNTIL_PROMPT) {
             if (System.currentTimeMillis() >= date_firstLaunch + 
                     (DAYS_UNTIL_PROMPT * 24 * 60 * 60 * 1000)) {
-                showRateDialog(mContext, editor, parent);
+                showRateDialog(mContext, editor, parent, 
+                		"Điện Biên Phủ trên không", 
+                		"com.chimgokien.phicongbutchi", 
+                		"Rate 5 stars for Điện Biên Phủ trên không", 
+                		"Rate", 
+                		"Later", 
+                		"No, thanks");
             }
         }
         
         editor.commit();
     }   
     
-    public static void showRateDialog(final Context mContext, final SharedPreferences.Editor editor, final PhiCongButChi parent) {
+    public static void showRateDialog(final Context mContext, final SharedPreferences.Editor editor, final PhiCongButChi parent,
+    		String game_name, final String game_package, String msg, String rate, String later, String no) {
         final Dialog dialog = new Dialog(mContext);
-        dialog.setTitle(APP_TITLE);
+        dialog.setTitle(game_name);
 
         LinearLayout ll = new LinearLayout(mContext);
         ll.setOrientation(LinearLayout.VERTICAL);
         
         TextView tv = new TextView(mContext);
-        tv.setText("Bình chọn cho " + APP_TITLE + " 5 sao nhé!");
-        tv.setWidth(240);
-        tv.setPadding(20, 0, 20, 10);
+        tv.setText(msg);
+        tv.setWidth(400);
+        tv.setPadding(10, 0, 10, 10);
         ll.addView(tv);
         
         Button b1 = new Button(mContext);
-        b1.setText("Rate ngay");
+        b1.setText(rate);
+        b1.setWidth(400);
         b1.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                mContext.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + APP_PNAME)));
+                mContext.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + game_package)));
                 dialog.dismiss();
                 
                 parent.onRateCompleted("RATE");
@@ -76,7 +86,8 @@ public class AppRater {
         ll.addView(b1);
 
         Button b2 = new Button(mContext);
-        b2.setText("Để sau");
+        b2.setText(later);
+        b2.setWidth(400);
         b2.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 dialog.dismiss();
@@ -88,7 +99,8 @@ public class AppRater {
         ll.addView(b2);
 
         Button b3 = new Button(mContext);
-        b3.setText("Không, cảm ơn");
+        b3.setText(no);
+        b3.setWidth(400);
         b3.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 if (editor != null) {

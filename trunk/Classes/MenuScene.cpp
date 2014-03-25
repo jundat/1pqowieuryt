@@ -408,7 +408,12 @@ void MenuScene::rateCallback( CCObject* pSender )
 		this);
 
 	CCDictionary* prms = CCDictionary::create();
-	prms->setObject(CCString::create(G_URL_RATE), "link");
+	prms->setObject(CCString::create(TXT("game_name")), "game_name");
+	prms->setObject(CCString::create(TXT("game_package")), "game_package");
+	prms->setObject(CCString::create(TXT("rate_msg")), "msg");
+	prms->setObject(CCString::create(TXT("rate_rate")), "rate");
+	prms->setObject(CCString::create(TXT("rate_later")), "later");
+	prms->setObject(CCString::create(TXT("rate_no")), "no");
 
 	SendMessageWithParams(string("Rate"), prms);
 }

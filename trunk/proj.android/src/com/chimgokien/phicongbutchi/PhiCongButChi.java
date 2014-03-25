@@ -85,7 +85,21 @@ public class PhiCongButChi extends Cocos2dxActivity {
 	
 	public void Rate(JSONObject prms)
 	{
-		AppRater.showRateDialog(this, null, this);
+		String game_name, game_package, msg, rate, later, no;
+		try {
+			game_name = prms.getString("game_name");
+			game_package = prms.getString("game_package");
+			msg = prms.getString("msg");
+			rate = prms.getString("rate");
+			later = prms.getString("later");
+			no = prms.getString("no");
+						
+			AppRater.showRateDialog(this, null, this, game_name, game_package, msg, rate, later, no);
+			
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
 	}
 	
 	public void onRateCompleted(String responseType) {
