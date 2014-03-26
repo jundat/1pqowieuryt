@@ -105,7 +105,8 @@ public:
 	std::string		GetLanguage();
 	void			SetLanguage(const char* language);
 
-
+	bool	GetFirstTimeChooseLanguage();
+	void	SetFirstTimeChooseLanguage(bool isFirstTime);
 	
 	~DataManager(void);
 };

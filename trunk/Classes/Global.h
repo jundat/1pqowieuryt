@@ -6,6 +6,7 @@
 //////////////////////////////////////////////////////////////////////////
 //CONSTANT
 #define G_CCWHITE4				ccc4(255, 255, 255, 255)
+#define G_DIM_COLOR				ccc4(0, 0, 0, 128)
 #define G_FONT_NORMAL			"Roboto-Medium.ttf"
 #define G_FONT_LEADERBOARD		"Villa.ttf"
 

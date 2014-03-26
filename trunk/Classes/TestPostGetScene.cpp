@@ -2,6 +2,7 @@
 #include "TestPostGetScene.h"
 #include "Global.h"
 #include "TextLoader.h"
+#include "DataManager.h"
 
 USING_NS_CC;
 
@@ -100,7 +101,8 @@ bool TestPostGetScene::init()
 //user profile
 void TestPostGetScene::testPost1(CCObject *sender)
 {
-	GameClientManager::sharedGameClientManager()->sendPlayerFbProfile("Fb1", "PhamLong", "PhamLong@gmail.com", string(G_APP_ID));
+	string fbid = DataManager::sharedDataManager()->GetFbID();
+	GameClientManager::sharedGameClientManager()->sendPlayerFbProfile(fbid.c_str(), "PhamLong", "PhamLong@gmail.com", string(G_APP_ID));
 // 	GameClientManager::sharedGameClientManager()->sendPlayerFbProfile("Fb2", "DinhDung", "DinhDung@gmail.com", string(G_APP_ID));
 // 	GameClientManager::sharedGameClientManager()->sendPlayerFbProfile("Fb3", "BuiHieu", "BuiHieu@gmail.com", string(G_APP_ID));
 // 	GameClientManager::sharedGameClientManager()->sendPlayerFbProfile("Fb4", "DangTran", "DangTran@gmail.com", string(G_APP_ID));
@@ -121,7 +123,8 @@ void TestPostGetScene::testPost2(CCObject *sender)
 	arrFr->addObject(new FacebookAccount("Fb6", "NguyenChau", std::string("NguyenChau@gmail.com"), 500));
 
 	CCLOG("SEND FRIEND FOR: Fb1");
-	GameClientManager::sharedGameClientManager()->sendFriendList("Fb1", arrFr);
+	string fbid = DataManager::sharedDataManager()->GetFbID();
+	GameClientManager::sharedGameClientManager()->sendFriendList(fbid.c_str(), arrFr);
 
 
 // 	CCArray* arrNotFr = new CCArray();
@@ -141,8 +144,9 @@ void TestPostGetScene::testPost2(CCObject *sender)
 //sendDeviceProfile
 void TestPostGetScene::testPost3(CCObject *sender)
 {
+	string fbid = DataManager::sharedDataManager()->GetFbID();
 	GameClientManager::sharedGameClientManager()->sendDeviceProfile(
-		"Fb1", 
+		fbid.c_str(), 
 		"DeviceId1", 
 		"DeviceToken1", 
 		"DeviceConfig1", 
@@ -152,7 +156,8 @@ void TestPostGetScene::testPost3(CCObject *sender)
 //sendScore
 void TestPostGetScene::testPost4(CCObject *sender)
 {
-	GameClientManager::sharedGameClientManager()->sendScore(G_APP_ID, "Fb1", 5000);
+	string fbid = DataManager::sharedDataManager()->GetFbID();
+	GameClientManager::sharedGameClientManager()->sendScore(G_APP_ID, fbid.c_str(), 5000);
 // 	GameClientManager::sharedGameClientManager()->sendScore(G_APP_ID, "Fb2", 10000);
 // 	GameClientManager::sharedGameClientManager()->sendScore(G_APP_ID, "Fb3", 15000);
 // 	GameClientManager::sharedGameClientManager()->sendScore(G_APP_ID, "Fb4", 20000);
@@ -163,23 +168,27 @@ void TestPostGetScene::testPost4(CCObject *sender)
 //getScore
 void TestPostGetScene::testPost5(CCObject *sender)
 {
-	GameClientManager::sharedGameClientManager()->getScore(G_APP_ID, "Fb1");
+	string fbid = DataManager::sharedDataManager()->GetFbID();
+	GameClientManager::sharedGameClientManager()->getScore(G_APP_ID, fbid.c_str());
 }
 
 //getPlayerFbProfile
 void TestPostGetScene::testPost6(CCObject *sender)
 {
-	GameClientManager::sharedGameClientManager()->getPlayerFbProfile("Fb1");
+	string fbid = DataManager::sharedDataManager()->GetFbID();
+	GameClientManager::sharedGameClientManager()->getPlayerFbProfile(fbid.c_str());
 }
 
 //getDeviceProfile
 void TestPostGetScene::testPost7(CCObject *sender)
 {
-	GameClientManager::sharedGameClientManager()->getDeviceProfile("Fb1", "DeviceId1");
+	string fbid = DataManager::sharedDataManager()->GetFbID();
+	GameClientManager::sharedGameClientManager()->getDeviceProfile(fbid.c_str(), "DeviceId1");
 }
 
 //getFriendList
 void TestPostGetScene::testPost8(CCObject *sender)
 {
-	GameClientManager::sharedGameClientManager()->getFriendList(G_APP_ID, "Fb1");
+	string fbid = DataManager::sharedDataManager()->GetFbID();
+	GameClientManager::sharedGameClientManager()->getFriendList(G_APP_ID, fbid.c_str());
 }

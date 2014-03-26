@@ -61,6 +61,9 @@ public:
 	//////////////////////////////////////////////////////////////////////////
 	//main functions
 public:
+
+	string getMD5();
+
 	void sendPlayerFbProfile(std::string fbId, std::string fbName, std::string email, string appId);
 	void _onSendPlayerFbProfileCompleted(CCHttpClient *sender, CCHttpResponse *response);
 

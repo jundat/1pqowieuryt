@@ -15,10 +15,10 @@ USING_NS_CC;
 
 bool BreakLeaderboardDialog::init()
 {
-    if ( !CCLayer::init() )
-    {
-        return false;
-    }
+	if ( !CCLayerColor::initWithColor(G_DIM_COLOR) )
+	{
+		return false;
+	}
 
 	CCPoint pExit = ccp(233, 1280-813);
 	CCPoint pRevive = ccp(561, 1280-813);
@@ -155,7 +155,17 @@ void BreakLeaderboardDialog::afterMovePlane( CCNode* pSender )
 
 void BreakLeaderboardDialog::afterMoveLoser()
 {
-	CCSprite* sprVuotMat = CCSprite::create("vuotmat.png");
+	CCSprite* sprVuotMat;
+	string lang = DataManager::sharedDataManager()->GetLanguage();
+	if (lang.compare("English") == 0)
+	{
+		sprVuotMat = CCSprite::create("en_beat.png");
+	} 
+	else
+	{
+		sprVuotMat = CCSprite::create("vn_beat.png");
+	}
+
 	sprVuotMat->setPosition(ccp(400, 700));
 	sprVuotMat->setScale(6.0f);
 	sprVuotMat->runAction(CCScaleTo::create(0.15f, 2.0f));

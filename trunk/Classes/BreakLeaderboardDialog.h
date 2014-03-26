@@ -18,7 +18,7 @@ USING_NS_CC_EXT;
 using namespace std;
 
 
-class BreakLeaderboardDialog : public cocos2d::CCLayer
+class BreakLeaderboardDialog : public cocos2d::CCLayerColor
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	,public EziFacebookDelegate
 #endif

@@ -135,6 +135,7 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
     <ClCompile Include="..\Classes\BreakLeaderboardDialog.cpp" />
     <ClCompile Include="..\Classes\Bullet.cpp" />
     <ClCompile Include="..\Classes\CCParallaxNodeExtras.cpp" />
+    <ClCompile Include="..\Classes\ChooseLanguageDialog.cpp" />
     <ClCompile Include="..\Classes\ConfigLoader.cpp" />
     <ClCompile Include="..\Classes\CustomTableViewCell.cpp" />
     <ClCompile Include="..\Classes\DataManager.cpp" />
@@ -185,6 +186,7 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
     <ClInclude Include="..\Classes\BreakLeaderboardDialog.h" />
     <ClInclude Include="..\Classes\Bullet.h" />
     <ClInclude Include="..\Classes\CCParallaxNodeExtras.h" />
+    <ClInclude Include="..\Classes\ChooseLanguageDialog.h" />
     <ClInclude Include="..\Classes\ConfigLoader.h" />
     <ClInclude Include="..\Classes\CustomTableViewCell.h" />
     <ClInclude Include="..\Classes\DataManager.h" />

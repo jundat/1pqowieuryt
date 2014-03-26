@@ -4,10 +4,10 @@
 #include "cocos2d.h"
 USING_NS_CC;
 
-class LoseDialog : public cocos2d::CCLayer
+class LoseDialog : public cocos2d::CCLayerColor
 {
 public:
-	LoseDialog(int score, bool isBreakrecord):CCLayer(){
+	LoseDialog(int score, bool isBreakrecord):CCLayerColor(){
 		this->m_score = score;
 		this->m_isBreakRecord = isBreakrecord;
 	};

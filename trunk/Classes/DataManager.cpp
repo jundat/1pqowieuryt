@@ -535,3 +535,17 @@ void DataManager::SetLanguage( const char* language )
 	CCUserDefault::sharedUserDefault()->setStringForKey("CURRENT_LANGUAGE", std::string(language));
 	CCUserDefault::sharedUserDefault()->flush();
 }
+
+
+//default = true
+bool DataManager::GetFirstTimeChooseLanguage()
+{
+	return CCUserDefault::sharedUserDefault()->getBoolForKey("IS_FIRST_TIME_CHOOSE_LANGUAGE", true);
+}
+
+void DataManager::SetFirstTimeChooseLanguage(bool isFirstTime)
+{
+	CCUserDefault::sharedUserDefault()->setBoolForKey("IS_FIRST_TIME_CHOOSE_LANGUAGE", isFirstTime);
+	CCUserDefault::sharedUserDefault()->flush();
+}
+

@@ -19,7 +19,7 @@ USING_NS_CC;
 USING_NS_CC_EXT;
 
 
-#define G_VERSION			70
+#define G_VERSION			71
 #define G_MENU_BG_COLOR		ccc4(195, 200, 201, 255)
 #define G_MENU_BG			"bg_menu.png"
 #define G_MENU_BG_ANCHORPOINT	ccp(0.0f, 0.0f)
@@ -34,8 +34,12 @@ USING_NS_CC_EXT;
 #define G_MENU_VERSION_TEXT_COLOR	ccc3(56, 56, 56)
 #define G_MENU_VERSION_TEXT_POS		ccp(20, 1280-20)
 
-#define G_MENU_NEW_BUTTON_SPR_NORMAL	"new_button.png"
-#define G_MENU_NEW_BUTTON_SPR_PRESS		"new_button_press.png"
+#define G_MENU_NEW_BUTTON_SPR_NORMAL_VN		"vn_new_button.png"
+#define G_MENU_NEW_BUTTON_SPR_PRESS_VN		"vn_new_button_press.png"
+
+#define G_MENU_NEW_BUTTON_SPR_NORMAL_EN		"en_new_button.png"
+#define G_MENU_NEW_BUTTON_SPR_PRESS_EN		"en_new_button_press.png"
+
 #define G_MENU_NEW_BUTTON_POS			ccp(400, 1280-813)
 
 

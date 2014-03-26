@@ -68,7 +68,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 		//save some value
 		DM->SetLastPlayerLife(G_MAX_PLAYER_LIFE);
 		DM->SetBoom(G_DEFAULT_BOOM);
-	}	
+	}
 
     CCDirector* pDirector = CCDirector::sharedDirector();
     CCEGLView* pEGLView = CCEGLView::sharedOpenGLView();
@@ -96,7 +96,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	AudioManager::sharedAudioManager()->SetVolumeFX(G_DEFAULT_VOLUME);
 
 
-    CCScene *pScene = TestPostGetScene::scene(); // MenuScene::scene(); //  MainGameScene::scene(); //TestPostGetScene::scene(); // IntroScene::scene(); // 
+    CCScene *pScene = TestPostGetScene::scene();  // IntroScene::scene(); //// MenuScene::scene(); //  MainGameScene::scene(); //TestPostGetScene::scene(); //
 	pDirector->runWithScene(pScene);
 
     return true;

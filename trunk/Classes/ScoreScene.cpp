@@ -35,9 +35,23 @@ bool ScoreScene::init()
 	m_lbInviteQuatang = NULL;
 
 
-	CCSprite* bg = CCSprite::create("bg_friend.png");
+	CCSprite* bg = CCSprite::create("bg_stars.png");
 	bg->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2));
 	this->addChild(bg);
+	
+	CCSprite* top;
+	string lang = DataManager::sharedDataManager()->GetLanguage();
+	if (lang.compare("English") == 0)
+	{
+		top = CCSprite::create("en_score_top.png");
+	} 
+	else
+	{
+		top = CCSprite::create("vn_score_top.png");
+	}
+	top->setPosition(ccp(383, 1280-61));
+	this->addChild(top);
+
 
 	CCSprite* table_top = CCSprite::create("table_top.png");
 	table_top->setPosition(ccp(400, 1280-202));

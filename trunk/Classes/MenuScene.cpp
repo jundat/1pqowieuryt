@@ -67,11 +67,24 @@ bool MenuScene::init()
 	this->addChild(labelVersion);
 
 	//
-    m_playItem = CCMenuItemImage::create(
-                                        G_MENU_NEW_BUTTON_SPR_NORMAL,
-                                        G_MENU_NEW_BUTTON_SPR_PRESS,
-                                        this,
-                                        menu_selector(MenuScene::playCallback));
+	string lang = DataManager::sharedDataManager()->GetLanguage();
+	if (lang.compare("English") == 0)
+	{
+		m_playItem = CCMenuItemImage::create(
+			G_MENU_NEW_BUTTON_SPR_NORMAL_EN,
+			G_MENU_NEW_BUTTON_SPR_PRESS_EN,
+			this,
+			menu_selector(MenuScene::playCallback));
+	} 
+	else
+	{
+		m_playItem = CCMenuItemImage::create(
+			G_MENU_NEW_BUTTON_SPR_NORMAL_VN,
+			G_MENU_NEW_BUTTON_SPR_PRESS_VN,
+			this,
+			menu_selector(MenuScene::playCallback));
+	}
+
 	m_playItem->setPosition(G_MENU_NEW_BUTTON_POS);
 
 	CCMenuItemImage *scoreItem = CCMenuItemImage::create(
@@ -79,21 +92,39 @@ bool MenuScene::init()
 		"score_button_press.png",
 		this,
 		menu_selector(MenuScene::scoreCallback));
-	scoreItem->setPosition(ccp(329, 1280-1175));
+	scoreItem->setPosition(ccp(315, 1280-1176));
+
+
+	//rate
+	CCMenuItemImage *itRate = CCMenuItemImage::create(
+		"rate.png",
+		"rateDown.png",
+		this,
+		menu_selector(MenuScene::rateCallback));
+	itRate->setPosition(ccp(502, 1280-1180));
+
+	//exit
+	CCMenuItemImage *itExit = CCMenuItemImage::create(
+		"exit.png",
+		"exitDown.png",
+		this,
+		menu_selector(MenuScene::exitCallback));
+	itExit->setPosition(ccp(692, 1280-1181));
+
 
 	
 	//////////////////////////////////////////////////////////////////////////
 	//Setting Bar
 
-	m_sprSettingBar = CCSprite::create("seting_bar.png");
+	m_sprSettingBar = CCSprite::create("setting_bar.png");
 	m_sprSettingBar->setAnchorPoint(ccp(0.5f, 0.0f));
-	m_sprSettingBar->setPosition(ccp(98, 1280-1188));
+	m_sprSettingBar->setPosition(ccp(108, 1280-1245));
 	m_sprSettingBar->setVisible(false);
 
 	CCMenuItem* facebookOn = CCMenuItemImage::create("facebook_icon.png", NULL, NULL);
 	CCMenuItem* facebookOff = CCMenuItemImage::create("facebook_icon_off.png", NULL, NULL);
 	m_facebookItem = CCMenuItemToggle::createWithTarget(this,  menu_selector(MenuScene::facebookCallback), facebookOn, facebookOff, NULL);
-	m_facebookItem->setPosition(ccp(76, m_sprSettingBar->getContentSize().height-81));
+	m_facebookItem->setPosition(ccp(70, m_sprSettingBar->getContentSize().height-65));
 	if (m_isLoggedIn)
 	{
 		m_facebookItem->setSelectedIndex(1);
@@ -106,7 +137,7 @@ bool MenuScene::init()
 	CCMenuItem* soundOn = CCMenuItemImage::create("sound_on.png", NULL, NULL);
 	CCMenuItem* soundOff = CCMenuItemImage::create("sound_off.png", NULL, NULL);
 	m_soundItem = CCMenuItemToggle::createWithTarget(this,  menu_selector(MenuScene::soundCallback), soundOn, soundOff, NULL);
-	m_soundItem->setPosition(ccp(76, m_sprSettingBar->getContentSize().height-227));
+	m_soundItem->setPosition(ccp(81, m_sprSettingBar->getContentSize().height-181));
 	if(AudioManager::sharedAudioManager()->IsEnableBackground())
 	{
 		m_soundItem->setSelectedIndex(0);
@@ -126,7 +157,7 @@ bool MenuScene::init()
 	CCMenuItem* settingOn = CCMenuItemImage::create("setting.png", NULL, NULL);
 	CCMenuItem* settingOff = CCMenuItemImage::create("settingDown.png", NULL, NULL);
 	m_settingItem = CCMenuItemToggle::createWithTarget(this,  menu_selector(MenuScene::settingCallback), settingOn, settingOff, NULL);
-	m_settingItem->setPosition(ccp(98, 1280-1181));
+	m_settingItem->setPosition(ccp(112, 1280-1178));
 
 	CCMenu* menuForSetting = CCMenu::create(m_settingItem, NULL);
 	menuForSetting->setPosition(CCPointZero);
@@ -138,14 +169,14 @@ bool MenuScene::init()
 
 	m_sprLanguageBar = CCSprite::create("language_bar.png");
 	m_sprLanguageBar->setAnchorPoint(ccp(0.5f, 0.0f));
-	m_sprLanguageBar->setPosition(ccp(703, 1280-1188));
+	m_sprLanguageBar->setPosition(ccp(688, 1280-1253));
 	m_sprLanguageBar->setVisible(false);
 
-	m_englishItem = CCMenuItemImage::create("flag_english.png", "flag_english.png", "flag_english.png", this, menu_selector(MenuScene::englishCallback));
-	m_englishItem->setPosition(ccp(72, m_sprLanguageBar->getContentSize().height-65)); //(703, 1280-947));
+	m_englishItem = CCMenuItemImage::create("flag_english.png", "flag_english_down.png", "flag_english_down.png", this, menu_selector(MenuScene::englishCallback));
+	m_englishItem->setPosition(ccp(71, m_sprLanguageBar->getContentSize().height-53)); //(703, 1280-947));
 
-	m_vietnamItem = CCMenuItemImage::create("flag_vietnam.png", "flag_vietnam.png", "flag_vietnam.png", this, menu_selector(MenuScene::vietnamCallback));
-	m_vietnamItem->setPosition(ccp(72, m_sprLanguageBar->getContentSize().height-183)); //703, 1280-1065));
+	m_vietnamItem = CCMenuItemImage::create("flag_vietnam.png", "flag_vietnam_down.png", "flag_vietnam_down.png", this, menu_selector(MenuScene::vietnamCallback));
+	m_vietnamItem->setPosition(ccp(71, m_sprLanguageBar->getContentSize().height-53)); //703, 1280-1065));
 
 	CCMenu* languageMenu = CCMenu::create(m_englishItem, m_vietnamItem, NULL);
 	languageMenu->setPosition(CCPointZero);
@@ -155,16 +186,17 @@ bool MenuScene::init()
 	this->addChild(m_sprLanguageBar, 2);
 
 	//check current language before set
-	string lang = DataManager::sharedDataManager()->GetLanguage();
 	if (lang.compare("English") == 0)
 	{
-		m_languageItem = CCMenuItemImage::create("flag_english.png", "flag_english.png", this, menu_selector(MenuScene::languageCallback));
+		m_englishItem->setVisible(false);
+		m_languageItem = CCMenuItemImage::create("flag_english.png", "flag_english_down.png", this, menu_selector(MenuScene::languageCallback));
 	} 
 	else
 	{
-		m_languageItem = CCMenuItemImage::create("flag_vietnam.png", "flag_vietnam.png", this, menu_selector(MenuScene::languageCallback));
+		m_vietnamItem->setVisible(false);
+		m_languageItem = CCMenuItemImage::create("flag_vietnam.png", "flag_vietnam_down.png", this, menu_selector(MenuScene::languageCallback));
 	}
-	m_languageItem->setPosition(ccp(703, 1280-1186));
+	m_languageItem->setPosition(ccp(690, 1280-1202));
 
 	CCMenu* menuForLanguage = CCMenu::create(m_languageItem, NULL);
 	menuForLanguage->setPosition(CCPointZero);
@@ -174,24 +206,6 @@ bool MenuScene::init()
 	//Language bar
 	//////////////////////////////////////////////////////////////////////////
 	
-
-	//rate
-	CCMenuItemImage *itRate = CCMenuItemImage::create(
-		"rate.png",
-		"rateDown.png",
-		this,
-		menu_selector(MenuScene::rateCallback));
-	itRate->setPosition(ccp(548, 1280-1181));
-
-	//exit
-	CCMenuItemImage *itExit = CCMenuItemImage::create(
-		"exit.png",
-		"exitDown.png",
-		this,
-		menu_selector(MenuScene::exitCallback));
-	itExit->setPosition(ccp(692, 1280-1181));
-
-
     m_menu = CCMenu::create(m_playItem, scoreItem, itRate, /*itExit,*/ NULL);
     m_menu->setPosition(CCPointZero);
     this->addChild(m_menu, 1);
@@ -749,6 +763,9 @@ void MenuScene::languageCallback( CCObject* pSender )
 
 void MenuScene::englishCallback( CCObject* pSender )
 {
+	m_englishItem->setVisible(false);
+	m_vietnamItem->setVisible(true);
+
 	m_languageItem->setNormalImage(m_englishItem->getNormalImage());
 	m_languageItem->setSelectedImage(m_englishItem->getSelectedImage());
 
@@ -761,6 +778,9 @@ void MenuScene::englishCallback( CCObject* pSender )
 
 void MenuScene::vietnamCallback( CCObject* pSender )
 {
+	m_englishItem->setVisible(true);
+	m_vietnamItem->setVisible(false);
+
 	m_languageItem->setNormalImage(m_vietnamItem->getNormalImage());
 	m_languageItem->setSelectedImage(m_vietnamItem->getSelectedImage());
 

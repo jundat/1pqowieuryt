@@ -13,10 +13,10 @@ USING_NS_CC_EXT;
 
 bool LoseDialog::init()
 {
-    if ( !CCLayer::init() )
-    {
-        return false;
-    }
+	if ( !CCLayerColor::initWithColor(G_DIM_COLOR) )
+	{
+		return false;
+	}
 	
 	m_timerBar = NULL;
 	m_timerNode = NULL;
@@ -32,7 +32,7 @@ bool LoseDialog::init()
 	CCScale9Sprite* bg = CCScale9Sprite::create("dialog.png");
 	bg->setPosition(ccp(400, 640));
 	bg->setContentSize(CCSizeMake(680, 480));
-	this->addChild(bg, -2);
+	this->addChild(bg);
 	
 
 	//diamon
@@ -283,7 +283,18 @@ void LoseDialog::breakRecord()
 
 
 	//Ngoi sao
-	CCSprite* sprKyLuc = CCSprite::create("kiluc.png");
+	CCSprite* sprKyLuc;
+
+	string lang = DataManager::sharedDataManager()->GetLanguage();
+	if (lang.compare("English") == 0)
+	{
+		sprKyLuc = CCSprite::create("en_kiluc.png");
+	} 
+	else
+	{
+		sprKyLuc = CCSprite::create("vn_kiluc.png");
+	}
+
 	sprKyLuc->setPosition(ccp(138, 1280-475));
 	sprKyLuc->setScale(1280.0f / sprKyLuc->getContentSize().height);
 	this->addChild(sprKyLuc);

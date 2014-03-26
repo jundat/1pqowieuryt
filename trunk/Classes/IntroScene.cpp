@@ -2,6 +2,7 @@
 #include "MenuScene.h"
 #include "IntroScene.h"
 #include "DataManager.h"
+#include "ChooseLanguageDialog.h"
 
 USING_NS_CC;
 
@@ -37,6 +38,16 @@ bool IntroScene::init()
 
 void IntroScene::menuCallback()
 {
-	CCScene *pScene = CCTransitionFade::create(G_INTRO_TRANSITION_MENU_TIME, MenuScene::scene(), ccWHITE);
-	CCDirector::sharedDirector()->replaceScene(pScene);
+	bool isFirstTimeChooseLanguage = DataManager::sharedDataManager()->GetFirstTimeChooseLanguage();
+
+	if (isFirstTimeChooseLanguage)
+	{
+		CCScene *pScene = CCTransitionFade::create(G_INTRO_TRANSITION_MENU_TIME, ChooseLanguageDialog::scene(), ccWHITE);
+		CCDirector::sharedDirector()->replaceScene(pScene);
+	} 
+	else
+	{
+		CCScene *pScene = CCTransitionFade::create(G_INTRO_TRANSITION_MENU_TIME, MenuScene::scene(), ccWHITE);
+		CCDirector::sharedDirector()->replaceScene(pScene);
+	}
 }

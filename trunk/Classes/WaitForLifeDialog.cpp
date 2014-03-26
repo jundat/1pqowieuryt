@@ -12,10 +12,10 @@ USING_NS_CC_EXT;
 
 bool WaitForLifeDialog::init()
 {
-    if ( !CCLayer::init() )
-    {
-        return false;
-    }
+	if ( !CCLayerColor::initWithColor(G_DIM_COLOR) )
+	{
+		return false;
+	}
 
 	CCPoint pexit = ccp(250, G_DESIGN_HEIGHT - 810);
 	CCPoint pask = ccp(G_DESIGN_WIDTH-250, G_DESIGN_HEIGHT - 810);
@@ -23,7 +23,7 @@ bool WaitForLifeDialog::init()
 	CCScale9Sprite* dialog = CCScale9Sprite::create("dialog.png");
 	dialog->setPosition(ccp(400, 640));
 	dialog->setContentSize(CCSizeMake(680, 480));
-	this->addChild(dialog, -2);
+	this->addChild(dialog);
 
 	MY_CREATE_MENU_BUTTON(exitButton, "button.png", "button_down.png", TXT("btn_exit"), 
 		"Roboto-Medium.ttf", 48, ccBLACK, pexit, this, WaitForLifeDialog::exitCallback);

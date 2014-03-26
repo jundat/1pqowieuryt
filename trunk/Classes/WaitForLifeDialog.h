@@ -12,13 +12,13 @@
 
 USING_NS_CC;
 
-class WaitForLifeDialog : public cocos2d::CCLayer
+class WaitForLifeDialog : public cocos2d::CCLayerColor
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	,public EziFacebookDelegate
 #endif
 {
 public:
-	WaitForLifeDialog(float timeInSeconds):CCLayer(){
+	WaitForLifeDialog(float timeInSeconds):CCLayerColor(){
 		this->m_waitTime = timeInSeconds;
 	};
     virtual bool init();
