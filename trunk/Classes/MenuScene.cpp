@@ -121,8 +121,8 @@ bool MenuScene::init()
 	m_sprSettingBar->setPosition(ccp(108, 1280-1245));
 	m_sprSettingBar->setVisible(false);
 
-	CCMenuItem* facebookOn = CCMenuItemImage::create("facebook_icon.png", NULL, NULL);
-	CCMenuItem* facebookOff = CCMenuItemImage::create("facebook_icon_off.png", NULL, NULL);
+	CCMenuItem* facebookOn = CCMenuItemImage::create("facebook_in.png", NULL, NULL);
+	CCMenuItem* facebookOff = CCMenuItemImage::create("facebook_out.png", NULL, NULL);
 	m_facebookItem = CCMenuItemToggle::createWithTarget(this,  menu_selector(MenuScene::facebookCallback), facebookOn, facebookOff, NULL);
 	m_facebookItem->setPosition(ccp(70, m_sprSettingBar->getContentSize().height-65));
 	if (m_isLoggedIn)
