@@ -31,8 +31,6 @@ bool IntroScene::init()
 		NULL));
 	this->addChild(sprLogo);
 
-	CCScene *pScene = MenuScene::scene();
-
     return true;
 }
 

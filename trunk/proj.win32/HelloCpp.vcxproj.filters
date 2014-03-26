@@ -162,6 +162,9 @@
     <ClCompile Include="..\Classes\ChooseLanguageDialog.cpp">
       <Filter>Classes</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\LogOutDialog.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -300,6 +303,9 @@
       <Filter>Classes</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\ChooseLanguageDialog.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\LogOutDialog.h">
       <Filter>Classes</Filter>
     </ClInclude>
   </ItemGroup>

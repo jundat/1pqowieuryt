@@ -37,6 +37,8 @@
 		<string>menu_thank_rate</string>
 		<key>menu_thank_caption</key>
 		<string>menu_thank_caption</string>
+		<key>fb_logout_ask</key>
+		<string>fb_logout_ask</string>
 		<key>quit_ask</key>
 		<string>quit_ask</string>
 		<key>score_invite_to_facebook</key>
@@ -129,6 +131,8 @@
 		<string>Thank you!</string>
 		<key>menu_thank_caption</key>
 		<string>Information</string>
+		<key>fb_logout_ask</key>
+		<string>Do you want to disconnect Facebook? </string>
 		<key>quit_ask</key>
 		<string>Do you want to exit? </string>
 		<key>score_invite_to_facebook</key>
@@ -221,6 +225,8 @@
 		<string>Cảm ơn bạn!</string>
 		<key>menu_thank_caption</key>
 		<string>Thông tin</string>
+		<key>fb_logout_ask</key>
+		<string>Bạn có muốn ngắt kết nối Facebook!</string>
 		<key>quit_ask</key>
 		<string>Bạn có muốn thoát game!</string>
 		<key>score_invite_to_facebook</key>

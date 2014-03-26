@@ -859,6 +859,19 @@ void ScoreScene::sendUserProfileToServer(string fbId, string fbName, string emai
 {
 	CCLOG("sendUserProfileToServer");
 	GameClientManager::sharedGameClientManager()->sendPlayerFbProfile(fbId, fbName, email, string(G_APP_ID));
+	
+	//send device token to server
+	string fbid = DataManager::sharedDataManager()->GetRegistrationId();
+	if (fbid.length() > 0)
+	{
+		GameClientManager::sharedGameClientManager()->sendDeviceProfile(
+			DataManager::sharedDataManager()->GetFbID(),
+			string(""),
+			DataManager::sharedDataManager()->GetRegistrationId(),
+			string(""),
+			string("")
+			);
+	}
 }
 
 void ScoreScene::onGetScoreCompleted( bool isSuccess, int score, std::string time )

@@ -1,4 +1,4 @@
-﻿#include "QuitDialog.h"
+﻿#include "LogOutDialog.h"
 #include "MainGameScene.h"
 #include "MenuScene.h"
 #include "DataManager.h"
@@ -9,7 +9,7 @@
 USING_NS_CC;
 USING_NS_CC_EXT;
 
-bool QuitDialog::init()
+bool LogOutDialog::init()
 {
 	if ( !CCLayerColor::initWithColor(G_DIM_COLOR) )
 	{
@@ -25,16 +25,16 @@ bool QuitDialog::init()
 	this->addChild(dialog);
 
 	MY_CREATE_MENU_BUTTON(exitButton, "button.png", "button_down.png", TXT("btn_yes"), 
-		"Roboto-Medium.ttf", 48, ccBLACK, pexit, this, QuitDialog::yesCallback);
+		"Roboto-Medium.ttf", 48, ccBLACK, pexit, this, LogOutDialog::yesCallback);
 
 	MY_CREATE_MENU_BUTTON(askButton, "button.png", "button_down.png", TXT("btn_no"), 
-		"Roboto-Medium.ttf", 48, ccBLACK, pask, this, QuitDialog::noCallback);
+		"Roboto-Medium.ttf", 48, ccBLACK, pask, this, LogOutDialog::noCallback);
 	
 	CCMenu* menu = CCMenu::create(exitButton, askButton, NULL);
 	menu->setPosition(CCPointZero);
 	this->addChild(menu);
 
-	CCLabelTTF* labelTitle = CCLabelTTF::create(TXT("quit_ask"), 
+	CCLabelTTF* labelTitle = CCLabelTTF::create(TXT("fb_logout_ask"), 
 		"Roboto-Medium.ttf", 
 		48, 
 		CCSizeMake(600, 0), 
@@ -48,13 +48,19 @@ bool QuitDialog::init()
     return true;
 }
 
-void QuitDialog::yesCallback( CCObject* pSender )
+void LogOutDialog::yesCallback( CCObject* pSender )
 {
-	CCDirector::sharedDirector()->end();
+	MenuScene* parent = (MenuScene*)this->getParent();
+
+	parent->facebookLogInOut();
+
+	parent->setTouchEnabled(true);
+	parent->onCloseDialog();
+	this->removeFromParent();
 }
 
 
-void QuitDialog::noCallback( CCObject* pSender )
+void LogOutDialog::noCallback( CCObject* pSender )
 {
 	MenuScene* parent = (MenuScene*)this->getParent();
 	parent->setTouchEnabled(true);
@@ -63,7 +69,7 @@ void QuitDialog::noCallback( CCObject* pSender )
 }
 
 
-void QuitDialog::keyBackClicked()
+void LogOutDialog::keyBackClicked()
 {
 	noCallback(NULL);
 }

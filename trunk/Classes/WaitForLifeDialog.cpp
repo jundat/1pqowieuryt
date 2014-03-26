@@ -41,11 +41,10 @@ bool WaitForLifeDialog::init()
 		CCSizeMake(600, 0), 
 		kCCTextAlignmentCenter, 
 		kCCVerticalTextAlignmentCenter);
-	
-	labelTitle->setColor(ccc3(56, 56, 56));
-	labelTitle->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2 + 120));
+	labelTitle->setColor(ccBLACK);
+	labelTitle->setPosition(ccp(400, 700));
 	this->addChild(labelTitle);
-
+	
     return true;
 }
 

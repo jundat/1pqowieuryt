@@ -19,9 +19,10 @@ USING_NS_CC;
 USING_NS_CC_EXT;
 
 
-#define G_VERSION			71
+#define G_VERSION			72
 #define G_MENU_BG_COLOR		ccc4(195, 200, 201, 255)
-#define G_MENU_BG			"bg_menu.png"
+#define G_MENU_BG_VN			"vn_bg_menu.png"
+#define G_MENU_BG_EN			"en_bg_menu.png"
 #define G_MENU_BG_ANCHORPOINT	ccp(0.0f, 0.0f)
 #define G_MENU_BG_POS			CCPointZero
 #define G_MENU_BG_Z					0
@@ -59,7 +60,7 @@ public:
     CREATE_FUNC(MenuScene);
 	
 
-
+	CCSprite* m_bg;
 	CCMenuItemToggle *m_soundItem;
 	CCMenuItemToggle *m_facebookItem;
 	CCMenuItemToggle *m_settingItem;
@@ -85,12 +86,13 @@ public:
 	void rateCallback(CCObject* pSender);
 	void settingCallback(CCObject* pSender);
 	void facebookCallback(CCObject* pSender);
+	void facebookLogInOut();
 	void exitCallback(CCObject* pSender);
-	
+
 	void languageCallback(CCObject* pSender);
 	void englishCallback(CCObject* pSender);
 	void vietnamCallback(CCObject* pSender);
-
+	void refreshLanguageUI();
 
 	void onEnterTransitionDidFinish()
 	{

@@ -7,6 +7,7 @@
 #include "QuitDialog.h"
 #include <time.h>
 #include "TextLoader.h"
+#include "LogOutDialog.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -27,7 +28,6 @@ bool MenuScene::init()
 	DataManager::sharedDataManager()->RefreshPlayerLife();
 
 	//////////////////////////////////////////////////////////////////////////
-	
 
     if ( !CCLayerColor::initWithColor(G_MENU_BG_COLOR) )
     {
@@ -49,11 +49,20 @@ bool MenuScene::init()
 #endif
 
     /////////////////////////////
-
-	CCSprite* bg = CCSprite::create(G_MENU_BG);
-	bg->setAnchorPoint(G_MENU_BG_ANCHORPOINT);
-	bg->setPosition(G_MENU_BG_POS);
-	this->addChild(bg, G_MENU_BG_Z);
+	
+	string lang = DataManager::sharedDataManager()->GetLanguage();
+	if (lang.compare("English") == 0)
+	{
+		m_bg = CCSprite::create(G_MENU_BG_EN);
+	}
+	else
+	{
+		m_bg = CCSprite::create(G_MENU_BG_VN);
+	}	
+	
+	m_bg->setAnchorPoint(G_MENU_BG_ANCHORPOINT);
+	m_bg->setPosition(G_MENU_BG_POS);
+	this->addChild(m_bg, G_MENU_BG_Z);
 	
 	initLifeIcon();	
 
@@ -67,7 +76,6 @@ bool MenuScene::init()
 	this->addChild(labelVersion);
 
 	//
-	string lang = DataManager::sharedDataManager()->GetLanguage();
 	if (lang.compare("English") == 0)
 	{
 		m_playItem = CCMenuItemImage::create(
@@ -245,13 +253,13 @@ void MenuScene::initLifeIcon()
 		CCSprite* _sprBlur = CCSprite::create("oil.png");
 		_sprBlur->setOpacity(50);
 		_sprBlur->setPosition(ccp(x + i * w, y));
-		this->addChild(_sprBlur);
+		this->addChild(_sprBlur, 1); //////////////////////////////////new ////////////////////////////////////////
 
 		CCSprite* _spr = CCSprite::create("oil.png");
 		_spr->setPosition(ccp(x + i * w, y));
 		_spr->setVisible(false);
-		this->addChild(_spr);
-
+		this->addChild(_spr, 1.1); ////////////////////////////////////new //////////////////////////////////////
+		
 		m_arrSprLife->addObject(_spr);
 	}
 
@@ -489,6 +497,30 @@ void MenuScene::facebookCallback( CCObject* pSender )
 {
 	PLAY_BUTTON_EFFECT;
 
+	if (m_isLoggedIn == true)
+	{
+		LogOutDialog* dialog = LogOutDialog::create();
+		this->addChild(dialog, 10);
+		this->onShowDialog();
+	}
+	else
+	{
+		facebookLogInOut();
+	}
+
+	/////////////refresh view ///////////////
+	if (m_isLoggedIn)
+	{
+		m_facebookItem->setSelectedIndex(1);
+	} 
+	else
+	{
+		m_facebookItem->setSelectedIndex(0);
+	}
+}
+
+void MenuScene::facebookLogInOut()
+{
 	if (m_isLoggedIn)
 	{
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
@@ -593,6 +625,7 @@ void MenuScene::initTimer()
 
 void MenuScene::GetRegistrationId()
 {
+	CCLOG("GetRegistrationId");
 	NDKHelper::AddSelector("MENU",
 		"onGetRegistrationIdCompleted",
 		callfuncND_selector(MenuScene::onGetRegistrationIdCompleted),
@@ -602,26 +635,33 @@ void MenuScene::GetRegistrationId()
 
 void MenuScene::onGetRegistrationIdCompleted( CCNode *sender, void *data )
 {
+	CCLOG("onGetRegistrationIdCompleted");
 	if (data != NULL)
 	{
+		CCLOG("!= NULL");
 		CCDictionary *convertedData = (CCDictionary *)data;
 		CCString* s = (CCString*)convertedData->objectForKey("isSuccess");
 		if (s->boolValue())
 		{
+			CCLOG("SUCCESS");
 			CCLOG("CPP RegistrationId Completed: TRUE");
 			CCString* s = (CCString*)convertedData->objectForKey("registrationId");
 			CCLOG("CPP: RegistrationId: %s", s->getCString());
 
 			DataManager::sharedDataManager()->SetRegistrationId(s->getCString());
 
-			//send to server
-			GameClientManager::sharedGameClientManager()->sendDeviceProfile(
+			//send to server if fbId != NULL
+			string fbid = DataManager::sharedDataManager()->GetFbID();
+			if (fbid.compare("NULL") != 0)
+			{
+				GameClientManager::sharedGameClientManager()->sendDeviceProfile(
 				DataManager::sharedDataManager()->GetFbID(),
 				string(""),
 				s->getCString(),
 				string(""),
 				string("")
 				);
+			}			
 		} 
 		else
 		{
@@ -646,6 +686,8 @@ void MenuScene::fbSessionCallback(int responseCode, const char *responseMessage)
 	{
 		CCLOG("fbSessionCallback: SUCCESSFUL");
 		m_isLoggedIn = true;
+		
+		//auto get profile, info
 	}
 	else
 	{
@@ -712,6 +754,19 @@ void MenuScene::sendUserProfileToServer(string fbId, string fbName, string email
 {
 	CCLOG("sendUserProfileToServer");
 	GameClientManager::sharedGameClientManager()->sendPlayerFbProfile(fbId, fbName, email, string(G_APP_ID));
+	
+	//send device token to server
+	string fbid = DataManager::sharedDataManager()->GetRegistrationId();
+	if (fbid.length() > 0)
+	{
+		GameClientManager::sharedGameClientManager()->sendDeviceProfile(
+			DataManager::sharedDataManager()->GetFbID(),
+			string(""),
+			DataManager::sharedDataManager()->GetRegistrationId(),
+			string(""),
+			string("")
+			);
+	}
 }
 
 void MenuScene::getFacebookFriends()
@@ -774,6 +829,7 @@ void MenuScene::englishCallback( CCObject* pSender )
 	TextLoader::shareTextLoader()->setCurrentLanguage(LANGUAGE_ENGLISH);
 
 	//refresh UI
+	refreshLanguageUI();
 }
 
 void MenuScene::vietnamCallback( CCObject* pSender )
@@ -789,4 +845,35 @@ void MenuScene::vietnamCallback( CCObject* pSender )
 	TextLoader::shareTextLoader()->setCurrentLanguage(LANGUAGE_VIETNAMESE);
 
 	//refresh UI
+	refreshLanguageUI();
+}
+
+void MenuScene::refreshLanguageUI()
+{
+	string lang = DataManager::sharedDataManager()->GetLanguage();
+
+	if (lang.compare("English") == 0)
+	{
+		//bg
+		m_bg = CCSprite::create(G_MENU_BG_EN);
+		m_bg->setAnchorPoint(G_MENU_BG_ANCHORPOINT);
+		m_bg->setPosition(G_MENU_BG_POS);
+		this->addChild(m_bg, G_MENU_BG_Z);
+
+		//start
+		m_playItem->setNormalImage(CCSprite::create(G_MENU_NEW_BUTTON_SPR_NORMAL_EN));
+		m_playItem->setSelectedImage(CCSprite::create(G_MENU_NEW_BUTTON_SPR_PRESS_EN));
+	}
+	else
+	{
+		//bg
+		m_bg = CCSprite::create(G_MENU_BG_VN);
+		m_bg->setAnchorPoint(G_MENU_BG_ANCHORPOINT);
+		m_bg->setPosition(G_MENU_BG_POS);
+		this->addChild(m_bg, G_MENU_BG_Z);
+
+		//start
+		m_playItem->setNormalImage(CCSprite::create(G_MENU_NEW_BUTTON_SPR_NORMAL_VN));
+		m_playItem->setSelectedImage(CCSprite::create(G_MENU_NEW_BUTTON_SPR_PRESS_VN));
+	}
 }
