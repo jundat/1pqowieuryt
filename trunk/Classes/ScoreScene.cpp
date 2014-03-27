@@ -12,6 +12,8 @@ USING_NS_CC;
 USING_NS_CC_EXT;
 using namespace std;
 
+int ScoreScene::s_beginFriendInd = 0;
+int ScoreScene::s_endFriendInd = 0;
 
 #define 	BEGIN_TAG_LB_GET_BOOM			6000
 #define 	BEGIN_TAG_LB_GET_BOOM_TIMER		5000
@@ -552,8 +554,7 @@ void ScoreScene::itGetBoomNowCallback( CCObject* pSender )
 		PLAY_GET_BOMB_EFFECT;
 
 		DataManager::sharedDataManager()->SetDiamon(diamond - G_DIAMON_TO_GET_BOOM_NOW);
-		//animation in diamond
-		//pham tan long
+		DataManager::sharedDataManager()->IncreaseBoom();
 
 		m_sprDiamond->runAction(CCSequence::createWithTwoActions(
 			CCScaleTo::create(0.2f, 1.25f),
@@ -865,7 +866,9 @@ void ScoreScene::getFacebookFriends()
 {
 	CCLOG("getFacebookFriends");
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-	EziSocialObject::sharedObject()->getFriends(EziSocialWrapperNS::FB_FRIEND_SEARCH::ONLY_INSTALLED, 0, 1000);
+	ScoreScene::s_beginFriendInd = 0;
+	ScoreScene::s_endFriendInd = G_NUMBER_FRIEND_TO_GET - 1;
+	EziSocialObject::sharedObject()->getFriends(EziSocialWrapperNS::FB_FRIEND_SEARCH::ALL_FRIENDS, ScoreScene::s_beginFriendInd, ScoreScene::s_endFriendInd);
 
 	DataManager::sharedDataManager()->SetTimeRefreshFriendNow();
 #endif
@@ -1149,27 +1152,38 @@ void ScoreScene::fbFriendsCallback( int responseCode, const char* responseMessag
 {
 	CCLOG("fbFriendsCallback");
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-		
-	CCArray* arrFriends = new CCArray();
-	arrFriends->retain();
+	int count = friends->count();
 
-	CCObject* it;
-	CCARRAY_FOREACH(friends, it)
+	if (count > 0)
 	{
-		EziFacebookFriend* fbFriend = dynamic_cast<EziFacebookFriend*>(it);
-		if (NULL != it)
+		CCArray* arrFriends = new CCArray();
+		arrFriends->retain();
+
+		CCObject* it;
+		CCARRAY_FOREACH(friends, it)
 		{
-			string fbId = fbFriend->getFBID();
-			string fbName = fbFriend->getName();
-			FacebookAccount* acc = new FacebookAccount(fbId, fbName, string(), -1);
+			EziFacebookFriend* fbFriend = dynamic_cast<EziFacebookFriend*>(it);
+			if (NULL != it)
+			{
+				string fbId = fbFriend->getFBID();
+				string fbName = fbFriend->getName();
+				FacebookAccount* acc = new FacebookAccount(fbId, fbName, string(), -1);
 
-			arrFriends->addObject(acc);
+				arrFriends->addObject(acc);
+			}
 		}
+
+		GameClientManager::sharedGameClientManager()->sendFriendList(DataManager::sharedDataManager()->GetFbID(), arrFriends);
+
+		ScoreScene::s_beginFriendInd += G_NUMBER_FRIEND_TO_GET;
+		ScoreScene::s_endFriendInd += G_NUMBER_FRIEND_TO_GET;
+		EziSocialObject::sharedObject()->getFriends(EziSocialWrapperNS::FB_FRIEND_SEARCH::ALL_FRIENDS, ScoreScene::s_beginFriendInd, ScoreScene::s_endFriendInd);
 	}
-
-	GameClientManager::sharedGameClientManager()->sendFriendList(DataManager::sharedDataManager()->GetFbID(), arrFriends);
-
-	getHighScores();
+	else //finish get friends
+	{
+		//get highscore after send all friend to server
+		getHighScores();
+	}
 #endif
 }
 

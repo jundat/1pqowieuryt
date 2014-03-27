@@ -10,7 +10,7 @@
 #define G_FONT_NORMAL			"Roboto-Medium.ttf"
 #define G_FONT_LEADERBOARD		"Villa.ttf"
 
-#define G_NUMBER_FRIEND_TO_GET	100
+#define G_NUMBER_FRIEND_TO_GET	20
 
 //GAME CONSTANT
 #define G_APP_ID				"DBPTK"

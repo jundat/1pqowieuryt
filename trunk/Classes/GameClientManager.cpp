@@ -3,7 +3,7 @@
 #include "Base64.h"
 #include "Md5.h"
 
-#define ENCODE_BUFFER_SIZE		2048
+#define ENCODE_BUFFER_SIZE		4096
 
 GameClientManager* GameClientManager::s_instance = NULL;
 

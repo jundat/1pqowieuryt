@@ -44,6 +44,7 @@ USING_NS_CC_EXT;
 #define G_MENU_NEW_BUTTON_POS			ccp(400, 1280-813)
 
 
+
 class MenuScene : public cocos2d::CCLayerColor
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	,public EziFacebookDelegate
@@ -127,6 +128,7 @@ public:
 
 	//////////////////////////////////////////////////////////////////////////
 	//facebook
+	
 	void sendUserProfileToServer(string fbId, string fbName, string email);
 	void getFacebookFriends();
 

@@ -22,7 +22,6 @@ USING_NS_CC;
 USING_NS_CC_EXT;
 using namespace std;
 
-
 class ScoreScene : public cocos2d::CCLayer, 
 	public GameClientDelegate,
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
@@ -85,6 +84,8 @@ public:
 	void scheduleTimer(float dt);
 
 public:
+	static int s_beginFriendInd;
+	static int s_endFriendInd;
 
 	bool m_isLoggedIn;
 	bool m_isXepHangView;
