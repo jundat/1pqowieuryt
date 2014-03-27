@@ -231,7 +231,7 @@ void LoseDialog::reviveCallBack( CCObject* pSender )
 	{
 		PLAY_OUT_PORP_EFFECT;
 
-		CCMessageBox(TXT("lose_error"), TXT("lose_error_caption"));
+		CCMessageBox(TXT("lose_lack_diamond"), TXT("lose_error_caption"));
 
 		//visitble
 		m_itExitButton->setVisible(true);

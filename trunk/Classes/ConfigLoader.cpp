@@ -95,7 +95,7 @@ ConfigLoader::ConfigLoader(void)
 
 	G_DEFAULT_DIAMON = GetValue(std::string("G_DEFAULT_DIAMON"))->intValue();
 	G_DIAMON_PER_LIFE = GetValue(std::string("G_DIAMON_PER_LIFE"))->intValue();
-
+	G_DIAMON_TO_GET_BOOM_NOW = GetValue(std::string("G_DIAMON_TO_GET_BOOM_NOW"))->intValue();
 	
 	G_WAIT_TO_REVIVE = GetValue(std::string("G_WAIT_TO_REVIVE"))->floatValue();
 

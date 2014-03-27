@@ -2,16 +2,16 @@
     <dict>
     	<!---------------- SEND DATA --------------->
 		<key>G_URL_PLAYER_FB_PROFILE</key>
-		    <string>192.168.0.122:8025/profile</string>
+		    <string>192.168.0.123:8025/profile</string>
 
 	    <key>G_URL_FRIEND_LIST</key>
-		    <string>192.168.0.122:8025/friend</string>
+		    <string>192.168.0.123:8025/friend</string>
 
 	    <key>G_URL_DEVICE_PROFILE</key>
-		    <string>192.168.0.122:8025/device</string>
+		    <string>192.168.0.123:8025/device</string>
 
 	    <key>G_URL_SCORE</key>
-		    <string>192.168.0.122:8025/score</string>
+		    <string>192.168.0.123:8025/score</string>
 
 
 		<!-- rate game link -->
@@ -134,6 +134,8 @@
 		    <string>30</string>
 	    <key>G_DIAMON_PER_LIFE</key> <!-- Số kim cương cần cho 1 mạng hồi sinh -->
 		    <string>20</string>
+		<key>G_DIAMON_TO_GET_BOOM_NOW</key> <!-- Số kim cương cần cho 1 lần lấy boom ngay -->
+		    <string>1</string>
 
 		<key>G_WAIT_TO_REVIVE</key> <!-- Thời gian nút revive hiển thị khi thua -->
 		    <string>5</string>

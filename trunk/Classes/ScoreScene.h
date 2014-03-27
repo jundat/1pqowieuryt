@@ -48,6 +48,7 @@ public:
 	virtual void keyBackClicked();
 	void itAddFriendCallback(CCObject* pSender);
 	void itGetBoomCallback(CCObject* pSender);
+	void itGetBoomNowCallback(CCObject* pSender);
 	void itSendLifeCallback(CCObject* pSender);
 
 	static int CompareEziFriendScore(const CCObject* p1, const CCObject* p2)
@@ -116,8 +117,10 @@ public:
 	CCSprite* m_userAvatar;
 	CCSprite* m_sprLife;
 	CCSprite* m_sprBoom;
+	CCSprite* m_sprDiamond;
 	CCLabelTTF* m_lbLife;
 	CCLabelTTF* m_lbBoom;
+	CCLabelTTF* m_lbDiamond;
 	CCArray* m_friendList;
 	
 	void checkRefreshFriendList();

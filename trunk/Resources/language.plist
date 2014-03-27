@@ -29,8 +29,8 @@
 		<string>tut_mission</string>
 		<key>lose_score</key>
 		<string>lose_score</string>
-		<key>lose_error</key>
-		<string>lose_error</string>
+		<key>lose_lack_diamond</key>
+		<string>lose_lack_diamond</string>
 		<key>lose_error_caption</key>
 		<string>lose_error_caption</string>
 		<key>menu_thank_rate</key>
@@ -57,6 +57,8 @@
 		<string>score_send_life_msg</string>
 		<key>score_get</key>
 		<string>score_get</string>
+		<key>score_lack_diamond</key>
+		<string>score_lack_diamond</string>
 		<key>score_send_life</key>
 		<string>score_send_life</string>
 		<key>wait_lack_of_life</key>
@@ -123,7 +125,7 @@
 		<string>Do not miss more than 3 B-52 bombers !!!</string>
 		<key>lose_score</key>
 		<string>Score</string>
-		<key>lose_error</key>
+		<key>lose_lack_diamond</key>
 		<string>You do not have enough diamond!</string>
 		<key>lose_error_caption</key>
 		<string>Information</string>
@@ -151,6 +153,8 @@
 		<string>Give you 1 life</string>
 		<key>score_get</key>
 		<string>Get</string>
+		<key>score_lack_diamond</key>
+		<string>You do not have enough diamond!</string>
 		<key>score_send_life</key>
 		<string>Send</string>
 		<key>wait_lack_of_life</key>
@@ -217,7 +221,7 @@
 		<string>Không được để lọt lưới trên 3 chiếc B-52 !!!</string>
 		<key>lose_score</key>
 		<string>Điểm</string>
-		<key>lose_error</key>
+		<key>lose_lack_diamond</key>
 		<string>Bạn không đủ số kim cương!</string>
 		<key>lose_error_caption</key>
 		<string>Thông tin</string>
@@ -245,6 +249,8 @@
 		<string>Cho bạn 1 mạng nè!</string>
 		<key>score_get</key>
 		<string>Nhận</string>
+		<key>score_lack_diamond</key>
+		<string>Bạn không đủ số kim cương!</string>
 		<key>score_send_life</key>
 		<string>Gửi</string>
 		<key>wait_lack_of_life</key>

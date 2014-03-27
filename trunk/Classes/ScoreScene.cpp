@@ -13,6 +13,15 @@ USING_NS_CC_EXT;
 using namespace std;
 
 
+#define 	BEGIN_TAG_LB_GET_BOOM			6000
+#define 	BEGIN_TAG_LB_GET_BOOM_TIMER		5000
+#define 	BEGIN_TAG_LB_SEND_LIFE			4000
+#define 	BEGIN_TAG_LB_SEND_LIFE_TIMER	3000
+#define		BEGIN_TAG_IT_SEND_LIFE			2000
+#define 	BEGIN_TAG_IT_GET_BOOM_NOW		7000
+#define 	BEGIN_TAG_IT_GET_BOOM 			1000
+
+
 bool ScoreScene::init()
 {
 	if (!CCLayer::init())
@@ -126,6 +135,19 @@ bool ScoreScene::init()
 	m_lbBoom->setPosition(ccp(650, 1280-245));
 	m_lbBoom->setAnchorPoint(ccp(0.0f, 0.5f));
 	this->addChild(m_lbBoom);
+
+	//Diamond
+
+	m_sprDiamond = CCSprite::create("diamond.png");
+	m_sprDiamond->setPosition(ccp(418, 1280-245));
+	this->addChild(m_sprDiamond);
+
+	str = CCString::createWithFormat("x%d", DataManager::sharedDataManager()->GetDiamon());
+	m_lbDiamond = CCLabelTTF::create(str->getCString(), "Roboto-Medium.ttf", 48);
+	m_lbDiamond->setColor(ccc3(0, 0, 0));
+	m_lbDiamond->setPosition(ccp(454, 1280-245));
+	m_lbDiamond->setAnchorPoint(ccp(0.0f, 0.5f));
+	this->addChild(m_lbDiamond);
 
 
 	//Xep hang
@@ -475,7 +497,7 @@ unsigned int ScoreScene::numberOfCellsInTableView(CCTableView *table)
 void ScoreScene::itGetBoomCallback( CCObject* pSender )
 {
 	int tag = ((CCMenuItemImage*)pSender)->getTag();
-	int idx = tag - 1000;
+	int idx = tag - BEGIN_TAG_IT_GET_BOOM;
 	CustomTableViewCell* cell = (CustomTableViewCell*)m_tableXephang->cellAtIndex(idx);
 	std::string fbID = ((CustomTableViewCell*)cell)->fbID;
 
@@ -514,12 +536,71 @@ void ScoreScene::itGetBoomCallback( CCObject* pSender )
 	}
 }
 
+void ScoreScene::itGetBoomNowCallback( CCObject* pSender )
+{
+	int tag = ((CCMenuItemImage*)pSender)->getTag();
+	int idx = tag - BEGIN_TAG_IT_GET_BOOM_NOW;
+	CustomTableViewCell* cell = (CustomTableViewCell*)m_tableXephang->cellAtIndex(idx);
+	std::string fbID = ((CustomTableViewCell*)cell)->fbID;
+
+	//check if ok
+	int numBoom = DataManager::sharedDataManager()->GetBoom();
+	int diamond = DataManager::sharedDataManager()->GetDiamon();
+
+	if (numBoom < G_MAX_BOOM && diamond >= G_DIAMON_TO_GET_BOOM_NOW) //eveything ok
+	{
+		PLAY_GET_BOMB_EFFECT;
+
+		DataManager::sharedDataManager()->SetDiamon(diamond - G_DIAMON_TO_GET_BOOM_NOW);
+		//animation in diamond
+		//pham tan long
+
+		m_sprDiamond->runAction(CCSequence::createWithTwoActions(
+			CCScaleTo::create(0.2f, 1.25f),
+			CCScaleTo::create(0.2f, 1.0f)
+			));
+
+		m_sprBoom->runAction(CCSequence::createWithTwoActions(
+			CCScaleTo::create(0.2f, 1.0f),
+			CCScaleTo::create(0.2f, 0.75f)
+			));
+
+		refreshUserDetail();
+	}
+	else
+	{
+		PLAY_OUT_PORP_EFFECT;
+
+		if (numBoom >= G_MAX_BOOM)
+		{
+			m_sprBoom->runAction(CCSequence::createWithTwoActions(
+				CCScaleTo::create(0.2f, 1.0f),
+				CCScaleTo::create(0.2f, 0.75f)
+			));
+
+			CCMessageBox(CCString::createWithFormat(TXT("score_limit_lazer"), G_MAX_BOOM)->getCString(), TXT("score_popup_caption"));
+		} 
+		else if (diamond < G_DIAMON_TO_GET_BOOM_NOW)
+		{
+			//animation in diamond number
+			//pham tan long
+
+			m_sprDiamond->runAction(CCSequence::createWithTwoActions(
+				CCScaleTo::create(0.2f, 1.25f),
+				CCScaleTo::create(0.2f, 1.0f)
+				));
+
+			CCMessageBox(TXT("score_lack_diamond"), TXT("score_popup_caption"));
+		}
+	}
+}
+
 void ScoreScene::itSendLifeCallback( CCObject* pSender )
 {
 	PLAY_BUTTON_EFFECT;
 
 	int tag = ((CCMenuItemImage*)pSender)->getTag();
-	int idx = tag - 2000;
+	int idx = tag - BEGIN_TAG_IT_SEND_LIFE;
 	CustomTableViewCell* cell = (CustomTableViewCell*)m_tableXephang->cellAtIndex(idx);
 	std::string fbID = cell->fbID;
 	
@@ -592,6 +673,10 @@ void ScoreScene::refreshUserDetail()
 
 	str = CCString::createWithFormat("x%d", DataManager::sharedDataManager()->GetBoom());
 	m_lbBoom->setString(str->getCString());
+
+	str = CCString::createWithFormat("x%d", DataManager::sharedDataManager()->GetDiamon());
+	m_lbDiamond->setString(str->getCString());
+
 }
 
 void ScoreScene::scheduleTimer( float dt )
@@ -612,7 +697,8 @@ void ScoreScene::scheduleTimer( float dt )
 			
 			if (cell->m_itGetBoom != NULL &&
 				cell->m_lbGetBoomTimer != NULL &&
-				cell->m_lbGetBoom != NULL)
+				cell->m_lbGetBoom != NULL &&
+				cell->m_itGetBoomNow != NULL)
 			{
 				time_t lastTime = mktime(cell->m_lastTimeGetBoom);
 				time_t curTime = time(NULL);
@@ -621,13 +707,15 @@ void ScoreScene::scheduleTimer( float dt )
 				if (waitTime <= 0)
 				{
 					//FULL TIME
-					cell->m_itGetBoom->setEnabled(true);
+					cell->m_itGetBoom->setVisible(true);
+					cell->m_itGetBoomNow->setVisible(false);
 					cell->m_lbGetBoomTimer->setVisible(false);
 					cell->m_lbGetBoom->setVisible(true);
 				}
 				else
 				{
-					cell->m_itGetBoom->setEnabled(false);
+					cell->m_itGetBoom->setVisible(false);
+					cell->m_itGetBoomNow->setVisible(true);
 					cell->m_lbGetBoomTimer->setVisible(true);
 					cell->m_lbGetBoom->setVisible(false);
 				}
@@ -1385,17 +1473,22 @@ CCTableViewCell* ScoreScene::getTableCellXepHangAtIndex( CCTableView *table, uns
 
 		if (isMyScore == false)
 		{
-			CCMenuItemImage* itGetBoom = CCMenuItemImage::create("boomgift.png", "boomgift1.png", "boomgift1.png", this, menu_selector(ScoreScene::itGetBoomCallback));
-			itGetBoom->setPosition(ccp(600, m_sprCell->getContentSize().height/2 + 10 - 8));
-			itGetBoom->setTag(1000 + idx);
+			CCMenuItemImage* itGetBoom = CCMenuItemImage::create("boom_free.png", "boom_disable.png", "boom_disable.png", this, menu_selector(ScoreScene::itGetBoomCallback));
+			itGetBoom->setPosition(ccp(605, m_sprCell->getContentSize().height/2 + 20));
+			itGetBoom->setTag(BEGIN_TAG_IT_GET_BOOM + idx); //1000
 			((CustomTableViewCell*)cell)->m_itGetBoom = itGetBoom;
+
+			CCMenuItemImage *itGetBoomNow = CCMenuItemImage::create("boom_not_free.png", "boom_disable.png", "boom_disable.png", this, menu_selector(ScoreScene::itGetBoomNowCallback));
+			itGetBoomNow->setPosition(ccp(605, m_sprCell->getContentSize().height/2 + 20));
+			itGetBoomNow->setTag(BEGIN_TAG_IT_GET_BOOM_NOW + idx); //7000			
+			((CustomTableViewCell*)cell)->m_itGetBoomNow = itGetBoomNow;
 
 			CCMenuItemImage* itSendLife = CCMenuItemImage::create("oil.png", "oil_blur.png", "oil_blur.png", this, menu_selector(ScoreScene::itSendLifeCallback));
 			itSendLife->setPosition(ccp(725, m_sprCell->getContentSize().height/2 + 15));
-			itSendLife->setTag(2000 + idx);
+			itSendLife->setTag(BEGIN_TAG_IT_SEND_LIFE + idx); //2000
 			((CustomTableViewCell*)cell)->m_itSendLife = itSendLife;
 
-			CCMenu* cell_menu = CCMenu::create(itGetBoom, itSendLife, NULL);
+			CCMenu* cell_menu = CCMenu::create(itGetBoom, itSendLife, itGetBoomNow, NULL);
 			cell_menu->setPosition(CCPointZero);
 			cell->addChild(cell_menu);
 
@@ -1408,7 +1501,7 @@ CCTableViewCell* ScoreScene::getTableCellXepHangAtIndex( CCTableView *table, uns
 			lbSendLifeTimer->setColor(ccc3(0, 0, 0));
 			lbSendLifeTimer->setAnchorPoint(ccp(0.5f, 0.75f));
 			lbSendLifeTimer->setPosition(ccp(725, m_sprCell->getContentSize().height/4));
-			lbSendLifeTimer->setTag(3000 + idx);
+			lbSendLifeTimer->setTag(BEGIN_TAG_LB_SEND_LIFE_TIMER + idx); //3000
 			cell->addChild(lbSendLifeTimer);
 			((CustomTableViewCell*)cell)->m_lbSendLifeTimer = lbSendLifeTimer;
 
@@ -1416,7 +1509,7 @@ CCTableViewCell* ScoreScene::getTableCellXepHangAtIndex( CCTableView *table, uns
 			lbSendLife->setColor(ccc3(0, 0, 0));
 			lbSendLife->setAnchorPoint(ccp(0.5f, 0.75f));
 			lbSendLife->setPosition(ccp(725, m_sprCell->getContentSize().height/4));
-			lbSendLife->setTag(4000 + idx);
+			lbSendLife->setTag(BEGIN_TAG_LB_SEND_LIFE + idx); //4000
 			cell->addChild(lbSendLife);
 			((CustomTableViewCell*)cell)->m_lbSendLife = lbSendLife;
 
@@ -1429,7 +1522,7 @@ CCTableViewCell* ScoreScene::getTableCellXepHangAtIndex( CCTableView *table, uns
 			lbGetBoomTimer->setColor(ccc3(0, 0, 0));
 			lbGetBoomTimer->setAnchorPoint(ccp(0.5f, 0.75f));
 			lbGetBoomTimer->setPosition(ccp(600, m_sprCell->getContentSize().height/4 - 5));
-			lbGetBoomTimer->setTag(5000 + idx);
+			lbGetBoomTimer->setTag(BEGIN_TAG_LB_GET_BOOM_TIMER + idx); //5000
 			cell->addChild(lbGetBoomTimer);
 			((CustomTableViewCell*)cell)->m_lbGetBoomTimer = lbGetBoomTimer;
 
@@ -1437,36 +1530,26 @@ CCTableViewCell* ScoreScene::getTableCellXepHangAtIndex( CCTableView *table, uns
 			lbGetBoom->setColor(ccc3(0, 0, 0));
 			lbGetBoom->setAnchorPoint(ccp(0.5f, 0.75f));
 			lbGetBoom->setPosition(ccp(600, m_sprCell->getContentSize().height/4 - 5));
-			lbGetBoom->setTag(6000 + idx);
+			lbGetBoom->setTag(BEGIN_TAG_LB_GET_BOOM + idx); //6000
 			cell->addChild(lbGetBoom);
 			((CustomTableViewCell*)cell)->m_lbGetBoom = lbGetBoom;
 
 
-// 			CCLabelTTF* lbGetBoomNow = CCLabelTTF::create("Nhận ngay", "Roboto-Medium.ttf", 28);
-// 			lbGetBoomNow->setColor(ccc3(0, 0, 0));
-// 			lbGetBoomNow->setAnchorPoint(ccp(0.5f, 0.75f));
-// 			lbGetBoomNow->setPosition(ccp(600, 3 * m_sprCell->getContentSize().height/4 + 5));
-// 			lbGetBoomNow->setTag(7000 + idx);
-// 			cell->addChild(lbGetBoomNow);
-// 			((CustomTableViewCell*)cell)->m_lbGetBoom = lbGetBoomNow;
-
 			//////////////////////////////////////////////////////////////////////////
 
 			//Get boom
-			if (_getBoomWaitTime <= 0)
+			if (_getBoomWaitTime <= 0) //free
 			{
 				//FULL TIME
-				itGetBoom->setEnabled(true);
 				lbGetBoomTimer->setVisible(false);
 				lbGetBoom->setVisible(true);
+				itGetBoomNow->setVisible(false);
 			}
-			else
+			else //not free
 			{
-				itGetBoom->selected();
-
-				itGetBoom->setEnabled(false);
 				lbGetBoomTimer->setVisible(true);
 				lbGetBoom->setVisible(false);
+				itGetBoomNow->setVisible(true);
 			}
 
 			//////////////////

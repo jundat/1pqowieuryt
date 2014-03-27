@@ -19,7 +19,7 @@ USING_NS_CC;
 USING_NS_CC_EXT;
 
 
-#define G_VERSION			72
+#define G_VERSION			73
 #define G_MENU_BG_COLOR		ccc4(195, 200, 201, 255)
 #define G_MENU_BG_VN			"vn_bg_menu.png"
 #define G_MENU_BG_EN			"en_bg_menu.png"
