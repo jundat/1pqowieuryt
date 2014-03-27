@@ -77,6 +77,8 @@ public:
 	void	SetTimeBoomFriend(const char* fbId, tm* time);
 	void	SetTimeBoomFriendNow(const char* fbId);
 
+	bool	GetIsJustGetBoomNowFriend(const char* fbId); ////////////////////////////////// new ////////////////////////////////////////
+	void	SetIsJustGetBoomNowFriend(const char* fbId, bool isTrue);
 
 	tm*		GetTimeLifeToFriend(const char* fbId);
 	void	SetTimeLifeToFriend(const char* fbId, tm* time);

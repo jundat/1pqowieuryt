@@ -343,6 +343,22 @@ void DataManager::SetTimeBoomFriendNow( const char* fbId )
 
 
 
+
+void DataManager::SetIsJustGetBoomNowFriend( const char* fbId, bool isTrue )
+{
+	CCString* sKey = CCString::createWithFormat("IS_JUST_GET_BOOM_NOW_%s", fbId);
+	CCUserDefault::sharedUserDefault()->setBoolForKey(sKey->getCString(), isTrue);
+	CCUserDefault::sharedUserDefault()->flush();
+}
+
+bool DataManager::GetIsJustGetBoomNowFriend( const char* fbId )
+{
+	CCString* sKey = CCString::createWithFormat("IS_JUST_GET_BOOM_NOW_%s", fbId);
+	return CCUserDefault::sharedUserDefault()->getBoolForKey(sKey->getCString(), false);
+}
+
+
+
 void DataManager::SetTimeLifeToFriend( const char* fbId, tm* time )
 {
 	CCString* sKey = CCString::createWithFormat("LAST_SEND_LIFE_TO_%s", fbId);

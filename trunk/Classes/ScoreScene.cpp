@@ -115,39 +115,39 @@ bool ScoreScene::init()
 	//life
 	m_sprLife = CCSprite::create("oil.png");
 	m_sprLife->setScale(0.75f);
-	m_sprLife->setPosition(ccp(609, 1280-164));
+	m_sprLife->setPosition(ccp(609 + 50, 1280-164));
 	this->addChild(m_sprLife);
 
 	str = CCString::createWithFormat("x%d", DataManager::sharedDataManager()->GetLastPlayerLife());
 	m_lbLife = CCLabelTTF::create(str->getCString(), "Roboto-Medium.ttf", 48);
 	m_lbLife->setColor(ccc3(0, 0, 0));
-	m_lbLife->setPosition(ccp(650, 1280-164));
+	m_lbLife->setPosition(ccp(650 + 50, 1280-164));
 	m_lbLife->setAnchorPoint(ccp(0.0f, 0.5f));
 	this->addChild(m_lbLife);
 	
 	//boom
 	m_sprBoom = CCSprite::create("boomgift.png");
 	m_sprBoom->setScale(0.75f);
-	m_sprBoom->setPosition(ccp(609, 1280-245));
+	m_sprBoom->setPosition(ccp(609 + 50, 1280-245));
 	this->addChild(m_sprBoom);
 
 	str = CCString::createWithFormat("x%d", DataManager::sharedDataManager()->GetBoom());
 	m_lbBoom = CCLabelTTF::create(str->getCString(), "Roboto-Medium.ttf", 48);
 	m_lbBoom->setColor(ccc3(0, 0, 0));
-	m_lbBoom->setPosition(ccp(650, 1280-245));
+	m_lbBoom->setPosition(ccp(650 + 50, 1280-245));
 	m_lbBoom->setAnchorPoint(ccp(0.0f, 0.5f));
 	this->addChild(m_lbBoom);
 
 	//Diamond
 
 	m_sprDiamond = CCSprite::create("diamond.png");
-	m_sprDiamond->setPosition(ccp(418, 1280-245));
+	m_sprDiamond->setPosition(ccp(418 + 50, 1280-245));
 	this->addChild(m_sprDiamond);
 
 	str = CCString::createWithFormat("x%d", DataManager::sharedDataManager()->GetDiamon());
 	m_lbDiamond = CCLabelTTF::create(str->getCString(), "Roboto-Medium.ttf", 48);
 	m_lbDiamond->setColor(ccc3(0, 0, 0));
-	m_lbDiamond->setPosition(ccp(454, 1280-245));
+	m_lbDiamond->setPosition(ccp(454 + 50, 1280-245));
 	m_lbDiamond->setAnchorPoint(ccp(0.0f, 0.5f));
 	this->addChild(m_lbDiamond);
 
@@ -555,6 +555,7 @@ void ScoreScene::itGetBoomNowCallback( CCObject* pSender )
 
 		DataManager::sharedDataManager()->SetDiamon(diamond - G_DIAMON_TO_GET_BOOM_NOW);
 		DataManager::sharedDataManager()->IncreaseBoom();
+		DataManager::sharedDataManager()->SetIsJustGetBoomNowFriend(fbID.c_str(), true);
 
 		m_sprDiamond->runAction(CCSequence::createWithTwoActions(
 			CCScaleTo::create(0.2f, 1.25f),
@@ -567,6 +568,9 @@ void ScoreScene::itGetBoomNowCallback( CCObject* pSender )
 			));
 
 		refreshUserDetail();
+
+		//disable
+		cell->m_itGetBoomNow->setVisible(false);
 	}
 	else
 	{
@@ -705,20 +709,32 @@ void ScoreScene::scheduleTimer( float dt )
 				time_t curTime = time(NULL);
 				int waitTime = 24 * 60 * 60 - (int)difftime(curTime, lastTime);
 
-				if (waitTime <= 0)
+				if (waitTime <= 0) //free
 				{
 					//FULL TIME
-					cell->m_itGetBoom->setVisible(true);
+					cell->m_itGetBoom->setEnabled(true);
 					cell->m_itGetBoomNow->setVisible(false);
 					cell->m_lbGetBoomTimer->setVisible(false);
 					cell->m_lbGetBoom->setVisible(true);
+
+					DataManager::sharedDataManager()->SetIsJustGetBoomNowFriend(cell->fbID.c_str(), false);
 				}
-				else
+				else //not free
 				{
-					cell->m_itGetBoom->setVisible(false);
-					cell->m_itGetBoomNow->setVisible(true);
 					cell->m_lbGetBoomTimer->setVisible(true);
 					cell->m_lbGetBoom->setVisible(false);
+
+					cell->m_itGetBoom->setEnabled(false);
+					
+					bool isJustGetBoomNow = DataManager::sharedDataManager()->GetIsJustGetBoomNowFriend(cell->fbID.c_str());
+					if (isJustGetBoomNow)
+					{
+						cell->m_itGetBoomNow->setVisible(false);
+					} 
+					else
+					{
+						cell->m_itGetBoomNow->setVisible(true);
+					}
 				}
 
 				waitTime = (waitTime > 0) ? waitTime : 0;
@@ -748,14 +764,14 @@ void ScoreScene::scheduleTimer( float dt )
 				time_t curTime = time(NULL);
 				int waitTime = 24 * 60 * 60 - (int)difftime(curTime, lastTime);
 
-				if (waitTime <= 0)
+				if (waitTime <= 0) //free
 				{
 					//FULL TIME
 					cell->m_itSendLife->setEnabled(true);
 					cell->m_lbSendLifeTimer->setVisible(false);
 					cell->m_lbSendLife->setVisible(true);
 				}
-				else
+				else //not free
 				{
 					cell->m_itSendLife->setEnabled(false);
 					cell->m_lbSendLifeTimer->setVisible(true);
@@ -1551,19 +1567,31 @@ CCTableViewCell* ScoreScene::getTableCellXepHangAtIndex( CCTableView *table, uns
 
 			//////////////////////////////////////////////////////////////////////////
 
+			bool isJustGetBoomNow = DataManager::sharedDataManager()->GetIsJustGetBoomNowFriend(strFriendId.c_str());
+
 			//Get boom
 			if (_getBoomWaitTime <= 0) //free
 			{
 				//FULL TIME
 				lbGetBoomTimer->setVisible(false);
 				lbGetBoom->setVisible(true);
+				itGetBoom->setEnabled(true);
 				itGetBoomNow->setVisible(false);
 			}
 			else //not free
 			{
 				lbGetBoomTimer->setVisible(true);
 				lbGetBoom->setVisible(false);
-				itGetBoomNow->setVisible(true);
+				itGetBoom->setEnabled(false);
+
+				if (isJustGetBoomNow)
+				{
+					itGetBoomNow->setVisible(false);
+				}
+				else
+				{
+					itGetBoomNow->setVisible(true);
+				}				
 			}
 
 			//////////////////
