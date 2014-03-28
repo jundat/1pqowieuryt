@@ -99,9 +99,17 @@ public:
 	{
 		CCSpriteFrameCache* sprcache = CCSpriteFrameCache::sharedSpriteFrameCache();
 		sprcache->addSpriteFramesWithFile("MainGame.plist");
+
+
+		//DEBUG
+		NDKHelper::AddSelector("MENU",
+			"onPushNotification",
+			callfuncND_selector(MenuScene::onPushNotification),
+			this);
 	}
 
 	void onRateCompleted( CCNode *sender, void *data );
+	void onPushNotification( CCNode *sender, void *data );
 
 	void onCompletedWaiting();
 	void onShowDialog();

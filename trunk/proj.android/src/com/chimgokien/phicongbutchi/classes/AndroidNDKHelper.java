@@ -8,6 +8,7 @@ import org.json.JSONObject;
 
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 
 public class AndroidNDKHelper
 {
@@ -67,6 +68,7 @@ public class AndroidNDKHelper
 		catch (Exception e)
 		{
 			e.printStackTrace();
+			Log.i("TAG_PUSH", "Failed: CPPNativeCallHandler (AndroidNDKHelper) can not run");
 		}
 	}
 	

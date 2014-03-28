@@ -166,7 +166,10 @@ void MainGameScene::showEndGame( int score, int killedEnemies )
 	
 	LoseDialog* dialog = LoseDialog::create(score, isBreakRecord);
 	this->addChild(dialog);
-	
+
+	//show memory info
+	CCTextureCache::sharedTextureCache()->dumpCachedTextureInfo();
+
 	//save highscore after show dialog
 	DataManager::sharedDataManager()->SetHighScore(score);
 

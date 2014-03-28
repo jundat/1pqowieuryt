@@ -232,6 +232,7 @@ bool MenuScene::init()
 		GetRegistrationId();
 	}
 
+
 	STOP_BACKGROUND_MUSIC;
     return true;
 }
@@ -884,5 +885,25 @@ void MenuScene::refreshLanguageUI()
 		//start
 		m_playItem->setNormalImage(CCSprite::create(G_MENU_NEW_BUTTON_SPR_NORMAL_VN));
 		m_playItem->setSelectedImage(CCSprite::create(G_MENU_NEW_BUTTON_SPR_PRESS_VN));
+	}
+}
+
+void MenuScene::onPushNotification( CCNode *sender, void *data )
+{
+	if (data != NULL)
+	{
+		CCDictionary *convertedData = (CCDictionary *)data;
+		CCString* s = (CCString*)convertedData->objectForKey("isSuccess");
+		if (s->boolValue())
+		{
+			CCLOG("CPP onPushNotification Completed: TRUE");
+			CCMessageBox("Push notification Success!", "Kaka");
+		} 
+		else
+		{
+			CCLOG("CPP onPushNotification Completed: FALSE");
+		}
+
+		//NDKHelper::RemoveSelector("MENU", "onPushNotification");
 	}
 }

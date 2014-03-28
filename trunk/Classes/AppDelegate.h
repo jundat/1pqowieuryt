@@ -3,6 +3,9 @@
 
 #include "cocos2d.h"
 
+
+#define COCOS2D_DEBUG	1
+
 /**
 @brief    The cocos2d Application.
 

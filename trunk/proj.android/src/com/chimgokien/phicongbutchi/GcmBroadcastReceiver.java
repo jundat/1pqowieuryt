@@ -19,6 +19,7 @@ import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Vibrator;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
 
@@ -39,6 +40,7 @@ public class GcmBroadcastReceiver extends WakefulBroadcastReceiver {
     	
     	Log.i("NOTIFY", "GcmBroadcastReceiver: onReceive");
     	
+    	
         // Explicitly specify that GcmIntentService will handle the intent.
         ComponentName comp = new ComponentName(context.getPackageName(),
                 GcmIntentService.class.getName());
@@ -46,5 +48,22 @@ public class GcmBroadcastReceiver extends WakefulBroadcastReceiver {
         // Start the service, keeping the device awake while it is launching.
         startWakefulService(context, (intent.setComponent(comp)));
         setResultCode(Activity.RESULT_OK);
+        
+        ////////////////////////////////////////////////////////////////////////
+                
+        ////////////////////////////////////////////////////////////////////////
+        
+
+    	//TEST SEND DATA FROM PUSH TO APP    
+//        try {
+//        	String jsonStr = "{\"isSuccess\" : true }";    
+//        	Log.i("TAG_PUSH", "send push to CPP");
+//        	JSONObject prmsToSend = new JSONObject(jsonStr);
+//			AndroidNDKHelper.SendMessageWithParameters("onPushNotification", prmsToSend);
+//		}
+//        catch (Exception e) {
+//			e.printStackTrace();
+//			Log.i("TAG_PUSH", "Failed: Application is not running!");
+//		}
     }
 }

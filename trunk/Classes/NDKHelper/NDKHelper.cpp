@@ -15,6 +15,7 @@ vector<NDKCallbackNode> NDKHelper::selectorList;
 
 void NDKHelper::AddSelector(const char *groupName, const char *name, SEL_CallFuncND selector, CCNode* target)
 {
+	CCLOG("Add selector: %s (in group %s)", name, groupName);
     NDKHelper::selectorList.push_back(NDKCallbackNode(groupName, name, selector, target));
 }
 

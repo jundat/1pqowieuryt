@@ -70,7 +70,7 @@ public class PhiCongButChi extends Cocos2dxActivity {
      * Substitute you own sender ID here. This is the project number you got
      * from the API Console, as described in "Getting Started."
      */
-    String SENDER_ID = "415130126994";// "1063175715204"; //Google Cloud Project Id
+    String SENDER_ID = "1063175715204";// "415130126994";// "1063175715204"; //Google Cloud Project Id
     String TAG_PUSH = "PUSH";
 
     GoogleCloudMessaging gcm;

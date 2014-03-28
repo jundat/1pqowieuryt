@@ -17,10 +17,14 @@
 package com.chimgokien.phicongbutchi;
 
 import android.app.IntentService;
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -121,10 +125,16 @@ public class GcmIntentService extends IntentService {
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
                 new Intent(this, PhiCongButChi.class), 0);
 
+        long[] vibrate = {0, 300, 0};
+        Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
         .setSmallIcon(R.drawable.icon)
         .setContentTitle(this.getApplicationContext().getString(R.string.app_name))
         .setStyle(new NotificationCompat.BigTextStyle().bigText(note))
+//        .setVibrate(vibrate)
+//        .setLights(Color.BLUE, 500, 500)
+//        .setSound(alarmSound)
         .setContentText(note);
 
         mBuilder.setContentIntent(contentIntent);
