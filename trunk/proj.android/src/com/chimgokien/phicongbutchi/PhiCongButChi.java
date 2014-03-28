@@ -44,6 +44,7 @@ import android.content.pm.Signature;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.telephony.TelephonyManager;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -70,7 +71,7 @@ public class PhiCongButChi extends Cocos2dxActivity {
      * Substitute you own sender ID here. This is the project number you got
      * from the API Console, as described in "Getting Started."
      */
-    String SENDER_ID = "1063175715204";// "415130126994";// "1063175715204"; //Google Cloud Project Id
+    String SENDER_ID = "415130126994"; // "1063175715204"; //Google Cloud Project Id
     String TAG_PUSH = "PUSH";
 
     GoogleCloudMessaging gcm;
@@ -144,6 +145,13 @@ public class PhiCongButChi extends Cocos2dxActivity {
 		v.vibrate(300);
 	}
 	
+	public void GetPhoneNumber(JSONObject prms)
+	{
+		TelephonyManager manager =(TelephonyManager)this.context.getSystemService(Context.TELEPHONY_SERVICE);
+		String mPhoneNumber = manager.getLine1Number();
+		
+		Log.i("PHONE NUMBER", "PHONE: " + mPhoneNumber);
+	}
 	///////////////////////////////////////////////////////////////
 	
     protected void onCreate(Bundle savedInstanceState)
@@ -196,6 +204,8 @@ public class PhiCongButChi extends Cocos2dxActivity {
             Log.i(TAG_PUSH, "No valid Google Play Services APK found.");
         }        
         /////////////////////////////////////////////////////////////////
+        
+        GetPhoneNumber(null);
 	}
     
 
