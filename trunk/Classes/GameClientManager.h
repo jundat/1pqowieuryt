@@ -11,8 +11,10 @@
 #include "Global.h"
 #include "GameClientObjects.h"
 
+
 USING_NS_CC;
 USING_NS_CC_EXT;
+using namespace std;
 
 #define KEY		"cGk@proJectDBPtkkEy-askdjhsakdhajakshdwi"
 
@@ -94,6 +96,16 @@ public:
 
 	void getScore( std::string appId, std::string fbId );
 	void _onGetScoreCompleted(CCHttpClient *sender, CCHttpResponse *response);
+
+	//////////////////////////////////////////////////////////////////////////
+
+	void requestRevive(string appId, string fbId);
+	void _onRequestReviveCompleted(CCHttpClient *sender, CCHttpResponse *response);
+	
+	//////////////////////////////////////////////////////////////////////////
+
+	void requestGetLazer(string appId, string fbId, string friendId);
+	void _onRequestGetLazerCompleted(CCHttpClient *sender, CCHttpResponse *response);
 
 	//////////////////////////////////////////////////////////////////////////
 

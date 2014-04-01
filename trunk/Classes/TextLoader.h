@@ -49,7 +49,7 @@ protected:
 static const char* TXT(const char* id)
 {
 	const char* text = TextLoader::shareTextLoader()->getText(id);
-	CCLOG("TXT: %s => %s", id, text);
+	//CCLOG("TXT: %s => %s", id, text);
 	return text;
 }
 

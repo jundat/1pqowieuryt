@@ -207,7 +207,6 @@ void GameClientManager::_onGetPlayerFbProfileCompleted( CCHttpClient *sender, CC
 		FacebookAccount* acc = new FacebookAccount(json_string_value(fbId), json_string_value(fbName), std::string(json_string_value(email)), -1);
 
 		m_clientDelegate->onGetPlayerFbProfileCompleted(true, acc);
-
 	}
 
 	CCLOG("------- END %s -------", response->getHttpRequest()->getTag());
@@ -678,6 +677,151 @@ void GameClientManager::_onGetScoreCompleted( CCHttpClient *sender, CCHttpRespon
 		time = json_object_get(root, "time");
 
 		m_clientDelegate->onGetScoreCompleted(true, (int)atof(json_string_value(score)), json_string_value(time));
+	}
+
+	CCLOG("------- END %s -------", response->getHttpRequest()->getTag());
+}
+
+//
+
+void GameClientManager::requestRevive( string appId, string fbId )
+{
+	string sUrl = string(G_URL_REVIVE);
+	CCLOG("URL: %s", sUrl.c_str());
+	CCAssert(sUrl.length() > 0, "Not set G_URL_REVIVE yet");
+	CCHttpRequest* request = new CCHttpRequest();
+	request->setUrl(sUrl.c_str());
+	request->setRequestType(CCHttpRequest::kHttpPost);
+
+	request->setTag("requestRevive");
+	request->setResponseCallback(this, httpresponse_selector(GameClientManager::_onRequestReviveCompleted));
+
+
+	// write the post data
+	CCString* strData = CCString::createWithFormat(
+		"{ method: \"set\", data: { appId: \"%s\", fbId: \"%s\" }, sign: \"%s\", appId: \"%s\" }",
+		G_APP_ID,
+		fbId.c_str(),
+		getMD5().c_str(),
+		G_APP_ID);
+
+
+	std::string s = encodeBeforeSend(strData->getCString());
+	request->setRequestData(s.c_str(), strlen(s.c_str()));
+
+	CCHttpClient::getInstance()->send(request);
+	request->release();
+}
+
+void GameClientManager::_onRequestReviveCompleted( CCHttpClient *sender, CCHttpResponse *response )
+{
+	if (!response || m_clientDelegate == NULL)
+	{
+		return;
+	}
+
+	//Show info
+	CCLOG("------- BEGIN %s -------", response->getHttpRequest()->getTag());
+	CCLOG("Status: [%i]", response->getResponseCode());
+
+	if (!response->isSucceed())
+	{
+		CCLOG("Request failed: %s", response->getErrorBuffer());
+		m_clientDelegate->onRequestReviveCompleted(false, -1);
+	}
+	else
+	{
+		std::vector<char> *buffer = response->getResponseData();
+		std::string str(buffer->begin(), buffer->end());
+
+		str = decodeBeforeProcess(str);
+
+		CCLOG("Content: %s", str.c_str());
+
+		//get score from response
+		json_t *root;
+		json_error_t error;
+		json_t *isSuccess;
+		json_t *newDiamond;
+
+		root = json_loads(str.c_str(), strlen(str.c_str()), &error);
+		isSuccess = json_object_get(root, "isSuccess");
+		newDiamond = json_object_get(root, "newDiamond");
+
+		m_clientDelegate->onRequestReviveCompleted((bool)json_is_true(isSuccess), (int)atof(json_string_value(newDiamond)));
+	}
+
+	CCLOG("------- END %s -------", response->getHttpRequest()->getTag());
+}
+
+//
+
+void GameClientManager::requestGetLazer( string appId, string fbId, string friendId)
+{
+	string sUrl = string(G_URL_GET_LAZER);
+	CCLOG("URL: %s", sUrl.c_str());
+	CCAssert(sUrl.length() > 0, "Not set G_URL_GET_LAZER yet");
+	CCHttpRequest* request = new CCHttpRequest();
+	request->setUrl(sUrl.c_str());
+	request->setRequestType(CCHttpRequest::kHttpPost);
+
+	request->setTag("getLazer");
+	request->setResponseCallback(this, httpresponse_selector(GameClientManager::_onRequestGetLazerCompleted));
+
+
+	// write the post data
+	CCString* strData = CCString::createWithFormat(
+		"{ method: \"set\", data: { appId: \"%s\", fbId: \"%s\", friendId: \"%s\" }, sign: \"%s\", appId: \"%s\" }",
+		G_APP_ID,
+		fbId.c_str(),
+		friendId.c_str(),
+		getMD5().c_str(),
+		G_APP_ID);
+
+
+	std::string s = encodeBeforeSend(strData->getCString());
+	request->setRequestData(s.c_str(), strlen(s.c_str()));
+
+	CCHttpClient::getInstance()->send(request);
+	request->release();
+}
+
+void GameClientManager::_onRequestGetLazerCompleted( CCHttpClient *sender, CCHttpResponse *response )
+{
+	if (!response || m_clientDelegate == NULL)
+	{
+		return;
+	}
+
+	//Show info
+	CCLOG("------- BEGIN %s -------", response->getHttpRequest()->getTag());
+	CCLOG("Status: [%i]", response->getResponseCode());
+
+	if (!response->isSucceed())
+	{
+		CCLOG("Request failed: %s", response->getErrorBuffer());
+		m_clientDelegate->onRequestGetLazerCompleted(false, -1);
+	}
+	else
+	{
+		std::vector<char> *buffer = response->getResponseData();
+		std::string str(buffer->begin(), buffer->end());
+
+		str = decodeBeforeProcess(str);
+
+		CCLOG("Content: %s", str.c_str());
+
+		//get score from response
+		json_t *root;
+		json_error_t error;
+		json_t *isSuccess;
+		json_t *newDiamond;
+
+		root = json_loads(str.c_str(), strlen(str.c_str()), &error);
+		isSuccess = json_object_get(root, "isSuccess");
+		newDiamond = json_object_get(root, "newDiamond");
+
+		m_clientDelegate->onRequestGetLazerCompleted((bool)json_is_true(isSuccess), (int)atof(json_string_value(newDiamond)));
 	}
 
 	CCLOG("------- END %s -------", response->getHttpRequest()->getTag());

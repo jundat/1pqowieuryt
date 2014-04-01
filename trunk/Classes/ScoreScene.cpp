@@ -1551,7 +1551,7 @@ CCTableViewCell* ScoreScene::getTableCellXepHangAtIndex( CCTableView *table, uns
 			CCLabelTTF* lbGetBoomTimer = CCLabelTTF::create(strGetBoomTimer->getCString(), "Roboto-Medium.ttf", 28); //32
 			lbGetBoomTimer->setColor(ccc3(0, 0, 0));
 			lbGetBoomTimer->setAnchorPoint(ccp(0.5f, 0.75f));
-			lbGetBoomTimer->setPosition(ccp(600, m_sprCell->getContentSize().height/4 - 5));
+			lbGetBoomTimer->setPosition(ccp(600, m_sprCell->getContentSize().height/4));
 			lbGetBoomTimer->setTag(BEGIN_TAG_LB_GET_BOOM_TIMER + idx); //5000
 			cell->addChild(lbGetBoomTimer);
 			((CustomTableViewCell*)cell)->m_lbGetBoomTimer = lbGetBoomTimer;

@@ -42,6 +42,8 @@ extern std::string G_URL_PLAYER_FB_PROFILE;
 extern std::string G_URL_FRIEND_LIST;
 extern std::string G_URL_DEVICE_PROFILE;
 extern std::string G_URL_SCORE;
+extern std::string G_URL_REVIVE;
+extern std::string G_URL_GET_LAZER;
 
 extern std::string G_URL_RATE;
 

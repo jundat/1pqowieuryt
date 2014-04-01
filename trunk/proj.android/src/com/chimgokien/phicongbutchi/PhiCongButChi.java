@@ -31,6 +31,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.cocos2dx.lib.Cocos2dxActivity;
 import org.cocos2dx.lib.Cocos2dxGLSurfaceView;
+import org.cocos2dx.lib.Cocos2dxRenderer;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -47,6 +48,7 @@ import android.os.Vibrator;
 import android.telephony.TelephonyManager;
 import android.util.Base64;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 
 import com.chimgokien.phicongbutchi.classes.AndroidNDKHelper;
@@ -73,6 +75,7 @@ public class PhiCongButChi extends Cocos2dxActivity {
      */
     String SENDER_ID = "415130126994"; // "1063175715204"; //Google Cloud Project Id
     String TAG_PUSH = "PUSH";
+	String TAG = "JAVA_CALL";
 
     GoogleCloudMessaging gcm;
     AtomicInteger msgId = new AtomicInteger();
@@ -81,8 +84,14 @@ public class PhiCongButChi extends Cocos2dxActivity {
     String regid;
     
     ////////////////////////////////////////////////////////////////////////
+    //Disable multitouch
+    
+    
+    
+    
+    
+    ////////////////////////////////////////////////////////////////////////
 	
-	String TAG = "JAVA_CALL";
 	
 	public void Rate(JSONObject prms)
 	{
@@ -205,7 +214,7 @@ public class PhiCongButChi extends Cocos2dxActivity {
         }        
         /////////////////////////////////////////////////////////////////
         
-        GetPhoneNumber(null);
+        //GetPhoneNumber(null);
 	}
     
 
