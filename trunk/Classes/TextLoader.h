@@ -9,6 +9,8 @@
 USING_NS_CC;
 using namespace std;
 
+
+
 #define TEXT_FILE		"language.plist"
 
 #define LANGUAGE_ENGLISH		"English"

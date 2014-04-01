@@ -12,6 +12,7 @@ using namespace std;
 	if(x > maxX) { x = maxX; }\
 }
 
+
 static string MY_LIMIT_STR(string srcString, int maxlen, string addString)
 {
 	if ((int)srcString.length() > maxlen)

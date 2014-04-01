@@ -13,6 +13,8 @@ USING_NS_CC;
 
 static const int PLAYER_Y = 250;
 
+
+
 bool ObjectLayer::init()
 {
     if ( !CCLayer::init() )

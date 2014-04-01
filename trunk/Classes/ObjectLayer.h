@@ -10,10 +10,12 @@
 #include "Item.h"
 #include "Enemy.h"
 #include "EnemyFactory.h"
-
 USING_NS_CC;
 
+
 #define CROSS_NUMBER  3
+
+
 
 class ObjectLayer : public cocos2d::CCLayer
 {
