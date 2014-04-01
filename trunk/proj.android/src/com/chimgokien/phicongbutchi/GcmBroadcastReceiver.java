@@ -19,6 +19,8 @@ import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Vibrator;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
@@ -50,9 +52,15 @@ public class GcmBroadcastReceiver extends WakefulBroadcastReceiver {
         setResultCode(Activity.RESULT_OK);
         
         ////////////////////////////////////////////////////////////////////////
-                
-        ////////////////////////////////////////////////////////////////////////
         
+        //check if app is running
+        SharedPreferences sp = context.getSharedPreferences(PhiCongButChi.SAVE_KEY, Context.MODE_PRIVATE);
+        boolean isActive = sp.getBoolean(PhiCongButChi.KEY_IS_ACTIVE, false);
+        if (isActive) {
+			Log.i("PUSH", "App is active --- ");
+		} else {
+			Log.i("PUSH", "App is NOT active --- ");
+		}
 
     	//TEST SEND DATA FROM PUSH TO APP    
 //        try {

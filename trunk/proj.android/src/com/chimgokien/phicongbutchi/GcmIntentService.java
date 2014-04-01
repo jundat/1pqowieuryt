@@ -125,16 +125,18 @@ public class GcmIntentService extends IntentService {
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
                 new Intent(this, PhiCongButChi.class), 0);
 
-        long[] vibrate = {0, 300, 0};
-        Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        //long[] vibrate = {0, 300, 0};
+        //Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        //.setVibrate(vibrate)
+        //.setLights(Color.BLUE, 500, 500)
+        //.setSound(alarmSound)
         
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
         .setSmallIcon(R.drawable.icon)
         .setContentTitle(this.getApplicationContext().getString(R.string.app_name))
         .setStyle(new NotificationCompat.BigTextStyle().bigText(note))
-//        .setVibrate(vibrate)
-//        .setLights(Color.BLUE, 500, 500)
-//        .setSound(alarmSound)
+        .setAutoCancel(true)
+        .setOnlyAlertOnce(true)
         .setContentText(note);
 
         mBuilder.setContentIntent(contentIntent);

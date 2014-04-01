@@ -38,6 +38,7 @@ import org.json.JSONObject;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -73,9 +74,11 @@ public class PhiCongButChi extends Cocos2dxActivity {
      * Substitute you own sender ID here. This is the project number you got
      * from the API Console, as described in "Getting Started."
      */
-    String SENDER_ID = "415130126994"; // "1063175715204"; //Google Cloud Project Id
-    String TAG_PUSH = "PUSH";
-	String TAG = "JAVA_CALL";
+    final static String SENDER_ID = "1063175715204"; //"415130126994"; // "1063175715204"; //Google Cloud Project Id
+    final static String TAG_PUSH = "PUSH";
+    final static String TAG = "JAVA_CALL";
+	final static String SAVE_KEY = "CGKStudio_DBPTK";
+	final static String KEY_IS_ACTIVE = "isActive";
 
     GoogleCloudMessaging gcm;
     AtomicInteger msgId = new AtomicInteger();
@@ -401,6 +404,32 @@ public class PhiCongButChi extends Cocos2dxActivity {
     
     //END PUSH
     ////////////////////////////////////////////////////////////////////
+    
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.i("DBPTK", "onStart");
+        
+        // Store our shared preference
+        SharedPreferences sp = getSharedPreferences(SAVE_KEY, MODE_PRIVATE);
+        Editor ed = sp.edit();
+        ed.putBoolean(KEY_IS_ACTIVE, true);
+        ed.commit();
+    }
+    
+    
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.i("DBPTK", "onStop");
+                 
+        // Store our shared preference
+        SharedPreferences sp = getSharedPreferences(SAVE_KEY, MODE_PRIVATE);
+        Editor ed = sp.edit();
+        ed.putBoolean(KEY_IS_ACTIVE, false);
+        ed.commit();         
+    }
+    //- See more at: http://androidblog.reindustries.com/check-if-an-android-activity-is-currently-running/#sthash.CNPavloV.dpuf
     
     public Cocos2dxGLSurfaceView onCreateView()
     {
