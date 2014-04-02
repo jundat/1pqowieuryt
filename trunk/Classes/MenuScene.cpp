@@ -68,10 +68,10 @@ bool MenuScene::init()
 
 	//
 	CCString* s = CCString::createWithFormat("v%d", G_VERSION);
-	CCLabelTTF* labelVersion = CCLabelTTF::create(s->getCString(), G_FONT_NORMAL, G_MENU_VERSION_TEXT_SIZE);
-	labelVersion->setColor(G_MENU_VERSION_TEXT_COLOR);
-	labelVersion->setPosition(G_MENU_VERSION_TEXT_POS);
-	this->addChild(labelVersion);
+// 	CCLabelTTF* labelVersion = CCLabelTTF::create(s->getCString(), G_FONT_NORMAL, G_MENU_VERSION_TEXT_SIZE);
+// 	labelVersion->setColor(G_MENU_VERSION_TEXT_COLOR);
+// 	labelVersion->setPosition(G_MENU_VERSION_TEXT_POS);
+// 	this->addChild(labelVersion);
 
 	//
 	if (lang.compare("English") == 0)
@@ -211,8 +211,11 @@ bool MenuScene::init()
 
 	//Language bar
 	//////////////////////////////////////////////////////////////////////////
+
+	CCMenuItemImage* itShowCharge = CCMenuItemImage::create("crossActive.png", "cross.png", "cross.png", this, menu_selector(MenuScene::showChargeCallback));
+	itShowCharge->setPosition(ccp(50, 640));
 	
-    m_menu = CCMenu::create(m_playItem, scoreItem, itRate, /*itExit,*/ NULL);
+    m_menu = CCMenu::create(m_playItem, scoreItem, itRate, itShowCharge, NULL);
     m_menu->setPosition(CCPointZero);
     this->addChild(m_menu, 1);
 
@@ -906,4 +909,24 @@ void MenuScene::onPushNotification( CCNode *sender, void *data )
 
 		//NDKHelper::RemoveSelector("MENU", "onPushNotification");
 	}
+}
+
+void MenuScene::showChargeCallback( CCObject* pSender )
+{
+	NDKHelper::AddSelector("MENU",
+		"onShowChargeCompleted",
+		callfuncND_selector(MenuScene::onShowChargeCompleted),
+		this);
+
+	CCDictionary* prms = CCDictionary::create();
+	prms->setObject(CCString::create(TXT("charge_caption")), "charge_caption");
+	prms->setObject(CCString::create(TXT("charge_close")), "charge_close");
+	prms->setObject(CCString::create(TXT("charge_link")), "charge_link");
+
+	SendMessageWithParams(string("ShowChargeWebView"), prms);
+}
+
+void MenuScene::onShowChargeCompleted( CCNode *sender, void *data )
+{
+	CCLOG("CPP: onShowChargeCompleted");
 }

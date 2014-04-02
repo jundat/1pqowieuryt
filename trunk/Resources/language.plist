@@ -95,6 +95,12 @@
 		<string>rate_later</string>
 		<key>rate_no</key>
 		<string>rate_no</string>
+		<key>charge_close</key>
+		<string>charge_close</string>
+		<key>charge_caption</key>
+		<string>charge_caption</string>
+		<key>charge_link</key>
+		<string>charge_link</string>
 	</dict>
 
 	<key>English</key>
@@ -120,7 +126,7 @@
 		<key>feed_error</key>
 		<string>Failed to share</string>
 		<key>tut_content</key>
-		<string>1972 .... The enemy had attacked for several days mainly using the B-52 bomber at night ....</string>
+		<string>...1972, The final operation, LineBacker II was conducted throughout 12 days to destroy major target complexes which could only be accomplished by B-52s...</string>
 		<key>tut_mission</key>
 		<string>Do not miss more than 3 B-52 bombers !!!</string>
 		<key>lose_score</key>
@@ -191,6 +197,12 @@
 		<string>Remind me later</string>
 		<key>rate_no</key>
 		<string>No, thanks</string>
+		<key>charge_close</key>
+		<string>Close</string>
+		<key>charge_caption</key>
+		<string>Charge diamond tutorial</string>
+		<key>charge_link</key>
+		<string>https://www.google.com.vn</string>
 	</dict>
 
 	<key>Vietnamese</key>
@@ -216,7 +228,7 @@
 		<key>feed_error</key>
 		<string>Không thể chia sẻ</string>
 		<key>tut_content</key>
-		<string>....1972 Cuộc tập kích của địch diễn ra liên tục nhiều ngày với trọng tâm là các cuộc ném bom của B-52 vào ban đêm....</string>
+		<string>...1972, Chiến dịch cuối cùng của địch mang tên LineBacker II đã diễn ra liên tục suốt 12 ngày với trọng tâm là các cuộc ném bom của B-52 vào các thành phố Hà Nội, Hải Phòng...</string>
 		<key>tut_mission</key>
 		<string>Không được để lọt lưới trên 3 chiếc B-52 !!!</string>
 		<key>lose_score</key>
@@ -287,6 +299,12 @@
 		<string>Để sau</string>
 		<key>rate_no</key>
 		<string>Không, cảm ơn</string>
+		<key>charge_close</key>
+		<string>Đóng</string>
+		<key>charge_caption</key>
+		<string>Hướng dẫn nạp kim cương</string>
+		<key>charge_link</key>
+		<string>https://www.google.com.vn</string>
 	</dict>
 
 </dict>

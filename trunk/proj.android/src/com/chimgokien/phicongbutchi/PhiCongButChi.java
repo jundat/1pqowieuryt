@@ -35,7 +35,11 @@ import org.cocos2dx.lib.Cocos2dxRenderer;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -51,6 +55,9 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 import com.chimgokien.phicongbutchi.classes.AndroidNDKHelper;
 import com.ezibyte.social.EziSocialManager;
@@ -94,7 +101,52 @@ public class PhiCongButChi extends Cocos2dxActivity {
     
     
     ////////////////////////////////////////////////////////////////////////
-	
+	@SuppressLint("SetJavaScriptEnabled")
+	public void ShowChargeWebView(JSONObject prms)
+	{
+		String charge_caption = "";
+		String charge_close = "";
+		String charge_link = "";
+		
+		try {
+			charge_caption = prms.getString("charge_caption");
+			charge_close = prms.getString("charge_close");
+			charge_link = prms.getString("charge_link");
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		AlertDialog.Builder alert = new AlertDialog.Builder(
+                PhiCongButChi.this);
+        alert.setTitle(charge_caption);
+
+        WebView wv = new WebView(PhiCongButChi.this);
+        wv.getSettings().setJavaScriptEnabled(true);
+        wv.loadUrl(charge_link);
+        wv.setWebViewClient(new WebViewClient() {
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                view.loadUrl(url);
+                return true;
+            }
+        });
+
+        alert.setNegativeButton(charge_close,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                    }
+                });
+        
+        Dialog d = alert.setView(wv).create();
+        d.show();
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(d.getWindow().getAttributes());
+        lp.width = WindowManager.LayoutParams.FILL_PARENT;
+        lp.height = WindowManager.LayoutParams.FILL_PARENT;
+        d.getWindow().setAttributes(lp);
+	}
 	
 	public void Rate(JSONObject prms)
 	{
@@ -112,7 +164,7 @@ public class PhiCongButChi extends Cocos2dxActivity {
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}		
+		}
 	}
 	
 	public void onRateCompleted(String responseType) {

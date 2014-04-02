@@ -89,7 +89,7 @@ public:
 	void facebookCallback(CCObject* pSender);
 	void facebookLogInOut();
 	void exitCallback(CCObject* pSender);
-
+	void showChargeCallback(CCObject* pSender);
 	void languageCallback(CCObject* pSender);
 	void englishCallback(CCObject* pSender);
 	void vietnamCallback(CCObject* pSender);
@@ -106,9 +106,9 @@ public:
 // 			callfuncND_selector(MenuScene::onPushNotification),
 // 			this);
 	}
-
 	void onRateCompleted( CCNode *sender, void *data );
 	void onPushNotification( CCNode *sender, void *data );
+	void onShowChargeCompleted( CCNode *sender, void *data );
 
 	void onCompletedWaiting();
 	void onShowDialog();
