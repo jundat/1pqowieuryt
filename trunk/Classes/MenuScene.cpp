@@ -24,7 +24,7 @@ CCScene* MenuScene::scene()
 bool MenuScene::init()
 {
 	DataManager::sharedDataManager()->RefreshPlayerLife();
-
+	CCTextureCache::sharedTextureCache()->dumpCachedTextureInfo();
 	//////////////////////////////////////////////////////////////////////////
 
     if ( !CCLayerColor::initWithColor(G_MENU_BG_COLOR) )
