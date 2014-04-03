@@ -422,6 +422,7 @@ void MenuScene::onCloseDialog()
 	initLifeIcon();
 	m_menu->setEnabled(true);
 	this->setKeypadEnabled(true);
+	m_sprSettingBar->runAction(CCSequence::createWithTwoActions(CCDelayTime::create(0.5f), CCHide::create()));
 }
 
 void MenuScene::onCompletedWaiting()
@@ -465,6 +466,8 @@ void MenuScene::soundCallback( CCObject* pSender )
 		AudioManager::sharedAudioManager()->SetEnableBackground(true);
 		AudioManager::sharedAudioManager()->SetEnableEffect(true);
 	}
+
+	m_sprSettingBar->runAction(CCSequence::createWithTwoActions(CCDelayTime::create(0.5f), CCHide::create()));
 }
 
 void MenuScene::rateCallback( CCObject* pSender )
@@ -708,6 +711,8 @@ void MenuScene::fbSessionCallback(int responseCode, const char *responseMessage)
 	{
 		m_facebookItem->setSelectedIndex(0);
 	}
+
+	m_sprSettingBar->runAction(CCSequence::createWithTwoActions(CCDelayTime::create(0.5f), CCHide::create()));
 #endif
 }
 
@@ -931,4 +936,5 @@ void MenuScene::showChargeCallback( CCObject* pSender )
 void MenuScene::onShowChargeCompleted( CCNode *sender, void *data )
 {
 	CCLOG("CPP: onShowChargeCompleted");
+	m_sprSettingBar->runAction(CCSequence::createWithTwoActions(CCDelayTime::create(0.5f), CCHide::create()));
 }

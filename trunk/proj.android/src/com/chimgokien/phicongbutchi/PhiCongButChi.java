@@ -136,6 +136,7 @@ public class PhiCongButChi extends Cocos2dxActivity {
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
+                    	AndroidNDKHelper.SendMessageWithParameters("onShowChargeCompleted", null);
                     }
                 });
         
