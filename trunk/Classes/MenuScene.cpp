@@ -68,10 +68,10 @@ bool MenuScene::init()
 
 	//
 	CCString* s = CCString::createWithFormat("v%d", G_VERSION);
-// 	CCLabelTTF* labelVersion = CCLabelTTF::create(s->getCString(), G_FONT_NORMAL, G_MENU_VERSION_TEXT_SIZE);
-// 	labelVersion->setColor(G_MENU_VERSION_TEXT_COLOR);
-// 	labelVersion->setPosition(G_MENU_VERSION_TEXT_POS);
-// 	this->addChild(labelVersion);
+	CCLabelTTF* labelVersion = CCLabelTTF::create(s->getCString(), G_FONT_NORMAL, G_MENU_VERSION_TEXT_SIZE);
+	labelVersion->setColor(G_MENU_VERSION_TEXT_COLOR);
+	labelVersion->setPosition(G_MENU_VERSION_TEXT_POS);
+	this->addChild(labelVersion);
 
 	//
 	if (lang.compare("English") == 0)
@@ -127,6 +127,11 @@ bool MenuScene::init()
 	m_sprSettingBar->setPosition(ccp(108, 1280-1245));
 	m_sprSettingBar->setVisible(false);
 
+
+	CCMenuItemImage* itShowCharge = CCMenuItemImage::create("charge.png", "charge_down.png", "charge_down.png", this, menu_selector(MenuScene::showChargeCallback));
+	itShowCharge->setPosition(ccp(70, m_sprSettingBar->getContentSize().height - 65 + 121));
+
+
 	CCMenuItem* facebookOn = CCMenuItemImage::create("facebook_in.png", NULL, NULL);
 	CCMenuItem* facebookOff = CCMenuItemImage::create("facebook_out.png", NULL, NULL);
 	m_facebookItem = CCMenuItemToggle::createWithTarget(this,  menu_selector(MenuScene::facebookCallback), facebookOn, facebookOff, NULL);
@@ -153,7 +158,7 @@ bool MenuScene::init()
 		m_soundItem->setSelectedIndex(1);
 	}
 
-	CCMenu* settingMenu = CCMenu::create(m_facebookItem, m_soundItem, NULL);
+	CCMenu* settingMenu = CCMenu::create(m_facebookItem, m_soundItem, itShowCharge, NULL);
 	settingMenu->setPosition(CCPointZero);
 	
 	m_sprSettingBar->addChild(settingMenu);
@@ -212,10 +217,7 @@ bool MenuScene::init()
 	//Language bar
 	//////////////////////////////////////////////////////////////////////////
 
-	CCMenuItemImage* itShowCharge = CCMenuItemImage::create("crossActive.png", "cross.png", "cross.png", this, menu_selector(MenuScene::showChargeCallback));
-	itShowCharge->setPosition(ccp(50, 640));
-	
-    m_menu = CCMenu::create(m_playItem, scoreItem, itRate, itShowCharge, NULL);
+    m_menu = CCMenu::create(m_playItem, scoreItem, itRate, NULL);
     m_menu->setPosition(CCPointZero);
     this->addChild(m_menu, 1);
 

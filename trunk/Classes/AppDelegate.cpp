@@ -79,7 +79,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
 #endif
 	
     pDirector->setOpenGLView(pEGLView);
-    pDirector->setAnimationInterval(G_FPS);
+    pDirector->setAnimationInterval(1.0f / 60.0f);
+	//pDirector->setDisplayStats(true);
 	
 	CCSize realSize = pEGLView->getFrameSize();
 	
