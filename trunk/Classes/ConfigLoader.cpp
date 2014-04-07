@@ -105,7 +105,8 @@ ConfigLoader::ConfigLoader(void)
 
 	G_TIME_TO_REFRESH_FRIENDS = GetValue(std::string("G_TIME_TO_REFRESH_FRIENDS"))->floatValue();	
 
-	G_IS_ENCODE = GetValue(std::string("G_IS_ENCODE"))->boolValue();	
+	G_IS_ENCODE = GetValue(std::string("G_IS_ENCODE"))->boolValue();
+	G_IS_MONEYTIZE = GetValue(std::string("G_IS_MONEYTIZE"))->boolValue();
 	
 }
 

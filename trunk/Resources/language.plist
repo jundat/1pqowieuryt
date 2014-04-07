@@ -37,6 +37,10 @@
 		<string>menu_thank_rate</string>
 		<key>menu_thank_caption</key>
 		<string>menu_thank_caption</string>
+		<key>menu_error_server</key>
+		<string>menu_error_server</string>
+		<key>menu_error_caption</key>
+		<string>menu_error_caption</string>
 		<key>fb_logout_ask</key>
 		<string>fb_logout_ask</string>
 		<key>quit_ask</key>
@@ -139,6 +143,10 @@
 		<string>Thank you!</string>
 		<key>menu_thank_caption</key>
 		<string>Information</string>
+		<key>menu_error_server</key>
+		<string>Failed to connect to server</string>
+		<key>menu_error_caption</key>
+		<string>Error</string>
 		<key>fb_logout_ask</key>
 		<string>Do you want to disconnect Facebook? </string>
 		<key>quit_ask</key>
@@ -241,6 +249,10 @@
 		<string>Cảm ơn bạn!</string>
 		<key>menu_thank_caption</key>
 		<string>Thông tin</string>
+		<key>menu_error_server</key>
+		<string>Không thể kết nối máy chủ</string>
+		<key>menu_error_caption</key>
+		<string>Lỗi</string>
 		<key>fb_logout_ask</key>
 		<string>Bạn có muốn ngắt kết nối Facebook!</string>
 		<key>quit_ask</key>

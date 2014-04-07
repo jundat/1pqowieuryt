@@ -565,3 +565,16 @@ void DataManager::SetFirstTimeChooseLanguage(bool isFirstTime)
 	CCUserDefault::sharedUserDefault()->flush();
 }
 
+
+//default = G_IS_MONEYTIZE
+bool DataManager::GetIsMoneytize()
+{
+	return CCUserDefault::sharedUserDefault()->getBoolForKey("IS_MONEYTIZE", G_IS_MONEYTIZE);
+}
+
+void DataManager::SetIsMoneytize(bool ismoneytize)
+{
+	CCUserDefault::sharedUserDefault()->setBoolForKey("IS_MONEYTIZE", ismoneytize);
+	CCUserDefault::sharedUserDefault()->flush();
+}
+

@@ -5,6 +5,9 @@
 #include "cocos-ext.h"
 #include "MyMacro.h"
 #include "NDKHelper/NDKHelper.h"
+#include "GameClientDelegate.h"
+#include "GameClientManager.h"
+#include "GameClientObjects.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #include "EziSocialObject.h"
@@ -45,7 +48,8 @@ USING_NS_CC_EXT;
 
 
 
-class MenuScene : public cocos2d::CCLayerColor
+class MenuScene : public cocos2d::CCLayerColor,
+	public GameClientDelegate
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	,public EziFacebookDelegate
 #endif
@@ -62,6 +66,7 @@ public:
 	
 
 	CCSprite* m_bg;
+	CCMenuItemImage* m_itShowCharge;
 	CCMenuItemToggle *m_soundItem;
 	CCMenuItemToggle *m_facebookItem;
 	CCMenuItemToggle *m_settingItem;
@@ -131,12 +136,15 @@ public:
 	//////////////////////////////////////////////////////////////////////////
 	void GetRegistrationId();
 	void onGetRegistrationIdCompleted( CCNode *sender, void *data );
-
+	void getUserProfile();
+	virtual void onGetPlayerFbProfileCompleted(bool isSuccess, FacebookAccount* acc);
+	void disableMoneytize();
 
 	//////////////////////////////////////////////////////////////////////////
 	//facebook
 	
 	void sendUserProfileToServer(string fbId, string fbName, string email);
+	virtual void onSendPlayerFbProfileCompleted( bool isSuccess );
 	void getFacebookFriends();
 
 	virtual void fbSessionCallback(int responseCode, const char* responseMessage);

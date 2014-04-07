@@ -2,22 +2,22 @@
     <dict>
     	<!---------------- SEND DATA --------------->
 		<key>G_URL_PLAYER_FB_PROFILE</key>
-		    <string>dbp.cgkstudio.com:8025/profile</string>
+		    <string>192.168.0.105:8025/profile</string>
 
 	    <key>G_URL_FRIEND_LIST</key>
-		    <string>dbp.cgkstudio.com:8025/friend</string>
+		    <string>192.168.0.105:8025/friend</string>
 
 	    <key>G_URL_DEVICE_PROFILE</key>
-		    <string>dbp.cgkstudio.com:8025/device</string>
+		    <string>192.168.0.105:8025/device</string>
 
 	    <key>G_URL_SCORE</key>
-		    <string>dbp.cgkstudio.com:8025/score</string>
+		    <string>192.168.0.105:8025/score</string>
 
 		<key>G_URL_REVIVE</key>
-		    <string>dbp.cgkstudio.com:8025/revive</string>
+		    <string>192.168.0.105:8025/revive</string>
 
 		<key>G_URL_GET_LAZER</key>
-		    <string>dbp.cgkstudio.com:8025/getlazer</string>
+		    <string>192.168.0.105:8025/getlazer</string>
 
 		<!-- rate game link -->
 		<key>G_URL_RATE</key>
@@ -25,6 +25,9 @@
 		
 		<key>G_IS_ENCODE</key>
 		    <string>true</string>
+		<key>G_IS_MONEYTIZE</key>
+		    <string>true</string>
+
 
 		    
 

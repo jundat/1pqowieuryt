@@ -109,6 +109,9 @@ public:
 
 	bool	GetFirstTimeChooseLanguage();
 	void	SetFirstTimeChooseLanguage(bool isFirstTime);
+
+	bool	GetIsMoneytize();
+	void	SetIsMoneytize(bool isMoneytize);
 	
 	~DataManager(void);
 };

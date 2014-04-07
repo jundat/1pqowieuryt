@@ -40,7 +40,7 @@ public class GcmBroadcastReceiver extends WakefulBroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
     	
-    	Log.i("NOTIFY", "GcmBroadcastReceiver: onReceive");
+    	//Log.i("NOTIFY", "GcmBroadcastReceiver: onReceive");
     	
     	
         // Explicitly specify that GcmIntentService will handle the intent.
@@ -57,9 +57,9 @@ public class GcmBroadcastReceiver extends WakefulBroadcastReceiver {
         SharedPreferences sp = context.getSharedPreferences(PhiCongButChi.SAVE_KEY, Context.MODE_PRIVATE);
         boolean isActive = sp.getBoolean(PhiCongButChi.KEY_IS_ACTIVE, false);
         if (isActive) {
-			Log.i("PUSH", "App is active --- ");
+			//Log.i("PUSH", "App is active --- ");
 		} else {
-			Log.i("PUSH", "App is NOT active --- ");
+			//Log.i("PUSH", "App is NOT active --- ");
 		}
 
     	//TEST SEND DATA FROM PUSH TO APP    

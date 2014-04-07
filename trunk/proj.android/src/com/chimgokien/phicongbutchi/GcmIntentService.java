@@ -114,10 +114,10 @@ public class GcmIntentService extends IntentService {
         String name = extras.getString("fbName");
         String note = name + " vượt mặt bạn với " + score + " điểm!";
         
-        Log.i(TAG, "fbId: " + fbId);
-        Log.i(TAG, "meId: " + meId);
-        Log.i(TAG, "score: " + score);
-        Log.i(TAG, "fbName: " + name);
+        //Log.i(TAG, "fbId: " + fbId);
+        //Log.i(TAG, "meId: " + meId);
+        //Log.i(TAG, "score: " + score);
+        //Log.i(TAG, "fbName: " + name);
     	
         mNotificationManager = (NotificationManager)
                 this.getSystemService(Context.NOTIFICATION_SERVICE);

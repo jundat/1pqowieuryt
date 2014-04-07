@@ -186,19 +186,19 @@ public class PhiCongButChi extends Cocos2dxActivity {
 	}
 	
 	public void GetRegistrationId(JSONObject prms) {
-		Log.i(TAG_PUSH, "GetRegistrationId");
+		//Log.i(TAG_PUSH, "GetRegistrationId");
 		
 		String jsonStr = "{\"isSuccess\" : true, " +
         		"\"registrationId\" : \"" + regid + "\"}";
         JSONObject prmsToSend = null;
-        Log.i(TAG_PUSH, jsonStr);
+        //Log.i(TAG_PUSH, jsonStr);
         try {
 			prmsToSend = new JSONObject(jsonStr);
 		}
         catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			Log.i(TAG_PUSH, "NULL params");
+			//Log.i(TAG_PUSH, "NULL params");
 		}
         
     	AndroidNDKHelper.SendMessageWithParameters("onGetRegistrationIdCompleted", prmsToSend);
@@ -215,13 +215,13 @@ public class PhiCongButChi extends Cocos2dxActivity {
 		TelephonyManager manager =(TelephonyManager)this.context.getSystemService(Context.TELEPHONY_SERVICE);
 		String mPhoneNumber = manager.getLine1Number();
 		
-		Log.i("PHONE NUMBER", "PHONE: " + mPhoneNumber);
+		//Log.i("PHONE NUMBER", "PHONE: " + mPhoneNumber);
 	}
 	///////////////////////////////////////////////////////////////
 	
     protected void onCreate(Bundle savedInstanceState)
     {
-		Log.i(TAG, "onCreate");
+		//Log.i(TAG, "onCreate");
 		super.onCreate(savedInstanceState);
         
         // Try to get your hash key
@@ -266,7 +266,7 @@ public class PhiCongButChi extends Cocos2dxActivity {
                 registerInBackground();
             }
         } else {
-            Log.i(TAG_PUSH, "No valid Google Play Services APK found.");
+            //Log.i(TAG_PUSH, "No valid Google Play Services APK found.");
         }        
         /////////////////////////////////////////////////////////////////
         
@@ -280,7 +280,7 @@ public class PhiCongButChi extends Cocos2dxActivity {
      * the Google Play Store or enable it in the device's system settings.
      */
     private boolean checkPlayServices() {
-		Log.i(TAG_PUSH, "checkPlayServices");
+		//Log.i(TAG_PUSH, "checkPlayServices");
         int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
         if (resultCode != ConnectionResult.SUCCESS) {
             if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
@@ -303,10 +303,10 @@ public class PhiCongButChi extends Cocos2dxActivity {
      * @param regId registration ID
      */
     private void storeRegistrationId(Context context, String regId) {
-		Log.i(TAG_PUSH, "storeRegistrationId");
+		//Log.i(TAG_PUSH, "storeRegistrationId");
         final SharedPreferences prefs = getGcmPreferences(context);
         int appVersion = getAppVersion(context);
-        Log.i(TAG_PUSH, "Saving regId on app version " + appVersion);
+        //Log.i(TAG_PUSH, "Saving regId on app version " + appVersion);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString(PROPERTY_REG_ID, regId);
         editor.putInt(PROPERTY_APP_VERSION, appVersion);
@@ -322,7 +322,7 @@ public class PhiCongButChi extends Cocos2dxActivity {
      *         registration ID.
      */
     private String getRegistrationId(Context context) {
-		Log.i(TAG_PUSH, "getRegistrationId");
+		//Log.i(TAG_PUSH, "getRegistrationId");
         final SharedPreferences prefs = getGcmPreferences(context);
         String registrationId = prefs.getString(PROPERTY_REG_ID, "");
         if (registrationId == null || registrationId == "") {
@@ -335,7 +335,7 @@ public class PhiCongButChi extends Cocos2dxActivity {
         int registeredVersion = prefs.getInt(PROPERTY_APP_VERSION, Integer.MIN_VALUE);
         int currentVersion = getAppVersion(context);
         if (registeredVersion != currentVersion) {
-            Log.i(TAG_PUSH, "App version changed.");
+            //Log.i(TAG_PUSH, "App version changed.");
             return "";
         }
         
@@ -350,7 +350,7 @@ public class PhiCongButChi extends Cocos2dxActivity {
      * shared preferences.
      */
     private void registerInBackground() {
-		Log.i(TAG_PUSH, "registerInBackground");
+		//Log.i(TAG_PUSH, "registerInBackground");
         new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... params) {
@@ -383,14 +383,14 @@ public class PhiCongButChi extends Cocos2dxActivity {
 
             @Override
             protected void onPostExecute(String msg) {
-                Log.i(TAG_PUSH, "onPostExecute: " + msg);
+                //Log.i(TAG_PUSH, "onPostExecute: " + msg);
             }
         }.execute(null, null, null);
     }
 
     // Send an upstream message.
     public void onClick(final View view) {
-		Log.i(TAG_PUSH, "onClick");
+		//Log.i(TAG_PUSH, "onClick");
     	new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... params) {
@@ -412,7 +412,7 @@ public class PhiCongButChi extends Cocos2dxActivity {
 
             @Override
             protected void onPostExecute(String msg) {
-                Log.i(TAG_PUSH, "onPostExecute: " + msg);
+                //Log.i(TAG_PUSH, "onPostExecute: " + msg);
             }
         }.execute(null, null, null);
     }
@@ -422,7 +422,7 @@ public class PhiCongButChi extends Cocos2dxActivity {
      * @return Application's version code from the {@code PackageManager}.
      */
     private static int getAppVersion(Context context) {
-		Log.i("TAG_PUSH_STATIC", "getAppVersion");
+		//Log.i("TAG_PUSH_STATIC", "getAppVersion");
         try {
             PackageInfo packageInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
             return packageInfo.versionCode;
@@ -436,11 +436,11 @@ public class PhiCongButChi extends Cocos2dxActivity {
      * @return Application's {@code SharedPreferences}.
      */
     private SharedPreferences getGcmPreferences(Context context) {
-		Log.i(TAG_PUSH, "getGcmPreferences");
+		//Log.i(TAG_PUSH, "getGcmPreferences");
         // This sample app persists the registration ID in shared preferences, but
         // how you store the regID in your app is up to you.
 		
-		Log.i(TAG_PUSH, "NAME: " + PhiCongButChi.class.getSimpleName());
+		//Log.i(TAG_PUSH, "NAME: " + PhiCongButChi.class.getSimpleName());
 		
         return getSharedPreferences(PhiCongButChi.class.getSimpleName(),
                 Context.MODE_PRIVATE);
@@ -461,7 +461,7 @@ public class PhiCongButChi extends Cocos2dxActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        Log.i("DBPTK", "onStart");
+        //Log.i("DBPTK", "onStart");
         
         // Store our shared preference
         SharedPreferences sp = getSharedPreferences(SAVE_KEY, MODE_PRIVATE);
@@ -474,7 +474,7 @@ public class PhiCongButChi extends Cocos2dxActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        Log.i("DBPTK", "onStop");
+        //Log.i("DBPTK", "onStop");
                  
         // Store our shared preference
         SharedPreferences sp = getSharedPreferences(SAVE_KEY, MODE_PRIVATE);
@@ -486,7 +486,7 @@ public class PhiCongButChi extends Cocos2dxActivity {
     
     public Cocos2dxGLSurfaceView onCreateView()
     {
-		Log.i(TAG, "onCreateView");
+		//Log.i(TAG, "onCreateView");
     	Cocos2dxGLSurfaceView glSurfaceView = new Cocos2dxGLSurfaceView(this);
     	// PhiCongButChi should create stencil buffer
     	glSurfaceView.setEGLConfigChooser(5, 6, 5, 0, 16, 8);
@@ -497,7 +497,7 @@ public class PhiCongButChi extends Cocos2dxActivity {
     @Override
 	protected void onResume()
 	{
-    	Log.i(TAG, "onResume");
+    	//Log.i(TAG, "onResume");
 		super.onResume();
 		EziSocialManager.applicationResumed();
 		
@@ -509,7 +509,7 @@ public class PhiCongButChi extends Cocos2dxActivity {
 	@Override
 	public void onPause()
 	{
-		Log.i(TAG, "onPause");
+		//Log.i(TAG, "onPause");
 		super.onPause();
 		EziSocialManager.applicationPaused();
 	}
@@ -517,7 +517,7 @@ public class PhiCongButChi extends Cocos2dxActivity {
 	@Override
 	public void onDestroy()
 	{
-		Log.i(TAG, "onDestroy");
+		//Log.i(TAG, "onDestroy");
 		super.onDestroy();
 		EziSocialManager.applicationDestroyed();
 	}
@@ -525,7 +525,7 @@ public class PhiCongButChi extends Cocos2dxActivity {
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data)
 	{
-		Log.i(TAG, "onActivityResult");
+		//Log.i(TAG, "onActivityResult");
 		super.onActivityResult(requestCode, resultCode, data);
 		EziSocialManager.onActivityResult(requestCode, resultCode, data);
 	}

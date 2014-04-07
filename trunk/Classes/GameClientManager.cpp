@@ -35,7 +35,7 @@ std::string GameClientManager::encodeBeforeSend( std::string src )
 		string result = "data=";
 		result.append(Base64::encode(m_Test, len));
 
-		CCLOG("AFTER:\n%s", result.c_str());
+		//CCLOG("AFTER:\n%s", result.c_str());
 
 		return result;
 	}
@@ -44,7 +44,7 @@ std::string GameClientManager::encodeBeforeSend( std::string src )
 		string result = "data=";
 		result.append(src);
 
-		CCLOG("AFTER:\n%s", result.c_str());
+		//CCLOG("AFTER:\n%s", result.c_str());
 
 		return result;
 	}
@@ -71,11 +71,11 @@ std::string GameClientManager::getMD5()
 	srcMd5.append(DataManager::sharedDataManager()->GetFbID());
 	srcMd5.append(""); //meId
 	
-	CCLOG("SRC MD5: %s", srcMd5.c_str());
+	//CCLOG("SRC MD5: %s", srcMd5.c_str());
 	
 	string md5 = MD5::createMd5(srcMd5);
 
-	CCLOG("DEST MD5: %s", md5.c_str());
+	//CCLOG("DEST MD5: %s", md5.c_str());
 
 	return md5;
 }
@@ -111,7 +111,7 @@ void GameClientManager::sendPlayerFbProfile( std::string fbId, std::string fbNam
 
 void GameClientManager::_onSendPlayerFbProfileCompleted( CCHttpClient *sender, CCHttpResponse *response )
 {
-	if (!response || m_clientDelegate == NULL)
+	if (!response)
 	{
 		return;
 	}
@@ -123,7 +123,10 @@ void GameClientManager::_onSendPlayerFbProfileCompleted( CCHttpClient *sender, C
 	if (!response->isSucceed())
 	{
 		CCLOG("Request failed: %s", response->getErrorBuffer());
-		m_clientDelegate->onSendPlayerFbProfileCompleted(false);
+		if (m_clientDelegate)
+		{
+			m_clientDelegate->onSendPlayerFbProfileCompleted(false);
+		}
 	}
 	else
 	{
@@ -133,7 +136,10 @@ void GameClientManager::_onSendPlayerFbProfileCompleted( CCHttpClient *sender, C
 		str = decodeBeforeProcess(str);
 
 		CCLOG("Content: %s", str.c_str());
-		m_clientDelegate->onSendPlayerFbProfileCompleted(true);
+		if (m_clientDelegate)
+		{
+			m_clientDelegate->onSendPlayerFbProfileCompleted(true);
+		}
 	}
 
 	CCLOG("------- END %s -------", response->getHttpRequest()->getTag());
@@ -166,7 +172,7 @@ void GameClientManager::getPlayerFbProfile(std::string fbId )
 
 void GameClientManager::_onGetPlayerFbProfileCompleted( CCHttpClient *sender, CCHttpResponse *response )
 {
-	if (!response || m_clientDelegate == NULL)
+	if (!response)
 	{
 		return;
 	}
@@ -178,7 +184,10 @@ void GameClientManager::_onGetPlayerFbProfileCompleted( CCHttpClient *sender, CC
 	if (!response->isSucceed())
 	{
 		CCLOG("Request failed: %s", response->getErrorBuffer());
-		m_clientDelegate->onGetPlayerFbProfileCompleted(false, NULL);
+		if (m_clientDelegate)
+		{
+			m_clientDelegate->onGetPlayerFbProfileCompleted(false, NULL);
+		}
 	}
 	else
 	{
@@ -195,18 +204,21 @@ void GameClientManager::_onGetPlayerFbProfileCompleted( CCHttpClient *sender, CC
 		json_t *fbId;
 		json_t *fbName;
 		json_t *email;
-		//json_t *score;
+		json_t *coin;
 
 
 		root = json_loads(str.c_str(), strlen(str.c_str()), &error);
 		fbId = json_object_get(root, "fbId");
 		fbName = json_object_get(root, "fbName");
 		email = json_object_get(root, "email");
-		//score = json_object_get(root, "score");
+		coin = json_object_get(root, "coin");
 
-		FacebookAccount* acc = new FacebookAccount(json_string_value(fbId), json_string_value(fbName), std::string(json_string_value(email)), -1);
+		FacebookAccount* acc = new FacebookAccount(json_string_value(fbId), json_string_value(fbName), std::string(json_string_value(email)), -1, (int)atof(json_string_value(coin)));
 
-		m_clientDelegate->onGetPlayerFbProfileCompleted(true, acc);
+		if (m_clientDelegate)
+		{
+			m_clientDelegate->onGetPlayerFbProfileCompleted(true, acc);
+		}		
 	}
 
 	CCLOG("------- END %s -------", response->getHttpRequest()->getTag());
@@ -265,7 +277,7 @@ void GameClientManager::sendFriendList(std::string fbId, CCArray* arrFriends )
 
 void GameClientManager::_onSendFriendListCompleted( CCHttpClient *sender, CCHttpResponse *response )
 {
-	if (!response || m_clientDelegate == NULL)
+	if (!response)
 	{
 		return;
 	}
@@ -277,7 +289,10 @@ void GameClientManager::_onSendFriendListCompleted( CCHttpClient *sender, CCHttp
 	if (!response->isSucceed())
 	{
 		CCLOG("Request failed: %s", response->getErrorBuffer());
-		m_clientDelegate->onSendFriendListCompleted(false);
+		if (m_clientDelegate)
+		{
+			m_clientDelegate->onSendFriendListCompleted(false);
+		}
 	}
 	else
 	{
@@ -287,7 +302,10 @@ void GameClientManager::_onSendFriendListCompleted( CCHttpClient *sender, CCHttp
 		str = decodeBeforeProcess(str);
 
 		CCLOG("Content: %s", str.c_str());
-		m_clientDelegate->onSendFriendListCompleted(true);		
+		if (m_clientDelegate)
+		{
+			m_clientDelegate->onSendFriendListCompleted(true);	
+		}			
 	}
 
 	CCLOG("------- END %s -------", response->getHttpRequest()->getTag());
@@ -325,7 +343,7 @@ void GameClientManager::getFriendList( std::string appId, std::string fbId )
 
 void GameClientManager::_onGetFriendListCompleted( CCHttpClient *sender, CCHttpResponse *response )
 {
-	if (!response || m_clientDelegate == NULL)
+	if (!response)
 	{
 		return;
 	}
@@ -337,7 +355,10 @@ void GameClientManager::_onGetFriendListCompleted( CCHttpClient *sender, CCHttpR
 	if (!response->isSucceed())
 	{
 		CCLOG("Request failed: %s", response->getErrorBuffer());
-		m_clientDelegate->onGetFriendListCompleted(false, NULL);
+		if (m_clientDelegate)
+		{
+			m_clientDelegate->onGetFriendListCompleted(false, NULL);
+		}
 	}
 	else
 	{
@@ -381,7 +402,10 @@ void GameClientManager::_onGetFriendListCompleted( CCHttpClient *sender, CCHttpR
 		}
 
 		//GameClientManager::SortFriendScore(arrFriends);
-		m_clientDelegate->onGetFriendListCompleted(true, arrFriends);
+		if (m_clientDelegate)
+		{
+			m_clientDelegate->onGetFriendListCompleted(true, arrFriends);
+		}
 	}
 
 	CCLOG("------- END %s -------", response->getHttpRequest()->getTag());
@@ -424,7 +448,7 @@ void GameClientManager::sendDeviceProfile( std::string fbId, std::string deviceI
 
 void GameClientManager::_onSendDeviceProfileCompleted( CCHttpClient *sender, CCHttpResponse *response )
 {
-	if (!response || m_clientDelegate == NULL)
+	if (!response)
 	{
 		return;
 	}
@@ -436,7 +460,10 @@ void GameClientManager::_onSendDeviceProfileCompleted( CCHttpClient *sender, CCH
 	if (!response->isSucceed())
 	{
 		CCLOG("Request failed: %s", response->getErrorBuffer());
-		m_clientDelegate->onSendDeviceProfileCompleted(false);
+		if (m_clientDelegate)
+		{
+			m_clientDelegate->onSendDeviceProfileCompleted(false);
+		}
 	}
 	else
 	{
@@ -446,7 +473,10 @@ void GameClientManager::_onSendDeviceProfileCompleted( CCHttpClient *sender, CCH
 		str = decodeBeforeProcess(str);
 
 		CCLOG("Content: %s", str.c_str());
-		m_clientDelegate->onSendDeviceProfileCompleted(true);
+		if (m_clientDelegate)
+		{
+			m_clientDelegate->onSendDeviceProfileCompleted(true);
+		}
 	}
 
 	CCLOG("------- END %s -------", response->getHttpRequest()->getTag());
@@ -481,7 +511,7 @@ void GameClientManager::getDeviceProfile(std::string fbId, std::string deviceId 
 
 void GameClientManager::_onGetDeviceProfileCompleted( CCHttpClient *sender, CCHttpResponse *response )
 {
-	if (!response || m_clientDelegate == NULL)
+	if (!response)
 	{
 		return;
 	}
@@ -493,7 +523,10 @@ void GameClientManager::_onGetDeviceProfileCompleted( CCHttpClient *sender, CCHt
 	if (!response->isSucceed())
 	{
 		CCLOG("Request failed: %s", response->getErrorBuffer());
-		m_clientDelegate->onGetDeviceProfileCompleted(false, NULL);
+		if (m_clientDelegate)
+		{
+			m_clientDelegate->onGetDeviceProfileCompleted(false, NULL);
+		}
 	}
 	else
 	{
@@ -527,8 +560,10 @@ void GameClientManager::_onGetDeviceProfileCompleted( CCHttpClient *sender, CCHt
 			json_string_value(deviceConfig),
 			json_string_value(devicePhoneNumber));
 
-		m_clientDelegate->onGetDeviceProfileCompleted(true, acc);
-
+		if (m_clientDelegate)
+		{
+			m_clientDelegate->onGetDeviceProfileCompleted(true, acc);
+		}
 	}
 
 	CCLOG("------- END %s -------", response->getHttpRequest()->getTag());
@@ -567,7 +602,7 @@ void GameClientManager::sendScore( std::string appId, std::string fbId, int scor
 
 void GameClientManager::_onSendScoreCompleted( CCHttpClient *sender, CCHttpResponse *response )
 {
-	if (!response || m_clientDelegate == NULL)
+	if (!response)
 	{
 		return;
 	}
@@ -579,7 +614,10 @@ void GameClientManager::_onSendScoreCompleted( CCHttpClient *sender, CCHttpRespo
 	if (!response->isSucceed())
 	{
 		CCLOG("Request failed: %s", response->getErrorBuffer());
-		m_clientDelegate->onSendScoreCompleted(false, -1);
+		if (m_clientDelegate)
+		{
+			m_clientDelegate->onSendScoreCompleted(false, -1);
+		}
 	}
 	else
 	{
@@ -602,12 +640,18 @@ void GameClientManager::_onSendScoreCompleted( CCHttpClient *sender, CCHttpRespo
 
 		if (success)
 		{
-			m_clientDelegate->onSendScoreCompleted(success, DataManager::sharedDataManager()->GetHighScore());
+			if (m_clientDelegate)
+			{
+				m_clientDelegate->onSendScoreCompleted(success, DataManager::sharedDataManager()->GetHighScore());
+			}
 		} 
 		else
 		{
 			score = json_object_get(root, "score");
-			m_clientDelegate->onSendScoreCompleted(success, (int)atof(json_string_value(score)));
+			if (m_clientDelegate)
+			{
+				m_clientDelegate->onSendScoreCompleted(success, (int)atof(json_string_value(score)));
+			}
 		}
 	}
 
@@ -643,7 +687,7 @@ void GameClientManager::getScore( std::string appId, std::string fbId )
 
 void GameClientManager::_onGetScoreCompleted( CCHttpClient *sender, CCHttpResponse *response )
 {
-	if (!response || m_clientDelegate == NULL)
+	if (!response)
 	{
 		return;
 	}
@@ -655,7 +699,10 @@ void GameClientManager::_onGetScoreCompleted( CCHttpClient *sender, CCHttpRespon
 	if (!response->isSucceed())
 	{
 		CCLOG("Request failed: %s", response->getErrorBuffer());
-		m_clientDelegate->onGetScoreCompleted(false, -1, std::string());
+		if (m_clientDelegate)
+		{
+			m_clientDelegate->onGetScoreCompleted(false, -1, std::string());
+		}
 	}
 	else
 	{
@@ -676,7 +723,10 @@ void GameClientManager::_onGetScoreCompleted( CCHttpClient *sender, CCHttpRespon
 		score = json_object_get(root, "score");
 		time = json_object_get(root, "time");
 
-		m_clientDelegate->onGetScoreCompleted(true, (int)atof(json_string_value(score)), json_string_value(time));
+		if (m_clientDelegate)
+		{
+			m_clientDelegate->onGetScoreCompleted(true, (int)atof(json_string_value(score)), json_string_value(time));
+		}
 	}
 
 	CCLOG("------- END %s -------", response->getHttpRequest()->getTag());
@@ -715,7 +765,7 @@ void GameClientManager::requestRevive( string appId, string fbId )
 
 void GameClientManager::_onRequestReviveCompleted( CCHttpClient *sender, CCHttpResponse *response )
 {
-	if (!response || m_clientDelegate == NULL)
+	if (!response)
 	{
 		return;
 	}
@@ -727,7 +777,10 @@ void GameClientManager::_onRequestReviveCompleted( CCHttpClient *sender, CCHttpR
 	if (!response->isSucceed())
 	{
 		CCLOG("Request failed: %s", response->getErrorBuffer());
-		m_clientDelegate->onRequestReviveCompleted(false, -1);
+		if (m_clientDelegate)
+		{
+			m_clientDelegate->onRequestReviveCompleted(false, -1);
+		}
 	}
 	else
 	{
@@ -748,7 +801,10 @@ void GameClientManager::_onRequestReviveCompleted( CCHttpClient *sender, CCHttpR
 		isSuccess = json_object_get(root, "isSuccess");
 		newDiamond = json_object_get(root, "newDiamond");
 
-		m_clientDelegate->onRequestReviveCompleted((bool)json_is_true(isSuccess), (int)atof(json_string_value(newDiamond)));
+		if (m_clientDelegate)
+		{
+			m_clientDelegate->onRequestReviveCompleted((bool)json_is_true(isSuccess), (int)atof(json_string_value(newDiamond)));
+		}
 	}
 
 	CCLOG("------- END %s -------", response->getHttpRequest()->getTag());
@@ -788,7 +844,7 @@ void GameClientManager::requestGetLazer( string appId, string fbId, string frien
 
 void GameClientManager::_onRequestGetLazerCompleted( CCHttpClient *sender, CCHttpResponse *response )
 {
-	if (!response || m_clientDelegate == NULL)
+	if (!response)
 	{
 		return;
 	}
@@ -800,7 +856,10 @@ void GameClientManager::_onRequestGetLazerCompleted( CCHttpClient *sender, CCHtt
 	if (!response->isSucceed())
 	{
 		CCLOG("Request failed: %s", response->getErrorBuffer());
-		m_clientDelegate->onRequestGetLazerCompleted(false, -1);
+		if (m_clientDelegate)
+		{
+			m_clientDelegate->onRequestGetLazerCompleted(false, -1);
+		}
 	}
 	else
 	{
@@ -821,7 +880,10 @@ void GameClientManager::_onRequestGetLazerCompleted( CCHttpClient *sender, CCHtt
 		isSuccess = json_object_get(root, "isSuccess");
 		newDiamond = json_object_get(root, "newDiamond");
 
-		m_clientDelegate->onRequestGetLazerCompleted((bool)json_is_true(isSuccess), (int)atof(json_string_value(newDiamond)));
+		if (m_clientDelegate)
+		{
+			m_clientDelegate->onRequestGetLazerCompleted((bool)json_is_true(isSuccess), (int)atof(json_string_value(newDiamond)));
+		}
 	}
 
 	CCLOG("------- END %s -------", response->getHttpRequest()->getTag());

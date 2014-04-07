@@ -24,7 +24,8 @@ CCScene* MenuScene::scene()
 bool MenuScene::init()
 {
 	DataManager::sharedDataManager()->RefreshPlayerLife();
-	CCTextureCache::sharedTextureCache()->dumpCachedTextureInfo();
+	GameClientManager::sharedGameClientManager()->setDelegate(this);
+
 	//////////////////////////////////////////////////////////////////////////
 
     if ( !CCLayerColor::initWithColor(G_MENU_BG_COLOR) )
@@ -128,8 +129,8 @@ bool MenuScene::init()
 	m_sprSettingBar->setVisible(false);
 
 
-	CCMenuItemImage* itShowCharge = CCMenuItemImage::create("charge.png", "charge_down.png", "charge_down.png", this, menu_selector(MenuScene::showChargeCallback));
-	itShowCharge->setPosition(ccp(70, m_sprSettingBar->getContentSize().height - 65 + 121));
+	m_itShowCharge = CCMenuItemImage::create("charge.png", "charge_down.png", "charge_down.png", this, menu_selector(MenuScene::showChargeCallback));
+	m_itShowCharge->setPosition(ccp(70, m_sprSettingBar->getContentSize().height - 65 + 121));
 
 
 	CCMenuItem* facebookOn = CCMenuItemImage::create("facebook_in.png", NULL, NULL);
@@ -158,7 +159,7 @@ bool MenuScene::init()
 		m_soundItem->setSelectedIndex(1);
 	}
 
-	CCMenu* settingMenu = CCMenu::create(m_facebookItem, m_soundItem, itShowCharge, NULL);
+	CCMenu* settingMenu = CCMenu::create(m_facebookItem, m_soundItem, m_itShowCharge, NULL);
 	settingMenu->setPosition(CCPointZero);
 	
 	m_sprSettingBar->addChild(settingMenu);
@@ -226,7 +227,7 @@ bool MenuScene::init()
 	//check if life = 0 to show
 
 	int life = DataManager::sharedDataManager()->GetLastPlayerLife();
-	CCLOG("MenuScene: Last life = %d", life);
+	//CCLOG("MenuScene: Last life = %d", life);
 	if (life < G_MAX_PLAYER_LIFE) //start counter when not full of life
 	{
 		initTimer();
@@ -356,7 +357,7 @@ void MenuScene::playCallback(CCObject* pSender)
 	//check if last_player_life > 0
 	int lastLife = DataManager::sharedDataManager()->GetLastPlayerLife();
 
-	CCLOG("GOTO PLAY: Lastlife: %d", lastLife);
+	//CCLOG("GOTO PLAY: Lastlife: %d", lastLife);
 
 	if (lastLife > 0)
 	{
@@ -376,6 +377,8 @@ void MenuScene::scoreCallback( CCObject* pSender )
 {
 	PLAY_BUTTON_EFFECT;
 
+	GameClientManager::sharedGameClientManager()->setDelegate(NULL);
+
 	CCScene *pScene = CCTransitionFade::create(0.5, ScoreScene::scene());
 	CCDirector::sharedDirector()->replaceScene(pScene);
 }
@@ -393,9 +396,9 @@ void MenuScene::onRateCompleted( CCNode *sender, void *data )
 		CCString* s = (CCString*)convertedData->objectForKey("isSuccess");
 		if (s->boolValue())
 		{
-			CCLOG("CPP Rate Completed: TRUE");
+			//CCLOG("CPP Rate Completed: TRUE");
 			CCString* s = (CCString*)convertedData->objectForKey("responseType");
-			CCLOG("%s", s->getCString());
+			//CCLOG("%s", s->getCString());
 			if (s->compare("RATE") == 0)
 			{
 				CCMessageBox(TXT("menu_thank_rate"), TXT("menu_thank_caption"));
@@ -403,7 +406,7 @@ void MenuScene::onRateCompleted( CCNode *sender, void *data )
 		} 
 		else
 		{
-			CCLOG("CPP Rate Completed: FALSE");
+			//CCLOG("CPP Rate Completed: FALSE");
 		}
 
 		NDKHelper::RemoveSelector("MENU", "onRateCompleted");
@@ -436,7 +439,7 @@ void MenuScene::onCompletedWaiting()
 	int lastLife = (int)(seconds / G_PLAYER_TIME_TO_REVIVE);
 	lastLife = (lastLife > G_MAX_PLAYER_LIFE) ? G_MAX_PLAYER_LIFE : lastLife;
 
-	CCLOG("Revive Last life: %d", lastLife);
+	//CCLOG("Revive Last life: %d", lastLife);
 
 	if (lastLife > 0)
 	{
@@ -445,7 +448,7 @@ void MenuScene::onCompletedWaiting()
 	}
 	else
 	{
-		CCLOG("Your code is failed!, F**k the coder!");
+		//CCLOG("Your code is failed!, F**k the coder!");
 	}
 }
 
@@ -567,7 +570,7 @@ void MenuScene::ScheduleTick( float dt )
 		refreshLifeIcon();
 
 		int life = DataManager::sharedDataManager()->GetLastPlayerLife();
-		CCLOG("REFRESH LIFE ICON, Life = %d", life);
+		//CCLOG("REFRESH LIFE ICON, Life = %d", life);
 		if (life >= G_MAX_PLAYER_LIFE)
 		{
 			this->unschedule(schedule_selector(MenuScene::ScheduleTick));
@@ -591,7 +594,7 @@ void MenuScene::ScheduleTick( float dt )
 
 void MenuScene::initTimer()
 {
-	CCLOG("Initing... timer! ...");
+	//CCLOG("Initing... timer! ...");
 
 	int life = DataManager::sharedDataManager()->GetLastPlayerLife();
 	tm* lasttm = DataManager::sharedDataManager()->GetLastDeadTime();
@@ -632,7 +635,7 @@ void MenuScene::initTimer()
 
 void MenuScene::GetRegistrationId()
 {
-	CCLOG("GetRegistrationId");
+	//CCLOG("GetRegistrationId");
 	NDKHelper::AddSelector("MENU",
 		"onGetRegistrationIdCompleted",
 		callfuncND_selector(MenuScene::onGetRegistrationIdCompleted),
@@ -642,16 +645,14 @@ void MenuScene::GetRegistrationId()
 
 void MenuScene::onGetRegistrationIdCompleted( CCNode *sender, void *data )
 {
-	CCLOG("onGetRegistrationIdCompleted");
+	//CCLOG("onGetRegistrationIdCompleted");
 	if (data != NULL)
 	{
-		CCLOG("!= NULL");
 		CCDictionary *convertedData = (CCDictionary *)data;
 		CCString* s = (CCString*)convertedData->objectForKey("isSuccess");
 		if (s->boolValue())
 		{
-			CCLOG("SUCCESS");
-			CCLOG("CPP RegistrationId Completed: TRUE");
+			//CCLOG("CPP RegistrationId Completed: TRUE");
 			CCString* s = (CCString*)convertedData->objectForKey("registrationId");
 			CCLOG("CPP: RegistrationId: %s", s->getCString());
 
@@ -672,7 +673,7 @@ void MenuScene::onGetRegistrationIdCompleted( CCNode *sender, void *data )
 		} 
 		else
 		{
-			CCLOG("CPP RegistrationId Completed: FALSE");
+			//CCLOG("CPP RegistrationId Completed: FALSE");
 		}
 
 		NDKHelper::RemoveSelector("MENU", "onGetRegistrationIdCompleted");
@@ -687,18 +688,18 @@ void MenuScene::onGetRegistrationIdCompleted( CCNode *sender, void *data )
 //when did Logged In  || Logged Out
 void MenuScene::fbSessionCallback(int responseCode, const char *responseMessage)
 {
-	CCLOG("fbSessionCallback");
+	//CCLOG("fbSessionCallback");
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	if (responseCode == EziSocialWrapperNS::RESPONSE_CODE::FB_LOGIN_SUCCESSFUL)
 	{
-		CCLOG("fbSessionCallback: SUCCESSFUL");
+		//CCLOG("fbSessionCallback: SUCCESSFUL");
 		m_isLoggedIn = true;
-		
+
 		//auto get profile, info
 	}
 	else
 	{
-		CCLOG("fbSessionCallback: FAILED");
+		//CCLOG("fbSessionCallback: FAILED");
 		m_isLoggedIn = false;
 	}
 
@@ -720,10 +721,10 @@ void MenuScene::fbSessionCallback(int responseCode, const char *responseMessage)
 
 void MenuScene::fbUserDetailCallback( int responseCode, const char* responseMessage, EziFacebookUser* fbUser )
 {
-	CCLOG("fbUserDetailCallback");
+	//CCLOG("fbUserDetailCallback");
 	if (fbUser != NULL)
 	{
-		CCLOG("fbUserDetailCallback: user != NULL");
+		//CCLOG("fbUserDetailCallback: user != NULL");
 		EziSocialObject::sharedObject()->setCurrentFacebookUser(fbUser);
 
 		//save data
@@ -750,7 +751,7 @@ void MenuScene::fbUserDetailCallback( int responseCode, const char* responseMess
 
 void MenuScene::fbUserPhotoCallback(const char *userPhotoPath, const char* fbID)
 {
-	CCLOG("fbUserPhotoCallback");
+	//CCLOG("fbUserPhotoCallback");
 	std::string sid = std::string(fbID);
 
 	if ((strcmp(userPhotoPath, "") != 0))
@@ -761,7 +762,7 @@ void MenuScene::fbUserPhotoCallback(const char *userPhotoPath, const char* fbID)
 
 void MenuScene::sendUserProfileToServer(string fbId, string fbName, string email)
 {
-	CCLOG("sendUserProfileToServer");
+	//CCLOG("sendUserProfileToServer");
 	GameClientManager::sharedGameClientManager()->sendPlayerFbProfile(fbId, fbName, email, string(G_APP_ID));
 	
 	//send device token to server
@@ -780,7 +781,7 @@ void MenuScene::sendUserProfileToServer(string fbId, string fbName, string email
 
 void MenuScene::getFacebookFriends()
 {
-	CCLOG("getFacebookFriends");
+	//CCLOG("getFacebookFriends");
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	ScoreScene::s_beginFriendInd = 0;
 	ScoreScene::s_endFriendInd = G_NUMBER_FRIEND_TO_GET - 1;
@@ -792,7 +793,7 @@ void MenuScene::getFacebookFriends()
 
 void MenuScene::fbFriendsCallback( int responseCode, const char* responseMessage, cocos2d::CCArray* friends )
 {
-	CCLOG("fbFriendsCallback");
+	//CCLOG("fbFriendsCallback");
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	int count = friends->count();
 
@@ -815,7 +816,7 @@ void MenuScene::fbFriendsCallback( int responseCode, const char* responseMessage
 			}
 		}
 
-		GameClientManager::sharedGameClientManager()->sendFriendList(DataManager::sharedDataManager()->GetFbID(), arrFriends);
+		GameClientManager::sharedGameClientManager()->sendFriendList(DataManager::sharedDataManager()->GetFbID(), arrFriends);		
 
 		ScoreScene::s_beginFriendInd += G_NUMBER_FRIEND_TO_GET;
 		ScoreScene::s_endFriendInd += G_NUMBER_FRIEND_TO_GET;
@@ -906,12 +907,12 @@ void MenuScene::onPushNotification( CCNode *sender, void *data )
 		CCString* s = (CCString*)convertedData->objectForKey("isSuccess");
 		if (s->boolValue())
 		{
-			CCLOG("CPP onPushNotification Completed: TRUE");
+			//CCLOG("CPP onPushNotification Completed: TRUE");
 			CCMessageBox("Push notification Success!", "Kaka");
 		} 
 		else
 		{
-			CCLOG("CPP onPushNotification Completed: FALSE");
+			//CCLOG("CPP onPushNotification Completed: FALSE");
 		}
 
 		//NDKHelper::RemoveSelector("MENU", "onPushNotification");
@@ -935,6 +936,61 @@ void MenuScene::showChargeCallback( CCObject* pSender )
 
 void MenuScene::onShowChargeCompleted( CCNode *sender, void *data )
 {
-	CCLOG("CPP: onShowChargeCompleted");
+	//CCLOG("CPP: onShowChargeCompleted");
 	m_sprSettingBar->runAction(CCSequence::createWithTwoActions(CCDelayTime::create(0.5f), CCHide::create()));
+}
+
+void MenuScene::getUserProfile()
+{
+	string fbId = DataManager::sharedDataManager()->GetFbID();
+
+	if (fbId.compare("NULL") != 0)
+	{
+		GameClientManager::sharedGameClientManager()->getPlayerFbProfile(fbId);
+	}
+	else
+	{
+		CCLOG("fbId == NULL, could not connect server to get diamond");
+	}
+}
+
+void MenuScene::onGetPlayerFbProfileCompleted( bool isSuccess, FacebookAccount* acc )
+{
+	if (isSuccess)
+	{
+		CCLOG("DIAMOND: %d", acc->m_coin);
+		DataManager::sharedDataManager()->SetDiamon(acc->m_coin);
+	}
+	else
+	{
+		CCMessageBox(TXT("menu_error_server"), TXT("menu_error_caption"));
+		this->disableMoneytize();
+	}
+}
+
+void MenuScene::onSendPlayerFbProfileCompleted( bool isSuccess )
+{
+	if (isSuccess)
+	{
+		//get User Profile
+		this->getUserProfile();
+	}
+	else
+	{
+		//failed to connect server
+		this->disableMoneytize();
+	}
+}
+
+void MenuScene::disableMoneytize()
+{
+	////iOS
+	//CCLOG("DISABLE MONEYTIZE...");
+	//DataManager::sharedDataManager()->SetIsMoneytize(false);
+	////remove chargeTutorial
+	//m_itShowCharge->setVisible(false);
+
+	//Android, Windows Phone
+	CCLOG("SET DIAMOND = DEFAULT...");
+	DataManager::sharedDataManager()->SetDiamon(G_DEFAULT_DIAMON);
 }
