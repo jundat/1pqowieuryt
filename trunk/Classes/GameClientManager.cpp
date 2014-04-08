@@ -640,23 +640,17 @@ void GameClientManager::_onSendScoreCompleted( CCHttpClient *sender, CCHttpRespo
 
 		if (success)
 		{
-			CCLOG("TRUE");
 			if (m_clientDelegate)
 			{
-				CCLOG("TRUE 1");
 				m_clientDelegate->onSendScoreCompleted(success, DataManager::sharedDataManager()->GetHighScore());
-				CCLOG("TRUE 2");
 			}
 		} 
 		else
 		{
-			CCLOG("FALSE");
 			score = json_object_get(root, "score");
 			if (m_clientDelegate)
 			{
-				CCLOG("FALSE 1");
 				m_clientDelegate->onSendScoreCompleted(success, (int)atof(json_string_value(score)));
-				CCLOG("FALSE 2");
 			}
 		}
 	}
