@@ -343,6 +343,8 @@ void MenuScene::gotoMainGame()
 // 	CCScene *pScene = CCTransitionSlideInT::create(1280.0f / 480.0f, MainGameScene::scene());
 // 	CCDirector::sharedDirector()->replaceScene(pScene);
 
+	GameClientManager::sharedGameClientManager()->setDelegate(NULL);
+
 	CCScene *pScene = CCTransitionFade::create(0.5, MainGameScene::scene());
 	CCDirector::sharedDirector()->replaceScene(pScene);
 }
