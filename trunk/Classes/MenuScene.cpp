@@ -844,9 +844,16 @@ void MenuScene::englishCallback( CCObject* pSender )
 	m_englishItem->setVisible(false);
 	m_vietnamItem->setVisible(true);
 
-	m_languageItem->setNormalImage(m_englishItem->getNormalImage());
-	m_languageItem->setSelectedImage(m_englishItem->getSelectedImage());
-
+    
+    CCSprite* normalImage = (CCSprite*)m_englishItem->getNormalImage();
+    CCSprite* newNormalImage = CCSprite::createWithTexture(normalImage->getTexture());
+    
+    CCSprite* selectedImage = (CCSprite*)m_englishItem->getSelectedImage();
+    CCSprite* newSelectedImage = CCSprite::createWithTexture(selectedImage->getTexture());
+    
+	m_languageItem->setNormalImage(newNormalImage);
+	m_languageItem->setSelectedImage(newSelectedImage);
+    
 	m_sprLanguageBar->setVisible(false);
 	DataManager::sharedDataManager()->SetLanguage("English");
 	TextLoader::shareTextLoader()->setCurrentLanguage(LANGUAGE_ENGLISH);
@@ -860,8 +867,14 @@ void MenuScene::vietnamCallback( CCObject* pSender )
 	m_englishItem->setVisible(true);
 	m_vietnamItem->setVisible(false);
 
-	m_languageItem->setNormalImage(m_vietnamItem->getNormalImage());
-	m_languageItem->setSelectedImage(m_vietnamItem->getSelectedImage());
+    CCSprite* normalImage = (CCSprite*)m_vietnamItem->getNormalImage();
+    CCSprite* newNormalImage = CCSprite::createWithTexture(normalImage->getTexture());
+    
+    CCSprite* selectedImage = (CCSprite*)m_vietnamItem->getSelectedImage();
+    CCSprite* newSelectedImage = CCSprite::createWithTexture(selectedImage->getTexture());
+    
+	m_languageItem->setNormalImage(newNormalImage);
+	m_languageItem->setSelectedImage(newSelectedImage);
 
 	m_sprLanguageBar->setVisible(false);
 	DataManager::sharedDataManager()->SetLanguage("Vietnamese");

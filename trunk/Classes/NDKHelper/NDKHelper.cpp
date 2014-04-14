@@ -203,6 +203,7 @@ void NDKHelper::PrintSelectorList()
 
 void NDKHelper::HandleMessage(json_t *methodName, json_t* methodParams)
 {
+    CCLOG("Handler Message");
 	if (methodName == NULL)
 		return;
 
@@ -221,9 +222,9 @@ void NDKHelper::HandleMessage(json_t *methodName, json_t* methodParams)
 			SEL_CallFuncND sel = NDKHelper::selectorList[i].getSelector();
 			CCNode *target = NDKHelper::selectorList[i].getTarget();
 
-			CCLOG("Target: Reference %d", target->getReference());
+			CCLOG("Target: Reference %d", target->retainCount());
 
-			if (target->getReference() > 0)
+			if (target->retainCount() > 0)
 			{
 				//CCLOG("Run selector: %s::%s", 
 				//	NDKHelper::selectorList[i].getGroup().c_str(), NDKHelper::selectorList[i].getName().c_str());
@@ -295,6 +296,7 @@ extern "C"
     // Method for sending message from CPP to the targetted platform
     void SendMessageWithParams(string methodName, CCObject* methodParams)
     {
+        CCLOG("Send Message With Params");
         if (0 == strcmp(methodName.c_str(), ""))
             return;
         

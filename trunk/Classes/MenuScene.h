@@ -2,7 +2,7 @@
 #define __MENU_SCENE_H__
 
 #include "cocos2d.h"
-#include "cocos-ext.h"
+#include "cocos-ext.h"/Users/lenguyen/Desktop/cocos2d-x-2.2.2/projects/PhiCongButChi/Classes/MenuScene.h
 #include "MyMacro.h"
 #include "NDKHelper/NDKHelper.h"
 #include "GameClientDelegate.h"

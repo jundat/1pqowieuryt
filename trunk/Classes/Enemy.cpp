@@ -231,23 +231,48 @@ void Enemy::ScheduleFire( float dt )
 
 void Enemy::HitBullet(int damage)
 {
+    if (m_hp <= 0) return;
+    
 	m_hp -= damage;
 
 	if (m_hp > 0)
 	{
-		m_sprite->runAction(m_acPreExplosion);
+        if(m_acPreExplosion->getTarget() == NULL || (m_acPreExplosion->getTarget() != NULL && m_acPreExplosion->isDone()))
+        {
+            //m_sprite->stopAction(m_acPreExplosion);
+            //CCDirector::sharedDirector()->getActionManager()->removeAction(m_acPreExplosion);
+            m_sprite->runAction(m_acPreExplosion);
+        }
 	}
 	else
 	{
 		m_vy = 0;
-		m_sprite->stopAction(m_acFlying);
-		m_sprite->stopAction(m_acPreExplosion);
+        
+        if (!m_acFlying->isDone())
+        {
+            m_sprite->stopAction(m_acFlying);
+        }
+        
+        if (!m_acPreExplosion->isDone())
+        {
+            m_sprite->stopAction(m_acPreExplosion);
+        }
+        
+        //CCDirector::sharedDirector()->getActionManager()->removeAction(m_acFlying);
+		//m_sprite->stopAction(m_acPreExplosion);
+        //CCDirector::sharedDirector()->getActionManager()->removeAction(m_acPreExplosion);
+        
 		m_sprite->runAction(m_acExplosion);
 	}
 }
 
 void Enemy::RemoveFromObjectLayer()
 {
+    m_sprite->stopAllActions();
+    CCDirector::sharedDirector()->getActionManager()->removeAction(m_acPreExplosion);
+    CCDirector::sharedDirector()->getActionManager()->removeAction(m_acFlying);
+    CCDirector::sharedDirector()->getActionManager()->removeAction(m_acPreExplosion);
+
 	ObjectLayer* parent = (ObjectLayer*) this->getParent();
 	parent->RemoveEnemy(this);
 }

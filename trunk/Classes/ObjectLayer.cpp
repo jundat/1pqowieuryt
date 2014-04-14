@@ -154,6 +154,10 @@ void ObjectLayer::ccTouchEnded( CCTouch *pTouch, CCEvent *pEvent )
 {
 }
 
+void ObjectLayer::ccTouchCancelled(CCTouch *pTouch, CCEvent *pEvent)
+{
+}
+
 void ObjectLayer::AddEmemy( Enemy* enemy )
 {
 	float h = G_DESIGN_HEIGHT;
@@ -225,6 +229,7 @@ void ObjectLayer::ScheduleCheckCollision(float dt)
 
 					if (enemyRect.intersectsRect(bulletRect))
 					{
+                        bullet->stopAllActions();
 						this->removeChild(bullet);
 						m_arrPlayerBullets->removeObject(bullet);
 
@@ -302,6 +307,7 @@ void ObjectLayer::ScheduleCheckCollision(float dt)
 					this->IncreaseBoom();
 				}
 
+                item->stopAllActions();
 				this->removeChild(item);
 				m_arrItems->removeObject(item);
 			}
@@ -361,6 +367,7 @@ void ObjectLayer::RemoveEnemy( Enemy* enemy )
 		break;
 	}
 
+    enemy->stopAllActions();
 	this->removeChild(enemy);
 }
 
@@ -406,6 +413,7 @@ void ObjectLayer::update( float delta )
 			//out of screen
 			if (bullet->getPositionY() > G_DESIGN_HEIGHT)
 			{
+                bullet->stopAllActions();
 				this->removeChild(bullet);
 				m_arrPlayerBullets->removeObject(bullet);
 			}
@@ -421,6 +429,7 @@ void ObjectLayer::update( float delta )
 			//out of screen
 			if (item->getPositionY() < 0)
 			{
+                item->stopAllActions();
 				this->removeChild(item);
 				m_arrItems->removeObject(item);
 			}
@@ -545,6 +554,7 @@ void ObjectLayer::Restart()
 		Bullet* bullet = dynamic_cast<Bullet*>(it);
 		if (NULL != bullet)
 		{
+            bullet->stopAllActions();
 			this->removeChild(bullet);
 		}
 	}

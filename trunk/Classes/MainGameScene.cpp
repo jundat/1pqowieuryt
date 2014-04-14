@@ -33,8 +33,8 @@ bool MainGameScene::init()
 	m_isShowingPause = false;
 	m_isShowingLose = false;
 
-	CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, 0, true);
-	this->setTouchEnabled(true);
+	//CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, 0, true);
+	//this->setTouchEnabled(true);
 	this->setKeypadEnabled(true);
 
 	CCSpriteFrameCache* sprcache = CCSpriteFrameCache::sharedSpriteFrameCache();
