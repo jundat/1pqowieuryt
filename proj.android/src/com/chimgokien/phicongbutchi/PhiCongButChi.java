@@ -205,9 +205,16 @@ public class PhiCongButChi extends Cocos2dxActivity {
 	}
 	
 	public void Vibrate(JSONObject prms) {
+		int time = 300;
+		try {
+			time = prms.getInt("time");
+		} catch(JSONException e) {
+			time = 300;
+		}
+		
 		Vibrator v = (Vibrator) this.context.getSystemService(Context.VIBRATOR_SERVICE);
-		// Vibrate for 500 milliseconds
-		v.vibrate(300);
+		// Vibrate for <time> milliseconds
+		v.vibrate(time);
 	}
 	
 	public void GetPhoneNumber(JSONObject prms)

@@ -88,6 +88,7 @@ public:
 	static int s_endFriendInd;
 
 	bool m_isLoggedIn;
+    bool m_isFirstTimeLogIn;
 	bool m_isXepHangView;
 	int m_tableXepHangSize;
 	int m_tableQuatangSize;

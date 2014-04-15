@@ -50,7 +50,7 @@ public:
 	void Resume();
 	void resetCrosses();
 	void IncreaseCross();
-	void Vibrate();
+	void Vibrate(int _time = 300);
 
 public:
 	void AfterDeadEffectCallback();
@@ -59,6 +59,8 @@ private:
 	void GenerateEnemy(float dt);
 	void ScheduleGenerateItem(float dt);
 	void ScheduleCheckCollision(float dt);
+    
+    void addScore(CCObject* pSender);
 
 public:
 	CC_SYNTHESIZE(float, m_playedTime, PlayedTime);

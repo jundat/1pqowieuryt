@@ -44,6 +44,7 @@ bool ScoreScene::init()
 	m_friendCell = NULL;
 
 	m_lbInviteQuatang = NULL;
+    m_isFirstTimeLogIn = false;
 
 
 	CCSprite* bg = CCSprite::create("bg_stars.png");
@@ -988,26 +989,35 @@ void ScoreScene::onGetScoreCompleted( bool isSuccess, int score, std::string tim
 	if (isSuccess)
 	{
 		int deviceScore = DataManager::sharedDataManager()->GetHighScore();
-		if (deviceScore < score) // server -> device
-		{
-			DataManager::sharedDataManager()->SetHighScore(score);
-
+        score = (score <= 0) ? 0 : score;
+        
+        if (m_isFirstTimeLogIn == true) {
+            CCLOG("FIRST TIME LOG IN");
+        } else {
+            CCLOG("NO---FIRST TIME LOG IN");
+        }
+        
+        if (m_isFirstTimeLogIn == true || deviceScore <= score) {
+            CCLOG("SERVER -> LOCAL");
+            
+            //USE ANOTHER FUNCTION TO SET SCORE
+            DataManager::sharedDataManager()->SetHighScoreNotCheck(score);
+            
 			//score
 			CCString* str = CCString::createWithFormat("%d", DataManager::sharedDataManager()->GetHighScore());
 			m_lbScore->setString(str->getCString());
 			
 			PLAY_GET_BOMB_EFFECT;
-
+            
 			//animation
 			m_lbScore->runAction(CCSequence::createWithTwoActions(
-				CCScaleTo::create(0.2f, 1.25f),
-				CCScaleTo::create(0.2f, 1.0f)
-				));
-		} 
-		else // device -> server
-		{
-			submitScore();
-		}
+                                                                  CCScaleTo::create(0.2f, 1.25f),
+                                                                  CCScaleTo::create(0.2f, 1.0f)
+                                                                  ));
+        } else {
+            CCLOG("LOCAL -> SERVER");
+            submitScore();
+        }
 	} 
 	else
 	{
@@ -1033,6 +1043,7 @@ void ScoreScene::fbSessionCallback(int responseCode, const char *responseMessage
 	{
 		CCLOG("fbSessionCallback: SUCCESSFUL");
 		m_isLoggedIn = true;
+        m_isFirstTimeLogIn = true;
 
 		m_itFbLogInItem->setVisible(false);
 		m_lbInvite->setVisible(false);
@@ -1055,6 +1066,11 @@ void ScoreScene::fbSessionCallback(int responseCode, const char *responseMessage
 
 		m_itFbLogInItem->setVisible(true);
 		m_lbInvite->setVisible(true);
+        
+        
+        //set FbId = "NULL";
+        DataManager::sharedDataManager()->ClearFbProfileID();
+        
 
 		if (m_lbInviteQuatang != NULL)
 		{

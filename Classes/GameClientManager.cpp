@@ -25,7 +25,7 @@ void GameClientManager::setUrls( string urlProfile, string urlDevice, string url
 
 std::string GameClientManager::encodeBeforeSend( std::string src )
 {
-	CCLOG("BEFORE:\n%s", src.c_str());
+	//CCLOG("BEFORE:\n%s", src.c_str());
 	
 	if (G_IS_ENCODE)
 	{

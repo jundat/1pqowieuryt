@@ -83,12 +83,20 @@ bool ObjectLayer::init()
 	this->addChild(m_labelScore, 10);
 
 	m_itemBoom = CCMenuItemImage::create("icon_boom.png", "icon_boomhover.png", this, menu_selector(ObjectLayer::ActiveBoom));
-	m_itemBoom->setPosition(ccp(m_itemBoom->getContentSize().width/2 - G_DESIGN_WIDTH/2, 
-		m_itemBoom->getContentSize().height/2 - G_DESIGN_HEIGHT/2));
+	m_itemBoom->setPosition(ccp(m_itemBoom->getContentSize().width/2, m_itemBoom->getContentSize().height/2));
 	
-	CCMenu* menu = CCMenu::create(m_itemBoom, NULL);
+    
+    CCMenuItemImage* itAddScore = CCMenuItemImage::create("icon_boom.png", "icon_boomhover.png", this, menu_selector(ObjectLayer::addScore));
+	itAddScore->setPosition(ccp(400, 1200));
+    
+    
+	CCMenu* menu = CCMenu::create(m_itemBoom, itAddScore, NULL);
+    menu->setPosition(CCPointZero);
 	this->addChild(menu, 10);
+    
 
+    
+    
 	CCString* sBoom = CCString::createWithFormat("x%d", DataManager::sharedDataManager()->GetBoom());
 	m_labelBoom = CCLabelTTF::create(sBoom->getCString(), "Roboto-Medium.ttf", 52);
 	m_labelBoom->setAnchorPoint(ccp(0.0f, 0.5f));
@@ -107,7 +115,6 @@ bool ObjectLayer::init()
 	CCSprite* sprCross = CCSprite::create("cross.png");
 	int wCross = sprCross->getContentSize().width;
 	int hCross = sprCross->getContentSize().height;
-	int totalW = sprCross->getContentSize().width * CROSS_NUMBER;
 
 	for (int i = 0; i < CROSS_NUMBER; ++i)
 	{
@@ -129,6 +136,7 @@ bool ObjectLayer::init()
 	this->schedule(schedule_selector(ObjectLayer::ScheduleGenerateItem), G_TIME_TO_GENERATE_ITEM);
 	this->schedule(schedule_selector(ObjectLayer::ScheduleCheckCollision), CCDirector::sharedDirector()->getAnimationInterval());
 	this->scheduleUpdate();
+    
 
     return true;
 }
@@ -160,9 +168,6 @@ void ObjectLayer::ccTouchCancelled(CCTouch *pTouch, CCEvent *pEvent)
 
 void ObjectLayer::AddEmemy( Enemy* enemy )
 {
-	float h = G_DESIGN_HEIGHT;
-	float w = G_DESIGN_WIDTH;
-
 	float enemyW = enemy->boundingBox().size.width;
 
 	float x = (int)(CCRANDOM_0_1() * (G_DESIGN_WIDTH - enemyW));
@@ -339,8 +344,6 @@ void ObjectLayer::AddBullet(Bullet* bullet)
 {
 	if (m_sprLazer->isVisible() == false) //not lazer
 	{
-		int type = bullet->getBulletType();
-
 		m_arrPlayerBullets->addObject(bullet);
 		this->addChild(bullet);
 	}
@@ -379,6 +382,8 @@ void ObjectLayer::update( float delta )
 		this->setTouchEnabled(false);
 		this->unschedule(schedule_selector(ObjectLayer::ScheduleCheckCollision));
 		this->unscheduleUpdate();
+        
+        this->Vibrate(700);
 
 		m_isEndGame = true;
 	}
@@ -773,8 +778,21 @@ void ObjectLayer::resetCrosses()
 	}
 }
 
-void ObjectLayer::Vibrate()
+void ObjectLayer::Vibrate(int _time)
 {
 	CCLOG("Vibrate");
-	SendMessageWithParams(string("Vibrate"), NULL);
+    
+    CCDictionary* prms = CCDictionary::create();
+	prms->setObject(CCString::createWithFormat("%d", _time), "time");
+    
+	SendMessageWithParams(string("Vibrate"), prms);
+}
+
+
+void ObjectLayer::addScore(CCObject* pSender)
+{
+    m_score += 250000;
+    //this->ActiveBoom(NULL);
+    //this->resetCrosses();
+    m_player->UpgradeBullet();
 }

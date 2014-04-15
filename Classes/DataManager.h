@@ -23,6 +23,7 @@ public:
 
 	std::string GetFbID();
 	void SetFbProfileID(const char* profileID);
+	void ClearFbProfileID();
 
 	std::string GetFbUserName();
 	void SetFbUserName(const char* fbusernam);
@@ -51,6 +52,7 @@ public:
 
 	int		GetHighScore();
 	void	SetHighScore(int currentScore);
+    void    SetHighScoreNotCheck(int score);
 
 	tm*		GetLastDeadTime();
 	void	SetLastDeadTime(tm* time); //int hour, int min, int sec, int mday, int mon, int year);
