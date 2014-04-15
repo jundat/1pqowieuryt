@@ -1,3 +1,5 @@
+NDK_ROOT="/Users/lenguyen/Desktop/NDK"
+
 APPNAME="PhiCongButChi"
 
 # options
