@@ -218,8 +218,31 @@
 }
 
 
+//-------------- status bar ---------------//
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    if ([self respondsToSelector:@selector(setNeedsStatusBarAppearanceUpdate)])
+    {
+        [self prefersStatusBarHidden];
+        [self performSelector:@selector(setNeedsStatusBarAppearanceUpdate)];
+    }
+    else
+    {
+        // iOS 6
+        [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
+    }
+}
 
 
+// Add this Method
+- (BOOL)prefersStatusBarHidden
+{
+    return YES;
+}
+
+//-------------- end status bar ---------------//
 
 
 
