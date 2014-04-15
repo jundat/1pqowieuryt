@@ -39,6 +39,11 @@ void DataManager::SetHighScore(int score)
 	}
 }
 
+void DataManager::SetHighScoreNotCheck(int score)
+{
+    CCUserDefault::sharedUserDefault()->setIntegerForKey("CURRENT_HIGHSCORE", score);
+    CCUserDefault::sharedUserDefault()->flush();
+}
 
 //Default value = 0
 int	DataManager::GetValueFromKey(const char* key)
@@ -198,6 +203,12 @@ std::string DataManager::GetFbID()
 void DataManager::SetFbProfileID( const char* profileID )
 {
 	CCUserDefault::sharedUserDefault()->setStringForKey("G_PROFILE_ID", std::string(profileID));
+	CCUserDefault::sharedUserDefault()->flush();
+}
+
+void DataManager::ClearFbProfileID()
+{
+	CCUserDefault::sharedUserDefault()->setStringForKey("G_PROFILE_ID", std::string("NULL"));
 	CCUserDefault::sharedUserDefault()->flush();
 }
 

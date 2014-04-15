@@ -85,18 +85,24 @@ public class AppRater {
         });        
         ll.addView(b1);
 
-        Button b2 = new Button(mContext);
-        b2.setText(later);
-        b2.setWidth(400);
-        b2.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
-                dialog.dismiss();
+        
+        
+        if (later.length() > 0)
+        {
+            Button b2 = new Button(mContext);
+            b2.setText(later);
+            b2.setWidth(400);
+            b2.setOnClickListener(new OnClickListener() {
+                public void onClick(View v) {
+                    dialog.dismiss();
 
-                parent.onRateCompleted("REMIND_ME_LATER");
-                Log.i(TAG, "Choose2: Để sau");
-            }
-        });
-        ll.addView(b2);
+                    parent.onRateCompleted("REMIND_ME_LATER");
+                    Log.i(TAG, "Choose2: Để sau");
+                }
+            });
+            ll.addView(b2);
+        }
+        
 
         Button b3 = new Button(mContext);
         b3.setText(no);

@@ -487,7 +487,7 @@ void MenuScene::rateCallback( CCObject* pSender )
 	prms->setObject(CCString::create(TXT("game_package")), "game_package");
 	prms->setObject(CCString::create(TXT("rate_msg")), "msg");
 	prms->setObject(CCString::create(TXT("rate_rate")), "rate");
-	prms->setObject(CCString::create(TXT("rate_later")), "later");
+	prms->setObject(CCString::create(""), "later");
 	prms->setObject(CCString::create(TXT("rate_no")), "no");
 
 	SendMessageWithParams(string("Rate"), prms);
@@ -703,6 +703,9 @@ void MenuScene::fbSessionCallback(int responseCode, const char *responseMessage)
 	{
 		//CCLOG("fbSessionCallback: FAILED");
 		m_isLoggedIn = false;
+        
+        //set FbId = "NULL";
+        DataManager::sharedDataManager()->ClearFbProfileID();
 	}
 
 	/////////////refresh view ///////////////
