@@ -1,6 +1,7 @@
 #import "RootViewController.h"
 #include "IOSNDKHelper.h"
 #include "iRate.h"
+#import <AudioToolbox/AudioToolbox.h>
 
 
 @implementation RootViewController
@@ -140,7 +141,6 @@
     [IOSNDKHelper SendMessage:@"onRateCompleted" WithParameters:dict];
 }
 
-//------------- END RATE --------------//
 //-------- SHOW CHARGE WEB VIEW ----------//
 
 
@@ -242,7 +242,13 @@
     return YES;
 }
 
-//-------------- end status bar ---------------//
+//-------------- vibrate ---------------//
+
+- (void) Vibrate: (NSObject *)prms
+{
+    NSLog(@"Vibrate in IOS");
+    AudioServicesPlayAlertSound(kSystemSoundID_Vibrate); //kSystemSoundID_Vibrate
+}
 
 
 

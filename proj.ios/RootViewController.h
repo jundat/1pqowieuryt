@@ -26,6 +26,9 @@
 - (BOOL)prefersStatusBarHidden;
 
 
+//------ vibrate --------//
+- (void) Vibrate: (NSObject *)prms;
+
 
 
 
