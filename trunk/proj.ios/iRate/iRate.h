@@ -151,6 +151,12 @@ typedef NS_ENUM(NSUInteger, iRateErrorCode)
 //manually control behaviour
 - (BOOL)shouldPromptForRating;
 - (void)promptForRating;
+- (void)promptForRatingWithName:(NSString*)gameName
+                    gamePackage:(NSString*)gamePackage
+                        message:(NSString*)msg
+                           rate:(NSString*)rate
+                          later:(NSString*)later
+                             no:(NSString*)no;
 - (void)promptIfNetworkAvailable;
 - (void)openRatingsPageInAppStore;
 - (void)logEvent:(BOOL)deferPrompt;

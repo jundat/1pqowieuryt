@@ -858,6 +858,75 @@ static NSString *const iRateMacAppStoreURLFormat = @"macappstore://itunes.apple.
     }
 }
 
+
+- (void)promptForRatingWithName:(NSString*)gameName
+                    gamePackage:(NSString*)gamePackage
+                        message:(NSString*)msg
+                           rate:(NSString*)rate
+                          later:(NSString*)later
+                             no:(NSString*)no
+{
+    if (!self.visibleAlert)
+    {
+        NSString *message = self.ratedAnyVersion? self.updateMessage: self.message;
+        
+        
+#if TARGET_OS_IPHONE
+        
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:self.messageTitle
+                                                        message:message
+                                                       delegate:(id<UIAlertViewDelegate>)self
+                                              cancelButtonTitle:[self.cancelButtonLabel length] ? self.cancelButtonLabel: nil
+                                              otherButtonTitles:self.rateButtonLabel, nil];
+        if ([self.remindButtonLabel length])
+        {
+            [alert addButtonWithTitle:self.remindButtonLabel];
+        }
+        
+        self.visibleAlert = alert;
+        [self.visibleAlert show];
+#else
+        
+        //only show when main window is available
+        if (self.onlyPromptIfMainWindowIsAvailable && ![[NSApplication sharedApplication] mainWindow])
+        {
+            [self performSelector:@selector(promptForRating) withObject:nil afterDelay:0.5];
+            return;
+        }
+        
+        self.visibleAlert = [NSAlert alertWithMessageText:self.messageTitle
+                                            defaultButton:self.rateButtonLabel
+                                          alternateButton:self.cancelButtonLabel
+                                              otherButton:nil
+                                informativeTextWithFormat:@"%@", message];
+        
+        if ([self.remindButtonLabel length])
+        {
+            [self.visibleAlert addButtonWithTitle:self.remindButtonLabel];
+        }
+        
+        [self.visibleAlert beginSheetModalForWindow:[[NSApplication sharedApplication] mainWindow]
+                                      modalDelegate:self
+                                     didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:)
+                                        contextInfo:nil];
+        
+#endif
+        
+        //inform about prompt
+        [self.delegate iRateDidPromptForRating];
+    }
+}
+
+
+
+
+
+
+
+
+
+////////////////////////////
+
 - (void)applicationLaunched
 {
     //check if this is a new version
