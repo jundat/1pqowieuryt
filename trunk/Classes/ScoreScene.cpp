@@ -1067,11 +1067,6 @@ void ScoreScene::fbSessionCallback(int responseCode, const char *responseMessage
 		m_itFbLogInItem->setVisible(true);
 		m_lbInvite->setVisible(true);
         
-        
-        //set FbId = "NULL";
-        DataManager::sharedDataManager()->ClearFbProfileID();
-        
-
 		if (m_lbInviteQuatang != NULL)
 		{
 			m_lbInviteQuatang->setVisible(false);
@@ -1081,6 +1076,18 @@ void ScoreScene::fbSessionCallback(int responseCode, const char *responseMessage
 		{
 			m_lbLostConnection->setVisible(false);
 		}
+        
+        
+        
+        //
+        //Clear data
+        //
+        //set FbId = "NULL";
+        DataManager::sharedDataManager()->ClearFbProfileID();
+        
+        //clear highscores
+        DataManager::sharedDataManager()->SetHigherFriends(NULL);
+        
 	}
 #endif
 }

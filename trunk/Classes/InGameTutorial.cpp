@@ -20,7 +20,7 @@ bool InGameTutorial::init()
 	
 	CCPoint pExit = ccp(400, 1280-1176); // ccp(233, 1280-813);
 
-	float BUTTON_SCALE = 0.6722f;
+	
 
 	CCSprite* bg = CCSprite::create("intro.png");
 	bg->setPosition(ccp(G_DESIGN_WIDTH/2, G_DESIGN_HEIGHT/2));

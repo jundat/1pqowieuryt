@@ -11,7 +11,7 @@ LevelLoader::LevelLoader(void)
 	m_dict = CCDictionary::create();
 	m_dict->retain();
 
-	unsigned long bufferSize = 0;
+	
 	std::string fileData  = std::string(CCString::createWithContentsOfFile(s_levelFile->getCString())->getCString());
 	std::string smallStr;
 

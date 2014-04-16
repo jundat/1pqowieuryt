@@ -501,26 +501,31 @@ CCArray* DataManager::GetHigherFriends()
 
 void DataManager::SetHigherFriends( CCArray* arrFriends )
 {
-	//parse arrFriendList to json
-	std::string strFriendList = std::string("");
-	int count = arrFriends->count();
+    if (arrFriends == NULL) { //clear all
+        CCUserDefault::sharedUserDefault()->setStringForKey("HIGHER_FRIENDS", "{list: []}");
+        CCUserDefault::sharedUserDefault()->flush();
+    } else {
+        //parse arrFriendList to json
+        std::string strFriendList = std::string("");
+        int count = arrFriends->count();
 
-	for (int i = 0; i < count; ++i)
-	{
-		FacebookAccount* fbFriend = (FacebookAccount*)arrFriends->objectAtIndex(i);
-		strFriendList.append(fbFriend->toJson());
+        for (int i = 0; i < count; ++i)
+        {
+            FacebookAccount* fbFriend = (FacebookAccount*)arrFriends->objectAtIndex(i);
+            strFriendList.append(fbFriend->toJson());
 
-		if (i != count - 1)
-		{
-			strFriendList.append(",");
-		}
-	}	
+            if (i != count - 1)
+            {
+                strFriendList.append(",");
+            }
+        }
 
-	CCString* strData = CCString::createWithFormat("{\"list\": [%s]}", strFriendList.c_str());
-	CCLOG("SAVE: %s", strData->getCString());
+        CCString* strData = CCString::createWithFormat("{\"list\": [%s]}", strFriendList.c_str());
+        CCLOG("SAVE: %s", strData->getCString());
 
-	CCUserDefault::sharedUserDefault()->setStringForKey("HIGHER_FRIENDS", strData->getCString());
-	CCUserDefault::sharedUserDefault()->flush();
+        CCUserDefault::sharedUserDefault()->setStringForKey("HIGHER_FRIENDS", strData->getCString());
+        CCUserDefault::sharedUserDefault()->flush();
+    }
 }
 
 

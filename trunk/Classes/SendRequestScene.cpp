@@ -33,7 +33,7 @@ bool SendRequestScene::init()
 	//CCMenuItemImage* itSent = 
 
 
-	CCScene *pScene = MenuScene::scene();
+	
     return true;
 }
 
