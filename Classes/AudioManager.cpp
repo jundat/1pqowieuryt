@@ -99,7 +99,7 @@ void AudioManager::StopBackground()
 void AudioManager::PlayEffect(const char *path, bool isLoop)
 {
 	if (m_bEnableEffect) {
-		int id = SimpleAudioEngine::sharedEngine()->playEffect(CCFileUtils::sharedFileUtils()->fullPathForFilename(path).c_str(), isLoop);
+		SimpleAudioEngine::sharedEngine()->playEffect(CCFileUtils::sharedFileUtils()->fullPathForFilename(path).c_str(), isLoop);
 	}
 }
 

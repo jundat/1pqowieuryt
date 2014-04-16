@@ -598,7 +598,7 @@ void MenuScene::initTimer()
 {
 	//CCLOG("Initing... timer! ...");
 
-	int life = DataManager::sharedDataManager()->GetLastPlayerLife();
+	DataManager::sharedDataManager()->GetLastPlayerLife();
 	tm* lasttm = DataManager::sharedDataManager()->GetLastDeadTime();
 	int diff = (int)difftime(time(NULL), mktime(lasttm));
 
@@ -704,15 +704,22 @@ void MenuScene::fbSessionCallback(int responseCode, const char *responseMessage)
 		//CCLOG("fbSessionCallback: FAILED");
 		m_isLoggedIn = false;
         
+        
+        //
+        //Clear data
+        //
         //set FbId = "NULL";
         DataManager::sharedDataManager()->ClearFbProfileID();
+        
+        //clear highscores
+        DataManager::sharedDataManager()->SetHigherFriends(NULL);
 	}
 
 	/////////////refresh view ///////////////
 	if (m_isLoggedIn)
 	{
 		m_facebookItem->setSelectedIndex(1);
-	} 
+	}
 	else
 	{
 		m_facebookItem->setSelectedIndex(0);

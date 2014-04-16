@@ -22,8 +22,8 @@ bool BreakLeaderboardDialog::init()
 
 	CCPoint pExit = ccp(233, 1280-813);
 	CCPoint pRevive = ccp(561, 1280-813);
-	CCPoint pVuotMat = ccp(610, 1280-610);
-	float BUTTON_SCALE = 0.6722f;
+
+    
 	
 	CCScale9Sprite* dialog = CCScale9Sprite::create("dialog.png");
 	dialog->setPosition(ccp(400, 640));

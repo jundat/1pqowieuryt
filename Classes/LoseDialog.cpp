@@ -27,7 +27,7 @@ bool LoseDialog::init()
 	CCPoint pTimerBar = ccp(400 - 161, 1280-740); //ccp(565, 1280-813);
 	CCPoint pTimer = ccp(400, 1280-700); //ccp(565, 1280-813);
 
-	float BUTTON_SCALE = 0.6722f;
+	
 
 	CCScale9Sprite* bg = CCScale9Sprite::create("dialog.png");
 	bg->setPosition(ccp(400, 640));

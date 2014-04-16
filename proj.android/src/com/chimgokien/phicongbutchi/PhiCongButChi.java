@@ -101,6 +101,7 @@ public class PhiCongButChi extends Cocos2dxActivity {
     
     
     ////////////////////////////////////////////////////////////////////////
+	@SuppressWarnings("deprecation")
 	@SuppressLint("SetJavaScriptEnabled")
 	public void ShowChargeWebView(JSONObject prms)
 	{
