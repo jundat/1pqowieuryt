@@ -22,10 +22,10 @@ bool LoseDialog::init()
 	m_timerNode = NULL;
 	m_lbTimer = NULL;
 
-	CCPoint pExit = ccp(400, 1280-813); // ccp(233, 1280-813);
-	CCPoint pRevive = ccp(400, 1280-813); //ccp(565, 1280-813);
-	CCPoint pTimerBar = ccp(400 - 161, 1280-740); //ccp(565, 1280-813);
-	CCPoint pTimer = ccp(400, 1280-700); //ccp(565, 1280-813);
+	CCPoint pExit = ccp(400, 1280-813);
+	CCPoint pRevive = ccp(400, 1280-813);
+	CCPoint pTimerBar = ccp(400 - 161, 1280-740);
+	CCPoint pTimer = ccp(400, 1280-700);
 
 	
 
@@ -57,19 +57,28 @@ bool LoseDialog::init()
 
 	MY_CREATE_MENU_BUTTON(reviveButton, "button.png", "button_down.png", TXT("btn_revive"), 
 		"Roboto-Medium.ttf", 48, ccBLACK, pRevive, this, LoseDialog::reviveCallBack);
+    reviveButton->setVisible(false);
 	m_itRevive = reviveButton;
 	
 	//REVIVE /////////////////////////////////////////////////////////////////
-	//revive_button_press.png
+	
 	bool isJustRevive = DataManager::sharedDataManager()->GetIsJustRevived();
-	if (isJustRevive == true)
+    bool isLoggedInFb = false;
+    
+    string fbId = DataManager::sharedDataManager()->GetFbID();
+    if (fbId.compare("NULL") == 0) {
+        isLoggedInFb = false;
+    } else {
+        isLoggedInFb = true;
+    }
+    
+	if (isJustRevive == true || isLoggedInFb == false) //no revive
 	{
 		m_itRevive->setVisible(false);
-		//m_itRevive->setEnabled(false);
-		//m_itRevive->setOpacity(0.60f * 255);
 	}
-	else //timer
+	else //have revive, init timer
 	{
+        m_itRevive->setVisible(true);
 		m_itExitButton->setVisible(false);
 
 		m_elapsedTime = 0;
