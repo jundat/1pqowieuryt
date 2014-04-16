@@ -19,6 +19,7 @@
 
 //------ show charge webview --------//
 - (void) ShowChargeWebView:(NSObject *)prms;
+- (void) closeChargeWebView:(UIButton *)sender;
 
 
 //------ status bar in iOS 7 --------//

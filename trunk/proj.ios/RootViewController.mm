@@ -148,7 +148,7 @@
 {
     
     NSDictionary *parameters = (NSDictionary*)prms;
-    NSLog(@"Passed params are : %@", parameters);
+    //NSLog(@"Passed params are : %@", parameters);
     
     NSString *charge_caption, *charge_close, *charge_link;
     
@@ -160,63 +160,41 @@
     CGFloat screenWidth = screenRect.size.width;
     CGFloat screenHeight = screenRect.size.height;
     
-    UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, screenWidth, screenHeight)];
-    [self.view addSubview:webView];
+    //
+    //FullView
+    //Tag: 100
+    CGRect applicationFrame = [[UIScreen mainScreen] applicationFrame];
+    UIView *contentView = [[UIView alloc] initWithFrame:applicationFrame];
+    contentView.backgroundColor = [UIColor whiteColor];
+    [contentView setTag:100];
+    [self.view addSubview:contentView];
+
+    //
+    //Close button
+    //
+    UIButton *roundRectButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [roundRectButton setFrame:CGRectMake(screenWidth/2 - 50, screenHeight - 27.5, 100, 25)];
+    [roundRectButton setTitle:charge_close forState:UIControlStateNormal];
+    [roundRectButton addTarget:self action:@selector(closeChargeWebView:) forControlEvents:UIControlEventTouchUpInside];
+    [contentView addSubview:roundRectButton];
     
+    //
+    //WebView
+    //
+    UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, screenWidth, screenHeight - 30)];
+    [contentView addSubview:webView];
     NSURLRequest *urlRequest;
     NSURL *urlforWebView;
-    urlforWebView=[NSURL URLWithString:@"http://www.google.com"];
+    urlforWebView=[NSURL URLWithString:charge_link];
     urlRequest=[NSURLRequest requestWithURL:urlforWebView];
     [webView loadRequest:urlRequest];
- 
-    
-    // A rounded Rect button created by using class method
-    UIButton *roundRectButton = [UIButton buttonWithType:
-                                 UIButtonTypeInfoDark];
-    [roundRectButton setFrame:CGRectMake(60, 50, 100, 40)];
-    // sets title for the button
-    [roundRectButton setTitle:@"Close" forState:
-     UIControlStateNormal];
-    
-    [self.view addSubview:roundRectButton];
-    
-    UIButton *customButton = [UIButton buttonWithType: UIButtonTypeCustom];
-    [customButton setBackgroundColor: [UIColor whiteColor]];
-    [customButton setTitleColor:[UIColor blackColor] forState:
-     UIControlStateHighlighted];
-    [customButton setTitleColor:[UIColor blackColor] forState:
-     UIControlStateNormal];
-    //sets background image for normal state
-    [customButton setBackgroundImage:[UIImage imageNamed:
-                                      @"button.png"]
-                            forState:UIControlStateNormal];
-    //sets background image for highlighted state
-    [customButton setBackgroundImage:[UIImage imageNamed:
-                                      @"button_down.png"]
-                            forState:UIControlStateHighlighted];
-    [customButton setFrame:CGRectMake(60, 100, 200, 40)];
-    [customButton setTitle:@"Close" forState:UIControlStateNormal];
-    [self.view addSubview:customButton];
-    
-    
-    
-    
-    /*
-    UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"HUONG DAN" message:nil delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];    [av setFrame:CGRectMake(0, 0, 320, 480)];
-    UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, 260, 440)];
-    webView.scalesPageToFit = YES;
-    [self.view addSubview:webView];
-    NSURLRequest *urlRequest;
-    NSURL *urlforWebView;
-    urlforWebView=[NSURL URLWithString:@"http://www.google.com"];
-    urlRequest=[NSURLRequest requestWithURL:urlforWebView];
-    [webView loadRequest:urlRequest];
-    [av setValue:webView forKey:@"accessoryView"];
-    [av show];
-    */
-    
 }
 
+- (void) closeChargeWebView:(UIButton *)sender
+{
+    //NSLog(@"Close charge web view");
+    [[self.view viewWithTag:100] removeFromSuperview];
+}
 
 //-------------- status bar ---------------//
 
