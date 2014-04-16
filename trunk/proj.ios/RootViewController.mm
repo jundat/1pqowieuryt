@@ -181,13 +181,10 @@
     //
     //WebView
     //
+    NSURLRequest *urlRequest = [NSURLRequest requestWithURL: [NSURL URLWithString:charge_link]];
     UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, screenWidth, screenHeight - 30)];
-    [contentView addSubview:webView];
-    NSURLRequest *urlRequest;
-    NSURL *urlforWebView;
-    urlforWebView=[NSURL URLWithString:charge_link];
-    urlRequest=[NSURLRequest requestWithURL:urlforWebView];
     [webView loadRequest:urlRequest];
+    [contentView addSubview:webView];
 }
 
 - (void) closeChargeWebView:(UIButton *)sender
