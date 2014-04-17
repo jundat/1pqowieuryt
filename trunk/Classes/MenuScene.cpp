@@ -956,10 +956,7 @@ void MenuScene::refreshLanguageUI()
 	if (lang.compare("English") == 0)
 	{
 		//bg
-		m_bg = CCSprite::create(G_MENU_BG_EN);
-		m_bg->setAnchorPoint(G_MENU_BG_ANCHORPOINT);
-		m_bg->setPosition(G_MENU_BG_POS);
-		this->addChild(m_bg, G_MENU_BG_Z);
+		m_bg->setTexture(CCSprite::create(G_MENU_BG_EN)->getTexture());
 
 		//start
 		m_playItem->setNormalImage(CCSprite::create(G_MENU_NEW_BUTTON_SPR_NORMAL_EN));
@@ -968,10 +965,7 @@ void MenuScene::refreshLanguageUI()
 	else
 	{
 		//bg
-		m_bg = CCSprite::create(G_MENU_BG_VN);
-		m_bg->setAnchorPoint(G_MENU_BG_ANCHORPOINT);
-		m_bg->setPosition(G_MENU_BG_POS);
-		this->addChild(m_bg, G_MENU_BG_Z);
+        m_bg->setTexture(CCSprite::create(G_MENU_BG_VN)->getTexture());
 
 		//start
 		m_playItem->setNormalImage(CCSprite::create(G_MENU_NEW_BUTTON_SPR_NORMAL_VN));
