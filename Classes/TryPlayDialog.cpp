@@ -14,41 +14,36 @@ bool TryPlayDialog::init()
 		return false;
 	}
     
-    CCScale9Sprite* sprNormal1 = CCScale9Sprite::create("button.png");
-	sprNormal1->setContentSize(CCSizeMake(256, 256));
+	CCPoint pexit = ccp(250, G_DESIGN_HEIGHT - 810);
+	CCPoint pask = ccp(G_DESIGN_WIDTH-250, G_DESIGN_HEIGHT - 810);
     
-    CCScale9Sprite* sprSelect1 = CCScale9Sprite::create("button_down.png");
-	sprSelect1->setContentSize(CCSizeMake(256, 256));
+	CCScale9Sprite* dialog = CCScale9Sprite::create("dialog.png");
+	dialog->setPosition(ccp(400, 640));
+	dialog->setContentSize(CCSizeMake(680, 480));
+	this->addChild(dialog);
     
-    CCMenuItemSprite* itLogIn = CCMenuItemSprite::create(sprNormal1, sprSelect1, this, menu_selector(TryPlayDialog::yesCallback));
-    itLogIn->setPosition(ccp(230, 640));
+	MY_CREATE_MENU_BUTTON(exitButton, "button.png", "button_down.png", "Log In",
+                          "Roboto-Medium.ttf", 48, ccBLACK, pexit, this, TryPlayDialog::yesCallback);
     
-    
-    
-    CCScale9Sprite* sprNormal2 = CCScale9Sprite::create("button.png");
-	sprNormal2->setContentSize(CCSizeMake(256, 256));
-    
-    CCScale9Sprite* sprSelect2 = CCScale9Sprite::create("button_down.png");
-	sprSelect2->setContentSize(CCSizeMake(256, 256));
-    
-    CCMenuItemSprite* itTry = CCMenuItemSprite::create(sprNormal2, sprSelect2, this, menu_selector(TryPlayDialog::noCallback));
-    itTry->setPosition(ccp(570, 640));
-    
-    
-    
-    CCMenu* menu = CCMenu::create(itLogIn, itTry, NULL);
+	MY_CREATE_MENU_BUTTON(askButton, "button.png", "button_down.png", "Try",
+                          "Roboto-Medium.ttf", 48, ccBLACK, pask, this, TryPlayDialog::noCallback);
+	
+	CCMenu* menu = CCMenu::create(exitButton, askButton, NULL);
 	menu->setPosition(CCPointZero);
 	this->addChild(menu);
-
-    CCLabelTTF* lbLogIn = CCLabelTTF::create("Log In", G_FONT_NORMAL, 64);
-    lbLogIn->setPosition(itLogIn->getPosition());
-    lbLogIn->setColor(ccBLACK);
-    this->addChild(lbLogIn);
     
-    CCLabelTTF* lbTry = CCLabelTTF::create("Try", G_FONT_NORMAL, 64);
-    lbTry->setPosition(itTry->getPosition());
-    lbTry->setColor(ccBLACK);
-    this->addChild(lbTry);
+	CCLabelTTF* labelTitle = CCLabelTTF::create("Connect Facebook to get more friends, more gifts, ...",
+                                                "Roboto-Medium.ttf",
+                                                48,
+                                                CCSizeMake(600, 0),
+                                                kCCTextAlignmentCenter,
+                                                kCCVerticalTextAlignmentCenter);
+	labelTitle->setColor(ccBLACK);
+	labelTitle->setPosition(ccp(400, 700));
+	this->addChild(labelTitle);
+    
+	this->setKeypadEnabled(true);
+    return true;
     
     return true;
 }
