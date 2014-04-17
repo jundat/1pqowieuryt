@@ -29,7 +29,7 @@
 #define G_INSTALLED				1
 #define G_FPS					1/60.0f
 #define G_SMALL_DEVIVE_SIZE		320
-#define	G_DEFAULT_VOLUME		0.25f
+#define	G_DEFAULT_VOLUME		0.5f
 
 
 //////////////////////////////////////////////////////////////////////////

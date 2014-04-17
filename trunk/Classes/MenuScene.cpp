@@ -45,6 +45,10 @@ bool MenuScene::init()
 	{
 		m_isLoggedIn = true;
 	}
+    else
+    {
+        m_isLoggedIn = false;
+    }
 #endif
 
     /////////////////////////////
@@ -74,33 +78,67 @@ bool MenuScene::init()
 	labelVersion->setPosition(G_MENU_VERSION_TEXT_POS);
 	this->addChild(labelVersion);
 
+    //
+    //new button border
+    //
+    m_sprNewButtonBorderOut = CCSprite::create("new_button_border_out.png");
+    m_sprNewButtonBorderIn = CCSprite::create("new_button_border_in.png");
+    
+    m_sprNewButtonBorderOut->setPosition(G_MENU_NEW_BUTTON_POS);
+    m_sprNewButtonBorderIn->setPosition(G_MENU_NEW_BUTTON_POS);
+    
+    this->addChild(m_sprNewButtonBorderOut);
+    this->addChild(m_sprNewButtonBorderIn);
+    
+    
+    //
+    //disable play button animation in local mode
+    //
+    
+    string en_start_normal = string(G_MENU_NEW_BUTTON_SPR_NORMAL_EN);
+    string en_start_press = string(G_MENU_NEW_BUTTON_SPR_PRESS_EN);
+    
+    string vn_start_normal = string(G_MENU_NEW_BUTTON_SPR_NORMAL_VN);
+    string vn_start_press = string(G_MENU_NEW_BUTTON_SPR_PRESS_VN);
+    if (m_isLoggedIn == false) {
+        en_start_press = string(G_MENU_NEW_BUTTON_SPR_NORMAL_EN);
+        vn_start_press = string(G_MENU_NEW_BUTTON_SPR_PRESS_VN);
+    }
+    
 	//
 	if (lang.compare("English") == 0)
 	{
 		m_playItem = CCMenuItemImage::create(
-			G_MENU_NEW_BUTTON_SPR_NORMAL_EN,
-			G_MENU_NEW_BUTTON_SPR_PRESS_EN,
+			en_start_normal.c_str(),
+			en_start_press.c_str(),
 			this,
 			menu_selector(MenuScene::playCallback));
 	} 
 	else
 	{
 		m_playItem = CCMenuItemImage::create(
-			G_MENU_NEW_BUTTON_SPR_NORMAL_VN,
-			G_MENU_NEW_BUTTON_SPR_PRESS_VN,
+			vn_start_normal.c_str(),
+			vn_start_press.c_str(),
 			this,
 			menu_selector(MenuScene::playCallback));
 	}
 
 	m_playItem->setPosition(G_MENU_NEW_BUTTON_POS);
 
-	CCMenuItemImage *scoreItem = CCMenuItemImage::create(
+    
+    
+	m_scoreItem = CCMenuItemImage::create(
 		"score_button.png",
 		"score_button_press.png",
 		this,
 		menu_selector(MenuScene::scoreCallback));
-	scoreItem->setPosition(ccp(315, 1280-1176));
+	m_scoreItem->setPosition(ccp(315, 1280-1176));
 
+    if (m_isLoggedIn == false) {
+        m_scoreItem->setVisible(false);
+    }
+
+    
 
 	//rate
 	CCMenuItemImage *itRate = CCMenuItemImage::create(
@@ -218,7 +256,7 @@ bool MenuScene::init()
 	//Language bar
 	//////////////////////////////////////////////////////////////////////////
 
-    m_menu = CCMenu::create(m_playItem, scoreItem, itRate, NULL);
+    m_menu = CCMenu::create(m_playItem, m_scoreItem, itRate, NULL);
     m_menu->setPosition(CCPointZero);
     this->addChild(m_menu, 1);
 
@@ -351,8 +389,29 @@ void MenuScene::gotoMainGame()
 
 void MenuScene::playCallback(CCObject* pSender)
 {
-	PLAY_ENEMY1_DOWN_EFFECT;
-
+    //
+    //animation
+    //
+    
+    m_sprNewButtonBorderOut->runAction(
+        CCSequence::createWithTwoActions(
+            CCRotateTo::create(0.15f, 25),
+            CCRotateTo::create(0.15f, 0)
+        ));
+    m_sprNewButtonBorderIn->runAction(
+        CCSequence::createWithTwoActions(
+            CCRotateTo::create(0.15f, -25),
+            CCRotateTo::create(0.15f, 0)
+        ));
+    
+    if (m_isLoggedIn == true) {
+        CCLOG("ENEMY DOWN");
+        PLAY_ENEMY1_DOWN_EFFECT;
+    } else {
+        CCLOG("GUN RELOAD");
+        PLAY_GUN_RELOAD_EFFECT;
+    }
+    
 	this->setKeypadEnabled(false);
 	this->setTouchEnabled(false);
 
@@ -361,12 +420,12 @@ void MenuScene::playCallback(CCObject* pSender)
 
 	//CCLOG("GOTO PLAY: Lastlife: %d", lastLife);
 
-	if (lastLife > 0)
+	if (lastLife > 0) //enough life -> go play
 	{
 		playStartAnimation(lastLife);
 		m_playItem->selected();
 	}
-	else
+	else //not enough life -> request life
 	{
 		WaitForLifeDialog* dialog = WaitForLifeDialog::create((float)G_PLAYER_TIME_TO_REVIVE);
 		this->addChild(dialog, 100);
@@ -716,16 +775,46 @@ void MenuScene::fbSessionCallback(int responseCode, const char *responseMessage)
 	}
 
 	/////////////refresh view ///////////////
-	if (m_isLoggedIn)
+	if (m_isLoggedIn == true)
 	{
 		m_facebookItem->setSelectedIndex(1);
+        m_scoreItem->setVisible(true);
+        m_scoreItem->runAction(CCFadeIn::create(0.5f));
 	}
 	else
 	{
 		m_facebookItem->setSelectedIndex(0);
+        m_scoreItem->runAction(CCFadeOut::create(0.5f));
 	}
+    
+    
+    //
+    //start button
+    //
+    string lang = DataManager::sharedDataManager()->GetLanguage();
+    string en_start_press = string(G_MENU_NEW_BUTTON_SPR_PRESS_EN);
+    string vn_start_press = string(G_MENU_NEW_BUTTON_SPR_PRESS_VN);
+    if (m_isLoggedIn == false)
+    {
+        en_start_press = string(G_MENU_NEW_BUTTON_SPR_NORMAL_EN);
+        vn_start_press = string(G_MENU_NEW_BUTTON_SPR_PRESS_VN);
+    }
+    else
+    {
+        
+    }
+    
+    if (lang.compare("English") == 0)
+    {
+        CCSprite* selected_image = CCSprite::create(en_start_press.c_str());
+        m_playItem->setSelectedImage(selected_image);
+    }
+    else
+    {
+        CCSprite* selected_image = CCSprite::create(vn_start_press.c_str());
+        m_playItem->setSelectedImage(selected_image);
+    }
 
-	//m_sprSettingBar->runAction(CCSequence::createWithTwoActions(CCDelayTime::create(0.5f), CCHide::create()));
 #endif
 }
 

@@ -22,7 +22,7 @@ USING_NS_CC;
 USING_NS_CC_EXT;
 
 
-#define G_VERSION			81
+#define G_VERSION			83
 #define G_MENU_BG_COLOR		ccc4(195, 200, 201, 255)
 #define G_MENU_BG_VN			"vn_bg_menu.png"
 #define G_MENU_BG_EN			"en_bg_menu.png"
@@ -65,91 +65,88 @@ public:
     CREATE_FUNC(MenuScene);
 	
 
-	CCSprite* m_bg;
-	CCMenuItemImage* m_itShowCharge;
-	CCMenuItemToggle *m_soundItem;
-	CCMenuItemToggle *m_facebookItem;
-	CCMenuItemToggle *m_settingItem;
-	CCMenuItemImage *m_languageItem;
-	CCMenuItemImage *m_englishItem;
-	CCMenuItemImage *m_vietnamItem;
+    CCSprite* m_bg;
+    CCMenuItemImage* m_itShowCharge;
+    CCMenuItemToggle *m_soundItem;
+    CCMenuItemToggle *m_facebookItem;
+    CCMenuItemToggle *m_settingItem;
+    CCMenuItemImage *m_languageItem;
+    CCMenuItemImage *m_englishItem;
+    CCMenuItemImage *m_vietnamItem;
+    
+    CCMenuItemImage *m_scoreItem;
+    CCMenuItemImage *m_playItem;
+    CCSprite* m_sprNewButtonBorderOut;
+    CCSprite* m_sprNewButtonBorderIn;
+    CCMenu* m_menu;
 
-	CCMenuItemImage *m_playItem;
-	CCMenu* m_menu;
+    CCSprite* m_sprSettingBar;
+    CCSprite* m_sprLanguageBar;
 
-	CCSprite* m_sprSettingBar;
-	CCSprite* m_sprLanguageBar;
+    void initLifeIcon();
+    void refreshLifeIcon();
+    void playStartAnimation(int lastLife);
+    void gotoMainGame();
 
-	void initLifeIcon();
-	void refreshLifeIcon();
-	void playStartAnimation(int lastLife);
-	void gotoMainGame();
-	
-	virtual void keyBackClicked();
+    virtual void keyBackClicked();
     void playCallback(CCObject* pSender);
-	void scoreCallback(CCObject* pSender);
-	void soundCallback(CCObject* pSender);
-	void rateCallback(CCObject* pSender);
-	void settingCallback(CCObject* pSender);
-	void facebookCallback(CCObject* pSender);
-	void facebookLogInOut();
-	void exitCallback(CCObject* pSender);
-	void showChargeCallback(CCObject* pSender);
-	void languageCallback(CCObject* pSender);
-	void englishCallback(CCObject* pSender);
-	void vietnamCallback(CCObject* pSender);
-	void refreshLanguageUI();
+    void scoreCallback(CCObject* pSender);
+    void soundCallback(CCObject* pSender);
+    void rateCallback(CCObject* pSender);
+    void settingCallback(CCObject* pSender);
+    void facebookCallback(CCObject* pSender);
+    void facebookLogInOut();
+    void exitCallback(CCObject* pSender);
+    void showChargeCallback(CCObject* pSender);
+    void languageCallback(CCObject* pSender);
+    void englishCallback(CCObject* pSender);
+    void vietnamCallback(CCObject* pSender);
+    void refreshLanguageUI();
 
-	void onEnterTransitionDidFinish()
-	{
-		CCSpriteFrameCache* sprcache = CCSpriteFrameCache::sharedSpriteFrameCache();
-		sprcache->addSpriteFramesWithFile("MainGame.plist");
+    void onEnterTransitionDidFinish()
+    {
+        CCSpriteFrameCache* sprcache = CCSpriteFrameCache::sharedSpriteFrameCache();
+        sprcache->addSpriteFramesWithFile("MainGame.plist");
+    }
+    void onRateCompleted( CCNode *sender, void *data );
+    void onPushNotification( CCNode *sender, void *data );
+    void onShowChargeCompleted( CCNode *sender, void *data );
 
-//		//DEBUG
-// 		NDKHelper::AddSelector("MENU",
-// 			"onPushNotification",
-// 			callfuncND_selector(MenuScene::onPushNotification),
-// 			this);
-	}
-	void onRateCompleted( CCNode *sender, void *data );
-	void onPushNotification( CCNode *sender, void *data );
-	void onShowChargeCompleted( CCNode *sender, void *data );
+    void onCompletedWaiting();
+    void onShowDialog();
+    void onCloseDialog();
 
-	void onCompletedWaiting();
-	void onShowDialog();
-	void onCloseDialog();
+    bool m_isShowDialog;
+    bool m_isLoggedIn;
 
-	bool m_isShowDialog;
-	bool m_isLoggedIn;
-
-	//life animation
-	CCArray* m_arrSprLife;
+    //life animation
+    CCArray* m_arrSprLife;
 
 
-	//timer
-	int m_waitTime;
-	CCLabelTTF* m_lbTime;
+    //timer
+    int m_waitTime;
+    CCLabelTTF* m_lbTime;
 
-	void initTimer();
-	void ScheduleTick(float dt);
+    void initTimer();
+    void ScheduleTick(float dt);
 
-	//////////////////////////////////////////////////////////////////////////
-	void GetRegistrationId();
-	void onGetRegistrationIdCompleted( CCNode *sender, void *data );
-	void getUserProfile();
-	virtual void onGetPlayerFbProfileCompleted(bool isSuccess, FacebookAccount* acc);
-	void disableMoneytize();
+    //////////////////////////////////////////////////////////////////////////
+    void GetRegistrationId();
+    void onGetRegistrationIdCompleted( CCNode *sender, void *data );
+    void getUserProfile();
+    virtual void onGetPlayerFbProfileCompleted(bool isSuccess, FacebookAccount* acc);
+    void disableMoneytize();
 
-	//////////////////////////////////////////////////////////////////////////
-	//facebook
-	
-	void sendUserProfileToServer(string fbId, string fbName, string email);
-	virtual void onSendPlayerFbProfileCompleted( bool isSuccess );
-	void getFacebookFriends();
+    //////////////////////////////////////////////////////////////////////////
+    //facebook
 
-	virtual void fbSessionCallback(int responseCode, const char* responseMessage);
-	virtual void fbUserPhotoCallback(const char *userPhotoPath, const char* fbID);
-	virtual void fbFriendsCallback(int responseCode, const char* responseMessage, cocos2d::CCArray* friends);
+    void sendUserProfileToServer(string fbId, string fbName, string email);
+    virtual void onSendPlayerFbProfileCompleted( bool isSuccess );
+    void getFacebookFriends();
+
+    virtual void fbSessionCallback(int responseCode, const char* responseMessage);
+    virtual void fbUserPhotoCallback(const char *userPhotoPath, const char* fbID);
+    virtual void fbFriendsCallback(int responseCode, const char* responseMessage, cocos2d::CCArray* friends);
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	virtual void fbUserDetailCallback(int responseCode, const char* responseMessage, EziFacebookUser* fbUser);

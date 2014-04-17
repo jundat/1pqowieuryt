@@ -62,7 +62,6 @@ std::string GameClientManager::decodeBeforeProcess( std::string src )
 	}
 }
 
-
 std::string GameClientManager::getMD5()
 {
 	string srcMd5 = "";
@@ -732,7 +731,8 @@ void GameClientManager::_onGetScoreCompleted( CCHttpClient *sender, CCHttpRespon
 	CCLOG("------- END %s -------", response->getHttpRequest()->getTag());
 }
 
-//
+
+//request to check diamond and charge with diamond
 
 void GameClientManager::requestRevive( string appId, string fbId )
 {
