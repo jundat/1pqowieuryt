@@ -20,11 +20,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Classes/MenuScene.cpp"
-            timestampString = "419161899.91772"
+            timestampString = "419411728.396114"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "480"
-            endingLineNumber = "480"
+            startingLineNumber = "542"
+            endingLineNumber = "542"
             landmarkName = "MenuScene::rateCallback( CCObject* pSender )"
             landmarkType = "5">
          </BreakpointContent>
@@ -36,11 +36,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Classes/MenuScene.cpp"
-            timestampString = "419161934.676234"
+            timestampString = "419411728.396114"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "404"
-            endingLineNumber = "404"
+            startingLineNumber = "466"
+            endingLineNumber = "466"
             landmarkName = "MenuScene::onRateCompleted( CCNode *sender, void *data )"
             landmarkType = "5">
          </BreakpointContent>
@@ -52,11 +52,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Classes/MenuScene.cpp"
-            timestampString = "419161945.903321"
+            timestampString = "419411728.396114"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "395"
-            endingLineNumber = "395"
+            startingLineNumber = "457"
+            endingLineNumber = "457"
             landmarkName = "MenuScene::onRateCompleted( CCNode *sender, void *data )"
             landmarkType = "5">
          </BreakpointContent>
@@ -68,11 +68,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Classes/MenuScene.cpp"
-            timestampString = "419161981.349027"
+            timestampString = "419411728.396114"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "406"
-            endingLineNumber = "406"
+            startingLineNumber = "468"
+            endingLineNumber = "468"
             landmarkName = "MenuScene::onRateCompleted( CCNode *sender, void *data )"
             landmarkType = "5">
          </BreakpointContent>

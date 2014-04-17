@@ -30,6 +30,7 @@
 
 #define		PLAY_LAZER_EFFECT				AudioManager::sharedAudioManager()->PlayEffect("lazer.wav")
 #define		PLAY_CROSS_EFFECT				AudioManager::sharedAudioManager()->PlayEffect("cross.wav")
+#define		PLAY_GUN_RELOAD_EFFECT			AudioManager::sharedAudioManager()->PlayEffect("gun_reload.wav")
 
 
 class AudioManager
