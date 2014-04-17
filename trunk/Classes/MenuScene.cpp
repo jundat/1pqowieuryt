@@ -8,6 +8,7 @@
 #include <time.h>
 #include "TextLoader.h"
 #include "LogOutDialog.h"
+#include "TryPlayDialog.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -102,7 +103,7 @@ bool MenuScene::init()
     string vn_start_press = string(G_MENU_NEW_BUTTON_SPR_PRESS_VN);
     if (m_isLoggedIn == false) {
         en_start_press = string(G_MENU_NEW_BUTTON_SPR_NORMAL_EN);
-        vn_start_press = string(G_MENU_NEW_BUTTON_SPR_PRESS_VN);
+        vn_start_press = string(G_MENU_NEW_BUTTON_SPR_NORMAL_VN);
     }
     
 	//
@@ -334,43 +335,9 @@ void MenuScene::refreshLifeIcon()
 
 void MenuScene::playStartAnimation(int lastLife)
 {
-	//CCTransitionProgessVertical
-	//CCTransitionMoveInT
-	//CCTransitionSlideInT
-	
-// 	CCSprite* spr = (CCSprite*)m_arrSprLife->objectAtIndex(lastLife - 1);
-// 	float dy = 600;
-// 	float time = dy / 320.0f;
-// 
-// 	CCSpawn* spawn = CCSpawn::create(
-// 			CCFadeOut::create(time),
-// 			CCEaseBackIn::create(CCMoveBy::create(time, ccp(0, dy))),
-// 			CCSequence::create(
-// 				CCDelayTime::create(1.0f),
-// 				CCCallFunc::create(this, callfunc_selector(MenuScene::gotoMainGame)),
-// 				NULL
-// 			),
-// 			NULL
-// 		);
-// 
-// 	CCSequence* seq = CCSequence::create(
-// 		//CCDelayTime::create(0.5f),
-// 		spawn,
-// 		NULL
-// 		);
-// 	
-// 	MainGameScene::scene();
-// 
-// 	spr->runAction(seq);
-
-	CCSprite* spr = (CCSprite*)m_arrSprLife->objectAtIndex(lastLife - 1);
+    CCSprite* spr = (CCSprite*)m_arrSprLife->objectAtIndex(lastLife - 1);
 	CCSequence* seq = CCSequence::create(
-		CCSpawn::create(
-		//CCScaleTo::create(0.5f, 0.0f, 0.0f),
-		//CCFadeOut::create(0.5f)
-		CCMoveTo::create(0.5f, ccp(spr->getPositionX(), 1280 + 200)),
-		NULL
-		),
+        CCMoveTo::create(0.6f, ccp(spr->getPositionX(), 1280 + 200)),
 		CCCallFunc::create(this, callfunc_selector(MenuScene::gotoMainGame)),
 		NULL);
 	spr->runAction(seq);
@@ -378,32 +345,20 @@ void MenuScene::playStartAnimation(int lastLife)
 
 void MenuScene::gotoMainGame()
 {
-// 	CCScene *pScene = CCTransitionSlideInT::create(1280.0f / 480.0f, MainGameScene::scene());
-// 	CCDirector::sharedDirector()->replaceScene(pScene);
-
-	GameClientManager::sharedGameClientManager()->setDelegate(NULL);
-
-	CCScene *pScene = CCTransitionFade::create(0.5, MainGameScene::scene());
-	CCDirector::sharedDirector()->replaceScene(pScene);
+    if (m_isLoggedIn == false) {
+        TryPlayDialog* trydialog = TryPlayDialog::create();
+        this->addChild(trydialog, 10);
+        this->onShowDialog();
+    } else {
+        GameClientManager::sharedGameClientManager()->setDelegate(NULL);
+        
+        CCScene *pScene = CCTransitionFade::create(0.5, MainGameScene::scene());
+        CCDirector::sharedDirector()->replaceScene(pScene);
+    }
 }
 
 void MenuScene::playCallback(CCObject* pSender)
 {
-    //
-    //animation
-    //
-    
-    m_sprNewButtonBorderOut->runAction(
-        CCSequence::createWithTwoActions(
-            CCRotateTo::create(0.15f, 25),
-            CCRotateTo::create(0.15f, 0)
-        ));
-    m_sprNewButtonBorderIn->runAction(
-        CCSequence::createWithTwoActions(
-            CCRotateTo::create(0.15f, -25),
-            CCRotateTo::create(0.15f, 0)
-        ));
-    
     if (m_isLoggedIn == true) {
         CCLOG("ENEMY DOWN");
         PLAY_ENEMY1_DOWN_EFFECT;
@@ -411,6 +366,21 @@ void MenuScene::playCallback(CCObject* pSender)
         CCLOG("GUN RELOAD");
         PLAY_GUN_RELOAD_EFFECT;
     }
+
+    //
+    //animation
+    //
+    
+    m_sprNewButtonBorderOut->runAction(
+        CCSequence::createWithTwoActions(
+            CCRotateTo::create(0.15f, 40),
+            CCRotateTo::create(0.15f, 0)
+        ));
+    m_sprNewButtonBorderIn->runAction(
+        CCSequence::createWithTwoActions(
+            CCRotateTo::create(0.15f, -40),
+            CCRotateTo::create(0.15f, 0)
+        ));
     
 	this->setKeypadEnabled(false);
 	this->setTouchEnabled(false);
@@ -422,15 +392,15 @@ void MenuScene::playCallback(CCObject* pSender)
 
 	if (lastLife > 0) //enough life -> go play
 	{
-		playStartAnimation(lastLife);
-		m_playItem->selected();
+        playStartAnimation(lastLife);
+        m_playItem->selected();
 	}
 	else //not enough life -> request life
 	{
 		WaitForLifeDialog* dialog = WaitForLifeDialog::create((float)G_PLAYER_TIME_TO_REVIVE);
 		this->addChild(dialog, 100);
 		this->setTouchEnabled(false);
-		onShowDialog();
+		this->onShowDialog();
 	}
 }
 
@@ -797,11 +767,7 @@ void MenuScene::fbSessionCallback(int responseCode, const char *responseMessage)
     if (m_isLoggedIn == false)
     {
         en_start_press = string(G_MENU_NEW_BUTTON_SPR_NORMAL_EN);
-        vn_start_press = string(G_MENU_NEW_BUTTON_SPR_PRESS_VN);
-    }
-    else
-    {
-        
+        vn_start_press = string(G_MENU_NEW_BUTTON_SPR_NORMAL_VN);
     }
     
     if (lang.compare("English") == 0)
