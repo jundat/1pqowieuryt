@@ -13,7 +13,8 @@ public:
 	CREATE_FUNC(PauseDialog);
 
 	CC_SYNTHESIZE(CCSprite*, mainSpr, MainSprite);
-
+    bool m_isLoggedIn;
+    
 public:
 	void menuCallback(CCObject* pSender);
 	void resumeCallBack(CCObject* pSender);

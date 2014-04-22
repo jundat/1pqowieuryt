@@ -888,3 +888,8 @@ void GameClientManager::_onRequestGetLazerCompleted( CCHttpClient *sender, CCHtt
 
 	CCLOG("------- END %s -------", response->getHttpRequest()->getTag());
 }
+
+
+
+//Send, receive items
+//

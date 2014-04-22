@@ -1,5 +1,6 @@
 ﻿#include "LoseDialog.h"
 #include "MainGameScene.h"
+#include "NotLoggedInMenuScene.h"
 #include "MenuScene.h"
 #include "AudioManager.h"
 #include "DataManager.h"
@@ -10,6 +11,7 @@
 
 USING_NS_CC;
 USING_NS_CC_EXT;
+using namespace std;
 
 bool LoseDialog::init()
 {
@@ -43,10 +45,10 @@ bool LoseDialog::init()
 	m_lbDiamon->setPosition(ccp(bg->getContentSize().width/2 - 10 + bg->getPositionX(), bg->getContentSize().height/2 - 40 + bg->getPositionY()));
 	this->addChild(m_lbDiamon);
 
-
-	CCSprite* sprDiamon = CCSprite::create("diamond.png");
+    CCSprite* sprDiamon = CCSprite::create("diamond.png");
 	sprDiamon->setPosition(ccp(m_lbDiamon->getPositionX() - m_lbDiamon->getContentSize().width - sprDiamon->getContentSize().width/1.5f, m_lbDiamon->getPositionY()));
 	this->addChild(sprDiamon);
+    
 
 	//////////////////////////////////////////////////////////////////////////
 
@@ -61,18 +63,21 @@ bool LoseDialog::init()
 	m_itRevive = reviveButton;
 	
 	//REVIVE /////////////////////////////////////////////////////////////////
-	
+	string fbId = DataManager::sharedDataManager()->GetFbID();
 	bool isJustRevive = DataManager::sharedDataManager()->GetIsJustRevived();
-    bool isLoggedInFb = false;
+    m_isLoggedIn = false;
     
-    string fbId = DataManager::sharedDataManager()->GetFbID();
     if (fbId.compare("NULL") == 0) {
-        isLoggedInFb = false;
+        m_isLoggedIn = false;
+        
+        m_lbDiamon->setVisible(false);
+        sprDiamon->setVisible(false);
+
     } else {
-        isLoggedInFb = true;
+        m_isLoggedIn = true;
     }
     
-	if (isJustRevive == true || isLoggedInFb == false) //no revive
+	if (isJustRevive == true || m_isLoggedIn == false) //no revive
 	{
 		m_itRevive->setVisible(false);
 	}
@@ -188,7 +193,13 @@ void LoseDialog::menuCallBack( CCObject* pSender )
 	//NO BreakLeaderboard
 	if (!isBreakoutLeaderboard)
 	{
-		CCScene *pScene = CCTransitionFade::create(0.5, MenuScene::scene());
+        CCScene *pScene;
+        if (this->m_isLoggedIn) {
+            pScene = CCTransitionFade::create(0.5, MenuScene::scene());
+        } else {
+            pScene = CCTransitionFade::create(0.5, NotLoggedInMenuScene::scene());
+        }
+        
 		CCDirector::sharedDirector()->replaceScene(pScene);
 	}
 }

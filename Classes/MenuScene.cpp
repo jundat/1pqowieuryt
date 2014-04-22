@@ -9,6 +9,7 @@
 #include "TextLoader.h"
 #include "LogOutDialog.h"
 #include "TryPlayDialog.h"
+#include "NotLoggedInMenuScene.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -94,39 +95,25 @@ bool MenuScene::init()
     
     //
     //disable play button animation in local mode
-    //
-    
-    string en_start_normal = string(G_MENU_NEW_BUTTON_SPR_NORMAL_EN);
-    string en_start_press = string(G_MENU_NEW_BUTTON_SPR_PRESS_EN);
-    
-    string vn_start_normal = string(G_MENU_NEW_BUTTON_SPR_NORMAL_VN);
-    string vn_start_press = string(G_MENU_NEW_BUTTON_SPR_PRESS_VN);
-    if (m_isLoggedIn == false) {
-        en_start_press = string(G_MENU_NEW_BUTTON_SPR_NORMAL_EN);
-        vn_start_press = string(G_MENU_NEW_BUTTON_SPR_NORMAL_VN);
-    }
-    
 	//
 	if (lang.compare("English") == 0)
 	{
 		m_playItem = CCMenuItemImage::create(
-			en_start_normal.c_str(),
-			en_start_press.c_str(),
+			G_MENU_NEW_BUTTON_SPR_NORMAL_EN,
+			G_MENU_NEW_BUTTON_SPR_PRESS_EN,
 			this,
 			menu_selector(MenuScene::playCallback));
 	} 
 	else
 	{
 		m_playItem = CCMenuItemImage::create(
-			vn_start_normal.c_str(),
-			vn_start_press.c_str(),
+			G_MENU_NEW_BUTTON_SPR_NORMAL_VN,
+			G_MENU_NEW_BUTTON_SPR_PRESS_VN,
 			this,
 			menu_selector(MenuScene::playCallback));
 	}
 
 	m_playItem->setPosition(G_MENU_NEW_BUTTON_POS);
-
-    
     
 	m_scoreItem = CCMenuItemImage::create(
 		"score_button.png",
@@ -135,13 +122,9 @@ bool MenuScene::init()
 		menu_selector(MenuScene::scoreCallback));
 	m_scoreItem->setPosition(ccp(315, 1280-1176));
 
-    if (m_isLoggedIn == false) {
-        m_scoreItem->setVisible(false);
-    }
-
-    
-
+    //
 	//rate
+    //
 	CCMenuItemImage *itRate = CCMenuItemImage::create(
 		"rate.png",
 		"rateDown.png",
@@ -149,7 +132,9 @@ bool MenuScene::init()
 		menu_selector(MenuScene::rateCallback));
 	itRate->setPosition(ccp(502, 1280-1180));
 
+    //
 	//exit
+    //
 	CCMenuItemImage *itExit = CCMenuItemImage::create(
 		"exit.png",
 		"exitDown.png",
@@ -454,9 +439,14 @@ void MenuScene::onCloseDialog()
 {
 	DataManager::sharedDataManager()->RefreshPlayerLife();
 	initLifeIcon();
+	
+    CCLOG("MenuScene:: onCloseDialog");
 	m_menu->setEnabled(true);
+    CCLOG("1");
 	this->setKeypadEnabled(true);
-	//m_sprSettingBar->runAction(CCSequence::createWithTwoActions(CCDelayTime::create(0.5f), CCHide::create()));
+    CCLOG("2");
+    this->setTouchEnabled(true);
+    CCLOG("3");
 }
 
 void MenuScene::onCompletedWaiting()
@@ -580,6 +570,7 @@ void MenuScene::facebookLogInOut()
 void MenuScene::exitCallback( CCObject* pSender )
 {
 	QuitDialog* dialog = QuitDialog::create();
+    dialog->setYesNoDialogParent(this);
 	this->addChild(dialog, 10);
 	this->onShowDialog();
 }
@@ -742,19 +733,25 @@ void MenuScene::fbSessionCallback(int responseCode, const char *responseMessage)
         
         //clear highscores
         DataManager::sharedDataManager()->SetHigherFriends(NULL);
+        
+        //go to NotLoggedInMenuSene
+        GameClientManager::sharedGameClientManager()->setDelegate(NULL);
+        
+        CCScene *pScene = CCTransitionFade::create(0.5, NotLoggedInMenuScene::scene());
+        CCDirector::sharedDirector()->replaceScene(pScene);
 	}
 
 	/////////////refresh view ///////////////
 	if (m_isLoggedIn == true)
 	{
 		m_facebookItem->setSelectedIndex(1);
-        m_scoreItem->setVisible(true);
-        m_scoreItem->runAction(CCFadeIn::create(0.5f));
+        //m_scoreItem->setVisible(true);
+        //m_scoreItem->runAction(CCFadeIn::create(0.5f));
 	}
 	else
 	{
 		m_facebookItem->setSelectedIndex(0);
-        m_scoreItem->runAction(CCFadeOut::create(0.5f));
+        //m_scoreItem->runAction(CCFadeOut::create(0.5f));
 	}
     
     

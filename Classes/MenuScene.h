@@ -9,6 +9,8 @@
 #include "GameClientManager.h"
 #include "GameClientObjects.h"
 
+#include "YesNoDialogParent.h"
+
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #include "EziSocialObject.h"
 #include "EziSocialDelegate.h"
@@ -48,7 +50,7 @@ USING_NS_CC_EXT;
 
 
 
-class MenuScene : public cocos2d::CCLayerColor,
+class MenuScene : public cocos2d::CCLayerColor, public YesNoDialogParent,
 	public GameClientDelegate
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	,public EziFacebookDelegate
@@ -113,8 +115,8 @@ public:
     void onShowChargeCompleted( CCNode *sender, void *data );
 
     void onCompletedWaiting();
-    void onShowDialog();
-    void onCloseDialog();
+    virtual void onShowDialog();
+    virtual void onCloseDialog();
 
     bool m_isShowDialog;
     bool m_isLoggedIn;

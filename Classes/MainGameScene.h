@@ -46,6 +46,7 @@ public:
 private:
 	BackgroundLayer* m_BackgroundLayer;
 	ObjectLayer* m_ObjLayer;
+    bool m_isLoggedIn;
 };
 
 #endif // __MAIN_GAME_SCENE_H__
