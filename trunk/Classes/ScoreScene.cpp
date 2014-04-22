@@ -155,8 +155,8 @@ bool ScoreScene::init()
 
 	//Xep hang
 
-	CCMenuItem* xephangOn = CCMenuItemImage::create("xephang.png", NULL, NULL);
-	CCMenuItem* xephangOff = CCMenuItemImage::create("xephang1.png", NULL, NULL);
+	CCMenuItem* xephangOn = CCMenuItemImage::create("xephang1.png", NULL, NULL);
+	CCMenuItem* xephangOff = CCMenuItemImage::create("xephang.png", NULL, NULL);
 	m_itXephangToggle = CCMenuItemToggle::createWithTarget(this,  menu_selector(ScoreScene::itXephangCallback), xephangOn, xephangOff, NULL);
 	m_itXephangToggle->setSelectedIndex(0);
 	m_itXephangToggle->setPosition(ccp(202, 1280-351));
@@ -168,8 +168,8 @@ bool ScoreScene::init()
 
 	//Qua tang
 
-	CCMenuItem* quatangOn = CCMenuItemImage::create("quatang.png", NULL, NULL);
-	CCMenuItem* quatangOff = CCMenuItemImage::create("quatang1.png", NULL, NULL);
+	CCMenuItem* quatangOn = CCMenuItemImage::create("quatang1.png", NULL, NULL);
+	CCMenuItem* quatangOff = CCMenuItemImage::create("quatang.png", NULL, NULL);
 	m_itQuatangToggle = CCMenuItemToggle::createWithTarget(this,  menu_selector(ScoreScene::itQuatangCallback), quatangOn, quatangOff, NULL);
 	m_itQuatangToggle->setSelectedIndex(1);
 	m_itQuatangToggle->setPosition(ccp(600, 1280-351));

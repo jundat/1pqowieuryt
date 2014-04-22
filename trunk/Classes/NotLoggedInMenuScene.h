@@ -13,8 +13,7 @@ USING_NS_CC_EXT;
 
 class NotLoggedInMenuScene :
     public cocos2d::CCLayerColor,
-    public YesNoDialogParent,
-	public GameClientDelegate
+    public YesNoDialogParent
 {
 public:
     virtual bool init();  
@@ -25,8 +24,6 @@ public:
     CCSprite* m_bg;
     CCMenuItemToggle *m_facebookItem;
     CCMenuItemImage *m_playItem;
-    CCSprite* m_sprNewButtonBorderOut;
-    CCSprite* m_sprNewButtonBorderIn;
     CCMenu* m_menu;
 
     void playStartAnimation(int lastLife);

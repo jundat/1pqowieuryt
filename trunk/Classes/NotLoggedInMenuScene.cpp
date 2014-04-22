@@ -32,34 +32,17 @@ bool NotLoggedInMenuScene::init()
 	string lang = DataManager::sharedDataManager()->GetLanguage();
 	if (lang.compare("English") == 0)
 	{
-		m_bg = CCSprite::create("en_bg_menu.png");
+		m_bg = CCSprite::create("not_logged_bg.png");
 	}
 	else
 	{
-		m_bg = CCSprite::create("vn_bg_menu.png");
+		m_bg = CCSprite::create("not_logged_bg.png");
 	}	
 	
 	m_bg->setAnchorPoint(CCPointZero);
 	m_bg->setPosition(CCPointZero);
 	this->addChild(m_bg, 0);
-	
-    //
-    //new button border
-    //
-    m_sprNewButtonBorderOut = CCSprite::create("new_button_border_out.png");
-    m_sprNewButtonBorderIn = CCSprite::create("new_button_border_in.png");
-    
-    m_sprNewButtonBorderOut->setPosition(ccp(400, 1280-813));
-    m_sprNewButtonBorderIn->setPosition(ccp(400, 1280-813));
-    
-    this->addChild(m_sprNewButtonBorderOut);
-    this->addChild(m_sprNewButtonBorderIn);
-    
-    
-    //
-    //disable play button animation in local mode
-    //
-    
+	   
     string en_start_normal = string("en_new_button.png");
     string en_start_press = string("en_new_button_press.png");
     
@@ -117,23 +100,7 @@ void NotLoggedInMenuScene::playCallback(CCObject* pSender)
 {
     PLAY_GUN_RELOAD_EFFECT;
 
-    //
-    //animation
-    //
-    
-    m_sprNewButtonBorderOut->runAction(
-        CCSequence::createWithTwoActions(
-            CCRotateTo::create(0.15f, 40),
-            CCRotateTo::create(0.15f, 0)
-        ));
-    m_sprNewButtonBorderIn->runAction(
-        CCSequence::create(
-            CCRotateTo::create(0.15f, -40),
-            CCRotateTo::create(0.15f, 0),
-            CCCallFunc::create(this, callfunc_selector(NotLoggedInMenuScene::gotoMainGame)),
-            NULL
-        ));
-    
+    gotoMainGame();
 	this->setKeypadEnabled(false);
 	this->setTouchEnabled(false);
 }
@@ -172,12 +139,8 @@ void NotLoggedInMenuScene::onShowDialog()
 
 void NotLoggedInMenuScene::onCloseDialog()
 {
-    CCLOG("NotLoggedInMenuScene:: onCloseDialog");
 	m_menu->setEnabled(true);
-    CCLOG("1");
 	this->setKeypadEnabled(true);
-    CCLOG("2");
     this->setTouchEnabled(true);
-    CCLOG("3");
 }
 

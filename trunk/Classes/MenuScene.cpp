@@ -440,13 +440,9 @@ void MenuScene::onCloseDialog()
 	DataManager::sharedDataManager()->RefreshPlayerLife();
 	initLifeIcon();
 	
-    CCLOG("MenuScene:: onCloseDialog");
 	m_menu->setEnabled(true);
-    CCLOG("1");
 	this->setKeypadEnabled(true);
-    CCLOG("2");
     this->setTouchEnabled(true);
-    CCLOG("3");
 }
 
 void MenuScene::onCompletedWaiting()
@@ -563,6 +559,9 @@ void MenuScene::facebookLogInOut()
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 		bool needPublicPermission = true;
 		EziSocialObject::sharedObject()->performLoginUsingFacebook(needPublicPermission); // Pass true if you need publish permission also
+        this->retain();
+        
+        CCLOG("-------------- RETAIN MENU SCENE");
 #endif
 	}
 }
@@ -860,7 +859,7 @@ void MenuScene::fbFriendsCallback( int responseCode, const char* responseMessage
 	//CCLOG("fbFriendsCallback");
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	int count = friends->count();
-
+    CCLOG("GOT >>>>>>>>>>>>>> %d friends", count);
 	if (count > 0)
 	{
 		CCArray* arrFriends = new CCArray();
@@ -885,7 +884,11 @@ void MenuScene::fbFriendsCallback( int responseCode, const char* responseMessage
 		ScoreScene::s_beginFriendInd += G_NUMBER_FRIEND_TO_GET;
 		ScoreScene::s_endFriendInd += G_NUMBER_FRIEND_TO_GET;
 		EziSocialObject::sharedObject()->getFriends(EziSocialWrapperNS::FB_FRIEND_SEARCH::ALL_FRIENDS, ScoreScene::s_beginFriendInd, ScoreScene::s_endFriendInd);
-	}
+	} else {
+        //end of friends
+        this->release();
+        CCLOG("RELEASE MENU SCENE --------------");
+    }
 #endif
 }
 

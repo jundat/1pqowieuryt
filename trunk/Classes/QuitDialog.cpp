@@ -51,18 +51,14 @@ bool QuitDialog::init()
 
 void QuitDialog::yesCallback( CCObject* pSender )
 {
-    CCLOG("YES");
 	CCDirector::sharedDirector()->end();
 }
 
 
 void QuitDialog::noCallback( CCObject* pSender )
 {
-    CCLOG("NO 1");
 	m_yesnoParent->onCloseDialog();
-    CCLOG("NO 3");
 	this->removeFromParent();
-    CCLOG("NO 4");
 }
 
 
