@@ -28,6 +28,8 @@ bool NotLoggedInMenuScene::init()
         return false;
     }
 	
+    float dt = 193;
+    
     //
     //bg
     //
@@ -46,25 +48,25 @@ bool NotLoggedInMenuScene::init()
          this,
          menu_selector(NotLoggedInMenuScene::facebookCallback));
     m_facebookItem->setScale(SCALE_BUTTON);
-    m_facebookItem->setPosition(ccp(214, 1280-662));
+    m_facebookItem->setPosition(ccp(214, 1280-662-dt));
     
     //
     //play test
     //
     m_playItem = CCMenuItemImage::create(
-         "button.png",
-         "button_down.png",
+         "guest_mode_button.png",
+         "guest_mode_button_down.png",
          this,
          menu_selector(NotLoggedInMenuScene::playCallback));
     m_playItem->setScale(SCALE_BUTTON);
-    m_playItem->setPosition(ccp(589, 1280-662));
+    m_playItem->setPosition(ccp(589, 1280-662-dt));
     
 
     m_menu = CCMenu::create(m_playItem, m_facebookItem, NULL);
     m_menu->setPosition(CCPointZero);
     this->addChild(m_menu);
     
-    CCPoint ANCHOR_TEXT = ccp(0.4f, 0.3f);
+    CCPoint ANCHOR_TEXT = ccp(0.5f, 0.35f);
     //
     //text
     //
@@ -74,7 +76,7 @@ bool NotLoggedInMenuScene::init()
     txtLogIn->setPosition(m_facebookItem->getPosition());
     this->addChild(txtLogIn);
     
-    CCLabelTTF* txtPlay = CCLabelTTF::create(TXT("try_play_test"), G_FONT_NORMAL, 48);
+    CCLabelTTF* txtPlay = CCLabelTTF::create(TXT("try_play_test"), G_FONT_NORMAL, 36);
     txtPlay->setColor(ccBLACK);
     txtPlay->setAnchorPoint(ANCHOR_TEXT);
     txtPlay->setPosition(m_playItem->getPosition());
@@ -84,12 +86,12 @@ bool NotLoggedInMenuScene::init()
     //image
     //
     CCSprite* sprFb = CCSprite::create("fb_button.png");
-    sprFb->setPosition(ccp(91, 1280-651));
+    sprFb->setPosition(ccp(91, 1280-651-dt));
     this->addChild(sprFb);
     
-    CCSprite* sprPlay = CCSprite::create("fire_button.png");
-    sprPlay->setPosition(ccp(474, 1280-654));
-    this->addChild(sprPlay);
+    //CCSprite* sprPlay = CCSprite::create("fire_button.png");
+    //sprPlay->setPosition(ccp(474, 1280-654-dt));
+    //this->addChild(sprPlay);
     
     
 	
