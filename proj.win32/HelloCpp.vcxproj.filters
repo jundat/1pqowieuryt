@@ -7,6 +7,12 @@
     <Filter Include="Classes">
       <UniqueIdentifier>{bb6c862e-70e9-49d9-81b7-3829a6f50471}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Classes\jansson">
+      <UniqueIdentifier>{f3d6d954-81c1-4639-be90-fa431de110f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Classes\NDKHelper">
+      <UniqueIdentifier>{9af75a2e-dca7-40b7-bb03-95af1f971627}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -15,8 +21,149 @@
     <ClCompile Include="..\Classes\AppDelegate.cpp">
       <Filter>Classes</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\HelloWorldScene.cpp">
+    <ClCompile Include="..\Classes\AudioManager.cpp">
       <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\BackgroundLayer.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Base64.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\BreakLeaderboardDialog.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Bullet.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\CCParallaxNodeExtras.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\ChooseLanguageDialog.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\ConfigLoader.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\CustomTableViewCell.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\DataManager.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\EffectLayer.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Enemy.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\EnemyFactory.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\GameClientDelegate.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\GameClientManager.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\GameClientObjects.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\GameObject.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Global.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\InGameTutorial.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\IntroScene.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Item.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\LevelLoader.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\LogOutDialog.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\LoseDialog.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\MainGameScene.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Md5.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\MenuScene.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\ObjectLayer.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\PauseDialog.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\QuitDialog.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\ScoreScene.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\SendRequestScene.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Ship.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\TestPostGetScene.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\TextLoader.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\WaitForLifeDialog.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\jansson\dump.c">
+      <Filter>Classes\jansson</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\jansson\error.c">
+      <Filter>Classes\jansson</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\jansson\hashtable.c">
+      <Filter>Classes\jansson</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\jansson\load.c">
+      <Filter>Classes\jansson</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\jansson\memory.c">
+      <Filter>Classes\jansson</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\jansson\pack_unpack.c">
+      <Filter>Classes\jansson</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\jansson\strbuffer.c">
+      <Filter>Classes\jansson</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\jansson\strconv.c">
+      <Filter>Classes\jansson</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\jansson\utf.c">
+      <Filter>Classes\jansson</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\jansson\value.c">
+      <Filter>Classes\jansson</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\NDKHelper\NDKCallbackNode.cpp">
+      <Filter>Classes\NDKHelper</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\NDKHelper\NDKHelper.cpp">
+      <Filter>Classes\NDKHelper</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -26,8 +173,140 @@
     <ClInclude Include="..\Classes\AppDelegate.h">
       <Filter>Classes</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\HelloWorldScene.h">
+    <ClInclude Include="..\Classes\AudioManager.h">
       <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\BackgroundLayer.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Base64.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\BreakLeaderboardDialog.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Bullet.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\CCParallaxNodeExtras.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\ChooseLanguageDialog.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\ConfigLoader.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\CustomTableViewCell.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\DataManager.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\EffectLayer.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Enemy.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\EnemyFactory.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\GameClientDelegate.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\GameClientManager.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\GameClientObjects.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\GameObject.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Global.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\InGameTutorial.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\IntroScene.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Item.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\LevelLoader.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\LogOutDialog.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\LoseDialog.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\MainGameScene.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Md5.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\MenuScene.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\MyMacro.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\ObjectLayer.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PauseDialog.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\QuitDialog.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\ScoreScene.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\SendRequestScene.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Ship.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\TestPostGetScene.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\TextLoader.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\WaitForLifeDialog.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\jansson\hashtable.h">
+      <Filter>Classes\jansson</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\jansson\jansson.h">
+      <Filter>Classes\jansson</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\jansson\jansson_config.h">
+      <Filter>Classes\jansson</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\jansson\jansson_private.h">
+      <Filter>Classes\jansson</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\jansson\strbuffer.h">
+      <Filter>Classes\jansson</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\jansson\utf.h">
+      <Filter>Classes\jansson</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\NDKHelper\NDKCallbackNode.h">
+      <Filter>Classes\NDKHelper</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\NDKHelper\NDKHelper.h">
+      <Filter>Classes\NDKHelper</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

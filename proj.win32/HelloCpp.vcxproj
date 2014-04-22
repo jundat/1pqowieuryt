@@ -97,8 +97,8 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\cocos2dx;$(ProjectDir)..\..\..\cocos2dx\include;$(ProjectDir)..\..\..\cocos2dx\kazmath\include;$(ProjectDir)..\..\..\cocos2dx\platform\win32;$(ProjectDir)..\..\..\cocos2dx\platform\third_party\win32;$(ProjectDir)..\..\..\cocos2dx\platform\third_party\win32\OGLES;$(ProjectDir)..\..\..\external;$(ProjectDir)..\..\..\external\chipmunk\include\chipmunk;$(ProjectDir)..\..\..\CocosDenshion\include;$(ProjectDir)..\..\..\extensions;..\Classes;..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USE_MATH_DEFINES;GL_GLEXT_PROTOTYPES;CC_ENABLE_CHIPMUNK_INTEGRATION=1;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\cocos2dx;$(ProjectDir)..\..\..\cocos2dx\include;$(ProjectDir)..\..\..\cocos2dx\kazmath\include;$(ProjectDir)..\..\..\cocos2dx\platform\win32;$(ProjectDir)..\..\..\cocos2dx\platform\third_party\win32;$(ProjectDir)..\..\..\cocos2dx\platform\third_party\win32\OGLES;$(ProjectDir)..\..\..\external;$(ProjectDir)..\..\..\external\chipmunk\include\chipmunk;$(ProjectDir)..\..\..\CocosDenshion\include;$(ProjectDir)..\..\..\extensions;..\Classes;..;$(ProjectDir)..\..\..\extensions\network;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>COCOS2D_DEBUG;WIN32;NDEBUG;_WINDOWS;_USE_MATH_DEFINES;GL_GLEXT_PROTOTYPES;CC_ENABLE_CHIPMUNK_INTEGRATION=1;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <PrecompiledHeader>
@@ -108,7 +108,7 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
       <DisableSpecificWarnings>4267;4251;4244;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>libExtensions.lib;libcocos2d.lib;libCocosDenshion.lib;opengl32.lib;glew32.lib;libBox2d.lib;libchipmunk.lib;libcurl_imp.lib;pthreadVCE2.lib;websockets.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libExtensions.lib;libcocos2d.lib;libCocosDenshion.lib;opengl32.lib;glew32.lib;libcurl_imp.lib;pthreadVCE2.lib;websockets.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(ProjectName).exe</OutputFile>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -128,12 +128,103 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\Classes\AppDelegate.cpp" />
-    <ClCompile Include="..\Classes\HelloWorldScene.cpp" />
+    <ClCompile Include="..\Classes\AudioManager.cpp" />
+    <ClCompile Include="..\Classes\BackgroundLayer.cpp" />
+    <ClCompile Include="..\Classes\Base64.cpp" />
+    <ClCompile Include="..\Classes\BreakLeaderboardDialog.cpp" />
+    <ClCompile Include="..\Classes\Bullet.cpp" />
+    <ClCompile Include="..\Classes\CCParallaxNodeExtras.cpp" />
+    <ClCompile Include="..\Classes\ChooseLanguageDialog.cpp" />
+    <ClCompile Include="..\Classes\ConfigLoader.cpp" />
+    <ClCompile Include="..\Classes\CustomTableViewCell.cpp" />
+    <ClCompile Include="..\Classes\DataManager.cpp" />
+    <ClCompile Include="..\Classes\EffectLayer.cpp" />
+    <ClCompile Include="..\Classes\Enemy.cpp" />
+    <ClCompile Include="..\Classes\EnemyFactory.cpp" />
+    <ClCompile Include="..\Classes\GameClientDelegate.cpp" />
+    <ClCompile Include="..\Classes\GameClientManager.cpp" />
+    <ClCompile Include="..\Classes\GameClientObjects.cpp" />
+    <ClCompile Include="..\Classes\GameObject.cpp" />
+    <ClCompile Include="..\Classes\Global.cpp" />
+    <ClCompile Include="..\Classes\InGameTutorial.cpp" />
+    <ClCompile Include="..\Classes\IntroScene.cpp" />
+    <ClCompile Include="..\Classes\Item.cpp" />
+    <ClCompile Include="..\Classes\jansson\dump.c" />
+    <ClCompile Include="..\Classes\jansson\error.c" />
+    <ClCompile Include="..\Classes\jansson\hashtable.c" />
+    <ClCompile Include="..\Classes\jansson\load.c" />
+    <ClCompile Include="..\Classes\jansson\memory.c" />
+    <ClCompile Include="..\Classes\jansson\pack_unpack.c" />
+    <ClCompile Include="..\Classes\jansson\strbuffer.c" />
+    <ClCompile Include="..\Classes\jansson\strconv.c" />
+    <ClCompile Include="..\Classes\jansson\utf.c" />
+    <ClCompile Include="..\Classes\jansson\value.c" />
+    <ClCompile Include="..\Classes\LevelLoader.cpp" />
+    <ClCompile Include="..\Classes\LogOutDialog.cpp" />
+    <ClCompile Include="..\Classes\LoseDialog.cpp" />
+    <ClCompile Include="..\Classes\MainGameScene.cpp" />
+    <ClCompile Include="..\Classes\Md5.cpp" />
+    <ClCompile Include="..\Classes\MenuScene.cpp" />
+    <ClCompile Include="..\Classes\NDKHelper\NDKCallbackNode.cpp" />
+    <ClCompile Include="..\Classes\NDKHelper\NDKHelper.cpp" />
+    <ClCompile Include="..\Classes\ObjectLayer.cpp" />
+    <ClCompile Include="..\Classes\PauseDialog.cpp" />
+    <ClCompile Include="..\Classes\QuitDialog.cpp" />
+    <ClCompile Include="..\Classes\ScoreScene.cpp" />
+    <ClCompile Include="..\Classes\SendRequestScene.cpp" />
+    <ClCompile Include="..\Classes\Ship.cpp" />
+    <ClCompile Include="..\Classes\TestPostGetScene.cpp" />
+    <ClCompile Include="..\Classes\TextLoader.cpp" />
+    <ClCompile Include="..\Classes\WaitForLifeDialog.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Classes\AppDelegate.h" />
-    <ClInclude Include="..\Classes\HelloWorldScene.h" />
+    <ClInclude Include="..\Classes\AudioManager.h" />
+    <ClInclude Include="..\Classes\BackgroundLayer.h" />
+    <ClInclude Include="..\Classes\Base64.h" />
+    <ClInclude Include="..\Classes\BreakLeaderboardDialog.h" />
+    <ClInclude Include="..\Classes\Bullet.h" />
+    <ClInclude Include="..\Classes\CCParallaxNodeExtras.h" />
+    <ClInclude Include="..\Classes\ChooseLanguageDialog.h" />
+    <ClInclude Include="..\Classes\ConfigLoader.h" />
+    <ClInclude Include="..\Classes\CustomTableViewCell.h" />
+    <ClInclude Include="..\Classes\DataManager.h" />
+    <ClInclude Include="..\Classes\EffectLayer.h" />
+    <ClInclude Include="..\Classes\Enemy.h" />
+    <ClInclude Include="..\Classes\EnemyFactory.h" />
+    <ClInclude Include="..\Classes\GameClientDelegate.h" />
+    <ClInclude Include="..\Classes\GameClientManager.h" />
+    <ClInclude Include="..\Classes\GameClientObjects.h" />
+    <ClInclude Include="..\Classes\GameObject.h" />
+    <ClInclude Include="..\Classes\Global.h" />
+    <ClInclude Include="..\Classes\InGameTutorial.h" />
+    <ClInclude Include="..\Classes\IntroScene.h" />
+    <ClInclude Include="..\Classes\Item.h" />
+    <ClInclude Include="..\Classes\jansson\hashtable.h" />
+    <ClInclude Include="..\Classes\jansson\jansson.h" />
+    <ClInclude Include="..\Classes\jansson\jansson_config.h" />
+    <ClInclude Include="..\Classes\jansson\jansson_private.h" />
+    <ClInclude Include="..\Classes\jansson\strbuffer.h" />
+    <ClInclude Include="..\Classes\jansson\utf.h" />
+    <ClInclude Include="..\Classes\LevelLoader.h" />
+    <ClInclude Include="..\Classes\LogOutDialog.h" />
+    <ClInclude Include="..\Classes\LoseDialog.h" />
+    <ClInclude Include="..\Classes\MainGameScene.h" />
+    <ClInclude Include="..\Classes\Md5.h" />
+    <ClInclude Include="..\Classes\MenuScene.h" />
+    <ClInclude Include="..\Classes\MyMacro.h" />
+    <ClInclude Include="..\Classes\NDKHelper\NDKCallbackNode.h" />
+    <ClInclude Include="..\Classes\NDKHelper\NDKHelper.h" />
+    <ClInclude Include="..\Classes\ObjectLayer.h" />
+    <ClInclude Include="..\Classes\PauseDialog.h" />
+    <ClInclude Include="..\Classes\QuitDialog.h" />
+    <ClInclude Include="..\Classes\ScoreScene.h" />
+    <ClInclude Include="..\Classes\SendRequestScene.h" />
+    <ClInclude Include="..\Classes\Ship.h" />
+    <ClInclude Include="..\Classes\TestPostGetScene.h" />
+    <ClInclude Include="..\Classes\TextLoader.h" />
+    <ClInclude Include="..\Classes\WaitForLifeDialog.h" />
     <ClInclude Include="main.h" />
   </ItemGroup>
   <ItemGroup>

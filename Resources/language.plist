@@ -105,6 +105,10 @@
 		<string>charge_caption</string>
 		<key>charge_link</key>
 		<string>charge_link</string>
+		<key>try_login</key>
+		<string>try_login</string>
+		<key>try_play_test</key>
+		<string>try_play_test</string>
 	</dict>
 
 	<key>English</key>
@@ -211,6 +215,10 @@
 		<string>Charge diamond tutorial</string>
 		<key>charge_link</key>
 		<string>https://www.google.com.vn</string>
+		<key>try_login</key>
+		<string>Log In</string>
+		<key>try_play_test</key>
+		<string>Play test</string>
 	</dict>
 
 	<key>Vietnamese</key>
@@ -317,6 +325,10 @@
 		<string>Hướng dẫn nạp kim cương</string>
 		<key>charge_link</key>
 		<string>https://www.google.com.vn</string>
+		<key>try_login</key>
+		<string>Đăng nhập</string>
+		<key>try_play_test</key>
+		<string>Chơi thử</string>
 	</dict>
 
 </dict>
