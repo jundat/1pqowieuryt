@@ -595,3 +595,16 @@ void DataManager::SetIsMoneytize(bool ismoneytize)
 	CCUserDefault::sharedUserDefault()->flush();
 }
 
+
+
+void DataManager::ResetDataAfterLogIn()
+{
+    CCLOG(" ------------------- RESET DATA AFTER LOG IN ------------------- ");
+    DataManager::sharedDataManager()->SetHighScoreNotCheck(0);
+    DataManager::sharedDataManager()->SetLastPlayerLife(G_MAX_PLAYER_LIFE);
+    DataManager::sharedDataManager()->SetDiamon(G_DEFAULT_DIAMON);
+    DataManager::sharedDataManager()->SetBoom(G_DEFAULT_BOOM);
+}
+
+
+

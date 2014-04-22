@@ -716,8 +716,15 @@ void MenuScene::fbSessionCallback(int responseCode, const char *responseMessage)
 	{
 		//CCLOG("fbSessionCallback: SUCCESSFUL");
 		m_isLoggedIn = true;
-
+        
+        //
 		//auto get profile, info
+        //
+        
+        //
+        //reset data when log in ok
+        //
+        DataManager::sharedDataManager()->ResetDataAfterLogIn();
 	}
 	else
 	{
@@ -733,6 +740,11 @@ void MenuScene::fbSessionCallback(int responseCode, const char *responseMessage)
         
         //clear highscores
         DataManager::sharedDataManager()->SetHigherFriends(NULL);
+        
+        //
+        //reset data when log in ok
+        //
+        DataManager::sharedDataManager()->ResetDataAfterLogIn();
         
         //go to NotLoggedInMenuSene
         GameClientManager::sharedGameClientManager()->setDelegate(NULL);
