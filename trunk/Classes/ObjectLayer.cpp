@@ -12,7 +12,7 @@
 USING_NS_CC;
 
 static const int PLAYER_Y = 250;
-
+static bool IS_SHOW_CHEAT = false;
 
 
 bool ObjectLayer::init()
@@ -88,11 +88,12 @@ bool ObjectLayer::init()
     //
     //cheat
     //
-    //CCMenuItemImage* itAddScore = CCMenuItemImage::create("icon_boom.png", "icon_boomhover.png", this, menu_selector(ObjectLayer::addScore));
-	//itAddScore->setPosition(ccp(400, 1200));
+    CCMenuItemImage* itAddScore = CCMenuItemImage::create("icon_boom.png", "icon_boomhover.png", this, menu_selector(ObjectLayer::addScore));
+	itAddScore->setPosition(ccp(400, 1200));
+    itAddScore->setVisible(IS_SHOW_CHEAT);
     
     
-	CCMenu* menu = CCMenu::create(m_itemBoom, /*itAddScore,*/ NULL);
+	CCMenu* menu = CCMenu::create(m_itemBoom, itAddScore, NULL);
     menu->setPosition(CCPointZero);
 	this->addChild(menu, 10);
     
