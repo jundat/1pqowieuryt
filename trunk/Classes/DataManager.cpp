@@ -195,6 +195,7 @@ void DataManager::RefreshPlayerLife()
 	}
 }
 
+//default = "NULL"
 std::string DataManager::GetFbID()
 {
 	return CCUserDefault::sharedUserDefault()->getStringForKey("G_PROFILE_ID", std::string("NULL"));

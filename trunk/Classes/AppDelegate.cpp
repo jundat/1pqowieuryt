@@ -1,6 +1,7 @@
 ﻿#include "AppDelegate.h"
 #include "Global.h"
 #include "MainGameScene.h"
+#include "NotLoggedInMenuScene.h"
 #include "MenuScene.h"
 #include "SimpleAudioEngine.h"
 #include "DataManager.h"
@@ -97,7 +98,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	AudioManager::sharedAudioManager()->SetVolumeFX(G_DEFAULT_VOLUME);
 
 
-    CCScene *pScene = MenuScene::scene();// IIntroScene::scene(); //MenuScene::scene();// IntroScene::scene(); //
+    CCScene *pScene = IntroScene::scene(); // NotLoggedInMenuScene::scene();// IntroScene::scene(); // MenuScene::scene();// IntroScene::scene(); // MenuScene::scene(); // IntroScene::scene(); //
 	pDirector->runWithScene(pScene);
 
     return true;

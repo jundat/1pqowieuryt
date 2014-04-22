@@ -286,7 +286,6 @@
 		A4089A6618F68E9D0042E7F2 /* enemy3_down.wav in Resources */ = {isa = PBXBuildFile; fileRef = A4089A0818F68E9D0042E7F2 /* enemy3_down.wav */; };
 		A4089A6718F68E9D0042E7F2 /* exit.png in Resources */ = {isa = PBXBuildFile; fileRef = A4089A0918F68E9D0042E7F2 /* exit.png */; };
 		A4089A6818F68E9D0042E7F2 /* exitDown.png in Resources */ = {isa = PBXBuildFile; fileRef = A4089A0A18F68E9D0042E7F2 /* exitDown.png */; };
-		A4089A6918F68E9D0042E7F2 /* ezisocial.and in Resources */ = {isa = PBXBuildFile; fileRef = A4089A0B18F68E9D0042E7F2 /* ezisocial.and */; };
 		A4089A6A18F68E9D0042E7F2 /* facebook_in.png in Resources */ = {isa = PBXBuildFile; fileRef = A4089A0C18F68E9D0042E7F2 /* facebook_in.png */; };
 		A4089A6B18F68E9D0042E7F2 /* facebook_out.png in Resources */ = {isa = PBXBuildFile; fileRef = A4089A0D18F68E9D0042E7F2 /* facebook_out.png */; };
 		A4089A6C18F68E9D0042E7F2 /* fb-profile.png in Resources */ = {isa = PBXBuildFile; fileRef = A4089A0E18F68E9D0042E7F2 /* fb-profile.png */; };
@@ -343,6 +342,10 @@
 		A4089A9F18F68E9D0042E7F2 /* xephang.png in Resources */ = {isa = PBXBuildFile; fileRef = A4089A4118F68E9D0042E7F2 /* xephang.png */; };
 		A4089AA018F68E9D0042E7F2 /* xephang1.png in Resources */ = {isa = PBXBuildFile; fileRef = A4089A4218F68E9D0042E7F2 /* xephang1.png */; };
 		A469951418F79B19002104D4 /* IOSNDKHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = A469951318F79B19002104D4 /* IOSNDKHelper.mm */; };
+		A490038219060F1200EEE111 /* NotLoggedInMenuScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A490038019060F1200EEE111 /* NotLoggedInMenuScene.cpp */; };
+		A49003891906293400EEE111 /* ezisocial.and in Resources */ = {isa = PBXBuildFile; fileRef = A49003871906293400EEE111 /* ezisocial.and */; };
+		A490038A1906293400EEE111 /* ezisocial.ios in Resources */ = {isa = PBXBuildFile; fileRef = A49003881906293400EEE111 /* ezisocial.ios */; };
+		A490038D19064C3A00EEE111 /* YesNoDialogParent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A490038C19064C3A00EEE111 /* YesNoDialogParent.cpp */; };
 		A4D1ED2218FF8C92008587DA /* new_button_border_in.png in Resources */ = {isa = PBXBuildFile; fileRef = A4D1ED2018FF8C92008587DA /* new_button_border_in.png */; };
 		A4D1ED2318FF8C92008587DA /* new_button_border_out.png in Resources */ = {isa = PBXBuildFile; fileRef = A4D1ED2118FF8C92008587DA /* new_button_border_out.png */; };
 		A4D1ED2718FFB5ED008587DA /* gun_reload.wav in Resources */ = {isa = PBXBuildFile; fileRef = A4D1ED2618FFB5ED008587DA /* gun_reload.wav */; };
@@ -924,7 +927,6 @@
 		A4089A0818F68E9D0042E7F2 /* enemy3_down.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = enemy3_down.wav; sourceTree = "<group>"; };
 		A4089A0918F68E9D0042E7F2 /* exit.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = exit.png; sourceTree = "<group>"; };
 		A4089A0A18F68E9D0042E7F2 /* exitDown.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = exitDown.png; sourceTree = "<group>"; };
-		A4089A0B18F68E9D0042E7F2 /* ezisocial.and */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ezisocial.and; sourceTree = "<group>"; };
 		A4089A0C18F68E9D0042E7F2 /* facebook_in.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = facebook_in.png; sourceTree = "<group>"; };
 		A4089A0D18F68E9D0042E7F2 /* facebook_out.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = facebook_out.png; sourceTree = "<group>"; };
 		A4089A0E18F68E9D0042E7F2 /* fb-profile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "fb-profile.png"; sourceTree = "<group>"; };
@@ -983,6 +985,12 @@
 		A469951118F79B19002104D4 /* IOSNDKHelper-C-Interface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "IOSNDKHelper-C-Interface.h"; sourceTree = "<group>"; };
 		A469951218F79B19002104D4 /* IOSNDKHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IOSNDKHelper.h; sourceTree = "<group>"; };
 		A469951318F79B19002104D4 /* IOSNDKHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = IOSNDKHelper.mm; sourceTree = "<group>"; };
+		A490038019060F1200EEE111 /* NotLoggedInMenuScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = NotLoggedInMenuScene.cpp; path = ../Classes/NotLoggedInMenuScene.cpp; sourceTree = "<group>"; };
+		A490038119060F1200EEE111 /* NotLoggedInMenuScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NotLoggedInMenuScene.h; path = ../Classes/NotLoggedInMenuScene.h; sourceTree = "<group>"; };
+		A49003871906293400EEE111 /* ezisocial.and */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ezisocial.and; sourceTree = "<group>"; };
+		A49003881906293400EEE111 /* ezisocial.ios */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ezisocial.ios; sourceTree = "<group>"; };
+		A490038B19063D3600EEE111 /* YesNoDialogParent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = YesNoDialogParent.h; path = ../Classes/YesNoDialogParent.h; sourceTree = "<group>"; };
+		A490038C19064C3A00EEE111 /* YesNoDialogParent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = YesNoDialogParent.cpp; path = ../Classes/YesNoDialogParent.cpp; sourceTree = "<group>"; };
 		A4D1ED2018FF8C92008587DA /* new_button_border_in.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = new_button_border_in.png; sourceTree = "<group>"; };
 		A4D1ED2118FF8C92008587DA /* new_button_border_out.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = new_button_border_out.png; sourceTree = "<group>"; };
 		A4D1ED2618FFB5ED008587DA /* gun_reload.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = gun_reload.wav; sourceTree = "<group>"; };
@@ -1599,10 +1607,14 @@
 				A408999318F68E850042E7F2 /* LogOutDialog.h */,
 				A408999418F68E850042E7F2 /* LoseDialog.cpp */,
 				A408999518F68E850042E7F2 /* LoseDialog.h */,
+				A490038B19063D3600EEE111 /* YesNoDialogParent.h */,
+				A490038C19064C3A00EEE111 /* YesNoDialogParent.cpp */,
 				A408999618F68E850042E7F2 /* MainGameScene.cpp */,
 				A408999718F68E850042E7F2 /* MainGameScene.h */,
 				A408999818F68E850042E7F2 /* Md5.cpp */,
 				A408999918F68E850042E7F2 /* Md5.h */,
+				A490038019060F1200EEE111 /* NotLoggedInMenuScene.cpp */,
+				A490038119060F1200EEE111 /* NotLoggedInMenuScene.h */,
 				A408999A18F68E850042E7F2 /* MenuScene.cpp */,
 				A408999B18F68E850042E7F2 /* MenuScene.h */,
 				A408999C18F68E850042E7F2 /* MyMacro.h */,
@@ -1612,9 +1624,9 @@
 				A40899A418F68E850042E7F2 /* PauseDialog.cpp */,
 				A40899A518F68E850042E7F2 /* PauseDialog.h */,
 				A40899A618F68E850042E7F2 /* QuitDialog.cpp */,
+				A40899A718F68E850042E7F2 /* QuitDialog.h */,
 				A4D1ED2818FFBDAE008587DA /* TryPlayDialog.cpp */,
 				A4D1ED2918FFBDAE008587DA /* TryPlayDialog.h */,
-				A40899A718F68E850042E7F2 /* QuitDialog.h */,
 				A40899A818F68E850042E7F2 /* ScoreScene.cpp */,
 				A40899A918F68E850042E7F2 /* ScoreScene.h */,
 				A40899AA18F68E850042E7F2 /* SendRequestScene.cpp */,
@@ -1968,8 +1980,9 @@
 				A4089A0718F68E9D0042E7F2 /* enemy2_down.wav */,
 				A4089A0818F68E9D0042E7F2 /* enemy3_down.wav */,
 				A4089A0918F68E9D0042E7F2 /* exit.png */,
+				A49003871906293400EEE111 /* ezisocial.and */,
+				A49003881906293400EEE111 /* ezisocial.ios */,
 				A4089A0A18F68E9D0042E7F2 /* exitDown.png */,
-				A4089A0B18F68E9D0042E7F2 /* ezisocial.and */,
 				A4089A0C18F68E9D0042E7F2 /* facebook_in.png */,
 				A4089A0D18F68E9D0042E7F2 /* facebook_out.png */,
 				A4089A0E18F68E9D0042E7F2 /* fb-profile.png */,
@@ -2258,8 +2271,9 @@
 				A4089A6518F68E9D0042E7F2 /* enemy2_down.wav in Resources */,
 				A4089A6618F68E9D0042E7F2 /* enemy3_down.wav in Resources */,
 				A4089A6718F68E9D0042E7F2 /* exit.png in Resources */,
+				A49003891906293400EEE111 /* ezisocial.and in Resources */,
 				A4089A6818F68E9D0042E7F2 /* exitDown.png in Resources */,
-				A4089A6918F68E9D0042E7F2 /* ezisocial.and in Resources */,
+				A490038A1906293400EEE111 /* ezisocial.ios in Resources */,
 				A4089A6A18F68E9D0042E7F2 /* facebook_in.png in Resources */,
 				A4089A6B18F68E9D0042E7F2 /* facebook_out.png in Resources */,
 				A4089A6C18F68E9D0042E7F2 /* fb-profile.png in Resources */,
@@ -2342,6 +2356,7 @@
 				CB8AA9B717FA1E57000F935E /* EziFBIncomingRequest.cpp in Sources */,
 				15A3D9091682F7D5002FB0C5 /* b2EdgeShape.cpp in Sources */,
 				15A3D90A1682F7D5002FB0C5 /* b2PolygonShape.cpp in Sources */,
+				A490038D19064C3A00EEE111 /* YesNoDialogParent.cpp in Sources */,
 				15A3D90B1682F7D5002FB0C5 /* b2BlockAllocator.cpp in Sources */,
 				15A3D90C1682F7D5002FB0C5 /* b2Draw.cpp in Sources */,
 				15A3D90D1682F7D5002FB0C5 /* b2Math.cpp in Sources */,
@@ -2390,6 +2405,7 @@
 				15A3D9A11682F7F9002FB0C5 /* cpSlideJoint.c in Sources */,
 				15A3D9A21682F7F9002FB0C5 /* cpArbiter.c in Sources */,
 				15A3D9A31682F7F9002FB0C5 /* cpArray.c in Sources */,
+				A490038219060F1200EEE111 /* NotLoggedInMenuScene.cpp in Sources */,
 				15A3D9A41682F7F9002FB0C5 /* cpBB.c in Sources */,
 				15A3D9A51682F7F9002FB0C5 /* cpBBTree.c in Sources */,
 				15A3D9A61682F7F9002FB0C5 /* cpBody.c in Sources */,

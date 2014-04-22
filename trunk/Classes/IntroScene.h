@@ -20,6 +20,7 @@ public:
 	CREATE_FUNC(IntroScene);
 
 	void menuCallback();
+    bool m_isLoggedIn;
 };
 
 #endif // __INTRO_SCENE_H__

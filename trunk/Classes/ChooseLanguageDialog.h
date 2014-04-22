@@ -14,6 +14,7 @@ public:
 public:
 	void vietnamCallback(CCObject* pSender);
 	void englishCallback( CCObject* pSender );
+    void gotoMenu();
 };
 
 #endif // __CHOOSE_LANGUAGE_DIALOG_H__

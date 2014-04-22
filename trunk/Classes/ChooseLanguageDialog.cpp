@@ -1,6 +1,6 @@
 ﻿#include "ChooseLanguageDialog.h"
 #include "MainGameScene.h"
-#include "MenuScene.h"
+#include "NotLoggedInMenuScene.h"
 #include "DataManager.h"
 #include <time.h>
 #include "cocos-ext.h"
@@ -55,8 +55,7 @@ void ChooseLanguageDialog::vietnamCallback( CCObject* pSender )
 	DataManager::sharedDataManager()->SetLanguage("Vietnamese");
 	TextLoader::shareTextLoader()->setCurrentLanguage(LANGUAGE_VIETNAMESE);
 
-	CCScene *pScene = CCTransitionFade::create(0.5f, MenuScene::scene());
-	CCDirector::sharedDirector()->replaceScene(pScene);
+	gotoMenu();
 }
 
 
@@ -66,6 +65,11 @@ void ChooseLanguageDialog::englishCallback( CCObject* pSender )
 	DataManager::sharedDataManager()->SetLanguage("English");
 	TextLoader::shareTextLoader()->setCurrentLanguage(LANGUAGE_ENGLISH);
 
-	CCScene *pScene = CCTransitionFade::create(0.5f, MenuScene::scene());
-	CCDirector::sharedDirector()->replaceScene(pScene);
+    gotoMenu();
+}
+
+void ChooseLanguageDialog::gotoMenu()
+{
+    CCScene *pScene = CCTransitionFade::create(0.5, NotLoggedInMenuScene::scene());
+    CCDirector::sharedDirector()->replaceScene(pScene);
 }

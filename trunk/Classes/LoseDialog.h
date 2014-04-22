@@ -24,6 +24,7 @@ private:
 
 	float m_elapsedTime;
 	bool m_isBreakRecord;
+    bool m_isLoggedIn;
 	CCLabelTTF* m_lbTimer;
 	CCLabelTTF* m_lbDiamon;
 

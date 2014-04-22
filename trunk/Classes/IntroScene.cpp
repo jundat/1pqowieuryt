@@ -3,6 +3,7 @@
 #include "IntroScene.h"
 #include "DataManager.h"
 #include "ChooseLanguageDialog.h"
+#include "NotLoggedInMenuScene.h"
 
 USING_NS_CC;
 
@@ -21,6 +22,15 @@ bool IntroScene::init()
     {
         return false;
     }
+    
+    m_isLoggedIn = false;
+    string fbId = DataManager::sharedDataManager()->GetFbID();
+    if (fbId.compare("NULL") == 0) {
+        m_isLoggedIn = false;
+    } else {
+        m_isLoggedIn = true;
+    }
+    
 
 	CCSprite* sprLogo = CCSprite::create(G_LOGO);
 	sprLogo->setPosition(G_LOGO_POSITION);
@@ -45,7 +55,12 @@ void IntroScene::menuCallback()
 	} 
 	else
 	{
-		CCScene *pScene = CCTransitionFade::create(G_INTRO_TRANSITION_MENU_TIME, MenuScene::scene(), ccWHITE);
-		CCDirector::sharedDirector()->replaceScene(pScene);
+        CCScene *pScene;
+        if (this->m_isLoggedIn) {
+            pScene = CCTransitionFade::create(0.5, MenuScene::scene());
+        } else {
+            pScene = CCTransitionFade::create(0.5, NotLoggedInMenuScene::scene());
+        }
+        CCDirector::sharedDirector()->replaceScene(pScene);
 	}
 }

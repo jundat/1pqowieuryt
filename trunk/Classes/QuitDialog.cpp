@@ -5,6 +5,7 @@
 #include <time.h>
 #include "cocos-ext.h"
 #include "TextLoader.h"
+#include "YesNoDialogParent.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -50,16 +51,18 @@ bool QuitDialog::init()
 
 void QuitDialog::yesCallback( CCObject* pSender )
 {
+    CCLOG("YES");
 	CCDirector::sharedDirector()->end();
 }
 
 
 void QuitDialog::noCallback( CCObject* pSender )
 {
-	MenuScene* parent = (MenuScene*)this->getParent();
-	parent->setTouchEnabled(true);
-	parent->onCloseDialog();
+    CCLOG("NO 1");
+	m_yesnoParent->onCloseDialog();
+    CCLOG("NO 3");
 	this->removeFromParent();
+    CCLOG("NO 4");
 }
 
 

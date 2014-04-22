@@ -32,6 +32,14 @@ bool MainGameScene::init()
 
 	m_isShowingPause = false;
 	m_isShowingLose = false;
+    
+    m_isLoggedIn = false;
+    string fbId = DataManager::sharedDataManager()->GetFbID();
+    if (fbId.compare("NULL") == 0) {
+        m_isLoggedIn = false;
+    } else {
+        m_isLoggedIn = true;
+    }
 
 	//CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, 0, true);
 	//this->setTouchEnabled(true);
@@ -138,11 +146,15 @@ void MainGameScene::showEndGame( int score, int killedEnemies )
 
 	//refresh life, if lastLife = 4, and when playing, lastLife increase to 5
 	DataManager::sharedDataManager()->RefreshPlayerLife();
-	
+    
 	//check if enough last_life
 	int lastLife = DataManager::sharedDataManager()->GetLastPlayerLife();
-	lastLife--;
-	DataManager::sharedDataManager()->SetLastPlayerLife(lastLife);
+    if (m_isLoggedIn == true) {
+        lastLife--;
+    } else {
+        lastLife = G_MAX_PLAYER_LIFE;
+    }
+    DataManager::sharedDataManager()->SetLastPlayerLife(lastLife);
 
 	CCLOG("Last life: %d", lastLife);
 
