@@ -125,7 +125,7 @@ bool LoseDialog::init()
 	this->addChild(lbScore);
 
 	//BREAK THE RECORD ///////////////////////////////////////////////////////
-	if (m_isBreakRecord)
+	if (m_isBreakRecord && m_isLoggedIn == true)
 	{
 		PLAY_GET_BOMB_EFFECT;
 		breakRecord();
