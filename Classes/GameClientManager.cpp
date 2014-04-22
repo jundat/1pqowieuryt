@@ -3,7 +3,7 @@
 #include "Base64.h"
 #include "Md5.h"
 
-#define ENCODE_BUFFER_SIZE		4096
+#define ENCODE_BUFFER_SIZE		8192//4096
 
 GameClientManager* GameClientManager::s_instance = NULL;
 
@@ -26,15 +26,19 @@ void GameClientManager::setUrls( string urlProfile, string urlDevice, string url
 std::string GameClientManager::encodeBeforeSend( std::string src )
 {
 	//CCLOG("BEFORE:\n%s", src.c_str());
-	
+	CCLOG("GotoEncode");
+    
 	if (G_IS_ENCODE)
 	{
 		int len = src.length();
 		unsigned char m_Test[ENCODE_BUFFER_SIZE];
+        CCLOG("before copy");
 		std::copy(src.c_str(), src.c_str() + len, m_Test);
+        CCLOG("after copy");
 		string result = "data=";
+        CCLOG("before encode");
 		result.append(Base64::encode(m_Test, len));
-
+        CCLOG("after encode");
 		//CCLOG("AFTER:\n%s", result.c_str());
 
 		return result;
@@ -255,20 +259,26 @@ void GameClientManager::sendFriendList(std::string fbId, CCArray* arrFriends )
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	
 	// write the post data
+    CCLOG("1");
 	CCString* strData = CCString::createWithFormat(
 		"{ method: \"set\", data: { fbId: \"%s\", list: [%s] }, sign: \"%s\", appId: \"%s\" }",
 		fbId.c_str(),
 		strFriendList.c_str(),
 		getMD5().c_str(),
 		G_APP_ID);
-
+    
+    CCLOG("2");
+	CCLOG("%s", strData->getCString());
 	//////////////////////////////////////////////////////////////////////////
-
+    CCLOG("3");
+    static int c = 1;
+    c++;
+    CCLOG("COUNT: %d", c);
 	std::string s = encodeBeforeSend(strData->getCString());
+    CCLOG("4");
 	request->setRequestData(s.c_str(), strlen(s.c_str()));
-
+    CCLOG("5");
 
 	CCHttpClient::getInstance()->send(request);
 	request->release();
