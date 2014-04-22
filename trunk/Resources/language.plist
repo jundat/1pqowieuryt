@@ -218,7 +218,7 @@
 		<key>try_login</key>
 		<string>Log In</string>
 		<key>try_play_test</key>
-		<string>Play test</string>
+		<string>Guest mode</string>
 	</dict>
 
 	<key>Vietnamese</key>
