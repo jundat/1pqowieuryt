@@ -155,6 +155,7 @@ bool MenuScene::init()
 
 	m_itShowCharge = CCMenuItemImage::create("charge.png", "charge_down.png", "charge_down.png", this, menu_selector(MenuScene::showChargeCallback));
 	m_itShowCharge->setPosition(ccp(70, m_sprSettingBar->getContentSize().height - 65 + 121));
+    m_itShowCharge->setVisible(false);
 
 
 	CCMenuItem* facebookOn = CCMenuItemImage::create("facebook_in.png", NULL, NULL);

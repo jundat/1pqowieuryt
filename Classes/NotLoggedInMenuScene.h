@@ -22,7 +22,7 @@ public:
 	
 
     CCSprite* m_bg;
-    CCMenuItemToggle *m_facebookItem;
+    CCMenuItemImage *m_facebookItem;
     CCMenuItemImage *m_playItem;
     CCMenu* m_menu;
 
