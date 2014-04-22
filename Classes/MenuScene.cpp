@@ -14,6 +14,8 @@
 USING_NS_CC;
 USING_NS_CC_EXT;
 
+static bool IS_SHOW_VERSION = false;
+
 
 CCScene* MenuScene::scene()
 {
@@ -74,12 +76,14 @@ bool MenuScene::init()
 	//////////////////////////////////////////////////////////////////////////
 
 	//
-	CCString* s = CCString::createWithFormat("v%d", G_VERSION);
-	CCLabelTTF* labelVersion = CCLabelTTF::create(s->getCString(), G_FONT_NORMAL, G_MENU_VERSION_TEXT_SIZE);
-	labelVersion->setColor(G_MENU_VERSION_TEXT_COLOR);
-	labelVersion->setPosition(G_MENU_VERSION_TEXT_POS);
-	this->addChild(labelVersion);
-
+    if (IS_SHOW_VERSION) {
+        CCString* s = CCString::createWithFormat("v%d", G_VERSION);
+        CCLabelTTF* labelVersion = CCLabelTTF::create(s->getCString(), G_FONT_NORMAL, G_MENU_VERSION_TEXT_SIZE);
+        labelVersion->setColor(G_MENU_VERSION_TEXT_COLOR);
+        labelVersion->setPosition(G_MENU_VERSION_TEXT_POS);
+        this->addChild(labelVersion);
+    }
+    
     //
     //new button border
     //
