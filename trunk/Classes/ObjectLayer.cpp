@@ -85,12 +85,14 @@ bool ObjectLayer::init()
 	m_itemBoom = CCMenuItemImage::create("icon_boom.png", "icon_boomhover.png", this, menu_selector(ObjectLayer::ActiveBoom));
 	m_itemBoom->setPosition(ccp(m_itemBoom->getContentSize().width/2, m_itemBoom->getContentSize().height/2));
 	
+    //
+    //cheat
+    //
+    //CCMenuItemImage* itAddScore = CCMenuItemImage::create("icon_boom.png", "icon_boomhover.png", this, menu_selector(ObjectLayer::addScore));
+	//itAddScore->setPosition(ccp(400, 1200));
     
-    CCMenuItemImage* itAddScore = CCMenuItemImage::create("icon_boom.png", "icon_boomhover.png", this, menu_selector(ObjectLayer::addScore));
-	itAddScore->setPosition(ccp(400, 1200));
     
-    
-	CCMenu* menu = CCMenu::create(m_itemBoom, itAddScore, NULL);
+	CCMenu* menu = CCMenu::create(m_itemBoom, /*itAddScore,*/ NULL);
     menu->setPosition(CCPointZero);
 	this->addChild(menu, 10);
     

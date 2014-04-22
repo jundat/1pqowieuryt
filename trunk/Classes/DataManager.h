@@ -114,6 +114,8 @@ public:
 
 	bool	GetIsMoneytize();
 	void	SetIsMoneytize(bool isMoneytize);
+    
+    void    ResetDataAfterLogIn();
 	
 	~DataManager(void);
 };
