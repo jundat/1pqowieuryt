@@ -18,9 +18,13 @@ public:
     virtual bool init();
     static cocos2d::CCScene* scene();
 	CREATE_FUNC(IntroScene);
+    
+    CCSprite* m_sprLogo;
 
 	void menuCallback();
     bool m_isLoggedIn;
+    
+    void onEnterTransitionDidFinish();
 };
 
 #endif // __INTRO_SCENE_H__
