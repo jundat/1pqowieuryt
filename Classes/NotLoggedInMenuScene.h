@@ -28,6 +28,7 @@ public:
 
     void playStartAnimation(int lastLife);
     void gotoMainGame();
+    void initCloud();
 
     virtual void keyBackClicked();
     void playCallback(CCObject* pSender);
@@ -35,6 +36,9 @@ public:
     void exitCallback(CCObject* pSender);
     virtual void onShowDialog();
     virtual void onCloseDialog();
+    
+    void scheduleTick(float dt);
+    void jumpMenu();
 };
 
 #endif // __NOT_LOGGED_IN_MENU_SCENE_H__

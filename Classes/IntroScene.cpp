@@ -52,11 +52,11 @@ void IntroScene::menuCallback()
 	else
 	{
         CCScene *pScene;
-        if (this->m_isLoggedIn) {
-            pScene = CCTransitionFade::create(0.5, MenuScene::scene());
-        } else {
+        //if (this->m_isLoggedIn) {
+        //    pScene = CCTransitionFade::create(0.5, MenuScene::scene());
+        //} else {
             pScene = CCTransitionFade::create(0.5, NotLoggedInMenuScene::scene());
-        }
+        //}
         CCDirector::sharedDirector()->replaceScene(pScene);
 	}
 }

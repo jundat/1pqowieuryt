@@ -335,16 +335,16 @@ void MenuScene::playStartAnimation(int lastLife)
 
 void MenuScene::gotoMainGame()
 {
-    if (m_isLoggedIn == false) {
-        TryPlayDialog* trydialog = TryPlayDialog::create();
-        this->addChild(trydialog, 10);
-        this->onShowDialog();
-    } else {
+    //if (m_isLoggedIn == false) {
+    //    TryPlayDialog* trydialog = TryPlayDialog::create();
+    //    this->addChild(trydialog, 10);
+    //    this->onShowDialog();
+    //} else {
         GameClientManager::sharedGameClientManager()->setDelegate(NULL);
         
         CCScene *pScene = CCTransitionFade::create(0.5, MainGameScene::scene());
         CCDirector::sharedDirector()->replaceScene(pScene);
-    }
+    //}
 }
 
 void MenuScene::playCallback(CCObject* pSender)

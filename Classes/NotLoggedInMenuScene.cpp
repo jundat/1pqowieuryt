@@ -12,6 +12,8 @@
 USING_NS_CC;
 USING_NS_CC_EXT;
 
+#define VENDOR "CGK Studio"
+
 
 CCScene* NotLoggedInMenuScene::scene()
 {
@@ -89,15 +91,56 @@ bool NotLoggedInMenuScene::init()
     sprFb->setPosition(ccp(91, 1280-651-dt));
     this->addChild(sprFb);
     
-    //CCSprite* sprPlay = CCSprite::create("fire_button.png");
-    //sprPlay->setPosition(ccp(474, 1280-654-dt));
-    //this->addChild(sprPlay);
+    CCLabelTTF* vendor = CCLabelTTF::create(VENDOR, G_FONT_NORMAL, 32);
+    vendor->setColor(ccBLACK);
+    vendor->setPosition(ccp(400, vendor->getContentSize().height * 1.1f));
+    this->addChild(vendor);
     
+    this->initCloud();
     
-	
+    string fbId = DataManager::sharedDataManager()->GetFbID();
+    if (fbId.compare("NULL") != 0) {
+        this->scheduleOnce(schedule_selector(NotLoggedInMenuScene::scheduleTick), 1.0f);
+    }
+    
 	this->setKeypadEnabled(true);
 	STOP_BACKGROUND_MUSIC;
     return true;
+}
+
+void NotLoggedInMenuScene::initCloud()
+{
+    for (int i = 0; i < 8; ++i) {
+        CCString* file = CCString::createWithFormat("cloud%d.png", 1 + (i % 3));
+        CCSprite* c = CCSprite::create(file->getCString());
+        this->addChild(c);
+        
+        float rdx = CCRANDOM_0_1() * 1000-200;
+        float rdy = 1280 - CCRANDOM_0_1() * 600;
+        
+        c->setPosition(ccp(rdx, rdy));
+        
+        float rdDirectionX = CCRANDOM_0_1(); //0, 1
+        
+        float rdTime = 20 + CCRANDOM_0_1() * 10; // 15->20
+        
+        CCSequence* seq;
+        if (rdDirectionX > 0.5f) {
+            seq = CCSequence::create(
+                                     CCMoveTo::create(rdTime, ccp(800 + 500, rdy)),
+                                     CCMoveTo::create(rdTime, ccp(- 500, rdy)),
+                                     NULL);
+                                     } else {
+                                         seq = CCSequence::create(
+                                                                  CCMoveTo::create(rdTime, ccp(- 500, rdy)),
+                                                                  CCMoveTo::create(rdTime, ccp(800 + 500, rdy)),
+                                                                  NULL);
+                                     }
+        
+        CCRepeatForever* repeat = CCRepeatForever::create(seq);
+        c->runAction(repeat);
+    }
+
 }
 
 void NotLoggedInMenuScene::playStartAnimation(int lastLife)
@@ -159,5 +202,18 @@ void NotLoggedInMenuScene::onCloseDialog()
 	m_menu->setEnabled(true);
 	this->setKeypadEnabled(true);
     this->setTouchEnabled(true);
+}
+
+void NotLoggedInMenuScene::scheduleTick(float dt)
+{
+    m_facebookItem->selected();
+    
+    m_facebookItem->runAction(CCSequence::createWithTwoActions(CCDelayTime::create(0.5f), CCCallFunc::create(this, callfunc_selector(NotLoggedInMenuScene::jumpMenu))));
+}
+
+void NotLoggedInMenuScene::jumpMenu()
+{
+    CCScene *pScene = CCTransitionFade::create(0.5, MenuScene::scene());
+    CCDirector::sharedDirector()->replaceScene(pScene);
 }
 
