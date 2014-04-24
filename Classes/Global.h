@@ -34,6 +34,7 @@
 #define G_ITEM_LAZE             "laze"
 #define G_ITEM_LIFE             "life"
 #define G_ITEM_COIN             "coin"
+#define G_ITEM_REVIVE           "revive"
 
 
 

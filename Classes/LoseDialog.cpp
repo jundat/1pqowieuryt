@@ -218,7 +218,7 @@ void LoseDialog::reviveCallBack( CCObject* pSender )
 		this->addChild(sprDiamon);
 
 		PLAY_GET_DOUBLE_LAZER_EFFECT;
-
+        
 
 		//////////////////////////////////////////////////////////////////////////
 		//unvisiable

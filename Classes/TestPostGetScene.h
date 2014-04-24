@@ -132,6 +132,19 @@ public:
 			CCLOG("FALSE");
 		}
 	}
+    
+    virtual void onBuyItemCompleted(bool isSuccess, int newCoin, std::string itemType, int itemCount, std::string uniqueTag)
+    {
+        if (isSuccess) {
+            CCLOG("ItemType= %s", itemType.c_str());
+            CCLOG("Count= %d", itemCount);
+            CCLOG("uniqueTag= %s", uniqueTag.c_str());
+            
+            CCMessageBox("Mua dok OK", "Kaka");
+        } else {
+            CCMessageBox("FAIL to Mua đồ", "Èo");
+        }
+    }
 };
 
 
