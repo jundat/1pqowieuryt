@@ -115,6 +115,8 @@
 		<string>wait_connect_server</string>
 		<key>buy_revive</key>
 		<string>buy_revive</string>
+		<key>error_caption</key>
+		<string>error_caption</string>
 	</dict>
 
 	<key>English</key>
@@ -231,6 +233,8 @@
 		<string>Connecting server...</string>
 		<key>buy_revive</key>
 		<string>Failed to buy revive item</string>
+		<key>error_caption</key>
+		<string>Error</string>
 	</dict>
 
 	<key>Vietnamese</key>
@@ -346,6 +350,8 @@
 		<key>wait_connect_server</key>
 		<string>Đang kết nối máy chủ...</string>
 		<key>buy_revive</key>
+		<string>Không thể mua hồi sinh</string>
+		<key>error_caption</key>
 		<string></string>
 	</dict>
 
