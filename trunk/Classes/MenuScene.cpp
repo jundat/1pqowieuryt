@@ -143,17 +143,6 @@ bool MenuScene::init()
 		menu_selector(MenuScene::rateCallback));
 	itRate->setPosition(ccp(502, 1280-1180));
 
-    //
-	//exit
-    //
-	CCMenuItemImage *itExit = CCMenuItemImage::create(
-		"exit.png",
-		"exitDown.png",
-		this,
-		menu_selector(MenuScene::exitCallback));
-	itExit->setPosition(ccp(692, 1280-1181));
-
-
 	
 	//////////////////////////////////////////////////////////////////////////
 	//Setting Bar
@@ -278,6 +267,10 @@ bool MenuScene::init()
     //refresh
     //
     if (m_isLoggedIn == true) {
+        
+        //set all user item from server
+        this->getAllItems();
+        
         this->checkRefreshFriendList();
     }
     
@@ -546,23 +539,18 @@ void MenuScene::facebookCallback( CCObject* pSender )
 
 	if (m_isLoggedIn == true)
 	{
+        m_facebookItem->setSelectedIndex(1);
+        
 		LogOutDialog* dialog = LogOutDialog::create();
 		this->addChild(dialog, 10);
 		this->onShowDialog();
 	}
 	else
 	{
+        m_facebookItem->setSelectedIndex(0);
+        
 		facebookLogInOut();
 	}
-}
-
-void MenuScene::forceLogInFacebook()
-{
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    bool needPublicPermission = true;
-    EziSocialObject::sharedObject()->performLoginUsingFacebook(needPublicPermission); // Pass true if you need publish permission also
-    this->showWaitDialog(TXT("wait_connect_server"));
-#endif
 }
 
 void MenuScene::facebookLogInOut()
@@ -1068,7 +1056,7 @@ void MenuScene::disableMoneytize()
 
 void MenuScene::getAllItems()
 {
-    CCLOG("getAllItems");
+    CCLOG("MenuScene::getAllItems");
     GameClientManager::sharedGameClientManager()->getAllItem(G_APP_ID, DataManager::sharedDataManager()->GetFbID());
 }
 
@@ -1080,7 +1068,7 @@ void MenuScene::onGetAllItemsCompleted(bool isSuccess, int laze, int life, int c
     CCLOG("life: %d", life);
     CCLOG("coin: %d", coin);
 
-    if (isSuccess) {
+    if (isSuccess == true) {
         DataManager::sharedDataManager()->SetBoom(laze);
         DataManager::sharedDataManager()->SetLastPlayerLife(life);
         DataManager::sharedDataManager()->SetDiamon(coin);

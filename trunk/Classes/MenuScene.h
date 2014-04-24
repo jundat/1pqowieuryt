@@ -153,7 +153,6 @@ public:
     //////////////////////////////////////////////////////////////////////////
     //facebook
     
-    void forceLogInFacebook();
 
     void sendUserProfileToServer(string fbId, string fbName, string email);
     virtual void onSendPlayerFbProfileCompleted( bool isSuccess );

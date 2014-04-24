@@ -328,12 +328,14 @@ bool ScoreScene::init()
 #endif
 	
 	this->schedule(schedule_selector(ScoreScene::scheduleTimer), 1);
-
+    
+    CCLOG("ScoreScene::Init OK");
 	return true;
 }
 
 void ScoreScene::itMenuCallback(CCObject* pSender)
 {
+    CCLOG("ScoreScene::itMenuCallback");
 	PLAY_BUTTON_EFFECT;
 
 	GameClientManager::sharedGameClientManager()->setDelegate(NULL);
@@ -344,6 +346,7 @@ void ScoreScene::itMenuCallback(CCObject* pSender)
 
 void ScoreScene::itAddFriendCallback( CCObject* pSender )
 {
+    CCLOG("ScoreScene::itAddFriendCallback");
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	if(EziSocialObject::sharedObject()->isFacebookSessionActive()) //logged in state
 	{
@@ -631,6 +634,7 @@ void ScoreScene::itSendLifeCallback( CCObject* pSender )
 
 void ScoreScene::refreshView()
 {
+    CCLOG("ScoreScene::refreshView");
 	if (m_isXepHangView) //left
 	{
 		m_itXephangToggle->setSelectedIndex(0);
@@ -670,6 +674,7 @@ void ScoreScene::refreshView()
 
 void ScoreScene::refreshUserDetail()
 {
+    CCLOG("ScoreScene::refreshUserDetail");
 	CCString* str = CCString::createWithFormat("x%d", DataManager::sharedDataManager()->GetLastPlayerLife());
 	m_lbLife->setString(str->getCString());
 
@@ -683,7 +688,7 @@ void ScoreScene::refreshUserDetail()
 
 void ScoreScene::scheduleTimer( float dt )
 {
-	//CCLOG("Schedule timer");
+	CCLOG("Schedule timer");
 	int numCell = numberOfCellsInTableView(m_tableXephang);
 
 	for (int i = 0; i < numCell; ++i)
@@ -805,6 +810,7 @@ void ScoreScene::scheduleTimer( float dt )
 
 void ScoreScene::itFbLogInCallback( CCObject* pSender )
 {
+    CCLOG("ScoreScene::itFbLogInCallback");
 	PLAY_BUTTON_EFFECT;
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
@@ -819,6 +825,7 @@ void ScoreScene::itFbLogInCallback( CCObject* pSender )
 
 void ScoreScene::itFbLogOutCallback( CCObject* pSender )
 {
+    CCLOG("ScoreScene::itFbLogOutCallback");
 	PLAY_BUTTON_EFFECT;
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
@@ -839,6 +846,7 @@ void ScoreScene::submitScore()
 
 void ScoreScene::syncScore()
 {
+    CCLOG("ScoreScene::syncScore");
     this->showWaitDialog(TXT("wait_connect_server"));
     
 	//get score from server
@@ -847,7 +855,7 @@ void ScoreScene::syncScore()
 
 void ScoreScene::getHighScores()
 {
-	CCLOG("getHighScores");
+    CCLOG("ScoreScene::getHighScores");
     
     this->showWaitDialog(TXT("wait_connect_server"));
     
@@ -1563,6 +1571,7 @@ CCTableViewCell* ScoreScene::getTableCellQuatangAtIndex( CCTableView *table, uns
 
 void ScoreScene::showWaitDialog(string title)
 {
+    CCLOG("ScoreScene::showWaitDialog");
     m_menu->setEnabled(false);
     this->setTouchEnabled(false);
     this->setKeypadEnabled(false);
@@ -1571,8 +1580,8 @@ void ScoreScene::showWaitDialog(string title)
         m_waitDialog->m_refCount++;
         
     } else {
-        m_waitDialog->m_refCount = 1;
         m_waitDialog = WaitDialog::create();
+        m_waitDialog->m_refCount = 1;
         m_waitDialog->setTitle(title);
         
         this->addChild(m_waitDialog, 100); // =1
@@ -1581,6 +1590,7 @@ void ScoreScene::showWaitDialog(string title)
 
 void ScoreScene::closeWaitDialog()
 {
+    CCLOG("ScoreScene::closeWaitDialog");
     if (m_waitDialog != NULL) {
         m_waitDialog->m_refCount--;
         

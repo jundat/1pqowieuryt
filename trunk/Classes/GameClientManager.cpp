@@ -964,19 +964,32 @@ void GameClientManager::_onGetAllItemCompleted(CCHttpClient *sender, CCHttpRespo
 		//get score from response
 		json_t *root;
 		json_error_t error;
+        json_t *isSuccess;
 		json_t *laze;
 		json_t *life;
         json_t *coin;
         
 		root = json_loads(str.c_str(), strlen(str.c_str()), &error);
-		laze = json_object_get(root, G_ITEM_LAZE);
-		life = json_object_get(root, G_ITEM_LIFE);
-		coin = json_object_get(root, G_ITEM_COIN);
+        isSuccess = json_object_get(root, "isSuccess");
+		bool success = CCString::create(json_string_value(isSuccess))->boolValue();
         
-		if (m_clientDelegate)
-		{
-			m_clientDelegate->onGetAllItemsCompleted(true, (int)atof(json_string_value(laze)), (int)atof(json_string_value(life)), (int)atof(json_string_value(coin)));
-		}
+        if (success == true) {
+            
+            laze = json_object_get(root, G_ITEM_LAZE);
+            life = json_object_get(root, G_ITEM_LIFE);
+            coin = json_object_get(root, G_ITEM_COIN);
+            
+            if (m_clientDelegate)
+            {
+                m_clientDelegate->onGetAllItemsCompleted(true, (int)atof(json_string_value(laze)), (int)atof(json_string_value(life)), (int)atof(json_string_value(coin)));
+            }
+        } else {
+            if (m_clientDelegate)
+            {
+                m_clientDelegate->onGetAllItemsCompleted(false, -1, -1, -1);
+            }
+        }
+        
 	}
     
 	CCLOG("------- END %s -------", response->getHttpRequest()->getTag());
