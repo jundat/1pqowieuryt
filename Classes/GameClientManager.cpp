@@ -986,7 +986,7 @@ void GameClientManager::_onGetAllItemCompleted(CCHttpClient *sender, CCHttpRespo
 //
 
 
-void GameClientManager::buyItem(std::string appId, std::string fbId, std::string itemName, std::string uniqueTag)
+void GameClientManager::buyItem(std::string appId, std::string fbId, std::string itemName,  int count, std::string uniqueTag)
 {
     string sUrl = string(G_URL_ITEM);
 	CCLOG("URL: %s", sUrl.c_str());
@@ -1001,10 +1001,11 @@ void GameClientManager::buyItem(std::string appId, std::string fbId, std::string
     
 	// write the post data
 	CCString* strData = CCString::createWithFormat(
-       "{ method: \"buy\", data: { appId: \"%s\", fbId: \"%s\", type: \"%s\" }, sign: \"%s\", appId: \"%s\" }",
+       "{ method: \"buy\", data: { appId: \"%s\", fbId: \"%s\", type: \"%s\", count: \"%d\" }, sign: \"%s\", appId: \"%s\" }",
        G_APP_ID,
        fbId.c_str(),
        itemName.c_str(),
+       count,
        getMD5().c_str(),
        G_APP_ID);
     
@@ -1032,7 +1033,7 @@ void GameClientManager::_onBuyItemCompleted(CCHttpClient *sender, CCHttpResponse
 		CCLOG("Request failed: %s", response->getErrorBuffer());
 		if (m_clientDelegate)
 		{
-			m_clientDelegate->onBuyItemCompleted(false, -1, response->getHttpRequest()->getTag());
+			m_clientDelegate->onBuyItemCompleted(false, -1, "", -1, response->getHttpRequest()->getTag());
 		}
 	}
 	else
@@ -1049,15 +1050,29 @@ void GameClientManager::_onBuyItemCompleted(CCHttpClient *sender, CCHttpResponse
 		json_error_t error;
 		json_t *isSuccess;
 		json_t *newCoin;
+        json_t *type;
+        json_t *count;
+        
+        
         
 		root = json_loads(str.c_str(), strlen(str.c_str()), &error);
 		isSuccess = json_object_get(root, "isSuccess");
 		bool success = CCString::create(json_string_value(isSuccess))->boolValue();
-        newCoin = json_object_get(root, "newCoin");
         
-        if (m_clientDelegate)
-        {
-            m_clientDelegate->onBuyItemCompleted(success, (int)atof(json_string_value(newCoin)), response->getHttpRequest()->getTag());
+        if (success) {
+            newCoin = json_object_get(root, "newCoin");
+            type    = json_object_get(root, "type");
+            count    = json_object_get(root, "count");
+            
+            if (m_clientDelegate)
+            {
+                m_clientDelegate->onBuyItemCompleted(success, (int)atof(json_string_value(newCoin)), json_string_value(type), (int)atof(json_string_value(count)), response->getHttpRequest()->getTag());
+            }
+        } else {
+            if (m_clientDelegate)
+            {
+                m_clientDelegate->onBuyItemCompleted(false, -1, "", -1, response->getHttpRequest()->getTag());
+            }
         }
 	}
     

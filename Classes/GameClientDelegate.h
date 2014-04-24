@@ -28,7 +28,7 @@ public:
 
  	virtual void onGetAllItemsCompleted(bool isSuccess, int laze, int life, int coin){}
     
-    virtual void onBuyItemCompleted(bool isSuccess, bool newCoin, std::string uniqueTag){}
+    virtual void onBuyItemCompleted(bool isSuccess, bool newCoin, std::string itemType, int itemCount, std::string uniqueTag){}
 };
 
 
