@@ -3,19 +3,19 @@
 <plist version="1.0">
 <dict>
 	<key>G_URL_FRIEND_LIST</key>
-	<string>dbp.cgkstudio.com:8025/friend</string>
+	<string>192.168.0.110:8025/friend</string>
 	<key>G_URL_GET_LAZER</key>
-	<string>dbp.cgkstudio.com:8025/getlazer</string>
+	<string>192.168.0.110:8025/getlazer</string>
 	<key>G_URL_PLAYER_FB_PROFILE</key>
-	<string>dbp.cgkstudio.com:8025/profile</string>
+	<string>192.168.0.110:8025/profile</string>
 	<key>G_URL_DEVICE_PROFILE</key>
-	<string>dbp.cgkstudio.com:8025/device</string>
+	<string>192.168.0.110:8025/device</string>
 	<key>G_URL_SCORE</key>
-	<string>dbp.cgkstudio.com:8025/score</string>
+	<string>192.168.0.110:8025/score</string>
 	<key>G_URL_REVIVE</key>
-	<string>dbp.cgkstudio.com:8025/revive</string>
+	<string>192.168.0.110:8025/revive</string>
 	<key>G_URL_ITEM</key>
-	<string>dbp.cgkstudio.com:8025/item</string>
+	<string>192.168.0.110:8025/item</string>
 	<key>G_URL_RATE</key>
 	<string>https://play.google.com/store/apps/details?id=com.chimgokien.phicongbutchi</string>
 	<key>G_MAX_PLAYER_BULLET_LEVEL</key>
@@ -59,7 +59,7 @@
 	<key>G_DEFAULT_TIME_TO_GENERATE_ENEMY</key>
 	<string>1.0</string>
 	<key>G_TIME_TO_REFRESH_FRIENDS</key>
-	<string>20</string>
+	<string>86400</string>
 	<key>G_MAX_PLAYER_LIFE</key>
 	<string>5</string>
 	<key>G_HP_IN_DIFFICULTY</key>

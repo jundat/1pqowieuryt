@@ -34,6 +34,8 @@ public:
 	void testPost6(CCObject *sender);
 	void testPost7(CCObject *sender);
 	void testPost8(CCObject *sender);
+	void testPost9(CCObject *sender);
+    
 
 	virtual void onSendPlayerFbProfileCompleted( bool isSuccess )
 	{
