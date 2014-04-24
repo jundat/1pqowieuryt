@@ -597,7 +597,7 @@ void DataManager::SetIsMoneytize(bool ismoneytize)
 
 
 
-void DataManager::ResetDataAfterLogIn()
+void DataManager::ResetDataToLogIn()
 {
     CCLOG(" ------------------- RESET DATA AFTER LOG IN ------------------- ");
     DataManager::sharedDataManager()->SetHighScoreNotCheck(0);

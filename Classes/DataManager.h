@@ -115,7 +115,7 @@ public:
 	bool	GetIsMoneytize();
 	void	SetIsMoneytize(bool isMoneytize);
     
-    void    ResetDataAfterLogIn();
+    void    ResetDataToLogIn();
     void    ResetDataToPlayLocal();
 	
 	~DataManager(void);

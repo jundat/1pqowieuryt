@@ -284,8 +284,6 @@
 		A4089A6418F68E9D0042E7F2 /* enemy1_down.wav in Resources */ = {isa = PBXBuildFile; fileRef = A4089A0618F68E9D0042E7F2 /* enemy1_down.wav */; };
 		A4089A6518F68E9D0042E7F2 /* enemy2_down.wav in Resources */ = {isa = PBXBuildFile; fileRef = A4089A0718F68E9D0042E7F2 /* enemy2_down.wav */; };
 		A4089A6618F68E9D0042E7F2 /* enemy3_down.wav in Resources */ = {isa = PBXBuildFile; fileRef = A4089A0818F68E9D0042E7F2 /* enemy3_down.wav */; };
-		A4089A6718F68E9D0042E7F2 /* exit.png in Resources */ = {isa = PBXBuildFile; fileRef = A4089A0918F68E9D0042E7F2 /* exit.png */; };
-		A4089A6818F68E9D0042E7F2 /* exitDown.png in Resources */ = {isa = PBXBuildFile; fileRef = A4089A0A18F68E9D0042E7F2 /* exitDown.png */; };
 		A4089A6A18F68E9D0042E7F2 /* facebook_in.png in Resources */ = {isa = PBXBuildFile; fileRef = A4089A0C18F68E9D0042E7F2 /* facebook_in.png */; };
 		A4089A6B18F68E9D0042E7F2 /* facebook_out.png in Resources */ = {isa = PBXBuildFile; fileRef = A4089A0D18F68E9D0042E7F2 /* facebook_out.png */; };
 		A4089A6C18F68E9D0042E7F2 /* fb-profile.png in Resources */ = {isa = PBXBuildFile; fileRef = A4089A0E18F68E9D0042E7F2 /* fb-profile.png */; };
@@ -935,8 +933,6 @@
 		A4089A0618F68E9D0042E7F2 /* enemy1_down.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = enemy1_down.wav; sourceTree = "<group>"; };
 		A4089A0718F68E9D0042E7F2 /* enemy2_down.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = enemy2_down.wav; sourceTree = "<group>"; };
 		A4089A0818F68E9D0042E7F2 /* enemy3_down.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = enemy3_down.wav; sourceTree = "<group>"; };
-		A4089A0918F68E9D0042E7F2 /* exit.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = exit.png; sourceTree = "<group>"; };
-		A4089A0A18F68E9D0042E7F2 /* exitDown.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = exitDown.png; sourceTree = "<group>"; };
 		A4089A0C18F68E9D0042E7F2 /* facebook_in.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = facebook_in.png; sourceTree = "<group>"; };
 		A4089A0D18F68E9D0042E7F2 /* facebook_out.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = facebook_out.png; sourceTree = "<group>"; };
 		A4089A0E18F68E9D0042E7F2 /* fb-profile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "fb-profile.png"; sourceTree = "<group>"; };
@@ -2007,10 +2003,8 @@
 				A4089A0818F68E9D0042E7F2 /* enemy3_down.wav */,
 				A49003A01906959700EEE111 /* guest_mode_button_down.png */,
 				A49003A11906959700EEE111 /* guest_mode_button.png */,
-				A4089A0918F68E9D0042E7F2 /* exit.png */,
 				A49003871906293400EEE111 /* ezisocial.and */,
 				A49003881906293400EEE111 /* ezisocial.ios */,
-				A4089A0A18F68E9D0042E7F2 /* exitDown.png */,
 				A4089A0C18F68E9D0042E7F2 /* facebook_in.png */,
 				A4089A0D18F68E9D0042E7F2 /* facebook_out.png */,
 				A4089A0E18F68E9D0042E7F2 /* fb-profile.png */,
@@ -2306,9 +2300,7 @@
 				A4089A6418F68E9D0042E7F2 /* enemy1_down.wav in Resources */,
 				A4089A6518F68E9D0042E7F2 /* enemy2_down.wav in Resources */,
 				A4089A6618F68E9D0042E7F2 /* enemy3_down.wav in Resources */,
-				A4089A6718F68E9D0042E7F2 /* exit.png in Resources */,
 				A49003891906293400EEE111 /* ezisocial.and in Resources */,
-				A4089A6818F68E9D0042E7F2 /* exitDown.png in Resources */,
 				A490038A1906293400EEE111 /* ezisocial.ios in Resources */,
 				A4089A6A18F68E9D0042E7F2 /* facebook_in.png in Resources */,
 				A4089A6B18F68E9D0042E7F2 /* facebook_out.png in Resources */,

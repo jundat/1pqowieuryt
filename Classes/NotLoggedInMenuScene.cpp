@@ -12,7 +12,6 @@
 USING_NS_CC;
 USING_NS_CC_EXT;
 
-#define VENDOR "CGK Studio"
 
 
 CCScene* NotLoggedInMenuScene::scene()
@@ -90,7 +89,7 @@ bool NotLoggedInMenuScene::init()
     sprFb->setPosition(ccp(91, 1280-651-dt));
     this->addChild(sprFb);
     
-    CCLabelTTF* vendor = CCLabelTTF::create(VENDOR, G_FONT_NORMAL, 32);
+    CCLabelTTF* vendor = CCLabelTTF::create(TXT("vendor"), G_FONT_NORMAL, 32);
     vendor->setColor(ccBLACK);
     vendor->setPosition(ccp(400, vendor->getContentSize().height * 1.1f));
     this->addChild(vendor);
@@ -170,7 +169,11 @@ void NotLoggedInMenuScene::keyBackClicked()
 void NotLoggedInMenuScene::facebookCallback( CCObject* pSender )
 {
 	PLAY_BUTTON_EFFECT;
-
+    
+    //
+    //reset data when log in ok
+    //
+    DataManager::sharedDataManager()->ResetDataToLogIn();
     
     CCScene *scene = CCScene::create();
     MenuScene *layer = MenuScene::create();
