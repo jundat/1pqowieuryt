@@ -113,6 +113,8 @@
 		<string>vendor</string>
 		<key>wait_connect_server</key>
 		<string>wait_connect_server</string>
+		<key>buy_revive</key>
+		<string>buy_revive</string>
 	</dict>
 
 	<key>English</key>
@@ -227,6 +229,8 @@
 		<string>CGK Studio</string>
 		<key>wait_connect_server</key>
 		<string>Connecting server...</string>
+		<key>buy_revive</key>
+		<string>Failed to buy revive item</string>
 	</dict>
 
 	<key>Vietnamese</key>
@@ -341,6 +345,8 @@
 		<string>CGK Studio</string>
 		<key>wait_connect_server</key>
 		<string>Đang kết nối máy chủ...</string>
+		<key>buy_revive</key>
+		<string></string>
 	</dict>
 
 </dict>
