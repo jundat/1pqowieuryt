@@ -111,6 +111,8 @@
 		<string>try_play_test</string>
 		<key>try_vendor</key>
 		<string>try_vendor</string>
+		<key>wait_connect_server</key>
+		<string>wait_connect_server</string>
 	</dict>
 
 	<key>English</key>
@@ -223,6 +225,8 @@
 		<string>Guest mode</string>
 		<key>try_vendor</key>
 		<string>CGK Studio</string>
+		<key>wait_connect_server</key>
+		<string>Connecting server...</string>
 	</dict>
 
 	<key>Vietnamese</key>
@@ -335,6 +339,8 @@
 		<string>Chơi thử</string>
 		<key>try_vendor</key>
 		<string>CGK Studio</string>
+		<key>wait_connect_server</key>
+		<string>Đang kết nối máy chủ...</string>
 	</dict>
 
 </dict>
