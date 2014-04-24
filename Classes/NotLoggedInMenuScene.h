@@ -26,7 +26,6 @@ public:
     CCMenuItemImage *m_playItem;
     CCMenu* m_menu;
 
-    void playStartAnimation(int lastLife);
     void gotoMainGame();
     void initCloud();
 

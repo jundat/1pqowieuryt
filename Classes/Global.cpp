@@ -12,6 +12,7 @@ std::string G_URL_DEVICE_PROFILE;
 std::string G_URL_SCORE;
 std::string G_URL_REVIVE;
 std::string G_URL_GET_LAZER;
+std::string G_URL_ITEM;
 
 std::string G_URL_RATE;
 

@@ -657,8 +657,6 @@ void MenuScene::initTimer()
 	this->schedule(schedule_selector(MenuScene::ScheduleTick), 1);
 }
 
-//////////////////////////////////////////////////////////////////////////
-
 void MenuScene::GetRegistrationId()
 {
 	//CCLOG("GetRegistrationId");
@@ -706,12 +704,12 @@ void MenuScene::onGetRegistrationIdCompleted( CCNode *sender, void *data )
 	}
 }
 
-//////////////////////////////////////////////////////////////////////////
 
 
-//END MY FUNCTION
+///////////////// FACEBOOK ////////////////////
 
-//when did Logged In  || Logged Out
+
+
 void MenuScene::fbSessionCallback(int responseCode, const char *responseMessage)
 {
 	//CCLOG("fbSessionCallback");
@@ -745,10 +743,6 @@ void MenuScene::fbSessionCallback(int responseCode, const char *responseMessage)
         //clear highscores
         DataManager::sharedDataManager()->SetHigherFriends(NULL);
         
-        //
-        //reset data when log in ok
-        //
-        DataManager::sharedDataManager()->ResetDataAfterLogIn();
         
         //go to NotLoggedInMenuSene
         GameClientManager::sharedGameClientManager()->setDelegate(NULL);
@@ -846,8 +840,8 @@ void MenuScene::sendUserProfileToServer(string fbId, string fbName, string email
 	GameClientManager::sharedGameClientManager()->sendPlayerFbProfile(fbId, fbName, email, string(G_APP_ID));
 	
 	//send device token to server
-	string fbid = DataManager::sharedDataManager()->GetRegistrationId();
-	if (fbid.length() > 0)
+	string regid = DataManager::sharedDataManager()->GetRegistrationId();
+	if (regid.length() > 0)
 	{
 		GameClientManager::sharedGameClientManager()->sendDeviceProfile(
 			DataManager::sharedDataManager()->GetFbID(),
@@ -1054,7 +1048,6 @@ void MenuScene::onGetPlayerFbProfileCompleted( bool isSuccess, FacebookAccount* 
 	}
 	else
 	{
-		CCMessageBox(TXT("menu_error_server"), TXT("menu_error_caption"));
 		this->disableMoneytize();
 	}
 }
@@ -1065,6 +1058,9 @@ void MenuScene::onSendPlayerFbProfileCompleted( bool isSuccess )
 	{
 		//get User Profile
 		this->getUserProfile();
+        
+        //set all user item from server
+        this->getAllItems();
 	}
 	else
 	{
@@ -1075,6 +1071,8 @@ void MenuScene::onSendPlayerFbProfileCompleted( bool isSuccess )
 
 void MenuScene::disableMoneytize()
 {
+    CCMessageBox(TXT("menu_error_server"), TXT("menu_error_caption"));
+    
 	////iOS
 	//CCLOG("DISABLE MONEYTIZE...");
 	//DataManager::sharedDataManager()->SetIsMoneytize(false);
@@ -1082,6 +1080,34 @@ void MenuScene::disableMoneytize()
 	//m_itShowCharge->setVisible(false);
 
 	//Android, Windows Phone
-	CCLOG("SET DIAMOND = DEFAULT...");
+	CCLOG("...... Disable monitize, SET DIAMOND = DEFAULT......");
 	DataManager::sharedDataManager()->SetDiamon(G_DEFAULT_DIAMON);
 }
+
+
+void MenuScene::getAllItems()
+{
+    CCLOG("getAllItems");
+    GameClientManager::sharedGameClientManager()->getAllItem(G_APP_ID, DataManager::sharedDataManager()->GetFbID());
+}
+
+
+void MenuScene::onGetAllItemsCompleted(bool isSuccess, int laze, int life, int coin)
+{
+    CCLOG("MenuScene::onGetAllItemsCompleted");
+    CCLOG("laze: %d", laze);
+    CCLOG("life: %d", life);
+    CCLOG("coin: %d", coin);
+
+    if (isSuccess) {
+        DataManager::sharedDataManager()->SetBoom(laze);
+        DataManager::sharedDataManager()->SetLastPlayerLife(life);
+        DataManager::sharedDataManager()->SetDiamon(coin);
+        
+    } else {
+        this->disableMoneytize();
+    }
+}
+
+
+

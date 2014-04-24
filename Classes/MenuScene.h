@@ -138,7 +138,10 @@ public:
     void getUserProfile();
     virtual void onGetPlayerFbProfileCompleted(bool isSuccess, FacebookAccount* acc);
     void disableMoneytize();
-
+    
+    void getAllItems();
+    virtual void onGetAllItemsCompleted(bool isSuccess, int laze, int life, int coin);
+    
     //////////////////////////////////////////////////////////////////////////
     //facebook
 

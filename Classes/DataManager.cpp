@@ -608,3 +608,11 @@ void DataManager::ResetDataAfterLogIn()
 
 
 
+void DataManager::ResetDataToPlayLocal()
+{
+    CCLOG(" ------------------ RESET DATA TO PLAY LOCAL ------------------- ");
+    DataManager::sharedDataManager()->SetHighScoreNotCheck(0);
+    DataManager::sharedDataManager()->SetLastPlayerLife(G_MAX_PLAYER_LIFE);
+    DataManager::sharedDataManager()->SetDiamon(G_DEFAULT_DIAMON);
+    DataManager::sharedDataManager()->SetBoom(G_DEFAULT_BOOM);
+}
