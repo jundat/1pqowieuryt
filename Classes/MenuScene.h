@@ -10,6 +10,7 @@
 #include "GameClientObjects.h"
 
 #include "YesNoDialogParent.h"
+#include "WaitDialog.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #include "EziSocialObject.h"
@@ -142,6 +143,10 @@ public:
     void getAllItems();
     virtual void onGetAllItemsCompleted(bool isSuccess, int laze, int life, int coin);
     
+    void showWaitDialog(string title);
+    void closeWaitDialog();
+    WaitDialog* m_waitDialog;
+    int m_waitDialogCounter;
     //////////////////////////////////////////////////////////////////////////
     //facebook
 

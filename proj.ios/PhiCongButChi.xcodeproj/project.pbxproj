@@ -359,6 +359,7 @@
 		A4D1ED2318FF8C92008587DA /* new_button_border_out.png in Resources */ = {isa = PBXBuildFile; fileRef = A4D1ED2118FF8C92008587DA /* new_button_border_out.png */; };
 		A4D1ED2718FFB5ED008587DA /* gun_reload.wav in Resources */ = {isa = PBXBuildFile; fileRef = A4D1ED2618FFB5ED008587DA /* gun_reload.wav */; };
 		A4D1ED2A18FFBDAE008587DA /* TryPlayDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4D1ED2818FFBDAE008587DA /* TryPlayDialog.cpp */; };
+		A4D4F9161908B22B006CA228 /* WaitDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4D4F9141908B22B006CA228 /* WaitDialog.cpp */; };
 		A4F2EA9918F7F31A000D2FA3 /* iRate.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A4F2EA9618F7F31A000D2FA3 /* iRate.bundle */; };
 		A4F2EA9A18F7F31A000D2FA3 /* iRate.m in Sources */ = {isa = PBXBuildFile; fileRef = A4F2EA9818F7F31A000D2FA3 /* iRate.m */; };
 		BF171245129291EC00B8313A /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF170DB012928DE900B8313A /* OpenGLES.framework */; };
@@ -1014,6 +1015,8 @@
 		A4D1ED2618FFB5ED008587DA /* gun_reload.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = gun_reload.wav; sourceTree = "<group>"; };
 		A4D1ED2818FFBDAE008587DA /* TryPlayDialog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TryPlayDialog.cpp; path = ../Classes/TryPlayDialog.cpp; sourceTree = "<group>"; };
 		A4D1ED2918FFBDAE008587DA /* TryPlayDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TryPlayDialog.h; path = ../Classes/TryPlayDialog.h; sourceTree = "<group>"; };
+		A4D4F9141908B22B006CA228 /* WaitDialog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = WaitDialog.cpp; path = ../Classes/WaitDialog.cpp; sourceTree = "<group>"; };
+		A4D4F9151908B22B006CA228 /* WaitDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WaitDialog.h; path = ../Classes/WaitDialog.h; sourceTree = "<group>"; };
 		A4F2EA9618F7F31A000D2FA3 /* iRate.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = iRate.bundle; sourceTree = "<group>"; };
 		A4F2EA9718F7F31A000D2FA3 /* iRate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iRate.h; sourceTree = "<group>"; };
 		A4F2EA9818F7F31A000D2FA3 /* iRate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iRate.m; sourceTree = "<group>"; };
@@ -1614,6 +1617,8 @@
 				A408997818F68E840042E7F2 /* Global.h */,
 				A408997918F68E840042E7F2 /* InGameTutorial.cpp */,
 				A408997A18F68E840042E7F2 /* InGameTutorial.h */,
+				A4D4F9141908B22B006CA228 /* WaitDialog.cpp */,
+				A4D4F9151908B22B006CA228 /* WaitDialog.h */,
 				A408997B18F68E840042E7F2 /* IntroScene.cpp */,
 				A408997C18F68E840042E7F2 /* IntroScene.h */,
 				A408997D18F68E840042E7F2 /* Item.cpp */,
@@ -2565,6 +2570,7 @@
 				1A9CE8971765A12C000E3062 /* CCComAttribute.cpp in Sources */,
 				1A9CE8981765A12C000E3062 /* CCComAudio.cpp in Sources */,
 				1A9CE8991765A12C000E3062 /* CCComController.cpp in Sources */,
+				A4D4F9161908B22B006CA228 /* WaitDialog.cpp in Sources */,
 				1A9CE89A1765A12C000E3062 /* CCInputDelegate.cpp in Sources */,
 				A40899B418F68E850042E7F2 /* AppDelegate.cpp in Sources */,
 				A40899B518F68E850042E7F2 /* AudioManager.cpp in Sources */,

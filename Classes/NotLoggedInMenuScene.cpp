@@ -68,19 +68,18 @@ bool NotLoggedInMenuScene::init()
     m_menu->setPosition(CCPointZero);
     this->addChild(m_menu);
     
-    CCPoint ANCHOR_TEXT = ccp(0.5f, 0.35f);
     //
     //text
     //
     CCLabelTTF* txtLogIn = CCLabelTTF::create(TXT("try_login"), G_FONT_NORMAL, 48);
     txtLogIn->setColor(ccBLACK);
-    txtLogIn->setAnchorPoint(ANCHOR_TEXT);
+    txtLogIn->setAnchorPoint(ccp(0.4f, 0.35f));
     txtLogIn->setPosition(m_facebookItem->getPosition());
     this->addChild(txtLogIn);
     
     CCLabelTTF* txtPlay = CCLabelTTF::create(TXT("try_play_test"), G_FONT_NORMAL, 36);
     txtPlay->setColor(ccBLACK);
-    txtPlay->setAnchorPoint(ANCHOR_TEXT);
+    txtPlay->setAnchorPoint(ccp(0.5, 0.45f));
     txtPlay->setPosition(m_playItem->getPosition());
     this->addChild(txtPlay);
     
