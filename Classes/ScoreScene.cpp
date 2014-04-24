@@ -865,7 +865,7 @@ void ScoreScene::getHighScores()
 
 
 //get highscore list completed
-void ScoreScene::onGetFriendListCompleted(bool isSuccess, CCArray* arrFriends)
+void ScoreScene::onGetFriendListCompleted(bool isSuccess, long serverTime, CCArray* arrFriends)
 {
 	CCLOG("onGetFriendListCompleted");
 	if (isSuccess == false) 
@@ -874,6 +874,12 @@ void ScoreScene::onGetFriendListCompleted(bool isSuccess, CCArray* arrFriends)
 		return;
 	}
 
+    //
+    //SYNC TIME -----------
+    //
+    m_serverTime = serverTime;
+    m_clientTime = static_cast<long int> (time(NULL));
+    
 	if (m_arrHighScores != NULL)
 	{
 		m_arrHighScores->release();
@@ -914,19 +920,24 @@ void ScoreScene::onGetFriendListCompleted(bool isSuccess, CCArray* arrFriends)
 
 	//////////////////////////////////////////////////////////////////////////
 
-
 	for (int i = 0; i < m_tableXepHangSize; ++i)
 	{
 		FacebookAccount* fbFriend = (FacebookAccount*) (m_arrHighScores->objectAtIndex(i));
 		if (NULL != fbFriend)
 		{
 			std::string profileID = fbFriend->m_fbId;
+            
+            /*
+            //DEBUG
+            CCLOG("TIME LAZE: %s, %ld", profileID.c_str(), fbFriend->m_timeGetLaze);
+            */
+
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 			EziSocialObject::sharedObject()->getProfilePicForID(this, profileID.c_str(), // Profile ID of current user
 				G_AVATAR_SIZE, G_AVATAR_SIZE, // Size of the image
 				false // force download it from server
-				);
+            );
 #endif
 		}
 	}

@@ -366,7 +366,7 @@ void GameClientManager::_onGetFriendListCompleted( CCHttpClient *sender, CCHttpR
 		CCLOG("Request failed: %s", response->getErrorBuffer());
 		if (m_clientDelegate)
 		{
-			m_clientDelegate->onGetFriendListCompleted(false, NULL);
+			m_clientDelegate->onGetFriendListCompleted(false, -1, NULL);
 		}
 	}
 	else
@@ -381,9 +381,11 @@ void GameClientManager::_onGetFriendListCompleted( CCHttpClient *sender, CCHttpR
 		//get score from response
 		json_t *root;
 		json_error_t error;
+        json_t *serverTime;
 		json_t *friendList;
 
 		root = json_loads(str.c_str(), strlen(str.c_str()), &error);
+        serverTime = json_object_get(root, "time");
 		friendList = json_object_get(root, "list");
 
 		//foreach to get all friend, insert to list
@@ -397,23 +399,25 @@ void GameClientManager::_onGetFriendListCompleted( CCHttpClient *sender, CCHttpR
 
 			json_t* fbId;
 			json_t* fbName;
-			//json_t* email;
+			json_t* timeGetLaze;
+            //json_t* timeSendLife;
 			json_t* score;
 
 
 			fbId = json_object_get(fbFriend, "id");
 			fbName = json_object_get(fbFriend, "fbName");
-			//email = json_object_get(fbFriend, "email");
+			timeGetLaze = json_object_get(fbFriend, "timeLaze");
+            //timeSendLife = json_object_get(fbFriend, "timeSendLife");
 			score = json_object_get(fbFriend, "score");
 
-			FacebookAccount* acc = new FacebookAccount(json_string_value(fbId), json_string_value(fbName), std::string(), (int)atof(json_string_value(score)));
+			FacebookAccount* acc = new FacebookAccount(json_string_value(fbId), json_string_value(fbName), std::string(), (int)atoi(json_string_value(score)), (long)atol(json_string_value(timeGetLaze) /*, (long)atol(json_string_value(timeSendLife) */));
 			arrFriends->addObject(acc);
 		}
 
 		//GameClientManager::SortFriendScore(arrFriends);
 		if (m_clientDelegate)
 		{
-			m_clientDelegate->onGetFriendListCompleted(true, arrFriends);
+			m_clientDelegate->onGetFriendListCompleted(true, (long)atol(json_string_value(serverTime)), arrFriends);
 		}
 	}
 

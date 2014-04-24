@@ -17,6 +17,9 @@ public:
 	string m_email;
 	int m_score;
 	int m_coin;
+    
+    long m_timeGetLaze;
+    long m_timeSendLife;
 
 	string m_photoPath;
 
@@ -28,17 +31,23 @@ public:
 		m_email = string();
 		m_score = -1;
 		m_coin = 0;
+        
+        m_timeGetLaze = 0;
+        m_timeSendLife = 0;
 
 		m_photoPath = string();
 	}
 
-	FacebookAccount(string _fbId, string _fbName, string _email, int _score, int _coin = 0)
+	FacebookAccount(string _fbId, string _fbName, string _email, int _score, int _coin = 0, long timeGetLaze = 0, long timeSendLife = 0)
 	{
 		m_fbId = _fbId;
 		m_fbName = _fbName;
 		m_email = _email;
 		m_score = _score;
 		m_coin = _coin;
+        
+        m_timeGetLaze = timeGetLaze;
+        m_timeSendLife = timeSendLife;
 
 		m_photoPath = string();
 	}
@@ -64,6 +73,9 @@ public:
 		pRet->m_email = string(m_email);
 		pRet->m_score = m_score;
 		pRet->m_coin = m_coin;
+        
+        pRet->m_timeGetLaze = m_timeGetLaze;
+		pRet->m_timeSendLife = m_timeSendLife;
 
 		pRet->m_photoPath = string(m_photoPath);
 		
@@ -74,7 +86,7 @@ public:
 
 	string toJson()
 	{
-		CCString* s = CCString::createWithFormat("{\"fbId\": \"%s\", \"fbName\": \"%s\", \"email\": \"%s\", \"score\": %d, \"coin\": %d }", m_fbId.c_str(), m_fbName.c_str(), m_email.c_str(), m_score, m_coin);
+		CCString* s = CCString::createWithFormat("{\"fbId\": \"%s\", \"fbName\": \"%s\", \"email\": \"%s\", \"score\": %d, \"coin\": %d, \"timeGetLaze\": %ld, \"timeSendLife\": %ld }", m_fbId.c_str(), m_fbName.c_str(), m_email.c_str(), m_score, m_coin, m_timeGetLaze, m_timeSendLife);
 		return string(s->getCString());
 	}
 };

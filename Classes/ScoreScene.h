@@ -112,6 +112,9 @@ public:
 	CCArray* m_arrRequests;
 
 	CustomTableViewCell* m_friendCell;
+    
+    long m_serverTime;
+    long m_clientTime;
 
 	// Facebook //=========================================
 	
@@ -133,7 +136,7 @@ public:
 	void submitScore();
 	void syncScore();
 	void getHighScores();
-	virtual void onGetFriendListCompleted(bool isSuccess, CCArray* arrFriends);
+	virtual void onGetFriendListCompleted(bool isSuccess, long serverTime,  CCArray* arrFriends);
 	virtual void onGetScoreCompleted( bool isSuccess, int score, std::string time );
 
 	//Ezibyte
