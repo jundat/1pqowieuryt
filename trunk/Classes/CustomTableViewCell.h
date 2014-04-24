@@ -20,7 +20,7 @@ public:
 	std::string fbID;
 
 	//get boom
-	tm* m_lastTimeGetBoom;
+	long m_lastTimeGetBoom;
 	CCLabelTTF* m_lbGetBoomTimer;
 	CCLabelTTF* m_lbGetBoom;
 	CCMenuItemImage* m_itGetBoom;
