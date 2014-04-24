@@ -16,7 +16,6 @@
 	<string>dbp.cgkstudio.com:8025/revive</string>
 	<key>G_URL_ITEM</key>
 	<string>dbp.cgkstudio.com:8025/item</string>
-
 	<key>G_URL_RATE</key>
 	<string>https://play.google.com/store/apps/details?id=com.chimgokien.phicongbutchi</string>
 	<key>G_MAX_PLAYER_BULLET_LEVEL</key>
@@ -60,7 +59,7 @@
 	<key>G_DEFAULT_TIME_TO_GENERATE_ENEMY</key>
 	<string>1.0</string>
 	<key>G_TIME_TO_REFRESH_FRIENDS</key>
-	<string>86400</string>
+	<string>60</string>
 	<key>G_MAX_PLAYER_LIFE</key>
 	<string>5</string>
 	<key>G_HP_IN_DIFFICULTY</key>

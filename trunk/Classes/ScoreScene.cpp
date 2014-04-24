@@ -214,9 +214,9 @@ bool ScoreScene::init()
 	this->addChild(m_lbInvite, 1); //samw menu
 
 
-	CCMenu* pMenu = CCMenu::create(backItem, m_itFbLogInItem, m_itXephangToggle, m_itQuatangToggle, itAddFriend, NULL);
-	pMenu->setPosition(CCPointZero);
-	this->addChild(pMenu, 1);
+	m_menu = CCMenu::create(backItem, m_itFbLogInItem, m_itXephangToggle, m_itQuatangToggle, itAddFriend, NULL);
+	m_menu->setPosition(CCPointZero);
+	this->addChild(m_menu, 1);
 
 
 
@@ -298,7 +298,7 @@ bool ScoreScene::init()
 
 	if(EziSocialObject::sharedObject()->isFacebookSessionActive()) //logged in state
 	{
-		checkRefreshFriendList();
+		bool isRefreshingFriend = checkRefreshFriendList();
 
 		syncScore();
 
@@ -315,8 +315,10 @@ bool ScoreScene::init()
 			G_AVATAR_SIZE, G_AVATAR_SIZE, // Size of the image
 			false // force download it from server
 			);
-
-		getHighScores();
+        
+        if (isRefreshingFriend == false) {
+            getHighScores();
+        }
 	}
 	else //logged out stated
 	{
@@ -816,6 +818,9 @@ void ScoreScene::itFbLogInCallback( CCObject* pSender )
 	bool needPublicPermission = true;
 	EziSocialObject::sharedObject()->performLoginUsingFacebook(needPublicPermission); // Pass true if you need publish permission also
 #endif
+    
+    //show wait dialog to ignore all touch
+    this->showWaitDialog(TXT("wait_connect_server"));
 }
 
 void ScoreScene::itFbLogOutCallback( CCObject* pSender )
@@ -829,7 +834,7 @@ void ScoreScene::itFbLogOutCallback( CCObject* pSender )
 
 
 
-void ScoreScene::checkRefreshFriendList()
+bool ScoreScene::checkRefreshFriendList()
 {
     
 	CCLOG("~~~~~--- check Refresh Friend List ---~~~~~");
@@ -840,6 +845,7 @@ void ScoreScene::checkRefreshFriendList()
 	{
 		CCLOG("checkRefreshFriendList == first time");
 		getFacebookFriends();
+        return true;
 	}
 	else
 	{
@@ -851,12 +857,15 @@ void ScoreScene::checkRefreshFriendList()
 		{
 			CCLOG("checkRefreshFriendList == true");
 			getFacebookFriends();
+            return true;
 		}
 		else
 		{
 			CCLOG("NOT ENOUGH TIME TO REFRESH");
 		}
 	}
+    
+    return false;
 }
 
 void ScoreScene::submitScore()
@@ -877,6 +886,9 @@ void ScoreScene::syncScore()
 void ScoreScene::getHighScores()
 {
 	CCLOG("getHighScores");
+    
+    this->showWaitDialog(TXT("wait_connect_server"));
+    
 	GameClientManager::sharedGameClientManager()->getFriendList(string(G_APP_ID), DataManager::sharedDataManager()->GetFbID());
 }
 
@@ -962,6 +974,8 @@ void ScoreScene::onGetFriendListCompleted(bool isSuccess, CCArray* arrFriends)
 	m_sprWaiting->setVisible(false);
 	m_tableXephang->reloadData();
 	m_tableQuatang->reloadData();
+    
+    this->closeWaitDialog();
 }
 
 void ScoreScene::sendUserProfileToServer(string fbId, string fbName, string email)
@@ -1222,6 +1236,7 @@ void ScoreScene::fbFriendsCallback( int responseCode, const char* responseMessag
 	else //finish get friends
 	{
 		//get highscore after send all friend to server
+        this->closeWaitDialog();
 		getHighScores();
 	}
 #endif
@@ -1777,3 +1792,38 @@ CCTableViewCell* ScoreScene::getTableCellQuatangAtIndex( CCTableView *table, uns
 
 
 // Facebook //=========================================
+
+
+void ScoreScene::showWaitDialog(string title)
+{
+    m_menu->setEnabled(false);
+    this->setTouchEnabled(false);
+    this->setKeypadEnabled(false);
+    
+    if (m_waitDialog != NULL) {
+        m_waitDialogCounter++;
+        
+    } else {
+        m_waitDialogCounter = 1;
+        m_waitDialog = WaitDialog::create();
+        m_waitDialog->setTitle(title);
+        
+        this->addChild(m_waitDialog, 100); // =1
+    }
+}
+
+void ScoreScene::closeWaitDialog()
+{
+    if (m_waitDialog != NULL) {
+        m_waitDialogCounter--;
+        
+        if (m_waitDialogCounter <= 0) {
+            this->removeChild(m_waitDialog);
+            m_waitDialog = NULL;
+            
+            m_menu->setEnabled(true);
+            this->setTouchEnabled(true);
+            this->setKeypadEnabled(true);
+        }
+    }
+}
