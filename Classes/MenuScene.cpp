@@ -249,6 +249,8 @@ bool MenuScene::init()
 	//Language bar
 	//////////////////////////////////////////////////////////////////////////
 
+    CCMenuItemImage* itTestLogIn = CCMenuItemImage::create(", <#const char *selectedImage#>)
+    
     m_menu = CCMenu::create(m_playItem, m_scoreItem, itRate, NULL);
     m_menu->setPosition(CCPointZero);
     this->addChild(m_menu, 1);
