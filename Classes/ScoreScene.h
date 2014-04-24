@@ -85,9 +85,6 @@ public:
 	void scheduleTimer(float dt);
 
 public:
-	static int s_beginFriendInd;
-	static int s_endFriendInd;
-
 	bool m_isLoggedIn;
     bool m_isFirstTimeLogIn;
 	bool m_isXepHangView;
@@ -131,7 +128,6 @@ public:
     void showWaitDialog(string title);
     void closeWaitDialog();
     WaitDialog* m_waitDialog;
-    int m_waitDialogCounter;
     
     
 	void submitScore();
