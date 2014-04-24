@@ -5,6 +5,26 @@
 USING_NS_CC;
 using namespace std;
 
+typedef struct MY_TIME
+{
+    int hour;
+    int min;
+    int sec;
+    
+} MY_TIME;
+
+static MY_TIME CONVERT_MILISECOND_TO_TIME(int _milisecond)
+{
+    int hour, min, sec;
+    
+    sec = _milisecond % 60;
+    _milisecond -= sec;
+    min =  ((int)(_milisecond / 60)) % 60;
+    hour = ((int)(_milisecond / 60)) / 60;
+    
+    return {hour, min, sec};
+}
+
 
 #define LIMIT_VALUE(x, minX, maxX) \
 {\
