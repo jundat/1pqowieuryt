@@ -109,8 +109,8 @@
 		<string>try_login</string>
 		<key>try_play_test</key>
 		<string>try_play_test</string>
-		<key>try_vendor</key>
-		<string>try_vendor</string>
+		<key>vendor</key>
+		<string>vendor</string>
 		<key>wait_connect_server</key>
 		<string>wait_connect_server</string>
 	</dict>
@@ -223,7 +223,7 @@
 		<string>Log In</string>
 		<key>try_play_test</key>
 		<string>Guest mode</string>
-		<key>try_vendor</key>
+		<key>vendor</key>
 		<string>CGK Studio</string>
 		<key>wait_connect_server</key>
 		<string>Connecting server...</string>
@@ -337,7 +337,7 @@
 		<string>Đăng nhập</string>
 		<key>try_play_test</key>
 		<string>Chơi thử</string>
-		<key>try_vendor</key>
+		<key>vendor</key>
 		<string>CGK Studio</string>
 		<key>wait_connect_server</key>
 		<string>Đang kết nối máy chủ...</string>
