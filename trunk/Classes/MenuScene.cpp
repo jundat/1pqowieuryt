@@ -10,11 +10,13 @@
 #include "LogOutDialog.h"
 #include "TryPlayDialog.h"
 #include "NotLoggedInMenuScene.h"
+#include "WaitDialog.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
 
 static bool IS_SHOW_VERSION = false;
+static int  WAIT_DIALOG_TAG = 100;
 
 
 CCScene* MenuScene::scene()
@@ -564,11 +566,14 @@ void MenuScene::facebookLogInOut()
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 		bool needPublicPermission = true;
 		EziSocialObject::sharedObject()->performLoginUsingFacebook(needPublicPermission); // Pass true if you need publish permission also
-        this->retain();
+        //this->retain();
         
         CCLOG("-------------- RETAIN MENU SCENE");
 #endif
 	}
+    
+    //show wait dialog to ignore all touch
+    this->showWaitDialog(TXT("wait_connect_server"));
 }
 
 void MenuScene::exitCallback( CCObject* pSender )
@@ -718,6 +723,7 @@ void MenuScene::fbSessionCallback(int responseCode, const char *responseMessage)
 	{
 		//CCLOG("fbSessionCallback: SUCCESSFUL");
 		m_isLoggedIn = true;
+        m_facebookItem->setSelectedIndex(1);
         
         //
 		//auto get profile, info
@@ -732,7 +738,10 @@ void MenuScene::fbSessionCallback(int responseCode, const char *responseMessage)
 	{
 		//CCLOG("fbSessionCallback: FAILED");
 		m_isLoggedIn = false;
+        m_facebookItem->setSelectedIndex(0);
         
+        //close wait dialog
+        this->closeWaitDialog();
         
         //
         //Clear data
@@ -750,44 +759,6 @@ void MenuScene::fbSessionCallback(int responseCode, const char *responseMessage)
         CCScene *pScene = CCTransitionFade::create(0.5, NotLoggedInMenuScene::scene());
         CCDirector::sharedDirector()->replaceScene(pScene);
 	}
-
-	/////////////refresh view ///////////////
-	if (m_isLoggedIn == true)
-	{
-		m_facebookItem->setSelectedIndex(1);
-        //m_scoreItem->setVisible(true);
-        //m_scoreItem->runAction(CCFadeIn::create(0.5f));
-	}
-	else
-	{
-		m_facebookItem->setSelectedIndex(0);
-        //m_scoreItem->runAction(CCFadeOut::create(0.5f));
-	}
-    
-    
-    //
-    //start button
-    //
-    string lang = DataManager::sharedDataManager()->GetLanguage();
-    string en_start_press = string(G_MENU_NEW_BUTTON_SPR_PRESS_EN);
-    string vn_start_press = string(G_MENU_NEW_BUTTON_SPR_PRESS_VN);
-    if (m_isLoggedIn == false)
-    {
-        en_start_press = string(G_MENU_NEW_BUTTON_SPR_NORMAL_EN);
-        vn_start_press = string(G_MENU_NEW_BUTTON_SPR_NORMAL_VN);
-    }
-    
-    if (lang.compare("English") == 0)
-    {
-        CCSprite* selected_image = CCSprite::create(en_start_press.c_str());
-        m_playItem->setSelectedImage(selected_image);
-    }
-    else
-    {
-        CCSprite* selected_image = CCSprite::create(vn_start_press.c_str());
-        m_playItem->setSelectedImage(selected_image);
-    }
-
 #endif
 }
 
@@ -897,8 +868,9 @@ void MenuScene::fbFriendsCallback( int responseCode, const char* responseMessage
 		EziSocialObject::sharedObject()->getFriends(EziSocialWrapperNS::FB_FRIEND_SEARCH::ALL_FRIENDS, ScoreScene::s_beginFriendInd, ScoreScene::s_endFriendInd);
 	} else {
         //end of friends
-        this->release();
+        //this->release();
         CCLOG("RELEASE MENU SCENE --------------");
+        this->closeWaitDialog();
     }
 #endif
 }
@@ -1109,5 +1081,31 @@ void MenuScene::onGetAllItemsCompleted(bool isSuccess, int laze, int life, int c
     }
 }
 
+void MenuScene::showWaitDialog(string title)
+{
+    this->onShowDialog();
+    
+    if (m_waitDialog != NULL) {
+        m_waitDialogCounter++;
+        
+    } else {
+        m_waitDialogCounter = 1;
+        m_waitDialog = WaitDialog::create();
+        m_waitDialog->setTitle(title);
+        
+        this->addChild(m_waitDialog, WAIT_DIALOG_TAG); // =1
+    }
+}
 
-
+void MenuScene::closeWaitDialog()
+{
+    if (m_waitDialog != NULL) {
+        m_waitDialogCounter--;
+        
+        if (m_waitDialogCounter <= 0) {
+            this->removeChild(m_waitDialog);
+            m_waitDialog = NULL;
+            this->onCloseDialog();
+        }
+    }
+}
