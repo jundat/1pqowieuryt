@@ -15,7 +15,7 @@ public:
 
 	virtual void onSendFriendListCompleted( bool isSuccess ){}
 	//array of FacebookAccount (our code)
-	virtual void onGetFriendListCompleted( bool isSuccess, CCArray* arrFriends){}
+	virtual void onGetFriendListCompleted( bool isSuccess, long serverTime, CCArray* arrFriends){}
 
 	virtual void onSendDeviceProfileCompleted( bool isSuccess ){}
 	virtual void onGetDeviceProfileCompleted(bool isSuccess, DeviceProfile* deviceProfile){}
