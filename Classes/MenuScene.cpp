@@ -567,13 +567,13 @@ void MenuScene::facebookLogInOut()
 		bool needPublicPermission = true;
 		EziSocialObject::sharedObject()->performLoginUsingFacebook(needPublicPermission); // Pass true if you need publish permission also
         //this->retain();
+                
+        //show wait dialog to ignore all touch
+        this->showWaitDialog(TXT("wait_connect_server"));
         
         CCLOG("-------------- RETAIN MENU SCENE");
 #endif
 	}
-    
-    //show wait dialog to ignore all touch
-    this->showWaitDialog(TXT("wait_connect_server"));
 }
 
 void MenuScene::exitCallback( CCObject* pSender )

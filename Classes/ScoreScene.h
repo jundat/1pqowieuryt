@@ -7,6 +7,7 @@
 #include "GameClientManager.h"
 #include "GameClientDelegate.h"
 #include "GameClientObjects.h"
+#include "WaitDialog.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #include "EziSocialObject.h"
@@ -94,6 +95,7 @@ public:
 	int m_tableQuatangSize;
 
 	//UI
+    CCMenu* m_menu;
 	CCMenuItemToggle* m_itXephangToggle;
 	CCMenuItemToggle* m_itQuatangToggle;
 	CCMenuItemImage* m_itFbLogInItem;
@@ -124,8 +126,15 @@ public:
 	CCLabelTTF* m_lbBoom;
 	CCLabelTTF* m_lbDiamond;
 	CCArray* m_friendList;
+    
+    
+    void showWaitDialog(string title);
+    void closeWaitDialog();
+    WaitDialog* m_waitDialog;
+    int m_waitDialogCounter;
+    
 	
-	void checkRefreshFriendList();
+	bool checkRefreshFriendList();
 	void submitScore();
 	void syncScore();
 	void getHighScores();
