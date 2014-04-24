@@ -109,6 +109,8 @@
 		<string>try_login</string>
 		<key>try_play_test</key>
 		<string>try_play_test</string>
+		<key>try_vendor</key>
+		<string>try_vendor</string>
 	</dict>
 
 	<key>English</key>
@@ -219,6 +221,8 @@
 		<string>Log In</string>
 		<key>try_play_test</key>
 		<string>Guest mode</string>
+		<key>try_vendor</key>
+		<string>CGK Studio</string>
 	</dict>
 
 	<key>Vietnamese</key>
@@ -329,6 +333,8 @@
 		<string>Đăng nhập</string>
 		<key>try_play_test</key>
 		<string>Chơi thử</string>
+		<key>try_vendor</key>
+		<string>CGK Studio</string>
 	</dict>
 
 </dict>
