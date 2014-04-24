@@ -116,6 +116,7 @@ public:
 	void	SetIsMoneytize(bool isMoneytize);
     
     void    ResetDataAfterLogIn();
+    void    ResetDataToPlayLocal();
 	
 	~DataManager(void);
 };

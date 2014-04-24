@@ -14,6 +14,9 @@
 	<string>dbp.cgkstudio.com:8025/score</string>
 	<key>G_URL_REVIVE</key>
 	<string>dbp.cgkstudio.com:8025/revive</string>
+	<key>G_URL_ITEM</key>
+	<string>dbp.cgkstudio.com:8025/item</string>
+
 	<key>G_URL_RATE</key>
 	<string>https://play.google.com/store/apps/details?id=com.chimgokien.phicongbutchi</string>
 	<key>G_MAX_PLAYER_BULLET_LEVEL</key>

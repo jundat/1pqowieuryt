@@ -831,7 +831,8 @@ void ScoreScene::itFbLogOutCallback( CCObject* pSender )
 
 void ScoreScene::checkRefreshFriendList()
 {
-	CCLOG("checkRefreshFriendList");
+    
+	CCLOG("~~~~~--- check Refresh Friend List ---~~~~~");
 	//check
 	//get boom
 	tm* _lastTimeRefreshFriend = DataManager::sharedDataManager()->GetTimeRefreshFriend();
@@ -881,7 +882,7 @@ void ScoreScene::getHighScores()
 
 void ScoreScene::getFacebookFriends()
 {
-	CCLOG("getFacebookFriends");
+	CCLOG("~~~~~--- get Facebook Friends ---~~~~~");
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	ScoreScene::s_beginFriendInd = 0;
 	ScoreScene::s_endFriendInd = G_NUMBER_FRIEND_TO_GET - 1;

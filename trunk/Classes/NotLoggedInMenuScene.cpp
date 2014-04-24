@@ -143,14 +143,12 @@ void NotLoggedInMenuScene::initCloud()
 
 }
 
-void NotLoggedInMenuScene::playStartAnimation(int lastLife)
-{
-    this->gotoMainGame();
-}
-
 void NotLoggedInMenuScene::gotoMainGame()
 {
     GameClientManager::sharedGameClientManager()->setDelegate(NULL);
+    
+    //reset data
+    DataManager::sharedDataManager()->ResetDataToPlayLocal();
     
     CCScene *pScene = CCTransitionFade::create(0.5, MainGameScene::scene());
     CCDirector::sharedDirector()->replaceScene(pScene);
@@ -174,7 +172,6 @@ void NotLoggedInMenuScene::facebookCallback( CCObject* pSender )
 {
 	PLAY_BUTTON_EFFECT;
 
-    //facebookLogInOut();
     
     CCScene *scene = CCScene::create();
     MenuScene *layer = MenuScene::create();

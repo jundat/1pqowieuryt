@@ -24,11 +24,11 @@ public:
 	virtual void onGetScoreCompleted( bool isSuccess, int score, std::string time ){}
 
 	virtual void onRequestReviveCompleted( bool isSuccess, int newDiamond ){}
-
 	virtual void onRequestGetLazerCompleted(bool isSuccess, int newDiamond){}
 
-// 	virtual void onSendItemsCompleted( bool isSuccess, int newScore ){}
-// 	virtual void onGetItemsCompleted(bool isSuccess, CCArray* arrGameItems){}
+ 	virtual void onGetAllItemsCompleted(bool isSuccess, int laze, int life, int coin){}
+    
+    virtual void onBuyItemCompleted(bool isSuccess, bool newCoin, std::string uniqueTag){}
 };
 
 

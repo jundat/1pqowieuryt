@@ -109,6 +109,17 @@ public:
 
 	//////////////////////////////////////////////////////////////////////////
 
+    void getAllItem(std::string appId, std::string fbId);
+    void _onGetAllItemCompleted(CCHttpClient *sender, CCHttpResponse *response);
+    
+    
+    //////////////////////////////////////////////////////////////////////////
+    
+    void buyItem(std::string appId, std::string fbId, std::string itemName, std::string uniqueTag);
+    void _onBuyItemCompleted(CCHttpClient *sender, CCHttpResponse *response);
+    
+    
+    
 	//compare score in facebook account
 	static int CompareFriendScore(const CCObject* p1, const CCObject* p2)
 	{

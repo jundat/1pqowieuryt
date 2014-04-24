@@ -10,7 +10,7 @@
 #define G_FONT_NORMAL			"Roboto-Medium.ttf"
 #define G_FONT_LEADERBOARD		"Villa.ttf"
 
-#define G_NUMBER_FRIEND_TO_GET	200
+#define G_NUMBER_FRIEND_TO_GET	250
 
 //GAME CONSTANT
 #define G_APP_ID				"DBPTK"
@@ -31,6 +31,11 @@
 #define G_SMALL_DEVIVE_SIZE		320
 #define	G_DEFAULT_VOLUME		0.5f
 
+#define G_ITEM_LAZE             "laze"
+#define G_ITEM_LIFE             "life"
+#define G_ITEM_COIN             "coin"
+
+
 
 //////////////////////////////////////////////////////////////////////////
 //
@@ -43,6 +48,7 @@ extern std::string G_URL_DEVICE_PROFILE;
 extern std::string G_URL_SCORE;
 extern std::string G_URL_REVIVE;
 extern std::string G_URL_GET_LAZER;
+extern std::string G_URL_ITEM;
 
 extern std::string G_URL_RATE;
 
