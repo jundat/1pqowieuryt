@@ -147,8 +147,14 @@ public:
     void closeWaitDialog();
     WaitDialog* m_waitDialog;
     int m_waitDialogCounter;
+    
+    bool checkRefreshFriendList();
+    
+    
     //////////////////////////////////////////////////////////////////////////
     //facebook
+    
+    void forceLogInFacebook();
 
     void sendUserProfileToServer(string fbId, string fbName, string email);
     virtual void onSendPlayerFbProfileCompleted( bool isSuccess );

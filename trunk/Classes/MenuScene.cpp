@@ -248,8 +248,6 @@ bool MenuScene::init()
 
 	//Language bar
 	//////////////////////////////////////////////////////////////////////////
-
-    CCMenuItemImage* itTestLogIn = CCMenuItemImage::create(", <#const char *selectedImage#>)
     
     m_menu = CCMenu::create(m_playItem, m_scoreItem, itRate, NULL);
     m_menu->setPosition(CCPointZero);
@@ -555,6 +553,15 @@ void MenuScene::facebookCallback( CCObject* pSender )
 	}
 }
 
+void MenuScene::forceLogInFacebook()
+{
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    bool needPublicPermission = true;
+    EziSocialObject::sharedObject()->performLoginUsingFacebook(needPublicPermission); // Pass true if you need publish permission also
+    this->showWaitDialog(TXT("wait_connect_server"));
+#endif
+}
+
 void MenuScene::facebookLogInOut()
 {
 	if (m_isLoggedIn)
@@ -568,12 +575,9 @@ void MenuScene::facebookLogInOut()
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 		bool needPublicPermission = true;
 		EziSocialObject::sharedObject()->performLoginUsingFacebook(needPublicPermission); // Pass true if you need publish permission also
-        //this->retain();
-                
+        
         //show wait dialog to ignore all touch
         this->showWaitDialog(TXT("wait_connect_server"));
-        
-        CCLOG("-------------- RETAIN MENU SCENE");
 #endif
 	}
 }
@@ -730,11 +734,6 @@ void MenuScene::fbSessionCallback(int responseCode, const char *responseMessage)
         //
 		//auto get profile, info
         //
-        
-        //
-        //reset data when log in ok
-        //
-        DataManager::sharedDataManager()->ResetDataAfterLogIn();
 	}
 	else
 	{
@@ -789,6 +788,7 @@ void MenuScene::fbUserDetailCallback( int responseCode, const char* responseMess
 
 		sendUserProfileToServer(profileID, fullName, emailID);
 
+        this->closeWaitDialog();
 		getFacebookFriends();
 
 		EziSocialObject::sharedObject()->getProfilePicForID(this, fbUser->getProfileID(), G_AVATAR_SIZE, G_AVATAR_SIZE, false);
@@ -828,6 +828,7 @@ void MenuScene::sendUserProfileToServer(string fbId, string fbName, string email
 
 void MenuScene::getFacebookFriends()
 {
+    CCMessageBox("Get FB Friends", "Kaka");
 	//CCLOG("getFacebookFriends");
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	ScoreScene::s_beginFriendInd = 0;
@@ -835,6 +836,8 @@ void MenuScene::getFacebookFriends()
 	EziSocialObject::sharedObject()->getFriends(EziSocialWrapperNS::FB_FRIEND_SEARCH::ALL_FRIENDS, ScoreScene::s_beginFriendInd, ScoreScene::s_endFriendInd);
 
 	DataManager::sharedDataManager()->SetTimeRefreshFriendNow();
+    
+    this->showWaitDialog(TXT("wait_connect_server"));
 #endif
 }
 
@@ -870,8 +873,6 @@ void MenuScene::fbFriendsCallback( int responseCode, const char* responseMessage
 		EziSocialObject::sharedObject()->getFriends(EziSocialWrapperNS::FB_FRIEND_SEARCH::ALL_FRIENDS, ScoreScene::s_beginFriendInd, ScoreScene::s_endFriendInd);
 	} else {
         //end of friends
-        //this->release();
-        CCLOG("RELEASE MENU SCENE --------------");
         this->closeWaitDialog();
     }
 #endif
@@ -1110,4 +1111,39 @@ void MenuScene::closeWaitDialog()
             this->onCloseDialog();
         }
     }
+}
+
+
+bool MenuScene::checkRefreshFriendList()
+{
+    
+	CCLOG("~~~~~--- check Refresh Friend List ---~~~~~");
+	//check
+	//get boom
+	tm* _lastTimeRefreshFriend = DataManager::sharedDataManager()->GetTimeRefreshFriend();
+	if (_lastTimeRefreshFriend == NULL)
+	{
+		CCLOG("checkRefreshFriendList == first time");
+		getFacebookFriends();
+        return true;
+	}
+	else
+	{
+		time_t lastTime = mktime(_lastTimeRefreshFriend);
+		time_t curTime = time(NULL);
+		double elapsedTime = difftime(curTime, lastTime);
+		
+		if (elapsedTime > G_TIME_TO_REFRESH_FRIENDS)
+		{
+			CCLOG("checkRefreshFriendList == true");
+			getFacebookFriends();
+            return true;
+		}
+		else
+		{
+			CCLOG("NOT ENOUGH TIME TO REFRESH");
+		}
+	}
+    
+    return false;
 }

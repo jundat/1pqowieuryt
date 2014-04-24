@@ -298,8 +298,6 @@ bool ScoreScene::init()
 
 	if(EziSocialObject::sharedObject()->isFacebookSessionActive()) //logged in state
 	{
-		bool isRefreshingFriend = checkRefreshFriendList();
-
 		syncScore();
 
 		//check incoming request
@@ -316,9 +314,7 @@ bool ScoreScene::init()
 			false // force download it from server
 			);
         
-        if (isRefreshingFriend == false) {
-            getHighScores();
-        }
+        getHighScores();
 	}
 	else //logged out stated
 	{
@@ -834,40 +830,6 @@ void ScoreScene::itFbLogOutCallback( CCObject* pSender )
 
 
 
-bool ScoreScene::checkRefreshFriendList()
-{
-    
-	CCLOG("~~~~~--- check Refresh Friend List ---~~~~~");
-	//check
-	//get boom
-	tm* _lastTimeRefreshFriend = DataManager::sharedDataManager()->GetTimeRefreshFriend();
-	if (_lastTimeRefreshFriend == NULL)
-	{
-		CCLOG("checkRefreshFriendList == first time");
-		getFacebookFriends();
-        return true;
-	}
-	else
-	{
-		time_t lastTime = mktime(_lastTimeRefreshFriend);
-		time_t curTime = time(NULL);
-		double elapsedTime = difftime(curTime, lastTime);
-		
-		if (elapsedTime > G_TIME_TO_REFRESH_FRIENDS)
-		{
-			CCLOG("checkRefreshFriendList == true");
-			getFacebookFriends();
-            return true;
-		}
-		else
-		{
-			CCLOG("NOT ENOUGH TIME TO REFRESH");
-		}
-	}
-    
-    return false;
-}
-
 void ScoreScene::submitScore()
 {
 	CCLOG("callSubmitScore");
@@ -879,6 +841,8 @@ void ScoreScene::submitScore()
 
 void ScoreScene::syncScore()
 {
+    this->showWaitDialog(TXT("wait_connect_server"));
+    
 	//get score from server
 	GameClientManager::sharedGameClientManager()->getScore(string(G_APP_ID), DataManager::sharedDataManager()->GetFbID());
 }
@@ -892,17 +856,6 @@ void ScoreScene::getHighScores()
 	GameClientManager::sharedGameClientManager()->getFriendList(string(G_APP_ID), DataManager::sharedDataManager()->GetFbID());
 }
 
-void ScoreScene::getFacebookFriends()
-{
-	CCLOG("~~~~~--- get Facebook Friends ---~~~~~");
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-	ScoreScene::s_beginFriendInd = 0;
-	ScoreScene::s_endFriendInd = G_NUMBER_FRIEND_TO_GET - 1;
-	EziSocialObject::sharedObject()->getFriends(EziSocialWrapperNS::FB_FRIEND_SEARCH::ALL_FRIENDS, ScoreScene::s_beginFriendInd, ScoreScene::s_endFriendInd);
-
-	DataManager::sharedDataManager()->SetTimeRefreshFriendNow();
-#endif
-}
 
 //get highscore list completed
 void ScoreScene::onGetFriendListCompleted(bool isSuccess, CCArray* arrFriends)
@@ -978,25 +931,6 @@ void ScoreScene::onGetFriendListCompleted(bool isSuccess, CCArray* arrFriends)
     this->closeWaitDialog();
 }
 
-void ScoreScene::sendUserProfileToServer(string fbId, string fbName, string email)
-{
-	CCLOG("sendUserProfileToServer");
-	GameClientManager::sharedGameClientManager()->sendPlayerFbProfile(fbId, fbName, email, string(G_APP_ID));
-	
-	//send device token to server
-	string fbid = DataManager::sharedDataManager()->GetRegistrationId();
-	if (fbid.length() > 0)
-	{
-		GameClientManager::sharedGameClientManager()->sendDeviceProfile(
-			DataManager::sharedDataManager()->GetFbID(),
-			string(""),
-			DataManager::sharedDataManager()->GetRegistrationId(),
-			string(""),
-			string("")
-			);
-	}
-}
-
 void ScoreScene::onGetScoreCompleted( bool isSuccess, int score, std::string time )
 {
 	CCLOG("onGetScoreCompleted");
@@ -1041,6 +975,8 @@ void ScoreScene::onGetScoreCompleted( bool isSuccess, int score, std::string tim
 		this->m_sprWaiting->setVisible(false);
 		m_lbLostConnection->setVisible(true);
 		m_lbInviteQuatang->setVisible(false);
+        
+        this->closeWaitDialog();
 	}	
 }
 
@@ -1049,102 +985,8 @@ void ScoreScene::onGetScoreCompleted( bool isSuccess, int score, std::string tim
 
 //END MY FUNCTION
 
-//when did Logged In  || Logged Out
-void ScoreScene::fbSessionCallback(int responseCode, const char *responseMessage)
-{
-	CCLOG("fbSessionCallback");
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-	if (responseCode == EziSocialWrapperNS::RESPONSE_CODE::FB_LOGIN_SUCCESSFUL)
-	{
-		CCLOG("fbSessionCallback: SUCCESSFUL");
-		m_isLoggedIn = true;
-        m_isFirstTimeLogIn = true;
 
-		m_itFbLogInItem->setVisible(false);
-		m_lbInvite->setVisible(false);
 
-		refreshView();
-
-		//Auto fetchFBUserDetails, do not call it again
-		//It make exception
-		//CCLOG("call: fetchFBUserDetails");
-		//EziSocialObject::sharedObject()->fetchFBUserDetails(true); //need email = true
-	}
-	else
-	{
-		CCLOG("fbSessionCallback: FAILED");
-		m_isLoggedIn = false;
-
-		m_sprWaiting->setVisible(false);
-		m_tableXephang->setVisible(false);
-		m_tableQuatang->setVisible(false);
-
-		m_itFbLogInItem->setVisible(true);
-		m_lbInvite->setVisible(true);
-        
-		if (m_lbInviteQuatang != NULL)
-		{
-			m_lbInviteQuatang->setVisible(false);
-		}
-
-		if (m_lbLostConnection != NULL)
-		{
-			m_lbLostConnection->setVisible(false);
-		}
-        
-        
-        
-        //
-        //Clear data
-        //
-        //set FbId = "NULL";
-        DataManager::sharedDataManager()->ClearFbProfileID();
-        
-        //clear highscores
-        DataManager::sharedDataManager()->SetHigherFriends(NULL);
-        
-	}
-#endif
-}
-
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS) // fbUserDetailCallback
-
-void ScoreScene::fbUserDetailCallback( int responseCode, const char* responseMessage, EziFacebookUser* fbUser )
-{
-	CCLOG("fbUserDetailCallback");
-	if (fbUser != NULL)
-	{
-		CCLOG("fbUserDetailCallback: user != NULL");
-		EziSocialObject::sharedObject()->setCurrentFacebookUser(fbUser);
-
-		//save data
-		std::string firstname = fbUser->getFirstName(); //getFirstName //getFullName
-		std::string userName = fbUser->getUserName();
-		std::string profileID = fbUser->getProfileID();
-		std::string fullName = fbUser->getFullName(); //getEmailID
-		std::string emailID = fbUser->getEmailID();
-
-		DataManager::sharedDataManager()->SetName(firstname.c_str());
-		DataManager::sharedDataManager()->SetFbProfileID(profileID.c_str());
-		DataManager::sharedDataManager()->SetFbUserName(userName.c_str());
-		DataManager::sharedDataManager()->SetFbFullName(fullName.c_str());
-		DataManager::sharedDataManager()->SetFbEmail(emailID.c_str());
-
-		m_lbName->setString(firstname.c_str());
-
-		sendUserProfileToServer(profileID, fullName, emailID);
-		
-		syncScore();
-
-		getFacebookFriends();
-		
-		EziSocialObject::sharedObject()->getProfilePicForID(this, fbUser->getProfileID(), G_AVATAR_SIZE, G_AVATAR_SIZE, false);
-
-		//check incoming request
-		EziSocialObject::sharedObject()->checkIncomingRequest();
-	}
-}
-#endif
 
 void ScoreScene::fbUserPhotoCallback(const char *userPhotoPath, const char* fbID)
 {
@@ -1200,79 +1042,6 @@ void ScoreScene::fbUserPhotoCallback(const char *userPhotoPath, const char* fbID
 			m_tableQuatang->reloadData();
 		}
 	}
-}
-
-void ScoreScene::fbFriendsCallback( int responseCode, const char* responseMessage, cocos2d::CCArray* friends )
-{
-	CCLOG("fbFriendsCallback");
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-	int count = friends->count();
-
-	if (count > 0)
-	{
-		CCArray* arrFriends = new CCArray();
-		arrFriends->retain();
-
-		CCObject* it;
-		CCARRAY_FOREACH(friends, it)
-		{
-			EziFacebookFriend* fbFriend = dynamic_cast<EziFacebookFriend*>(it);
-			if (NULL != it)
-			{
-				string fbId = fbFriend->getFBID();
-				string fbName = fbFriend->getName();
-				FacebookAccount* acc = new FacebookAccount(fbId, fbName, string(), -1);
-
-				arrFriends->addObject(acc);
-			}
-		}
-
-		GameClientManager::sharedGameClientManager()->sendFriendList(DataManager::sharedDataManager()->GetFbID(), arrFriends);
-
-		ScoreScene::s_beginFriendInd += G_NUMBER_FRIEND_TO_GET;
-		ScoreScene::s_endFriendInd += G_NUMBER_FRIEND_TO_GET;
-		EziSocialObject::sharedObject()->getFriends(EziSocialWrapperNS::FB_FRIEND_SEARCH::ALL_FRIENDS, ScoreScene::s_beginFriendInd, ScoreScene::s_endFriendInd);
-	}
-	else //finish get friends
-	{
-		//get highscore after send all friend to server
-        this->closeWaitDialog();
-		getHighScores();
-	}
-#endif
-}
-
-void ScoreScene::postMessageToLoser( std::string loserName, std::string loserUserName, int yourScore )
-{
-	CCMessageBox("not implement", "");
-// 	CCLOG("postMessageToLoser");
-// #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-// 	CCString* strMessage = CCString::createWithFormat("Hey, i just got %d points in The Croods, following me is %s\nhttps://www.facebook.com/%s! Kaka :v", yourScore, loserName.c_str(), loserUserName.c_str());
-// 
-// 	//let try to post message
-// 	//postMessageOnWall
-// 	//autoPostMessageOnWall
-// 
-// 	EziSocialObject::sharedObject()->postMessageOnWall(
-// 		"The Croods",					//heading => Điện Biên Phủ Trên Không
-// 		"Let got it!",					//caption
-// 		strMessage->getCString(),		//message => Status
-// 		"From the creators of Angry Birds and the creative minds at DreamWorks Animation: a FREE new game based on the motion picture phenomenon!",	//descripton
-// 		"http://www.reelmama.com/wp-content/uploads/2013/04/Grug-from-THE-CROODS.jpg", //badgeIconURL
-// 		"https://play.google.com/store/apps/details?id=com.rovio.croods");	//deepLinkURL
-// #endif
-}
-
-void ScoreScene::fbMessageCallback(int responseCode, const char* responseMessage)
-{
-	//FB_AUTO_MESSAGE_ERROR
-
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-	if(responseCode == EziSocialWrapperNS::RESPONSE_CODE::FB_AUTO_MESSAGE_PUBLISHED)
-	{
-		CCLOG("Message published successfully!");
-	}
-#endif
 }
 
 void ScoreScene::fbSendRequestCallback( int responseCode, const char* responseMessage, cocos2d::CCArray* friendsGotRequests )
@@ -1817,7 +1586,7 @@ void ScoreScene::closeWaitDialog()
     if (m_waitDialog != NULL) {
         m_waitDialogCounter--;
         
-        if (m_waitDialogCounter <= 0) {
+        if (m_waitDialogCounter <= 1) {
             this->removeChild(m_waitDialog);
             m_waitDialog = NULL;
             
@@ -1827,3 +1596,6 @@ void ScoreScene::closeWaitDialog()
         }
     }
 }
+
+
+
