@@ -115,7 +115,7 @@ public:
     
     //////////////////////////////////////////////////////////////////////////
     
-    void buyItem(std::string appId, std::string fbId, std::string itemName, std::string uniqueTag);
+    void buyItem(std::string appId, std::string fbId, std::string itemName, int count, std::string uniqueTag);
     void _onBuyItemCompleted(CCHttpClient *sender, CCHttpResponse *response);
     
     
