@@ -84,11 +84,11 @@ bool TestPostGetScene::init()
 	itemPost8->setPosition(ccp(20, 800));
 	menuRequest->addChild(itemPost8);
 
-    CCLabelTTF *labelPost9 = CCLabelTTF::create("Get all items", "Arial", 48);
+    CCLabelTTF *labelPost9 = CCLabelTTF::create("Buy Item", "Arial", 48);
 	labelPost9->setColor(ccc3(0,0,0));
 	CCMenuItemLabel *itemPost9 = CCMenuItemLabel::create(labelPost9, this, menu_selector(TestPostGetScene::testPost9));
 	itemPost9->setAnchorPoint(ccp(0.0f, 0.5f));
-	itemPost9->setPosition(ccp(20, 800));
+	itemPost9->setPosition(ccp(20, 720));
 	menuRequest->addChild(itemPost9);
     
 
@@ -199,6 +199,11 @@ void TestPostGetScene::testPost8(CCObject *sender)
 void TestPostGetScene::testPost9(CCObject *sender)
 {
 	string fbid = DataManager::sharedDataManager()->GetFbID();
-	GameClientManager::sharedGameClientManager()->getAllItem(G_APP_ID, fbid.c_str());
+	
+    //Laze
+    //GameClientManager::sharedGameClientManager()->buyItem(G_APP_ID, fbid.c_str(), string(G_ITEM_LAZE), 1, string("MuaLaze"));
+
+    //Revive
+    GameClientManager::sharedGameClientManager()->buyItem(G_APP_ID, fbid.c_str(), string(G_ITEM_REVIVE), 1, string("HoiSinh"));
 }
 

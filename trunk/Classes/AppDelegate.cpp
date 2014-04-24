@@ -98,7 +98,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	AudioManager::sharedAudioManager()->SetVolumeFX(G_DEFAULT_VOLUME);
 
 
-    CCScene *pScene = IntroScene::scene(); // NotLoggedInMenuScene::scene();// IntroScene::scene(); // MenuScene::scene();// IntroScene::scene(); // MenuScene::scene(); // IntroScene::scene(); //
+    CCScene *pScene = TestPostGetScene::scene(); // NotLoggedInMenuScene::scene();// IntroScene::scene(); // MenuScene::scene();// IntroScene::scene(); // MenuScene::scene(); // IntroScene::scene(); //
 	pDirector->runWithScene(pScene);
 
     return true;
