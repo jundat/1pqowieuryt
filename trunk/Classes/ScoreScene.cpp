@@ -43,6 +43,7 @@ bool ScoreScene::init()
 
 	m_lbInviteQuatang = NULL;
     m_isFirstTimeLogIn = false;
+    m_waitDialog = NULL;
 
 
 	CCSprite* bg = CCSprite::create("bg_stars.png");

@@ -2,6 +2,7 @@
 #define __LOG_OUT_DIALOG_H__
 
 #include "cocos2d.h"
+
 USING_NS_CC;
 
 class LogOutDialog : public cocos2d::CCLayerColor

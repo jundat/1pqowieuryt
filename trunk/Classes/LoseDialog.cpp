@@ -23,6 +23,7 @@ bool LoseDialog::init()
 	m_timerBar = NULL;
 	m_timerNode = NULL;
 	m_lbTimer = NULL;
+    m_waitDialog = NULL;
 
 	CCPoint pExit = ccp(400, 1280-813);
 	CCPoint pRevive = ccp(400, 1280-813);
@@ -131,6 +132,7 @@ bool LoseDialog::init()
 		breakRecord();
 	}
 
+    GameClientManager::sharedGameClientManager()->setDelegate(this);
 	//////////////////////////////////////////////////////////////////////////
 
     return true;
@@ -206,66 +208,10 @@ void LoseDialog::menuCallBack( CCObject* pSender )
 
 void LoseDialog::reviveCallBack( CCObject* pSender )
 {
-	//check if enough Diamon
-	int diamon = DataManager::sharedDataManager()->GetDiamon();
-	if (diamon >= G_DIAMON_PER_LIFE)
-	{
-		DataManager::sharedDataManager()->SetDiamon(diamon - G_DIAMON_PER_LIFE);
-
-		//animation diamon
-		CCSprite* sprDiamon = CCSprite::create("sub_diamond.png");
-		sprDiamon->setPosition(m_itRevive->getPosition());
-		this->addChild(sprDiamon);
-
-		PLAY_GET_DOUBLE_LAZER_EFFECT;
-        
-
-		//////////////////////////////////////////////////////////////////////////
-		//unvisiable
-		m_lbTimer->setVisible(false);
-		m_timerBar->setVisible(false);
-		m_timerNode->setVisible(false);
-
-		//m_itRevive->setVisible(false);
-		m_itRevive->setEnabled(false);
-		m_itRevive->setOpacity(0.6f * 255);
-		this->unscheduleUpdate();
-
-		//m_lbDiamond
-
-		CCString* s = CCString::createWithFormat("%d", DataManager::sharedDataManager()->GetDiamon());
-		m_lbDiamon->setString(s->getCString());
-
-		//////////////////////////////////////////////////////////////////////////
-
-
-		sprDiamon->runAction(CCSequence::createWithTwoActions(
-			CCSpawn::createWithTwoActions(
-				CCJumpTo::create(1.0f, ccp(sprDiamon->getPositionX(), - sprDiamon->getContentSize().height), 600, 1),
-				CCFadeOut::create(1.0f)
-			),
-			CCCallFunc::create(this, callfunc_selector(LoseDialog::closeReviveAnimation))
-			));
-	}
-	else //Need more diamon
-	{
-		PLAY_OUT_PORP_EFFECT;
-
-		CCMessageBox(TXT("lose_lack_diamond"), TXT("lose_error_caption"));
-
-		//visitble
-		m_itExitButton->setVisible(true);
-
-		//unvisiable
-		m_lbTimer->setVisible(false);
-		m_timerBar->setVisible(false);
-		m_timerNode->setVisible(false);
-
-		m_itRevive->setVisible(false);
-		//m_itRevive->setEnabled(false);
-		//m_itRevive->setOpacity(0.6f * 255);
-		this->unscheduleUpdate();
-	}
+    string fbid = DataManager::sharedDataManager()->GetFbID();
+    GameClientManager::sharedGameClientManager()->buyItem(G_APP_ID, fbid.c_str(), string(G_ITEM_REVIVE), 1, string("Hoi_sinh"));
+    
+    this->showWaitDialog(TXT("buy_revive"));
 }
 
 void LoseDialog::breakRecord()
@@ -451,4 +397,77 @@ void LoseDialog::closeReviveAnimation()
 
 	//remove dialog after animation
 	this->removeFromParent();
+}
+
+
+void LoseDialog::showWaitDialog(string title)
+{
+    CCLOG("LoseDialog::showWaitDialog");
+    this->setKeypadEnabled(false);
+    
+    
+    if (m_waitDialog != NULL) {
+        m_waitDialog->m_refCount++;
+        
+    } else {
+        m_waitDialog = WaitDialog::create();
+        m_waitDialog->m_refCount = 1;
+        m_waitDialog->setTitle(title);
+        
+        this->addChild(m_waitDialog, 100); // =1
+    }
+}
+
+void LoseDialog::closeWaitDialog()
+{
+    CCLOG("LoseDialog::closeWaitDialog");
+    if (m_waitDialog != NULL) {
+        m_waitDialog->m_refCount--;
+        
+        if (m_waitDialog->m_refCount <= 0) {
+            this->removeChild(m_waitDialog);
+            m_waitDialog = NULL;
+
+            
+            this->setKeypadEnabled(true);
+        }
+    }
+}
+
+
+
+void LoseDialog::onBuyItemCompleted(bool isSuccess, int newCoin, std::string itemType, int itemCount, std::string uniqueTag)
+{
+    if (isSuccess) {
+        CCLOG("ItemType= %s", itemType.c_str());
+        CCLOG("Count= %d", itemCount);
+        CCLOG("uniqueTag= %s", uniqueTag.c_str());
+        
+        DataManager::sharedDataManager()->SetDiamon(newCoin);
+        
+        PLAY_GET_DOUBLE_LAZER_EFFECT;
+        
+		//////////////////////////////////////////////////////////////////////////
+		//unvisiable
+		m_lbTimer->setVisible(false);
+		m_timerBar->setVisible(false);
+		m_timerNode->setVisible(false);
+        
+		m_itRevive->setEnabled(false);
+		m_itRevive->setOpacity(0.6f * 255);
+		this->unscheduleUpdate();
+        
+		CCString* s = CCString::createWithFormat("%d", DataManager::sharedDataManager()->GetDiamon());
+		m_lbDiamon->setString(s->getCString());
+        
+        //resume game
+        closeReviveAnimation();
+
+    } else {
+        PLAY_OUT_PORP_EFFECT;
+        CCMessageBox(TXT("buy_revive_error"), TXT("error_caption"));
+        //CCMessageBox(TXT("lose_lack_diamond"), TXT("lose_error_caption"));
+    }
+    
+    this->closeWaitDialog();
 }

@@ -46,6 +46,7 @@ bool MenuScene::init()
 
 	m_isShowDialog = false;
 	this->setKeypadEnabled(true);
+    m_waitDialog = NULL;
 
 	//////////////////////////////////////////////////////////////////////////
 	m_isLoggedIn = false;
