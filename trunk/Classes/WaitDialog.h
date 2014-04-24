@@ -12,9 +12,13 @@ public:
     CREATE_FUNC(WaitDialog);
     
     void setTitle(std::string title);
+
     
 public:
     CCLabelTTF* m_labelTitle;
+    int m_refCount;
+    
+    
 };
 
 #endif // __WAIT_DIALOG_H__

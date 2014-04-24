@@ -12,8 +12,6 @@ USING_NS_CC;
 USING_NS_CC_EXT;
 using namespace std;
 
-int ScoreScene::s_beginFriendInd = 0;
-int ScoreScene::s_endFriendInd = 0;
 
 #define 	BEGIN_TAG_LB_GET_BOOM			6000
 #define 	BEGIN_TAG_LB_GET_BOOM_TIMER		5000
@@ -1570,10 +1568,10 @@ void ScoreScene::showWaitDialog(string title)
     this->setKeypadEnabled(false);
     
     if (m_waitDialog != NULL) {
-        m_waitDialogCounter++;
+        m_waitDialog->m_refCount++;
         
     } else {
-        m_waitDialogCounter = 1;
+        m_waitDialog->m_refCount = 1;
         m_waitDialog = WaitDialog::create();
         m_waitDialog->setTitle(title);
         
@@ -1584,9 +1582,9 @@ void ScoreScene::showWaitDialog(string title)
 void ScoreScene::closeWaitDialog()
 {
     if (m_waitDialog != NULL) {
-        m_waitDialogCounter--;
+        m_waitDialog->m_refCount--;
         
-        if (m_waitDialogCounter <= 1) {
+        if (m_waitDialog->m_refCount <= 1) {
             this->removeChild(m_waitDialog);
             m_waitDialog = NULL;
             

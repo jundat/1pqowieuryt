@@ -1060,7 +1060,7 @@ void GameClientManager::_onBuyItemCompleted(CCHttpClient *sender, CCHttpResponse
 		bool success = CCString::create(json_string_value(isSuccess))->boolValue();
         
         if (success) {
-            newCoin = json_object_get(root, "newCoin");
+            newCoin = json_object_get(root, "coin");
             type    = json_object_get(root, "type");
             count    = json_object_get(root, "count");
             

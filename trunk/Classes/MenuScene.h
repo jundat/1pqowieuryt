@@ -146,7 +146,6 @@ public:
     void showWaitDialog(string title);
     void closeWaitDialog();
     WaitDialog* m_waitDialog;
-    int m_waitDialogCounter;
     
     bool checkRefreshFriendList();
     
@@ -159,6 +158,11 @@ public:
     void sendUserProfileToServer(string fbId, string fbName, string email);
     virtual void onSendPlayerFbProfileCompleted( bool isSuccess );
     void getFacebookFriends();
+    
+    
+	static int s_beginFriendInd;
+	static int s_endFriendInd;
+
 
     virtual void fbSessionCallback(int responseCode, const char* responseMessage);
     virtual void fbUserPhotoCallback(const char *userPhotoPath, const char* fbID);

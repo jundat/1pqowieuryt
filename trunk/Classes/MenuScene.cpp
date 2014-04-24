@@ -19,6 +19,11 @@ static bool IS_SHOW_VERSION = false;
 static int  WAIT_DIALOG_TAG = 100;
 
 
+int MenuScene::s_beginFriendInd = 0;
+int MenuScene::s_endFriendInd = 0;
+
+
+
 CCScene* MenuScene::scene()
 {
     CCScene *scene = CCScene::create();
@@ -269,7 +274,14 @@ bool MenuScene::init()
 		GetRegistrationId();
 	}
 
-
+    //
+    //refresh
+    //
+    if (m_isLoggedIn == true) {
+        this->checkRefreshFriendList();
+    }
+    
+    
 	STOP_BACKGROUND_MUSIC;
     return true;
 }
@@ -529,6 +541,7 @@ void MenuScene::settingCallback( CCObject* pSender )
 
 void MenuScene::facebookCallback( CCObject* pSender )
 {
+    CCLOG("MenuScene::facebookCallback");
 	PLAY_BUTTON_EFFECT;
 
 	if (m_isLoggedIn == true)
@@ -540,16 +553,6 @@ void MenuScene::facebookCallback( CCObject* pSender )
 	else
 	{
 		facebookLogInOut();
-	}
-
-	/////////////refresh view ///////////////
-	if (m_isLoggedIn)
-	{
-		m_facebookItem->setSelectedIndex(1);
-	} 
-	else
-	{
-		m_facebookItem->setSelectedIndex(0);
 	}
 }
 
@@ -564,6 +567,7 @@ void MenuScene::forceLogInFacebook()
 
 void MenuScene::facebookLogInOut()
 {
+    CCLOG("MenuScene::facebookLogInOut");
 	if (m_isLoggedIn)
 	{
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
@@ -572,6 +576,7 @@ void MenuScene::facebookLogInOut()
 	} 
 	else
 	{
+        CCLOG("MenuScene::facebookLogInOut/LogIn");
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 		bool needPublicPermission = true;
 		EziSocialObject::sharedObject()->performLoginUsingFacebook(needPublicPermission); // Pass true if you need publish permission also
@@ -828,12 +833,13 @@ void MenuScene::sendUserProfileToServer(string fbId, string fbName, string email
 
 void MenuScene::getFacebookFriends()
 {
-    CCMessageBox("Get FB Friends", "Kaka");
-	//CCLOG("getFacebookFriends");
+    //DEBUG
+	CCLOG("getFacebookFriends");
+    
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-	ScoreScene::s_beginFriendInd = 0;
-	ScoreScene::s_endFriendInd = G_NUMBER_FRIEND_TO_GET - 1;
-	EziSocialObject::sharedObject()->getFriends(EziSocialWrapperNS::FB_FRIEND_SEARCH::ALL_FRIENDS, ScoreScene::s_beginFriendInd, ScoreScene::s_endFriendInd);
+	MenuScene::s_beginFriendInd = 0;
+	MenuScene::s_endFriendInd = G_NUMBER_FRIEND_TO_GET - 1;
+	EziSocialObject::sharedObject()->getFriends(EziSocialWrapperNS::FB_FRIEND_SEARCH::ALL_FRIENDS, MenuScene::s_beginFriendInd, MenuScene::s_endFriendInd);
 
 	DataManager::sharedDataManager()->SetTimeRefreshFriendNow();
     
@@ -868,9 +874,9 @@ void MenuScene::fbFriendsCallback( int responseCode, const char* responseMessage
 
 		GameClientManager::sharedGameClientManager()->sendFriendList(DataManager::sharedDataManager()->GetFbID(), arrFriends);		
 
-		ScoreScene::s_beginFriendInd += G_NUMBER_FRIEND_TO_GET;
-		ScoreScene::s_endFriendInd += G_NUMBER_FRIEND_TO_GET;
-		EziSocialObject::sharedObject()->getFriends(EziSocialWrapperNS::FB_FRIEND_SEARCH::ALL_FRIENDS, ScoreScene::s_beginFriendInd, ScoreScene::s_endFriendInd);
+		MenuScene::s_beginFriendInd += G_NUMBER_FRIEND_TO_GET;
+		MenuScene::s_endFriendInd += G_NUMBER_FRIEND_TO_GET;
+		EziSocialObject::sharedObject()->getFriends(EziSocialWrapperNS::FB_FRIEND_SEARCH::ALL_FRIENDS, MenuScene::s_beginFriendInd, MenuScene::s_endFriendInd);
 	} else {
         //end of friends
         this->closeWaitDialog();
@@ -1086,14 +1092,15 @@ void MenuScene::onGetAllItemsCompleted(bool isSuccess, int laze, int life, int c
 
 void MenuScene::showWaitDialog(string title)
 {
+    CCLOG("MenuScene::showWaitDialog");
     this->onShowDialog();
     
     if (m_waitDialog != NULL) {
-        m_waitDialogCounter++;
-        
+        m_waitDialog->m_refCount++;
+
     } else {
-        m_waitDialogCounter = 1;
         m_waitDialog = WaitDialog::create();
+        m_waitDialog->m_refCount = 1;
         m_waitDialog->setTitle(title);
         
         this->addChild(m_waitDialog, WAIT_DIALOG_TAG); // =1
@@ -1103,9 +1110,9 @@ void MenuScene::showWaitDialog(string title)
 void MenuScene::closeWaitDialog()
 {
     if (m_waitDialog != NULL) {
-        m_waitDialogCounter--;
+        m_waitDialog->m_refCount--;
         
-        if (m_waitDialogCounter <= 0) {
+        if (m_waitDialog->m_refCount <= 0) {
             this->removeChild(m_waitDialog);
             m_waitDialog = NULL;
             this->onCloseDialog();
@@ -1124,7 +1131,7 @@ bool MenuScene::checkRefreshFriendList()
 	if (_lastTimeRefreshFriend == NULL)
 	{
 		CCLOG("checkRefreshFriendList == first time");
-		getFacebookFriends();
+		this->getFacebookFriends();
         return true;
 	}
 	else
@@ -1136,7 +1143,7 @@ bool MenuScene::checkRefreshFriendList()
 		if (elapsedTime > G_TIME_TO_REFRESH_FRIENDS)
 		{
 			CCLOG("checkRefreshFriendList == true");
-			getFacebookFriends();
+			this->getFacebookFriends();
             return true;
 		}
 		else
