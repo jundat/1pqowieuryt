@@ -119,6 +119,8 @@
 		<string>error_caption</string>
 		<key>buy_revive</key>
 		<string>buy_revive</string>
+		<key>get_laze_free_error</key>
+		<string>get_laze_free_error</string>
 	</dict>
 
 	<key>English</key>
@@ -239,6 +241,8 @@
 		<string>Error</string>
 		<key>buy_revive</key>
 		<string>Buy revive item...</string>
+		<key>get_laze_free_error</key>
+		<string>Get free laze failed</string>
 	</dict>
 
 	<key>Vietnamese</key>
@@ -359,6 +363,8 @@
 		<string>Lỗi</string>
 		<key>buy_revive</key>
 		<string>Mua hồi sinh</string>
+		<key>get_laze_free_error</key>
+		<string>Không thể nhận quà</string>
 	</dict>
 
 </dict>
