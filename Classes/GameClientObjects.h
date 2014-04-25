@@ -18,6 +18,7 @@ public:
 	int m_score;
 	int m_coin;
     
+    //time in client
     long m_timeGetLaze;
     long m_timeSendLife;
 
@@ -38,7 +39,7 @@ public:
 		m_photoPath = string();
 	}
 
-	FacebookAccount(string _fbId, string _fbName, string _email, int _score, int _coin = 0, long timeGetLaze = 0, long timeSendLife = 0)
+	FacebookAccount(string _fbId, string _fbName, string _email, int _score, int _coin, long timeGetLaze, long timeSendLife)
 	{
 		m_fbId = _fbId;
 		m_fbName = _fbName;
@@ -79,7 +80,7 @@ public:
 
 		pRet->m_photoPath = string(m_photoPath);
 		
-
+        
 		CC_SAFE_DELETE(pNewZone);
 		return pRet;
 	}

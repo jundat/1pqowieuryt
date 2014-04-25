@@ -16,7 +16,6 @@ string GameClientManager::s_urlScore = string("");
 
 void GameClientManager::setUrls( string urlProfile, string urlDevice, string urlFriend, string urlScore )
 {
-	CCLOG("SET URL");
 	GameClientManager::s_urlProfile = string(urlProfile);
 	GameClientManager::s_urlDevice = string(urlDevice);
 	GameClientManager::s_urlFriend = string(urlFriend);
@@ -26,19 +25,14 @@ void GameClientManager::setUrls( string urlProfile, string urlDevice, string url
 std::string GameClientManager::encodeBeforeSend( std::string src )
 {
 	//CCLOG("BEFORE:\n%s", src.c_str());
-	CCLOG("GotoEncode");
     
 	if (G_IS_ENCODE)
 	{
 		int len = src.length();
 		unsigned char m_Test[ENCODE_BUFFER_SIZE];
-        CCLOG("before copy");
 		std::copy(src.c_str(), src.c_str() + len, m_Test);
-        CCLOG("after copy");
 		string result = "data=";
-        CCLOG("before encode");
 		result.append(Base64::encode(m_Test, len));
-        CCLOG("after encode");
 		//CCLOG("AFTER:\n%s", result.c_str());
 
 		return result;
@@ -216,7 +210,16 @@ void GameClientManager::_onGetPlayerFbProfileCompleted( CCHttpClient *sender, CC
 		email = json_object_get(root, "email");
 		coin = json_object_get(root, "coin");
 
-		FacebookAccount* acc = new FacebookAccount(json_string_value(fbId), json_string_value(fbName), std::string(json_string_value(email)), -1, (int)atof(json_string_value(coin)));
+        //(string _fbId, string _fbName, string _email, int _score, int _coin, long timeGetLaze, long timeSendLife)
+        
+		FacebookAccount* acc = new FacebookAccount(
+                                                   json_string_value(fbId),
+                                                   json_string_value(fbName),
+                                                   std::string(json_string_value(email)),
+                                                   -1,
+                                                   (int)atof(json_string_value(coin)),
+                                                   -1,
+                                                   -1);
 
 		if (m_clientDelegate)
 		{
@@ -366,7 +369,7 @@ void GameClientManager::_onGetFriendListCompleted( CCHttpClient *sender, CCHttpR
 		CCLOG("Request failed: %s", response->getErrorBuffer());
 		if (m_clientDelegate)
 		{
-			m_clientDelegate->onGetFriendListCompleted(false, -1, NULL);
+			m_clientDelegate->onGetFriendListCompleted(false, NULL);
 		}
 	}
 	else
@@ -391,7 +394,10 @@ void GameClientManager::_onGetFriendListCompleted( CCHttpClient *sender, CCHttpR
 		//foreach to get all friend, insert to list
 		int count = json_array_size(friendList);
 		CCArray* arrFriends = CCArray::create();
-		//arrFriends->retain();
+        
+        
+        long _serverTime = ((long long)atoll(json_string_value(serverTime)) / 1000);
+        long _clientTime = static_cast<long int> (time(NULL));
 
 		for(int i = 0; i < count; i++)
 		{
@@ -409,15 +415,32 @@ void GameClientManager::_onGetFriendListCompleted( CCHttpClient *sender, CCHttpR
 			timeGetLaze = json_object_get(fbFriend, "timeLaze");
             //timeSendLife = json_object_get(fbFriend, "timeSendLife");
 			score = json_object_get(fbFriend, "score");
+            
+            long _timeGetLaze = _clientTime - ( _serverTime - ((long long)atoll(json_string_value(timeGetLaze)) / 1000));
+            //long _timeSendLife = _clientTime - ( _serverTime - ((long long)atoll(json_string_value(timeSendLife) / 1000));
+            
+            CCLOG("~~~TIME LAZE Client: %ld", _timeGetLaze);
+            
+            //CCLOG("Time_Get_Laze: %ld", _timeGetLaze);
+            //CCLOG("Time_Send_Life: %lld", _timeSendLife);
 
-			FacebookAccount* acc = new FacebookAccount(json_string_value(fbId), json_string_value(fbName), std::string(), (int)atoi(json_string_value(score)), (long)atol(json_string_value(timeGetLaze) /*, (long)atol(json_string_value(timeSendLife) */));
+            //(string _fbId, string _fbName, string _email, int _score, int _coin, long timeGetLaze, long timeSendLife)
+            
+			FacebookAccount* acc = new FacebookAccount(json_string_value(fbId),
+                                                       json_string_value(fbName),
+                                                       std::string(""),
+                                                       (int)atoi(json_string_value(score)),
+                                                       -1,
+                                                       _timeGetLaze,
+                                                       -1
+                                                       /*, _timeSendLife */
+                                                       );
 			arrFriends->addObject(acc);
 		}
 
-		//GameClientManager::SortFriendScore(arrFriends);
 		if (m_clientDelegate)
 		{
-			m_clientDelegate->onGetFriendListCompleted(true, (long)atol(json_string_value(serverTime)), arrFriends);
+			m_clientDelegate->onGetFriendListCompleted(true, arrFriends);
 		}
 	}
 
@@ -814,10 +837,11 @@ void GameClientManager::_onRequestReviveCompleted( CCHttpClient *sender, CCHttpR
 		root = json_loads(str.c_str(), strlen(str.c_str()), &error);
 		isSuccess = json_object_get(root, "isSuccess");
 		newDiamond = json_object_get(root, "newDiamond");
-
+        bool success = CCString::create(json_string_value(isSuccess))->boolValue();
+        
 		if (m_clientDelegate)
 		{
-			m_clientDelegate->onRequestReviveCompleted((bool)json_is_true(isSuccess), (int)atof(json_string_value(newDiamond)));
+			m_clientDelegate->onRequestReviveCompleted(success, (int)atof(json_string_value(newDiamond)));
 		}
 	}
 
@@ -893,10 +917,11 @@ void GameClientManager::_onRequestGetLazerCompleted( CCHttpClient *sender, CCHtt
 		root = json_loads(str.c_str(), strlen(str.c_str()), &error);
 		isSuccess = json_object_get(root, "isSuccess");
 		newDiamond = json_object_get(root, "newDiamond");
-
+        bool success = CCString::create(json_string_value(isSuccess))->boolValue();
+        
 		if (m_clientDelegate)
 		{
-			m_clientDelegate->onRequestGetLazerCompleted((bool)json_is_true(isSuccess), (int)atof(json_string_value(newDiamond)));
+			m_clientDelegate->onRequestGetLazerCompleted(success, (int)atof(json_string_value(newDiamond)));
 		}
 	}
 
@@ -1095,6 +1120,183 @@ void GameClientManager::_onBuyItemCompleted(CCHttpClient *sender, CCHttpResponse
     
 	CCLOG("------- END %s -------", response->getHttpRequest()->getTag());
 }
+
+
+//
+
+
+void GameClientManager::getLazeFree(std::string appId, std::string fbId, std::string friendId)
+{
+    string sUrl = string(G_URL_FRIEND_LIST);
+	CCLOG("URL: %s", sUrl.c_str());
+	CCAssert(sUrl.length() > 0, "Not set G_URL_FRIEND_LIST yet");
+	CCHttpRequest* request = new CCHttpRequest();
+	request->setUrl(sUrl.c_str());
+	request->setRequestType(CCHttpRequest::kHttpPost);
+    
+	request->setTag(friendId.c_str());
+	request->setResponseCallback(this, httpresponse_selector(GameClientManager::_onGetLazeFreeCompleted));
+    
+    
+	// write the post data
+	CCString* strData = CCString::createWithFormat(
+           "{ method: \"getGift\", data: { appId: \"%s\", fbId: \"%s\", \"friendId\": \"%s\" }, sign: \"%s\", appId: \"%s\" }",
+           G_APP_ID,
+           fbId.c_str(),
+           friendId.c_str(),
+           getMD5().c_str(),
+           G_APP_ID);
+    
+    
+	std::string s = encodeBeforeSend(strData->getCString());
+	request->setRequestData(s.c_str(), strlen(s.c_str()));
+    
+	CCHttpClient::getInstance()->send(request);
+	request->release();
+}
+
+void GameClientManager::_onGetLazeFreeCompleted(CCHttpClient *sender, CCHttpResponse *response)
+{
+    if (!response)
+	{
+		return;
+	}
+    
+	//Show info
+	CCLOG("------- BEGIN %s -------", response->getHttpRequest()->getTag());
+	CCLOG("Status: [%i]", response->getResponseCode());
+    
+	if (!response->isSucceed())
+	{
+		CCLOG("Request failed: %s", response->getErrorBuffer());
+		if (m_clientDelegate)
+		{
+			m_clientDelegate->onGetLazeFreeCompleted(false, response->getHttpRequest()->getTag());
+		}
+	}
+	else
+	{
+		std::vector<char> *buffer = response->getResponseData();
+		std::string str(buffer->begin(), buffer->end());
+        
+		str = decodeBeforeProcess(str);
+        
+		CCLOG("Content: %s", str.c_str());
+        
+		//get score from response
+		json_t *root;
+		json_error_t error;
+		json_t *isSuccess;
+        //json_t *friendId;
+        
+        
+		root = json_loads(str.c_str(), strlen(str.c_str()), &error);
+		isSuccess = json_object_get(root, "isSuccess");
+		bool success = CCString::create(json_string_value(isSuccess))->boolValue();
+        //friendId = json_object_get(root, "friendId");
+        
+        if (m_clientDelegate)
+        {
+            m_clientDelegate->onGetLazeFreeCompleted(success, response->getHttpRequest()->getTag());
+        }
+    }
+    
+	CCLOG("------- END %s -------", response->getHttpRequest()->getTag());
+}
+
+
+//
+
+
+void GameClientManager::useLife(std::string appId, std::string fbId)
+{
+    string sUrl = string(G_URL_PLAYER_FB_PROFILE);
+	CCLOG("URL: %s", sUrl.c_str());
+	CCAssert(sUrl.length() > 0, "Not set G_URL_PLAYER_FB_PROFILE yet");
+	CCHttpRequest* request = new CCHttpRequest();
+	request->setUrl(sUrl.c_str());
+	request->setRequestType(CCHttpRequest::kHttpPost);
+    
+	request->setTag("Use_life");
+	request->setResponseCallback(this, httpresponse_selector(GameClientManager::_onUseLifeCompleted));
+    
+    
+	// write the post data
+	CCString* strData = CCString::createWithFormat(
+           "{ method: \"useLife\", data: { appId: \"%s\", fbId: \"%s\"}, sign: \"%s\", appId: \"%s\" }",
+           G_APP_ID,
+           fbId.c_str(),
+           getMD5().c_str(),
+           G_APP_ID);
+    
+    
+	std::string s = encodeBeforeSend(strData->getCString());
+	request->setRequestData(s.c_str(), strlen(s.c_str()));
+    
+	CCHttpClient::getInstance()->send(request);
+	request->release();
+}
+
+
+void GameClientManager::_onUseLifeCompleted(CCHttpClient *sender, CCHttpResponse *response)
+{
+    if (!response)
+	{
+		return;
+	}
+    
+	//Show info
+	CCLOG("------- BEGIN %s -------", response->getHttpRequest()->getTag());
+	CCLOG("Status: [%i]", response->getResponseCode());
+    
+	if (!response->isSucceed())
+	{
+		CCLOG("Request failed: %s", response->getErrorBuffer());
+		if (m_clientDelegate)
+		{
+			m_clientDelegate->onUseLifeCompleted(false, -1);
+		}
+	}
+	else
+	{
+		std::vector<char> *buffer = response->getResponseData();
+		std::string str(buffer->begin(), buffer->end());
+        
+		str = decodeBeforeProcess(str);
+        
+		CCLOG("Content: %s", str.c_str());
+        
+		//get score from response
+		json_t *root;
+		json_error_t error;
+		json_t *isSuccess;
+        json_t *newLife;
+        
+        
+		root = json_loads(str.c_str(), strlen(str.c_str()), &error);
+		isSuccess = json_object_get(root, "isSuccess");
+		bool success = CCString::create(json_string_value(isSuccess))->boolValue();
+        
+        if (success == true) {
+            newLife = json_object_get(root, "life");
+            if (m_clientDelegate)
+            {
+                m_clientDelegate->onUseLifeCompleted(success, (int)atoi(json_string_value(newLife)));
+            }
+        } else {
+            if (m_clientDelegate)
+            {
+                m_clientDelegate->onUseLifeCompleted(success, -1);
+            }
+        }
+    }
+    
+	CCLOG("------- END %s -------", response->getHttpRequest()->getTag());
+}
+
+
+
+
 
 //Send, receive items
 //

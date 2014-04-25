@@ -759,7 +759,7 @@ void MenuScene::fbSessionCallback(int responseCode, const char *responseMessage)
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS) // fbUserDetailCallback
 
-void MenuScene::fbUserDetailCallback( int responseCode, const char* responseMessage, EziFacebookUser* fbUser )
+void MenuScene::fbUserDetailCallback(int responseCode, const char* responseMessage, EziFacebookUser* fbUser )
 {
 	//CCLOG("fbUserDetailCallback");
 	if (fbUser != NULL)
@@ -855,7 +855,17 @@ void MenuScene::fbFriendsCallback( int responseCode, const char* responseMessage
 			{
 				string fbId = fbFriend->getFBID();
 				string fbName = fbFriend->getName();
-				FacebookAccount* acc = new FacebookAccount(fbId, fbName, string(), -1);
+                
+                //(string _fbId, string _fbName, string _email, int _score, int _coin, long timeGetLaze, long timeSendLife)
+                
+				FacebookAccount* acc = new FacebookAccount(
+                                                           fbId,
+                                                           fbName,
+                                                           std::string(""),
+                                                           -1,
+                                                           -1,
+                                                           -1,
+                                                           -1);
 
 				arrFriends->addObject(acc);
 			}
@@ -1143,3 +1153,18 @@ bool MenuScene::checkRefreshFriendList()
     
     return false;
 }
+
+
+void MenuScene::onUseLifeCompleted(bool isSuccess, int newLife)
+{
+    if (isSuccess) {
+        
+    } else {
+        
+    }
+}
+
+
+
+
+

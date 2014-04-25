@@ -84,11 +84,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Classes/GameClientObjects.h"
-            timestampString = "420038731.684828"
+            timestampString = "420119199.392003"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "89"
-            endingLineNumber = "89"
+            startingLineNumber = "90"
+            endingLineNumber = "90"
             landmarkName = "toJson()"
             landmarkType = "5">
             <Locations>
@@ -99,11 +99,11 @@
                   symbolName = "DataManager::SetHigherFriends(cocos2d::CCArray*)"
                   moduleName = "PhiCongButChi"
                   urlString = "file:///Users/lenguyen/Desktop/cocos2d-x-2.1.5/projects/PhiCongButChi/Classes/GameClientObjects.h"
-                  timestampString = "420039270.847869"
+                  timestampString = "420119200.562388"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "89"
-                  endingLineNumber = "89"
+                  startingLineNumber = "90"
+                  endingLineNumber = "90"
                   offsetFromSymbolStart = "214">
                </Location>
                <Location
@@ -113,11 +113,11 @@
                   symbolName = "TestPostGetScene::onGetFriendLeaderboardCompleted(bool, cocos2d::CCArray*)"
                   moduleName = "PhiCongButChi"
                   urlString = "file:///Users/lenguyen/Desktop/cocos2d-x-2.1.5/projects/PhiCongButChi/Classes/GameClientObjects.h"
-                  timestampString = "420039270.848066"
+                  timestampString = "420119200.56261"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "89"
-                  endingLineNumber = "89"
+                  startingLineNumber = "90"
+                  endingLineNumber = "90"
                   offsetFromSymbolStart = "64">
                </Location>
                <Location
@@ -127,14 +127,28 @@
                   symbolName = "TestPostGetScene::onGetWorldLeaderboardCompleted(bool, cocos2d::CCArray*)"
                   moduleName = "PhiCongButChi"
                   urlString = "file:///Users/lenguyen/Desktop/cocos2d-x-2.1.5/projects/PhiCongButChi/Classes/GameClientObjects.h"
-                  timestampString = "420039270.848227"
+                  timestampString = "420119200.562806"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "89"
-                  endingLineNumber = "89"
+                  startingLineNumber = "90"
+                  endingLineNumber = "90"
                   offsetFromSymbolStart = "64">
                </Location>
             </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../Classes/ScoreScene.cpp"
+            timestampString = "420090726.861075"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "626"
+            endingLineNumber = "626">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

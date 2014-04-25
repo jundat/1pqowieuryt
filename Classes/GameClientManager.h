@@ -119,6 +119,19 @@ public:
     void _onBuyItemCompleted(CCHttpClient *sender, CCHttpResponse *response);
     
     
+    void getLazeFree(std::string appId, std::string fbId, std::string friendId);
+    void _onGetLazeFreeCompleted(CCHttpClient *sender, CCHttpResponse *response);
+    
+    
+    //////////////////////////////////////////////////////////////////////////
+    
+    void useLife(std::string appId, std::string fbId);
+    void _onUseLifeCompleted(CCHttpClient *sender, CCHttpResponse *response);
+    
+    
+    
+    
+    
     
 	//compare score in facebook account
 	static int CompareFriendScore(const CCObject* p1, const CCObject* p2)

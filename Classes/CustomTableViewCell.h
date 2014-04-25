@@ -25,6 +25,8 @@ public:
 	CCLabelTTF* m_lbGetBoom;
 	CCMenuItemImage* m_itGetBoom;
 	CCMenuItemImage* m_itGetBoomNow;
+    CCSprite* m_sprWait;
+    
 
 	//send life
 	tm* m_lastTimeSendLife;

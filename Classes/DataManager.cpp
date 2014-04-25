@@ -489,11 +489,16 @@ CCArray* DataManager::GetHigherFriends()
 
 		CCLOG("%s : %s", json_string_value(fbName), json_string_value(score));
 
+        //(string _fbId, string _fbName, string _email, int _score, int _coin, long timeGetLaze, long timeSendLife)
+        
 		FacebookAccount* acc = new FacebookAccount(
-			json_string_value(fbId),
-			json_string_value(fbName), 
-			std::string(json_string_value(email)), 
-			(int)json_number_value(score));
+            json_string_value(fbId),
+            json_string_value(fbName), 
+            std::string(json_string_value(email)), 
+            (int)json_number_value(score),
+           -1,
+           -1,
+           -1);
 		arrFriends->addObject(acc);
 	}
 

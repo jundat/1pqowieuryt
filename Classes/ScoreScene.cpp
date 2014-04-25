@@ -39,7 +39,9 @@ bool ScoreScene::init()
 	m_friendList = NULL;
 	m_arrHighScores = NULL;
 	m_arrRequests = NULL;
-	m_friendCell = NULL;
+    
+    m_getLazeCell = NULL;
+	m_sendLifeCell = NULL;
 
 	m_lbInviteQuatang = NULL;
     m_isFirstTimeLogIn = false;
@@ -496,35 +498,26 @@ unsigned int ScoreScene::numberOfCellsInTableView(CCTableView *table)
 }
 
 
-
+//
+//get laze free
+//
 void ScoreScene::itGetBoomCallback( CCObject* pSender )
 {
 	int tag = ((CCMenuItemImage*)pSender)->getTag();
 	int idx = tag - BEGIN_TAG_IT_GET_BOOM;
 	CustomTableViewCell* cell = (CustomTableViewCell*)m_tableXephang->cellAtIndex(idx);
 	std::string fbID = ((CustomTableViewCell*)cell)->fbID;
-
+    
 	//check if ok
 	int numBoom = DataManager::sharedDataManager()->GetBoom();
-
 	if (numBoom < G_MAX_BOOM)
 	{
-		PLAY_GET_BOMB_EFFECT;
-		DataManager::sharedDataManager()->IncreaseBoom();
-		DataManager::sharedDataManager()->SetTimeBoomFriendNow(fbID.c_str());
-
-		//show clock
-		cell->m_lbGetBoom->setVisible(false);
-		cell->m_lbGetBoomTimer->setVisible(true);
-		cell->m_lastTimeGetBoom = DataManager::sharedDataManager()->GetTimeBoomFriend(fbID.c_str());
-
-		refreshUserDetail();
-
-		//animation
-		m_sprBoom->runAction(CCSequence::createWithTwoActions(
-			CCScaleTo::create(0.2f, 1.0f),
-			CCScaleTo::create(0.2f, 0.75f)
-			));
+        GameClientManager::sharedGameClientManager()->getLazeFree(G_APP_ID, DataManager::sharedDataManager()->GetFbID(), fbID);
+		
+        //show wait sprite
+        //disable all item to wait
+        cell->m_sprWait->setVisible(true);
+        cell->m_itGetBoom->setEnabled(false);
 	}
 	else
 	{
@@ -628,7 +621,46 @@ void ScoreScene::itSendLifeCallback( CCObject* pSender )
 		TXT("game_name"));
 #endif
 
-	m_friendCell = cell;
+	m_sendLifeCell = cell;
+}
+
+
+
+void ScoreScene::onGetLazeFreeCompleted(bool isSuccess, std::string friendId)
+{
+    CustomTableViewCell *cell;
+
+    for (int i = 0; i < m_tableXepHangSize; i++) {
+        cell = (CustomTableViewCell*) m_tableXephang->cellAtIndex(i);
+        if (cell->fbID.compare(friendId) == 0) {
+            break;
+        }
+    }
+    
+    if (isSuccess) {
+        PLAY_GET_BOMB_EFFECT;
+		DataManager::sharedDataManager()->IncreaseBoom();
+        
+		//show clock
+		cell->m_lbGetBoom->setVisible(false);
+		cell->m_lbGetBoomTimer->setVisible(true);
+		cell->m_lastTimeGetBoom = static_cast<long int>(time(NULL));
+        
+        
+		refreshUserDetail();
+        
+		//animation
+		m_sprBoom->runAction(CCSequence::createWithTwoActions(
+              CCScaleTo::create(0.2f, 1.0f),
+              CCScaleTo::create(0.2f, 0.75f)
+              ));
+    } else {
+        CCMessageBox(TXT("get_laze_free_error"), TXT("error_caption"));
+    }
+    
+    cell->m_itGetBoom->setEnabled(true);
+    cell->m_itGetBoom->setVisible(true);
+    cell->m_sprWait->setVisible(false);
 }
 
 
@@ -689,7 +721,7 @@ void ScoreScene::refreshUserDetail()
 
 void ScoreScene::scheduleTimer( float dt )
 {
-	CCLOG("Schedule timer");
+	//CCLOG("Schedule timer");
 	int numCell = numberOfCellsInTableView(m_tableXephang);
 
 	for (int i = 0; i < numCell; ++i)
@@ -712,6 +744,7 @@ void ScoreScene::scheduleTimer( float dt )
 				//time_t curTime = time(NULL);
 				//int waitTime = 24 * 60 * 60 - (int)difftime(curTime, lastTime);
                 
+                //senconds
                 long currentTime = static_cast<long int>(time(NULL));
                 long waitTime = 24 * 60 * 60 - (currentTime - cell->m_lastTimeGetBoom);
 
@@ -750,7 +783,7 @@ void ScoreScene::scheduleTimer( float dt )
 				//min =  ((int)(waitTime / 60)) % 60;
 				//hour = ((int)(waitTime / 60)) / 60;
                 
-                MY_TIME getLazeWaitTime = CONVERT_MILISECOND_TO_TIME(waitTime);
+                MY_TIME getLazeWaitTime = CONVERT_SECOND_TO_TIME(waitTime);
 				CCString* str = CCString::createWithFormat("%d:%d:%d", getLazeWaitTime.hour, getLazeWaitTime.min, getLazeWaitTime.sec);
 
 				if (cell->m_lbGetBoomTimer != NULL)
@@ -875,21 +908,18 @@ void ScoreScene::getHighScores()
 
 
 //get highscore list completed
-void ScoreScene::onGetFriendListCompleted(bool isSuccess, long serverTime, CCArray* arrFriends)
+void ScoreScene::onGetFriendListCompleted(bool isSuccess, CCArray* arrFriends)
 {
 	CCLOG("onGetFriendListCompleted");
-	if (isSuccess == false) 
+	if (isSuccess == false || arrFriends == NULL)
 	{
-		CCLOG("FAILED");
+		CCLOG("FAILED TO GET FRIEND LIST");
 		return;
 	}
 
     //
     //SYNC TIME SERVER-CLIENT -----------
     //
-    m_serverTime = serverTime;
-    m_clientTime = static_cast<long int> (time(NULL));
-    
     
 	if (m_arrHighScores != NULL)
 	{
@@ -902,11 +932,14 @@ void ScoreScene::onGetFriendListCompleted(bool isSuccess, long serverTime, CCArr
 
 	int score = DataManager::sharedDataManager()->GetHighScore();
 	//add current user to list
+    
+    //(string _fbId, string _fbName, string _email, int _score, int _coin, long timeGetLaze, long timeSendLife)
+    
 	FacebookAccount* curUser = new FacebookAccount(
 		DataManager::sharedDataManager()->GetFbID(),
 		DataManager::sharedDataManager()->GetFbFullName(),
 		DataManager::sharedDataManager()->GetFbEmail(),
-		score);
+		score, -1, -1, -1);
 	m_arrHighScores->addObject(curUser);
 
 	m_tableXepHangSize = m_arrHighScores->count();
@@ -938,10 +971,10 @@ void ScoreScene::onGetFriendListCompleted(bool isSuccess, long serverTime, CCArr
 		{
 			std::string profileID = fbFriend->m_fbId;
             
-            /*
+            
             //DEBUG
             CCLOG("TIME LAZE: %s, %ld", profileID.c_str(), fbFriend->m_timeGetLaze);
-            */
+            
 
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
@@ -957,6 +990,7 @@ void ScoreScene::onGetFriendListCompleted(bool isSuccess, long serverTime, CCArr
 	m_tableXephang->reloadData();
 	m_tableQuatang->reloadData();
     
+    CCLOG("Close dialog : onGetFriendListCompleted");
     this->closeWaitDialog();
 }
 
@@ -1005,6 +1039,7 @@ void ScoreScene::onGetScoreCompleted( bool isSuccess, int score, std::string tim
 		m_lbLostConnection->setVisible(true);
 		m_lbInviteQuatang->setVisible(false);
         
+        CCLOG("Close dialog : onGetScoreCompleted");
         this->closeWaitDialog();
 	}	
 }
@@ -1083,19 +1118,19 @@ void ScoreScene::fbSendRequestCallback( int responseCode, const char* responseMe
 		
 		PLAY_GET_BOMB_EFFECT;
 
-		if (m_friendCell != NULL) //send life
+		if (m_sendLifeCell != NULL) //send life
 		{
 			CCLOG("fbSendRequestCallback: FB_REQUEST_SENT: m_friendCell != NULL");
 
 			//reset timer
-			DataManager::sharedDataManager()->SetTimeLifeToFriendNow(m_friendCell->fbID.c_str());
+			DataManager::sharedDataManager()->SetTimeLifeToFriendNow(m_sendLifeCell->fbID.c_str());
 
 			//show clock
-			m_friendCell->m_lbSendLife->setVisible(false);
-			m_friendCell->m_lbSendLifeTimer->setVisible(true);
-			m_friendCell->m_lastTimeSendLife = DataManager::sharedDataManager()->GetTimeLifeToFriend(m_friendCell->fbID.c_str());
+			m_sendLifeCell->m_lbSendLife->setVisible(false);
+			m_sendLifeCell->m_lbSendLifeTimer->setVisible(true);
+			m_sendLifeCell->m_lastTimeSendLife = DataManager::sharedDataManager()->GetTimeLifeToFriend(m_sendLifeCell->fbID.c_str());
 
-			m_friendCell = NULL;
+			m_sendLifeCell = NULL;
 		}		
 	}
 	else
@@ -1207,7 +1242,7 @@ CCTableViewCell* ScoreScene::getTableCellXepHangAtIndex( CCTableView *table, uns
 
 		//get boom
 		//_lastTimeGetBoom =  DataManager::sharedDataManager()->GetTimeBoomFriend(strFriendId.c_str());
-        _lastTimeGetBoom = m_clientTime - (m_serverTime - fbFriend->m_timeGetLaze);
+        _lastTimeGetBoom = fbFriend->m_timeGetLaze;
 		
         /*
         if (_lastTimeGetBoom == NULL)
@@ -1231,9 +1266,10 @@ CCTableViewCell* ScoreScene::getTableCellXepHangAtIndex( CCTableView *table, uns
 		//_getBoomWaitTime = 24 * 60 * 60 - (int)difftime(curTime, lastTime);
 		//_getBoomWaitTime = (_getBoomWaitTime > 0) ? _getBoomWaitTime : 0;
         
-        _getBoomWaitTime = static_cast<long int> (time(NULL)) - _lastTimeGetBoom;
+        _getBoomWaitTime = 24 * 60 * 60 - (static_cast<long int> (time(NULL)) - _lastTimeGetBoom);
+        _getBoomWaitTime = (_getBoomWaitTime > 0) ? _getBoomWaitTime : 0;
 
-        MY_TIME getLazeWaitTime = CONVERT_MILISECOND_TO_TIME(_getBoomWaitTime);
+        MY_TIME getLazeWaitTime = CONVERT_SECOND_TO_TIME(_getBoomWaitTime);
 		strGetBoomTimer = CCString::createWithFormat("%d:%d:%d", getLazeWaitTime.hour, getLazeWaitTime.min, getLazeWaitTime.sec);
 
 
@@ -1268,7 +1304,7 @@ CCTableViewCell* ScoreScene::getTableCellXepHangAtIndex( CCTableView *table, uns
 		//min =  ((int)(_sendLifeWaitTime / 60)) % 60;
 		//hour = ((int)(_sendLifeWaitTime / 60)) / 60;
         
-        MY_TIME sendLifeWaitTime = CONVERT_MILISECOND_TO_TIME(_sendLifeWaitTime);
+        MY_TIME sendLifeWaitTime = CONVERT_SECOND_TO_TIME(_sendLifeWaitTime);
 		strSendLifeTimer = CCString::createWithFormat("%d:%d:%d", sendLifeWaitTime.hour, sendLifeWaitTime.min, sendLifeWaitTime.sec);
 		
 		//////////////////////////////////////////////////////////////////////////
@@ -1358,7 +1394,7 @@ CCTableViewCell* ScoreScene::getTableCellXepHangAtIndex( CCTableView *table, uns
 			itGetBoomNow->setPosition(ccp(605, m_sprCell->getContentSize().height/2 + 20));
 			itGetBoomNow->setTag(BEGIN_TAG_IT_GET_BOOM_NOW + idx); //7000			
 			((CustomTableViewCell*)cell)->m_itGetBoomNow = itGetBoomNow;
-
+            
 			CCMenuItemImage* itSendLife = CCMenuItemImage::create("oil.png", "oil_blur.png", "oil_blur.png", this, menu_selector(ScoreScene::itSendLifeCallback));
 			itSendLife->setPosition(ccp(725, m_sprCell->getContentSize().height/2 + 15));
 			itSendLife->setTag(BEGIN_TAG_IT_SEND_LIFE + idx); //2000
@@ -1367,6 +1403,18 @@ CCTableViewCell* ScoreScene::getTableCellXepHangAtIndex( CCTableView *table, uns
 			CCMenu* cell_menu = CCMenu::create(itGetBoom, itSendLife, itGetBoomNow, NULL);
 			cell_menu->setPosition(CCPointZero);
 			cell->addChild(cell_menu);
+
+            //
+            //waiting...
+            //
+            CCSprite* sprWait = CCSprite::create("wait.png");
+            sprWait->setPosition( ccpAdd( itGetBoom->getPosition(), ccp(-7, -7)));
+            sprWait->setScale(0.65f);
+            sprWait->setVisible(false);
+            sprWait->runAction(CCRepeatForever::create(CCRotateBy::create(1.0f, -360.0f)));
+            cell->addChild(sprWait);
+            ((CustomTableViewCell*)cell)->m_sprWait = sprWait;
+            
 
 
 			//////////////////////////////////////////////////////////////////////////
