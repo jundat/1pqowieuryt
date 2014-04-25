@@ -358,6 +358,7 @@
 		A4D1ED2718FFB5ED008587DA /* gun_reload.wav in Resources */ = {isa = PBXBuildFile; fileRef = A4D1ED2618FFB5ED008587DA /* gun_reload.wav */; };
 		A4D1ED2A18FFBDAE008587DA /* TryPlayDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4D1ED2818FFBDAE008587DA /* TryPlayDialog.cpp */; };
 		A4D4F9161908B22B006CA228 /* WaitDialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A4D4F9141908B22B006CA228 /* WaitDialog.cpp */; };
+		A4D4F918190A1285006CA228 /* wait.png in Resources */ = {isa = PBXBuildFile; fileRef = A4D4F917190A1285006CA228 /* wait.png */; };
 		A4F2EA9918F7F31A000D2FA3 /* iRate.bundle in Resources */ = {isa = PBXBuildFile; fileRef = A4F2EA9618F7F31A000D2FA3 /* iRate.bundle */; };
 		A4F2EA9A18F7F31A000D2FA3 /* iRate.m in Sources */ = {isa = PBXBuildFile; fileRef = A4F2EA9818F7F31A000D2FA3 /* iRate.m */; };
 		BF171245129291EC00B8313A /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF170DB012928DE900B8313A /* OpenGLES.framework */; };
@@ -1013,6 +1014,7 @@
 		A4D1ED2918FFBDAE008587DA /* TryPlayDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TryPlayDialog.h; path = ../Classes/TryPlayDialog.h; sourceTree = "<group>"; };
 		A4D4F9141908B22B006CA228 /* WaitDialog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = WaitDialog.cpp; path = ../Classes/WaitDialog.cpp; sourceTree = "<group>"; };
 		A4D4F9151908B22B006CA228 /* WaitDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WaitDialog.h; path = ../Classes/WaitDialog.h; sourceTree = "<group>"; };
+		A4D4F917190A1285006CA228 /* wait.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wait.png; sourceTree = "<group>"; };
 		A4F2EA9618F7F31A000D2FA3 /* iRate.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = iRate.bundle; sourceTree = "<group>"; };
 		A4F2EA9718F7F31A000D2FA3 /* iRate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iRate.h; sourceTree = "<group>"; };
 		A4F2EA9818F7F31A000D2FA3 /* iRate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iRate.m; sourceTree = "<group>"; };
@@ -1966,6 +1968,7 @@
 			children = (
 				A40899E718F68E9D0042E7F2 /* add_friend_hover.png */,
 				A40899E818F68E9D0042E7F2 /* add_friend.png */,
+				A4D4F917190A1285006CA228 /* wait.png */,
 				A40899E918F68E9D0042E7F2 /* anhsang.png */,
 				A40899EA18F68E9D0042E7F2 /* back.png */,
 				A40899EB18F68E9D0042E7F2 /* back1.png */,
@@ -2302,6 +2305,7 @@
 				A4089A6618F68E9D0042E7F2 /* enemy3_down.wav in Resources */,
 				A49003891906293400EEE111 /* ezisocial.and in Resources */,
 				A490038A1906293400EEE111 /* ezisocial.ios in Resources */,
+				A4D4F918190A1285006CA228 /* wait.png in Resources */,
 				A4089A6A18F68E9D0042E7F2 /* facebook_in.png in Resources */,
 				A4089A6B18F68E9D0042E7F2 /* facebook_out.png in Resources */,
 				A4089A6C18F68E9D0042E7F2 /* fb-profile.png in Resources */,

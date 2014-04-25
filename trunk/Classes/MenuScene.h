@@ -149,6 +149,8 @@ public:
     
     bool checkRefreshFriendList();
     
+    virtual void onUseLifeCompleted(bool isSuccess, int newLife);
+    
     
     //////////////////////////////////////////////////////////////////////////
     //facebook

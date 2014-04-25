@@ -13,7 +13,7 @@ typedef struct MY_TIME
     
 } MY_TIME;
 
-static MY_TIME CONVERT_MILISECOND_TO_TIME(int _milisecond)
+static MY_TIME CONVERT_SECOND_TO_TIME(long _milisecond)
 {
     int hour, min, sec;
     

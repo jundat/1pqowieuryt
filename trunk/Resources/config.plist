@@ -59,7 +59,7 @@
 	<key>G_DEFAULT_TIME_TO_GENERATE_ENEMY</key>
 	<string>1.0</string>
 	<key>G_TIME_TO_REFRESH_FRIENDS</key>
-	<string>20</string>
+	<string>86400</string>
 	<key>G_MAX_PLAYER_LIFE</key>
 	<string>5</string>
 	<key>G_HP_IN_DIFFICULTY</key>

@@ -116,13 +116,13 @@ void TestPostGetScene::testPost2(CCObject *sender)
 {
 	CCArray* arrFr = new CCArray();
 	arrFr->retain();
-
+/*
 	arrFr->addObject(new FacebookAccount("Fb2", "DinhDung", std::string("DinhDung@gmail.com"), 100));
 	arrFr->addObject(new FacebookAccount("Fb3", "BuiHieu", std::string("BuiHieu@gmail.com"), 200));
 	arrFr->addObject(new FacebookAccount("Fb4", "DangTran", std::string("DangTran@gmail.com"), 300));
 	arrFr->addObject(new FacebookAccount("Fb5", "TrinhLinh", std::string("TrinhLinh@gmail.com"), 400));
 	arrFr->addObject(new FacebookAccount("Fb6", "NguyenChau", std::string("NguyenChau@gmail.com"), 500));
-
+*/
 	CCLOG("SEND FRIEND FOR: Fb1");
 	string fbid = DataManager::sharedDataManager()->GetFbID();
 	GameClientManager::sharedGameClientManager()->sendFriendList(fbid.c_str(), arrFr);

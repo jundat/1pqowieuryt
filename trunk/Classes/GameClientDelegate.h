@@ -15,7 +15,7 @@ public:
 
 	virtual void onSendFriendListCompleted( bool isSuccess ){}
 	//array of FacebookAccount (our code)
-	virtual void onGetFriendListCompleted( bool isSuccess, long serverTime, CCArray* arrFriends){}
+	virtual void onGetFriendListCompleted( bool isSuccess, CCArray* arrFriends){}
 
 	virtual void onSendDeviceProfileCompleted( bool isSuccess ){}
 	virtual void onGetDeviceProfileCompleted(bool isSuccess, DeviceProfile* deviceProfile){}
@@ -29,6 +29,10 @@ public:
  	virtual void onGetAllItemsCompleted(bool isSuccess, int laze, int life, int coin){}
     
     virtual void onBuyItemCompleted(bool isSuccess, int newCoin, std::string itemType, int itemCount, std::string uniqueTag){}
+    
+    virtual void onGetLazeFreeCompleted(bool isSuccess, std::string friendId){}
+    
+    virtual void onUseLifeCompleted(bool isSuccess, int newLife){}
 };
 
 

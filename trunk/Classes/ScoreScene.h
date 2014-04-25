@@ -47,9 +47,14 @@ public:
 	void itMenuCallback(CCObject* pSender);
 	virtual void keyBackClicked();
 	void itAddFriendCallback(CCObject* pSender);
+
 	void itGetBoomCallback(CCObject* pSender);
 	void itGetBoomNowCallback(CCObject* pSender);
 	void itSendLifeCallback(CCObject* pSender);
+    
+    virtual void onGetLazeFreeCompleted(bool isSuccess, std::string friendId);
+    
+    
 
 	static int CompareEziFriendScore(const CCObject* p1, const CCObject* p2)
 	{
@@ -111,10 +116,9 @@ public:
 	CCArray* m_arrHighScores;
 	CCArray* m_arrRequests;
 
-	CustomTableViewCell* m_friendCell;
+	CustomTableViewCell* m_getLazeCell;
+    CustomTableViewCell* m_sendLifeCell;
     
-    long m_serverTime;
-    long m_clientTime;
 
 	// Facebook //=========================================
 	
@@ -136,7 +140,7 @@ public:
 	void submitScore();
 	void syncScore();
 	void getHighScores();
-	virtual void onGetFriendListCompleted(bool isSuccess, long serverTime,  CCArray* arrFriends);
+	virtual void onGetFriendListCompleted(bool isSuccess,  CCArray* arrFriends);
 	virtual void onGetScoreCompleted( bool isSuccess, int score, std::string time );
 
 	//Ezibyte
