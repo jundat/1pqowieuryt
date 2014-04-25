@@ -1271,28 +1271,38 @@ void GameClientManager::_onUseLifeCompleted(CCHttpClient *sender, CCHttpResponse
 		json_error_t error;
 		json_t *isSuccess;
         json_t *newLife;
-        
+        //json_t *
+        //json_t *lastTime;
         
 		root = json_loads(str.c_str(), strlen(str.c_str()), &error);
 		isSuccess = json_object_get(root, "isSuccess");
 		bool success = CCString::create(json_string_value(isSuccess))->boolValue();
+        newLife = json_object_get(root, "life");
+        //lastTime = json_object_get(root, "lastTime");
         
-        if (success == true) {
-            newLife = json_object_get(root, "life");
-            if (m_clientDelegate)
-            {
-                m_clientDelegate->onUseLifeCompleted(success, (int)atoi(json_string_value(newLife)));
-            }
-        } else {
-            if (m_clientDelegate)
-            {
-                m_clientDelegate->onUseLifeCompleted(success, -1);
-            }
+        
+        //long _serverTime = ((long long)atoll(json_string_value(serverTime)) / 1000);
+        //long _clientTime = static_cast<long int> (time(NULL));
+        
+
+        //long _timeGetLaze = _clientTime - ( _serverTime - ((long long)atoll(json_string_value(lastTime)) / 1000));
+        //long _timeSendLife = _clientTime - ( _serverTime - ((long long)atoll(json_string_value(timeSendLife) / 1000));
+        
+        //CCLOG("~~~TIME LAZE Client: %ld", _timeGetLaze);
+        
+       
+        
+        if (m_clientDelegate)
+        {
+            m_clientDelegate->onUseLifeCompleted(success, (int)atoi(json_string_value(newLife)));
         }
     }
     
 	CCLOG("------- END %s -------", response->getHttpRequest()->getTag());
 }
+
+
+//
 
 
 

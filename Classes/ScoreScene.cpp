@@ -740,10 +740,6 @@ void ScoreScene::scheduleTimer( float dt )
 				cell->m_lbGetBoom != NULL &&
 				cell->m_itGetBoomNow != NULL)
 			{
-				//time_t lastTime = mktime(cell->m_lastTimeGetBoom);
-				//time_t curTime = time(NULL);
-				//int waitTime = 24 * 60 * 60 - (int)difftime(curTime, lastTime);
-                
                 //senconds
                 long currentTime = static_cast<long int>(time(NULL));
                 long waitTime = 24 * 60 * 60 - (currentTime - cell->m_lastTimeGetBoom);
@@ -776,13 +772,7 @@ void ScoreScene::scheduleTimer( float dt )
 				}
 
 				waitTime = (waitTime > 0) ? waitTime : 0;
-			
-				//int hour, min, sec;
-				//sec = waitTime % 60;
-				//waitTime -= sec;
-				//min =  ((int)(waitTime / 60)) % 60;
-				//hour = ((int)(waitTime / 60)) / 60;
-                
+			             
                 MY_TIME getLazeWaitTime = CONVERT_SECOND_TO_TIME(waitTime);
 				CCString* str = CCString::createWithFormat("%d:%d:%d", getLazeWaitTime.hour, getLazeWaitTime.min, getLazeWaitTime.sec);
 
@@ -1092,11 +1082,9 @@ void ScoreScene::fbUserPhotoCallback(const char *userPhotoPath, const char* fbID
 				FacebookAccount* fbFriend = (FacebookAccount*) (it);
 				if (NULL != fbFriend)
 				{
-					//CCLOG("%s => %s", sid.c_str(), userPhotoPath);
 					if(fbFriend->m_fbId == sid)
 					{
 						fbFriend->m_photoPath = userPhotoPath;
-						//CCLOG("Set photo path ok --- ");
 					}
 				}
 			}
@@ -1241,31 +1229,8 @@ CCTableViewCell* ScoreScene::getTableCellXepHangAtIndex( CCTableView *table, uns
 		strFriendId = std::string(fbFriend->m_fbId);
 
 		//get boom
-		//_lastTimeGetBoom =  DataManager::sharedDataManager()->GetTimeBoomFriend(strFriendId.c_str());
         _lastTimeGetBoom = fbFriend->m_timeGetLaze;
-		
-        /*
-        if (_lastTimeGetBoom == NULL)
-		{
-			//2014 - 114 = 1900
-			//very last
-			_lastTimeGetBoom = new tm();
-			_lastTimeGetBoom->tm_hour = 0;
-			_lastTimeGetBoom->tm_min = 0;
-			_lastTimeGetBoom->tm_sec = 0;
-			_lastTimeGetBoom->tm_mday = 0;
-			_lastTimeGetBoom->tm_mon = 0;
-			_lastTimeGetBoom->tm_year = 0;
-
-			DataManager::sharedDataManager()->SetTimeBoomFriend(strFriendId.c_str(), _lastTimeGetBoom);
-		}
-         */
-         
-		//time_t lastTime = mktime(_lastTimeGetBoom);
-		//time_t curTime = time(NULL);
-		//_getBoomWaitTime = 24 * 60 * 60 - (int)difftime(curTime, lastTime);
-		//_getBoomWaitTime = (_getBoomWaitTime > 0) ? _getBoomWaitTime : 0;
-        
+		      
         _getBoomWaitTime = 24 * 60 * 60 - (static_cast<long int> (time(NULL)) - _lastTimeGetBoom);
         _getBoomWaitTime = (_getBoomWaitTime > 0) ? _getBoomWaitTime : 0;
 
@@ -1297,12 +1262,6 @@ CCTableViewCell* ScoreScene::getTableCellXepHangAtIndex( CCTableView *table, uns
 		time_t curTimeSendLife = time(NULL);
 		_sendLifeWaitTime = 24 * 60 * 60 - (int)difftime(curTimeSendLife, lastTimeSendLife);
 		_sendLifeWaitTime = (_sendLifeWaitTime > 0) ? _sendLifeWaitTime : 0;
-
-		//int hour, min, sec;
-		//sec = _sendLifeWaitTime % 60;
-		//_sendLifeWaitTime -= sec;
-		//min =  ((int)(_sendLifeWaitTime / 60)) % 60;
-		//hour = ((int)(_sendLifeWaitTime / 60)) / 60;
         
         MY_TIME sendLifeWaitTime = CONVERT_SECOND_TO_TIME(_sendLifeWaitTime);
 		strSendLifeTimer = CCString::createWithFormat("%d:%d:%d", sendLifeWaitTime.hour, sendLifeWaitTime.min, sendLifeWaitTime.sec);

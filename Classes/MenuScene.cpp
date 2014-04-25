@@ -333,6 +333,25 @@ void MenuScene::refreshLifeIcon()
 
 void MenuScene::playStartAnimation(int lastLife)
 {
+    //
+    //animation
+    //
+    
+    m_sprNewButtonBorderOut->runAction(
+       CCSequence::createWithTwoActions(
+        CCRotateTo::create(0.15f, 40),
+        CCRotateTo::create(0.15f, 0)
+        ));
+    m_sprNewButtonBorderIn->runAction(
+      CCSequence::createWithTwoActions(
+       CCRotateTo::create(0.15f, -40),
+       CCRotateTo::create(0.15f, 0)
+       ));
+    
+	this->setKeypadEnabled(false);
+	this->setTouchEnabled(false);
+
+    
     CCSprite* spr = (CCSprite*)m_arrSprLife->objectAtIndex(lastLife - 1);
 	CCSequence* seq = CCSequence::create(
         CCMoveTo::create(0.6f, ccp(spr->getPositionX(), 1280 + 200)),
@@ -343,55 +362,27 @@ void MenuScene::playStartAnimation(int lastLife)
 
 void MenuScene::gotoMainGame()
 {
-    //if (m_isLoggedIn == false) {
-    //    TryPlayDialog* trydialog = TryPlayDialog::create();
-    //    this->addChild(trydialog, 10);
-    //    this->onShowDialog();
-    //} else {
-        GameClientManager::sharedGameClientManager()->setDelegate(NULL);
-        
-        CCScene *pScene = CCTransitionFade::create(0.5, MainGameScene::scene());
-        CCDirector::sharedDirector()->replaceScene(pScene);
-    //}
+    PLAY_GUN_RELOAD_EFFECT;
+    
+    GameClientManager::sharedGameClientManager()->setDelegate(NULL);
+    
+    CCScene *pScene = CCTransitionFade::create(0.5, MainGameScene::scene());
+    CCDirector::sharedDirector()->replaceScene(pScene);
 }
 
 void MenuScene::playCallback(CCObject* pSender)
 {
-    if (m_isLoggedIn == true) {
-        CCLOG("ENEMY DOWN");
-        PLAY_ENEMY1_DOWN_EFFECT;
-    } else {
-        CCLOG("GUN RELOAD");
-        PLAY_GUN_RELOAD_EFFECT;
-    }
-
-    //
-    //animation
-    //
-    
-    m_sprNewButtonBorderOut->runAction(
-        CCSequence::createWithTwoActions(
-            CCRotateTo::create(0.15f, 40),
-            CCRotateTo::create(0.15f, 0)
-        ));
-    m_sprNewButtonBorderIn->runAction(
-        CCSequence::createWithTwoActions(
-            CCRotateTo::create(0.15f, -40),
-            CCRotateTo::create(0.15f, 0)
-        ));
-    
-	this->setKeypadEnabled(false);
-	this->setTouchEnabled(false);
+    PLAY_ENEMY1_DOWN_EFFECT;
 
 	//check if last_player_life > 0
 	int lastLife = DataManager::sharedDataManager()->GetLastPlayerLife();
-
-	//CCLOG("GOTO PLAY: Lastlife: %d", lastLife);
-
 	if (lastLife > 0) //enough life -> go play
 	{
         playStartAnimation(lastLife);
         m_playItem->selected();
+        
+        //request to server
+        GameClientManager::sharedGameClientManager()->useLife(G_APP_ID, DataManager::sharedDataManager()->GetFbID());
 	}
 	else //not enough life -> request life
 	{
@@ -859,13 +850,13 @@ void MenuScene::fbFriendsCallback( int responseCode, const char* responseMessage
                 //(string _fbId, string _fbName, string _email, int _score, int _coin, long timeGetLaze, long timeSendLife)
                 
 				FacebookAccount* acc = new FacebookAccount(
-                                                           fbId,
-                                                           fbName,
-                                                           std::string(""),
-                                                           -1,
-                                                           -1,
-                                                           -1,
-                                                           -1);
+                       fbId,
+                       fbName,
+                       std::string(""),
+                       -1,
+                       -1,
+                       -1,
+                       -1);
 
 				arrFriends->addObject(acc);
 			}
@@ -1122,7 +1113,6 @@ void MenuScene::closeWaitDialog()
 
 bool MenuScene::checkRefreshFriendList()
 {
-    
 	CCLOG("~~~~~--- check Refresh Friend List ---~~~~~");
 	//check
 	//get boom
@@ -1158,9 +1148,10 @@ bool MenuScene::checkRefreshFriendList()
 void MenuScene::onUseLifeCompleted(bool isSuccess, int newLife)
 {
     if (isSuccess) {
-        
+        CCLOG("---USE LIFE SUCCESS~~~");
     } else {
-        
+        CCLOG("---USE LIFE FAILED~~~");
+        DataManager::sharedDataManager()->SetLastPlayerLife(newLife);
     }
 }
 

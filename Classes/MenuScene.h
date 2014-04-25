@@ -149,6 +149,7 @@ public:
     
     bool checkRefreshFriendList();
     
+    //timeCountDown in milisecond
     virtual void onUseLifeCompleted(bool isSuccess, int newLife);
     
     

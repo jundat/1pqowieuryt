@@ -129,9 +129,13 @@ public:
     void _onUseLifeCompleted(CCHttpClient *sender, CCHttpResponse *response);
     
     
+    //////////////////////////////////////////////////////////////////////////
     
     
     
+    
+    
+    //-------------------------------------------------------------------------//
     
 	//compare score in facebook account
 	static int CompareFriendScore(const CCObject* p1, const CCObject* p2)
