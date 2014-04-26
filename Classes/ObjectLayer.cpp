@@ -618,6 +618,13 @@ void ObjectLayer::AfterDeadEffectCallback()
 void ObjectLayer::IncreaseBoom()
 {
 	DataManager::sharedDataManager()->IncreaseBoom();
+    
+    
+    //send to server
+    MainGameScene* parent = (MainGameScene*) this->getParent();
+    parent->addLaze();
+    
+
 
 	CCString* s = CCString::createWithFormat("x%d", DataManager::sharedDataManager()->GetBoom());
 	m_labelBoom->setString(s->getCString());
@@ -643,6 +650,11 @@ void ObjectLayer::ActiveBoom(CCObject* pSender)
 	{
 		m_numberBoom--;
 		DataManager::sharedDataManager()->DecreaseBoom();
+        
+        //send to server
+        MainGameScene* parent = (MainGameScene*) this->getParent();
+        parent->useLaze();
+        
 
 		CCString* s = CCString::createWithFormat("x%d", m_numberBoom);
 		m_labelBoom->setString(s->getCString());
@@ -654,7 +666,6 @@ void ObjectLayer::ActiveBoom(CCObject* pSender)
 		}
 
 		m_sprLazer->setScaleY(G_DESIGN_HEIGHT / m_sprLazer->getContentSize().height);
-		//m_sprLazer->setScaleX(1.5f);
 		m_sprLazer->setAnchorPoint(ccp(0.5f, 0.0f));
 		m_sprLazer->setPosition(m_player->getPosition());
 		m_sprLazer->setVisible(true);

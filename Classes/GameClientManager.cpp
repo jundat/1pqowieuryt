@@ -1405,6 +1405,169 @@ void GameClientManager::_onUseLifeCompleted(CCHttpClient *sender, CCHttpResponse
 //
 
 
+void GameClientManager::useItem(std::string fbId, string itemId)
+{
+    string sUrl = string(G_URL_ITEM);
+	CCLOG("URL: %s", sUrl.c_str());
+	CCAssert(sUrl.length() > 0, "Not set G_URL_ITEM yet");
+	CCHttpRequest* request = new CCHttpRequest();
+	request->setUrl(sUrl.c_str());
+	request->setRequestType(CCHttpRequest::kHttpPost);
+    
+	request->setTag(itemId.c_str());
+	request->setResponseCallback(this, httpresponse_selector(GameClientManager::_onUseItemCompleted));
+    
+    
+	// write the post data
+	CCString* strData = CCString::createWithFormat(
+       "{ method: \"use\", data: { appId: \"%s\", fbId: \"%s\", type: \"%s\"}, sign: \"%s\", appId: \"%s\" }",
+       G_APP_ID,
+       fbId.c_str(), itemId.c_str(),
+       getMD5().c_str(),
+       G_APP_ID);
+    
+    
+	std::string s = encodeBeforeSend(strData->getCString());
+	request->setRequestData(s.c_str(), strlen(s.c_str()));
+    
+	CCHttpClient::getInstance()->send(request);
+	request->release();
+}
+
+void GameClientManager::_onUseItemCompleted(CCHttpClient *sender, CCHttpResponse *response)
+{
+    if (!response)
+	{
+		return;
+	}
+    
+	//Show info
+	CCLOG("------- BEGIN %s -------", response->getHttpRequest()->getTag());
+	CCLOG("Status: [%i]", response->getResponseCode());
+    
+	if (!response->isSucceed())
+	{
+		CCLOG("Request failed: %s", response->getErrorBuffer());
+		if (m_clientDelegate)
+		{
+			m_clientDelegate->onUseItemCompleted(false, response->getHttpRequest()->getTag(), -1);
+		}
+	}
+	else
+	{
+		std::vector<char> *buffer = response->getResponseData();
+		std::string str(buffer->begin(), buffer->end());
+        
+		str = decodeBeforeProcess(str);
+        
+		CCLOG("Content: %s", str.c_str());
+        
+		//get score from response
+		json_t *root;
+		json_error_t error;
+        json_t *isSuccess;
+        json_t *type;
+        json_t *count;
+        
+		root = json_loads(str.c_str(), strlen(str.c_str()), &error);
+        isSuccess = json_object_get(root, "isSuccess");
+        type = json_object_get(root, "type");
+        count = json_object_get(root, "count");
+        
+        if (m_clientDelegate)
+        {
+            m_clientDelegate->onUseItemCompleted(isSuccess,
+                                                 json_string_value(type),
+                                                 (int)atoi(json_string_value(count)));
+        }
+    }
+    
+	CCLOG("------- END %s -------", response->getHttpRequest()->getTag());
+}
+
+
+//
+
+
+void GameClientManager::addItem(std::string fbId, string itemId)
+{
+    string sUrl = string(G_URL_ITEM);
+	CCLOG("URL: %s", sUrl.c_str());
+	CCAssert(sUrl.length() > 0, "Not set G_URL_ITEM yet");
+	CCHttpRequest* request = new CCHttpRequest();
+	request->setUrl(sUrl.c_str());
+	request->setRequestType(CCHttpRequest::kHttpPost);
+    
+	request->setTag(itemId.c_str());
+	request->setResponseCallback(this, httpresponse_selector(GameClientManager::_onAddItemCompleted));
+    
+    
+	// write the post data
+	CCString* strData = CCString::createWithFormat(
+           "{ method: \"add\", data: { appId: \"%s\", fbId: \"%s\", type: \"%s\"}, sign: \"%s\", appId: \"%s\" }",
+           G_APP_ID,
+           fbId.c_str(), itemId.c_str(),
+           getMD5().c_str(),
+           G_APP_ID);
+    
+    
+	std::string s = encodeBeforeSend(strData->getCString());
+	request->setRequestData(s.c_str(), strlen(s.c_str()));
+    
+	CCHttpClient::getInstance()->send(request);
+	request->release();
+}
+
+void GameClientManager::_onAddItemCompleted(CCHttpClient *sender, CCHttpResponse *response)
+{
+    if (!response)
+	{
+		return;
+	}
+    
+	//Show info
+	CCLOG("------- BEGIN %s -------", response->getHttpRequest()->getTag());
+	CCLOG("Status: [%i]", response->getResponseCode());
+    
+	if (!response->isSucceed())
+	{
+		CCLOG("Request failed: %s", response->getErrorBuffer());
+		if (m_clientDelegate)
+		{
+			m_clientDelegate->onAddItemCompleted(false, response->getHttpRequest()->getTag(), -1);
+		}
+	}
+	else
+	{
+		std::vector<char> *buffer = response->getResponseData();
+		std::string str(buffer->begin(), buffer->end());
+        
+		str = decodeBeforeProcess(str);
+        
+		CCLOG("Content: %s", str.c_str());
+        
+		//get score from response
+		json_t *root;
+		json_error_t error;
+        json_t *isSuccess;
+        json_t *type;
+        json_t *count;
+        
+		root = json_loads(str.c_str(), strlen(str.c_str()), &error);
+        isSuccess = json_object_get(root, "isSuccess");
+        type = json_object_get(root, "type");
+        count = json_object_get(root, "count");
+        
+        if (m_clientDelegate)
+        {
+            m_clientDelegate->onAddItemCompleted(isSuccess,
+                                                 json_string_value(type),
+                                                 (int)atoi(json_string_value(count)));
+        }
+    }
+    
+	CCLOG("------- END %s -------", response->getHttpRequest()->getTag());
+}
 
 
 
