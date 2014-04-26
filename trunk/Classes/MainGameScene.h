@@ -69,18 +69,26 @@ public:
     
     void addLaze()
     {
-        GameClientManager::sharedGameClientManager()->setDelegate(this);
         string fbid = DataManager::sharedDataManager()->GetFbID();
-        
-        GameClientManager::sharedGameClientManager()->addItem(fbid, "laze");
+        if (fbid.compare("NULL") != 0) {
+            
+            GameClientManager::sharedGameClientManager()->setDelegate(this);
+            string fbid = DataManager::sharedDataManager()->GetFbID();
+            
+            GameClientManager::sharedGameClientManager()->addItem(fbid, "laze");
+        }
     }
     
     void useLaze()
     {
-        GameClientManager::sharedGameClientManager()->setDelegate(this);
         string fbid = DataManager::sharedDataManager()->GetFbID();
-        
-        GameClientManager::sharedGameClientManager()->useItem(fbid, "laze");
+        if (fbid.compare("NULL") != 0) {
+            
+            GameClientManager::sharedGameClientManager()->setDelegate(this);
+            string fbid = DataManager::sharedDataManager()->GetFbID();
+            
+            GameClientManager::sharedGameClientManager()->useItem(fbid, "laze");
+        }
     }
 
 private:
