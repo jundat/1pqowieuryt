@@ -60,42 +60,23 @@ void DataManager::SetValueFromKey(const char* key, int val)
 }
 
 
-tm* DataManager::GetLastDeadTime()
+long DataManager::GetLastDeadTime()
 {
-	tm* _tm = new tm();
-	_tm->tm_hour = CCUserDefault::sharedUserDefault()->getIntegerForKey("G_LAST_DEAD_TIME_HOUR", -1);
-	_tm->tm_min = CCUserDefault::sharedUserDefault()->getIntegerForKey("G_LAST_DEAD_TIME_MIN", -1);
-	_tm->tm_sec = CCUserDefault::sharedUserDefault()->getIntegerForKey("G_LAST_DEAD_TIME_SEC", -1);
-	_tm->tm_mday = CCUserDefault::sharedUserDefault()->getIntegerForKey("G_LAST_DEAD_TIME_MDAY", -1);
-	_tm->tm_mon = CCUserDefault::sharedUserDefault()->getIntegerForKey("G_LAST_DEAD_TIME_MON", -1);
-	_tm->tm_year = CCUserDefault::sharedUserDefault()->getIntegerForKey("G_LAST_DEAD_TIME_YEAR", -1);
-
-	if (_tm->tm_hour == -1)
-	{
-		time_t t = time(NULL);
-		_tm = localtime(&t);
-	}
-
-	return _tm;
+	return CCUserDefault::sharedUserDefault()->getIntegerForKey("G_LAST_DEAD_TIME", -1);
 }
 
 
-void DataManager::SetLastDeadTime( tm* time )
+void DataManager::SetLastDeadTime( long time_in_second )
 {
-	CCUserDefault::sharedUserDefault()->setIntegerForKey("G_LAST_DEAD_TIME_HOUR", time->tm_hour);
-	CCUserDefault::sharedUserDefault()->setIntegerForKey("G_LAST_DEAD_TIME_MIN", time->tm_min);
-	CCUserDefault::sharedUserDefault()->setIntegerForKey("G_LAST_DEAD_TIME_SEC", time->tm_sec);
-	CCUserDefault::sharedUserDefault()->setIntegerForKey("G_LAST_DEAD_TIME_MDAY", time->tm_mday);
-	CCUserDefault::sharedUserDefault()->setIntegerForKey("G_LAST_DEAD_TIME_MON", time->tm_mon);
-	CCUserDefault::sharedUserDefault()->setIntegerForKey("G_LAST_DEAD_TIME_YEAR", time->tm_year);
+	CCUserDefault::sharedUserDefault()->setIntegerForKey("G_LAST_DEAD_TIME", time_in_second);
 	CCUserDefault::sharedUserDefault()->flush();
 }
 
 void DataManager::SetLastDeadTimeNow()
 {
-	time_t curTime = time(NULL);
-	tm* _tm = localtime(&curTime);
-	DataManager::sharedDataManager()->SetLastDeadTime(_tm);
+    long now = static_cast<long int>(time(NULL));
+    
+	DataManager::sharedDataManager()->SetLastDeadTime(now);
 }
 
 int DataManager::GetLastPlayerLife()
@@ -173,10 +154,8 @@ void DataManager::RefreshPlayerLife()
 	int lastLife = DataManager::sharedDataManager()->GetLastPlayerLife();
 	if (lastLife < G_MAX_PLAYER_LIFE)
 	{
-		tm* lasttm = DataManager::sharedDataManager()->GetLastDeadTime();
-		time_t lastTime = mktime(lasttm);
-		time_t curTime = time(NULL);
-		double seconds = difftime(curTime, lastTime);
+		long lasttm = DataManager::sharedDataManager()->GetLastDeadTime();
+		double seconds = static_cast<long int>(time(NULL)) - lasttm;
 
 		int add_lastLife = (int)((int)seconds / (int)G_PLAYER_TIME_TO_REVIVE);
 		if (add_lastLife > 0)
@@ -185,10 +164,8 @@ void DataManager::RefreshPlayerLife()
 			DataManager::sharedDataManager()->SetLastPlayerLife(lastLife);
 
 			//save next time
-			tm* _tm = DataManager::sharedDataManager()->GetLastDeadTime();
-			_tm->tm_sec += add_lastLife * G_PLAYER_TIME_TO_REVIVE;
-
-			mktime(_tm); //normalize
+			long _tm = DataManager::sharedDataManager()->GetLastDeadTime();
+            _tm += add_lastLife * G_PLAYER_TIME_TO_REVIVE;
 
 			DataManager::sharedDataManager()->SetLastDeadTime(_tm);
 		}

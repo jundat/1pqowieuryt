@@ -466,7 +466,7 @@ void LoseDialog::onBuyItemCompleted(bool isSuccess, int newCoin, std::string ite
 		CCString* s = CCString::createWithFormat("%d", DataManager::sharedDataManager()->GetDiamon());
 		m_lbDiamon->setString(s->getCString());
         
-        //resume game
+        //resume game to main game
         closeReviveAnimation();
 
     } else {

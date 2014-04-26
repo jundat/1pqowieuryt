@@ -125,6 +125,12 @@ public:
     
     //////////////////////////////////////////////////////////////////////////
     
+    void getLife(string fbId);
+    void _onGetLifeCompleted(CCHttpClient *sender, CCHttpResponse *response);
+    
+    
+    //////////////////////////////////////////////////////////////////////////
+    
     void useLife(std::string fbId);
     void _onUseLifeCompleted(CCHttpClient *sender, CCHttpResponse *response);
     

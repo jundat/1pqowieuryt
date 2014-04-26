@@ -145,26 +145,26 @@ void MainGameScene::showEndGame( int score, int killedEnemies )
 	this->setTouchEnabled(false);
 
 	//refresh life, if lastLife = 4, and when playing, lastLife increase to 5
-	DataManager::sharedDataManager()->RefreshPlayerLife();
+	//DataManager::sharedDataManager()->RefreshPlayerLife();
     
 	//check if enough last_life
-	int lastLife = DataManager::sharedDataManager()->GetLastPlayerLife();
-    if (m_isLoggedIn == true) {
-        lastLife--;
-    } else {
-        lastLife = G_MAX_PLAYER_LIFE;
-    }
-    DataManager::sharedDataManager()->SetLastPlayerLife(lastLife);
+	//int lastLife = DataManager::sharedDataManager()->GetLastPlayerLife();
+    //if (m_isLoggedIn == true) {
+    //    lastLife--;
+    //} else {
+    //    lastLife = G_MAX_PLAYER_LIFE;
+    //}
+    //DataManager::sharedDataManager()->SetLastPlayerLife(lastLife);
 
-	CCLOG("Last life: %d", lastLife);
+	//CCLOG("Last life: %d", lastLife);
 
 	//if life = G_MAX_PLAYER_LIFE = 4
 	//start counter
-	if (lastLife == G_MAX_PLAYER_LIFE - 1)
-	{
-		CCLOG("SET LAST DEAD TIME VALUE");
-		DataManager::sharedDataManager()->SetLastDeadTimeNow();
-	}
+	//if (lastLife == G_MAX_PLAYER_LIFE - 1)
+	//{
+	//	CCLOG("SET LAST DEAD TIME VALUE");
+	//	DataManager::sharedDataManager()->SetLastDeadTimeNow();
+	//}
 
 	PLAY_GAME_OVER;
 
@@ -203,11 +203,11 @@ void MainGameScene::reviveCallback()
 	CCDirector::sharedDirector()->getTouchDispatcher()->addTargetedDelegate(this, 0, true);
 	this->setTouchEnabled(true);
 
- 	int lastLife = DataManager::sharedDataManager()->GetLastPlayerLife();
- 	lastLife++;
- 	DataManager::sharedDataManager()->SetLastPlayerLife(lastLife);
-	
-	CCLOG("------------- REVIVE ------------ %d", lastLife);
+ 	//int lastLife = DataManager::sharedDataManager()->GetLastPlayerLife();
+ 	//lastLife++;
+ 	//DataManager::sharedDataManager()->SetLastPlayerLife(lastLife);
+	//
+	//CCLOG("------------- REVIVE ------------ %d", lastLife);
 	
 	DataManager::sharedDataManager()->SetIsJustRevived(true);
 	m_ObjLayer->Revive();

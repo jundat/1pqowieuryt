@@ -220,13 +220,13 @@ void GameClientManager::_onGetPlayerFbProfileCompleted( CCHttpClient *sender, CC
         //(string _fbId, string _fbName, string _email, int _score, int _coin, long timeGetLaze, long timeSendLife)
         
 		FacebookAccount* acc = new FacebookAccount(
-                                                   json_string_value(fbId),
-                                                   json_string_value(fbName),
-                                                   std::string(json_string_value(email)),
-                                                   -1,
-                                                   (int)atof(json_string_value(coin)),
-                                                   -1,
-                                                   -1);
+           json_string_value(fbId),
+           json_string_value(fbName),
+           std::string(json_string_value(email)),
+           -1,
+           (int)atof(json_string_value(coin)),
+           -1,
+           -1);
 
 		if (m_clientDelegate)
 		{
@@ -948,19 +948,6 @@ void GameClientManager::getAllItem( std::string fbId)
 	request->setTag("getAllItem");
 	request->setResponseCallback(this, httpresponse_selector(GameClientManager::_onGetAllItemCompleted));
 	
-	// write the post data
-    /*
-	CCString* strData = CCString::createWithFormat(
-       "{ method: \"get\", data: { appId: \"%s\", fbId: \"%s\", typeArr:[\"%s\", \"%s\", \"%s\"] }, sign: \"%s\", appId: \"%s\" }",
-       G_APP_ID,
-       fbId.c_str(),
-       G_ITEM_LAZE,
-       G_ITEM_LIFE,
-       G_ITEM_COIN,
-       getMD5().c_str(),
-       G_APP_ID);
-    */
-    
     CCString* strData = CCString::createWithFormat(
            "{ method: \"get\", data: { appId: \"%s\", fbId: \"%s\", typeArr:[\"%s\", \"%s\"] }, sign: \"%s\", appId: \"%s\" }",
            G_APP_ID,
@@ -995,7 +982,7 @@ void GameClientManager::_onGetAllItemCompleted(CCHttpClient *sender, CCHttpRespo
 		CCLOG("Request failed: %s", response->getErrorBuffer());
 		if (m_clientDelegate)
 		{
-			m_clientDelegate->onGetAllItemsCompleted(false, -1, -1, -1);
+			m_clientDelegate->onGetAllItemsCompleted(false, -1, -1);
 		}
 	}
 	else
@@ -1012,7 +999,6 @@ void GameClientManager::_onGetAllItemCompleted(CCHttpClient *sender, CCHttpRespo
 		json_error_t error;
         json_t *isSuccess;
 		json_t *laze;
-		//json_t *life;
         json_t *coin;
         
 		root = json_loads(str.c_str(), strlen(str.c_str()), &error);
@@ -1022,7 +1008,6 @@ void GameClientManager::_onGetAllItemCompleted(CCHttpClient *sender, CCHttpRespo
         if (success == true) {
             
             laze = json_object_get(root, G_ITEM_LAZE);
-            //life = json_object_get(root, G_ITEM_LIFE);
             coin = json_object_get(root, G_ITEM_COIN);
             
             if (m_clientDelegate)
@@ -1030,13 +1015,12 @@ void GameClientManager::_onGetAllItemCompleted(CCHttpClient *sender, CCHttpRespo
                 m_clientDelegate->onGetAllItemsCompleted(
                          true,
                          (int)atof(json_string_value(laze)),
-                         5, //(int)atof(json_string_value(life)),
                          (int)atof(json_string_value(coin)));
             }
         } else {
             if (m_clientDelegate)
             {
-                m_clientDelegate->onGetAllItemsCompleted(false, -1, -1, -1);
+                m_clientDelegate->onGetAllItemsCompleted(false, -1, -1);
             }
         }
         
@@ -1229,11 +1213,105 @@ void GameClientManager::_onGetLazeFreeCompleted(CCHttpClient *sender, CCHttpResp
 //
 
 
+void GameClientManager::getLife(string fbId)
+{
+    string sUrl = string(G_URL_ITEM);
+	CCLOG("URL: %s", sUrl.c_str());
+	CCAssert(sUrl.length() > 0, "Not set G_URL_ITEM yet");
+	CCHttpRequest* request = new CCHttpRequest();
+	request->setUrl(sUrl.c_str());
+	request->setRequestType(CCHttpRequest::kHttpPost);
+    
+	request->setTag("Get_life");
+	request->setResponseCallback(this, httpresponse_selector(GameClientManager::_onGetLifeCompleted));
+    
+    
+	// write the post data
+	CCString* strData = CCString::createWithFormat(
+           "{ method: \"getLife\", data: { appId: \"%s\", fbId: \"%s\"}, sign: \"%s\", appId: \"%s\" }",
+           G_APP_ID,
+           fbId.c_str(),
+           getMD5().c_str(),
+           G_APP_ID);
+    
+    
+	std::string s = encodeBeforeSend(strData->getCString());
+	request->setRequestData(s.c_str(), strlen(s.c_str()));
+    
+	CCHttpClient::getInstance()->send(request);
+	request->release();
+}
+
+void GameClientManager::_onGetLifeCompleted(CCHttpClient *sender, CCHttpResponse *response)
+{
+    if (!response)
+	{
+		return;
+	}
+    
+	//Show info
+	CCLOG("------- BEGIN %s -------", response->getHttpRequest()->getTag());
+	CCLOG("Status: [%i]", response->getResponseCode());
+    
+	if (!response->isSucceed())
+	{
+		CCLOG("Request failed: %s", response->getErrorBuffer());
+		if (m_clientDelegate)
+		{
+			m_clientDelegate->onGetLifeCompleted(false,
+                                                 DataManager::sharedDataManager()->GetLastPlayerLife() - 1,
+                                                 -1);
+		}
+	}
+	else
+	{
+		std::vector<char> *buffer = response->getResponseData();
+		std::string str(buffer->begin(), buffer->end());
+        
+		str = decodeBeforeProcess(str);
+        
+		CCLOG("Content: %s", str.c_str());
+        
+		//get score from response
+		json_t *root;
+		json_error_t error;
+        json_t *newLife;
+        json_t *serverTime;
+        json_t *lastTime;
+        
+		root = json_loads(str.c_str(), strlen(str.c_str()), &error);
+        newLife = json_object_get(root, "life");
+        serverTime = json_object_get(root, "time");
+        lastTime = json_object_get(root, "lastTime");
+        
+        
+        long _serverTime = ((long long)atoll(json_string_value(serverTime)) / 1000);
+        long _clientTime = static_cast<long int> (time(NULL));
+        
+        
+        long _lastTime = _clientTime - ( _serverTime - ((long long)atoll(json_string_value(lastTime)) / 1000));
+        
+        CCLOG("~~~LAST TIME GET LIFE Client: %ld", _lastTime);
+        
+        
+        if (m_clientDelegate)
+        {
+            m_clientDelegate->onGetLifeCompleted(true, (int)atoi(json_string_value(newLife)), _lastTime);
+        }
+    }
+    
+	CCLOG("------- END %s -------", response->getHttpRequest()->getTag());
+}
+
+
+//
+
+
 void GameClientManager::useLife( std::string fbId)
 {
-    string sUrl = string(G_URL_PLAYER_FB_PROFILE);
+    string sUrl = string(G_URL_ITEM);
 	CCLOG("URL: %s", sUrl.c_str());
-	CCAssert(sUrl.length() > 0, "Not set G_URL_PLAYER_FB_PROFILE yet");
+	CCAssert(sUrl.length() > 0, "Not set G_URL_ITEM yet");
 	CCHttpRequest* request = new CCHttpRequest();
 	request->setUrl(sUrl.c_str());
 	request->setRequestType(CCHttpRequest::kHttpPost);
@@ -1275,7 +1353,9 @@ void GameClientManager::_onUseLifeCompleted(CCHttpClient *sender, CCHttpResponse
 		CCLOG("Request failed: %s", response->getErrorBuffer());
 		if (m_clientDelegate)
 		{
-			m_clientDelegate->onUseLifeCompleted(false, -1);
+			m_clientDelegate->onUseLifeCompleted(false,
+                                                 DataManager::sharedDataManager()->GetLastPlayerLife() - 1,
+                                                 -1);
 		}
 	}
 	else
@@ -1292,30 +1372,29 @@ void GameClientManager::_onUseLifeCompleted(CCHttpClient *sender, CCHttpResponse
 		json_error_t error;
 		json_t *isSuccess;
         json_t *newLife;
-        //json_t *
-        //json_t *lastTime;
+        json_t *serverTime;
+        json_t *lastTime;
         
 		root = json_loads(str.c_str(), strlen(str.c_str()), &error);
 		isSuccess = json_object_get(root, "isSuccess");
 		bool success = CCString::create(json_string_value(isSuccess))->boolValue();
         newLife = json_object_get(root, "life");
-        //lastTime = json_object_get(root, "lastTime");
+        serverTime = json_object_get(root, "time");
+        lastTime = json_object_get(root, "lastTime");
         
         
-        //long _serverTime = ((long long)atoll(json_string_value(serverTime)) / 1000);
-        //long _clientTime = static_cast<long int> (time(NULL));
+        long _serverTime = ((long long)atoll(json_string_value(serverTime)) / 1000);
+        long _clientTime = static_cast<long int> (time(NULL));
         
 
-        //long _timeGetLaze = _clientTime - ( _serverTime - ((long long)atoll(json_string_value(lastTime)) / 1000));
-        //long _timeSendLife = _clientTime - ( _serverTime - ((long long)atoll(json_string_value(timeSendLife) / 1000));
+        long _lastTime = _clientTime - ( _serverTime - ((long long)atoll(json_string_value(lastTime)) / 1000));
         
-        //CCLOG("~~~TIME LAZE Client: %ld", _timeGetLaze);
-        
+        CCLOG("~~~LAST TIME GET LIFE Client: %ld", _lastTime);
        
         
         if (m_clientDelegate)
         {
-            m_clientDelegate->onUseLifeCompleted(success, (int)atoi(json_string_value(newLife)));
+            m_clientDelegate->onUseLifeCompleted(success, (int)atoi(json_string_value(newLife)), _lastTime);
         }
     }
     

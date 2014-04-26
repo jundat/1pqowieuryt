@@ -393,7 +393,9 @@ void ScoreScene::itQuatangCallback( CCObject* pSender )
 
 
 //new delegate
-
+//Need
+//DEBUG
+//Remove Item, then remove setdeadtime code here
 void ScoreScene::tableCellTouched(CCTableView* table, CCTableViewCell* cell)
 {
 	CCLOG("Cell at index: %i", cell->getIdx());
@@ -419,9 +421,8 @@ void ScoreScene::tableCellTouched(CCTableView* table, CCTableViewCell* cell)
 			CCLOG("ADD TO CURRENT LIFE = %d", curLife);
 
 			//save next time
-			tm* _tm = DataManager::sharedDataManager()->GetLastDeadTime();
-			_tm->tm_sec += G_PLAYER_TIME_TO_REVIVE;
-			mktime(_tm); //normalize
+			long _tm = DataManager::sharedDataManager()->GetLastDeadTime();
+            _tm += G_PLAYER_TIME_TO_REVIVE;
 			DataManager::sharedDataManager()->SetLastDeadTime(_tm);
 
 			//delete request

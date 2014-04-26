@@ -36,7 +36,7 @@ bool MenuScene::init()
 {
 	DataManager::sharedDataManager()->RefreshPlayerLife();
 	GameClientManager::sharedGameClientManager()->setDelegate(this);
-
+    
 	//////////////////////////////////////////////////////////////////////////
 
     if ( !CCLayerColor::initWithColor(G_MENU_BG_COLOR) )
@@ -270,6 +270,7 @@ bool MenuScene::init()
     if (m_isLoggedIn == true) {
         
         //set all user item from server
+        this->getLife();
         this->getAllItems();
         
         this->checkRefreshFriendList();
@@ -452,10 +453,8 @@ void MenuScene::onCloseDialog()
 void MenuScene::onCompletedWaiting()
 {
 	//get revive_life
-	tm* lasttm = DataManager::sharedDataManager()->GetLastDeadTime();
-	time_t lastTime = mktime(lasttm);
-	time_t curTime = time(NULL);
-	double seconds = difftime(curTime, lastTime);
+	long lasttm = DataManager::sharedDataManager()->GetLastDeadTime();
+	double seconds = static_cast<long int>(time(NULL)) - lasttm;
 
 	int lastLife = (int)(seconds / G_PLAYER_TIME_TO_REVIVE);
 	lastLife = (lastLife > G_MAX_PLAYER_LIFE) ? G_MAX_PLAYER_LIFE : lastLife;
@@ -469,7 +468,7 @@ void MenuScene::onCompletedWaiting()
 	}
 	else
 	{
-		//CCLOG("Your code is failed!, F**k the coder!");
+		CCLOG("Your code is failed!, F**k the coder!");
 	}
 }
 
@@ -577,41 +576,53 @@ void MenuScene::exitCallback( CCObject* pSender )
 
 void MenuScene::ScheduleTick( float dt )
 {
-	tm* lasttm = DataManager::sharedDataManager()->GetLastDeadTime();
-	int diff = (int)difftime(time(NULL), mktime(lasttm));
-
-	m_waitTime = 1000 * G_PLAYER_TIME_TO_REVIVE - diff;
-	m_waitTime %= G_PLAYER_TIME_TO_REVIVE;
-
-	int mins = m_waitTime / 60;
-	int seconds = m_waitTime % 60;
-
-	if (seconds == 0)
-	{
-		DataManager::sharedDataManager()->RefreshPlayerLife();
-		refreshLifeIcon();
-
-		int life = DataManager::sharedDataManager()->GetLastPlayerLife();
-		//CCLOG("REFRESH LIFE ICON, Life = %d", life);
-		if (life >= G_MAX_PLAYER_LIFE)
-		{
-			this->unschedule(schedule_selector(MenuScene::ScheduleTick));
-			m_lbTime->setVisible(false);
-			return;
-		}
-	}	
-
-	CCString* s;
-	if (seconds >= 10)
-	{
-		s = CCString::createWithFormat("0%d:%d", mins, seconds);
-	}
-	else
-	{
-		s = CCString::createWithFormat("0%d:0%d", mins, seconds);
-	}
-
-	m_lbTime->setString(s->getCString());
+    int life = DataManager::sharedDataManager()->GetLastPlayerLife();
+    
+    if (life < G_MAX_PLAYER_LIFE) {
+        
+        long lasttm = DataManager::sharedDataManager()->GetLastDeadTime();
+        int diff = static_cast<long int>(time(NULL)) - lasttm;
+        
+        m_waitTime = 1000 * G_PLAYER_TIME_TO_REVIVE - diff;
+        m_waitTime %= G_PLAYER_TIME_TO_REVIVE;
+        
+        int mins = m_waitTime / 60;
+        int seconds = m_waitTime % 60;
+        
+        if (seconds == 0)
+        {
+            //get life from server
+            this->getLife();
+            
+            //DataManager::sharedDataManager()->RefreshPlayerLife();
+            //refreshLifeIcon();
+            
+            //int life = DataManager::sharedDataManager()->GetLastPlayerLife();
+            //CCLOG("REFRESH LIFE ICON, Life = %d", life);
+            //if (life >= G_MAX_PLAYER_LIFE)
+            //{
+            //    this->unschedule(schedule_selector(MenuScene::ScheduleTick));
+            //    m_lbTime->setVisible(false);
+            //    return;
+            //}
+        }
+        
+        CCString* s;
+        if (seconds >= 10)
+        {
+            s = CCString::createWithFormat("0%d:%d", mins, seconds);
+        }
+        else
+        {
+            s = CCString::createWithFormat("0%d:0%d", mins, seconds);
+        }
+        
+        m_lbTime->setVisible(true);
+        m_lbTime->setString(s->getCString());
+        
+    } else {
+        m_lbTime->setVisible(false);
+    }
 }
 
 void MenuScene::initTimer()
@@ -619,8 +630,8 @@ void MenuScene::initTimer()
 	//CCLOG("Initing... timer! ...");
 
 	DataManager::sharedDataManager()->GetLastPlayerLife();
-	tm* lasttm = DataManager::sharedDataManager()->GetLastDeadTime();
-	int diff = (int)difftime(time(NULL), mktime(lasttm));
+	long lasttm = DataManager::sharedDataManager()->GetLastDeadTime();
+	long diff = static_cast<long int>(time(NULL)) - lasttm;
 
 	m_waitTime = 1000 * G_PLAYER_TIME_TO_REVIVE - diff;
 	m_waitTime %= G_PLAYER_TIME_TO_REVIVE;
@@ -1031,6 +1042,7 @@ void MenuScene::onSendPlayerFbProfileCompleted( bool isSuccess )
 		this->getUserProfile();
         
         //set all user item from server
+        this->getLife();
         this->getAllItems();
 	}
 	else
@@ -1063,16 +1075,14 @@ void MenuScene::getAllItems()
 }
 
 
-void MenuScene::onGetAllItemsCompleted(bool isSuccess, int laze, int life, int coin)
+void MenuScene::onGetAllItemsCompleted(bool isSuccess, int laze, int coin)
 {
     CCLOG("MenuScene::onGetAllItemsCompleted");
     CCLOG("laze: %d", laze);
-    CCLOG("life: %d", life);
     CCLOG("coin: %d", coin);
 
     if (isSuccess == true) {
         DataManager::sharedDataManager()->SetBoom(laze);
-        DataManager::sharedDataManager()->SetLastPlayerLife(life);
         DataManager::sharedDataManager()->SetDiamon(coin);
         
     } else {
@@ -1145,15 +1155,44 @@ bool MenuScene::checkRefreshFriendList()
 }
 
 
-void MenuScene::onUseLifeCompleted(bool isSuccess, int newLife)
+void MenuScene::onUseLifeCompleted(bool isSuccess, int newLife, long lastTime_client)
 {
+    CCLOG("life: %d, lastTime: %ld", newLife, lastTime_client);
+    
+    DataManager::sharedDataManager()->SetLastPlayerLife(newLife);
+    DataManager::sharedDataManager()->SetLastDeadTime(lastTime_client);
+    
     if (isSuccess) {
         CCLOG("---USE LIFE SUCCESS~~~");
     } else {
         CCLOG("---USE LIFE FAILED~~~");
-        DataManager::sharedDataManager()->SetLastPlayerLife(newLife);
     }
 }
+
+
+void MenuScene::getLife()
+{
+    CCLOG("MenuScene::getLife");
+    
+    GameClientManager::sharedGameClientManager()->getLife(DataManager::sharedDataManager()->GetFbID());
+}
+
+void MenuScene::onGetLifeCompleted(bool isSuccess, int life, long lastTimeClient_Second)
+{
+    CCLOG("MenuScene::onGetLifeCompleted");
+    
+    DataManager::sharedDataManager()->SetLastPlayerLife(life);
+    DataManager::sharedDataManager()->SetLastDeadTime(lastTimeClient_Second);
+    
+    this->refreshLifeIcon();
+    
+    if (isSuccess == false) {
+        CCLOG("FAILED TO CONNECT SERVER");
+    }
+}
+
+
+
 
 
 

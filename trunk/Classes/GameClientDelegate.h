@@ -26,17 +26,21 @@ public:
 	virtual void onRequestReviveCompleted( bool isSuccess, int newDiamond ){}
 	virtual void onRequestGetLazerCompleted(bool isSuccess, int newDiamond){}
 
- 	virtual void onGetAllItemsCompleted(bool isSuccess, int laze, int life, int coin){}
+ 	virtual void onGetAllItemsCompleted(bool isSuccess, int laze, int coin){}
     
     virtual void onBuyItemCompleted(bool isSuccess, int newCoin, std::string itemType, int itemCount, std::string uniqueTag){}
     
     virtual void onGetLazeFreeCompleted(bool isSuccess, std::string friendId){}
     
-    virtual void onUseLifeCompleted(bool isSuccess, int newLife){}
+    virtual void onGetLifeCompleted(bool isSuccess, int life, long lastTimeClient_Second){}
+    
+    virtual void onUseLifeCompleted(bool isSuccess, int newLife, long lastTime_client){}
     
     virtual void onSendItemCompleted(bool isSuccess, string friendId, string itemId, int count){}
     
     virtual void onGetInboxCompleted(bool isSuccess, CCArray* arrFriends){}
+    
+    
 };
 
 

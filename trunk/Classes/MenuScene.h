@@ -141,7 +141,10 @@ public:
     void disableMoneytize();
     
     void getAllItems();
-    virtual void onGetAllItemsCompleted(bool isSuccess, int laze, int life, int coin);
+    virtual void onGetAllItemsCompleted(bool isSuccess, int laze, int coin);
+    
+    void getLife();
+    virtual void onGetLifeCompleted(bool isSuccess, int life, long lastTimeClient_Second);
     
     void showWaitDialog(string title);
     void closeWaitDialog();
@@ -150,7 +153,7 @@ public:
     bool checkRefreshFriendList();
     
     //timeCountDown in milisecond
-    virtual void onUseLifeCompleted(bool isSuccess, int newLife);
+    virtual void onUseLifeCompleted(bool isSuccess, int newLife, long lastTime_client);
     
     
     //////////////////////////////////////////////////////////////////////////
