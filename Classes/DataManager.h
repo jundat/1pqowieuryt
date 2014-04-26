@@ -75,16 +75,9 @@ public:
 	tm*		GetTime(const char* key);
 	void	SetTime(const char* key, tm* time);
 
-	tm*		GetTimeBoomFriend(const char* fbId);
-	void	SetTimeBoomFriend(const char* fbId, tm* time);
-	void	SetTimeBoomFriendNow(const char* fbId);
 
 	bool	GetIsJustGetBoomNowFriend(const char* fbId); ////////////////////////////////// new ////////////////////////////////////////
 	void	SetIsJustGetBoomNowFriend(const char* fbId, bool isTrue);
-
-	tm*		GetTimeLifeToFriend(const char* fbId);
-	void	SetTimeLifeToFriend(const char* fbId, tm* time);
-	void	SetTimeLifeToFriendNow(const char* fbId);
 
 
 	int		GetBoom();

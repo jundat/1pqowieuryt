@@ -17,11 +17,11 @@
 	<key>G_URL_ITEM</key>
 	<string>192.168.0.110:8025/item</string>
 	<key>G_URL_GIFT_SEND_ITEM</key>
-	<string>http://127.0.0.1:8026/gift/send_item</string>
+	<string>192.168.0.110:8025/gift/send_inbox</string>
 	<key>G_URL_GIFT_GET_INBOX</key>
-	<string>http://127.0.0.1:8026/gift/send_item</string>
+	<string>192.168.0.110:8025/gift/get_inbox</string>
 	<key>G_URL_GIFT_REMOVE_ITEM</key>
-	<string>http://127.0.0.1:8026/gift/send_item</string>
+	<string>192.168.0.110:8025/gift/remove_inbox</string>
 	<key>G_URL_RATE</key>
 	<string>https://play.google.com/store/apps/details?id=com.chimgokien.phicongbutchi</string>
 	<key>G_MAX_PLAYER_BULLET_LEVEL</key>

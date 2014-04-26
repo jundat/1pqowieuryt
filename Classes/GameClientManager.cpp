@@ -413,23 +413,21 @@ void GameClientManager::_onGetFriendListCompleted( CCHttpClient *sender, CCHttpR
 			json_t* fbId;
 			json_t* fbName;
 			json_t* timeGetLaze;
-            //json_t* timeSendLife;
+            json_t* timeSendLife;
 			json_t* score;
 
 
 			fbId = json_object_get(fbFriend, "id");
 			fbName = json_object_get(fbFriend, "fbName");
 			timeGetLaze = json_object_get(fbFriend, "timeLaze");
-            //timeSendLife = json_object_get(fbFriend, "timeSendLife");
+            timeSendLife = json_object_get(fbFriend, "timeSendLife");
 			score = json_object_get(fbFriend, "score");
             
             long _timeGetLaze = _clientTime - ( _serverTime - ((long long)atoll(json_string_value(timeGetLaze)) / 1000));
-            //long _timeSendLife = _clientTime - ( _serverTime - ((long long)atoll(json_string_value(timeSendLife) / 1000));
+            long _timeSendLife = _clientTime - ( _serverTime - ((long long)atoll(json_string_value(timeSendLife)) / 1000));
             
-            CCLOG("~~~TIME LAZE Client: %ld", _timeGetLaze);
-            
-            //CCLOG("Time_Get_Laze: %ld", _timeGetLaze);
-            //CCLOG("Time_Send_Life: %lld", _timeSendLife);
+            CCLOG("Time_Get_Laze: %ld", _timeGetLaze);
+            CCLOG("Time_Send_Life: %ld", _timeSendLife);
 
             //(string _fbId, string _fbName, string _email, int _score, int _coin, long timeGetLaze, long timeSendLife)
             
@@ -439,8 +437,7 @@ void GameClientManager::_onGetFriendListCompleted( CCHttpClient *sender, CCHttpR
                                                        (int)atoi(json_string_value(score)),
                                                        -1,
                                                        _timeGetLaze,
-                                                       -1
-                                                       /*, _timeSendLife */
+                                                       _timeSendLife
                                                        );
 			arrFriends->addObject(acc);
 		}
@@ -1792,7 +1789,7 @@ void GameClientManager::_onGetInboxCompleted(CCHttpClient *sender, CCHttpRespons
 
 
 
-void GameClientManager::removeItem(std::string fbId, std::string senderId, long long time)
+void GameClientManager::removeItem(std::string fbId, std::string senderId, long long time, string itemId)
 {
     string sUrl = string(G_URL_GIFT_REMOVE_ITEM);
 	CCLOG("URL: %s", sUrl.c_str());
@@ -1801,15 +1798,15 @@ void GameClientManager::removeItem(std::string fbId, std::string senderId, long 
 	request->setUrl(sUrl.c_str());
 	request->setRequestType(CCHttpRequest::kHttpPost);
     
-    CCString *stag = CCString::createWithFormat("{ \"senderId\": \"%s\", \"time\": %lld }", senderId.c_str(), time);
+    CCString *stag = CCString::createWithFormat("{ \"senderId\": \"%s\", \"time\": \"%lld\" }", senderId.c_str(), time);
 	request->setTag(stag->getCString());
 	request->setResponseCallback(this, httpresponse_selector(GameClientManager::_onRemoveItemCompleted));
     
     
 	// write the post data
 	CCString* strData = CCString::createWithFormat(
-           "{ method: \"set\", data: { appId: \"%s\", fbId: \"%s\", senderId: \"%s\", time: \"%lld\" }, sign: \"%s\", appId: \"%s\" }",
-           G_APP_ID, fbId.c_str(), senderId.c_str(), time, getMD5().c_str(), G_APP_ID);
+           "{ method: \"set\", data: { appId: \"%s\", fbId: \"%s\", senderId: \"%s\", time: \"%lld\", itemId: \"%s\" }, sign: \"%s\", appId: \"%s\" }",
+           G_APP_ID, fbId.c_str(), senderId.c_str(), time, itemId.c_str(), getMD5().c_str(), G_APP_ID);
     
     
 	std::string s = encodeBeforeSend(strData->getCString());
