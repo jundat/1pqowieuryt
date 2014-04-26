@@ -33,7 +33,7 @@ public:
     
 
 	//send life
-	tm* m_lastTimeSendLife;
+	long m_lastTimeSendLife;
 	CCLabelTTF* m_lbSendLifeTimer;
 	CCLabelTTF* m_lbSendLife;
 	CCMenuItemImage* m_itSendLife;
@@ -41,6 +41,10 @@ public:
     
 
     Gift* m_gift;
+    
+    FacebookAccount* m_fbFriend;
+    
+    int m_idx;
 	
 	CustomTableViewCell();
 };

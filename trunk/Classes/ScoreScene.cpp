@@ -298,9 +298,6 @@ bool ScoreScene::init()
 	{
 		syncScore();
 
-		//check inbox
-        this->getInbox();
-
 
 		m_isLoggedIn = true;
 		m_itFbLogInItem->setVisible(false);
@@ -397,7 +394,7 @@ void ScoreScene::tableCellTouched(CCTableView* table, CCTableViewCell* cell)
 {
 	CCLOG("Cell at index: %i", cell->getIdx());
 
-	if (table == m_tableXephang) //Xep hang
+	if (table == m_tableQuatang) //Xep hang
 	{
         CustomTableViewCell* customCell = (CustomTableViewCell*) cell;
 
@@ -406,39 +403,23 @@ void ScoreScene::tableCellTouched(CCTableView* table, CCTableViewCell* cell)
 		
 		if (curLife < G_MAX_PLAYER_LIFE)
 		{
-			PLAY_GET_BOMB_EFFECT;
-
-			curLife++;
-
-			DataManager::sharedDataManager()->SetLastPlayerLife(curLife);
-			CCLOG("ADD TO CURRENT LIFE = %d", curLife);
-
-			//save next time
-			long _tm = DataManager::sharedDataManager()->GetLastDeadTime();
-            _tm += G_PLAYER_TIME_TO_REVIVE;
-			DataManager::sharedDataManager()->SetLastDeadTime(_tm);
-
-			//delete request
-			CCLOG("REMOVE REQUEST");
-
-			m_arrRequests->removeObject(customCell->m_gift);
-			m_tableQuatangSize = m_arrRequests->count();
-			
-            //refresh UI
-			m_tableQuatang->reloadData();
-
-			refreshUserDetail();
+            
+            //
+            //remove item
+            //
+            
+            GameClientManager::sharedGameClientManager()->removeItem(DataManager::sharedDataManager()->GetFbID(),
+                                                                     customCell->m_gift->m_senderId, customCell->m_gift->m_time, customCell->m_gift->m_itemId);
+            
+            PLAY_BUTTON_EFFECT;
 		} 
 		else
 		{
 			PLAY_OUT_PORP_EFFECT;
+            
+            CCString* s = CCString::createWithFormat(TXT("score_limit_life"), G_MAX_PLAYER_LIFE);
+            CCMessageBox(s->getCString(), TXT("menu_thank_caption"));
 		}
-
-		//animation
-		m_sprLife->runAction(CCSequence::createWithTwoActions(
-			CCScaleTo::create(0.2f, 1.0f),
-			CCScaleTo::create(0.2f, 0.75f)
-			));
 	}	
 }
 
@@ -767,7 +748,7 @@ void ScoreScene::scheduleTimer( float dt )
 				}
 
 				waitTime = (waitTime > 0) ? waitTime : 0;
-			             
+                
                 MY_TIME getLazeWaitTime = CONVERT_SECOND_TO_TIME(waitTime);
 				CCString* str = CCString::createWithFormat("%d:%d:%d", getLazeWaitTime.hour, getLazeWaitTime.min, getLazeWaitTime.sec);
 
@@ -791,9 +772,9 @@ void ScoreScene::scheduleTimer( float dt )
 			{
 				//CCLOG("Schedule timer ------ Send life");
 
-				time_t lastTime = mktime(cell->m_lastTimeSendLife);
-				time_t curTime = time(NULL);
-				int waitTime = 24 * 60 * 60 - (int)difftime(curTime, lastTime);
+                //senconds
+                long currentTime = static_cast<long int>(time(NULL));
+                long waitTime = 24 * 60 * 60 - (currentTime - cell->m_lastTimeSendLife);
 
 				if (waitTime <= 0) //free
 				{
@@ -811,14 +792,9 @@ void ScoreScene::scheduleTimer( float dt )
 
 				waitTime = (waitTime > 0) ? waitTime : 0;
 
-
-				int hour, min, sec;
-				sec = waitTime % 60;
-				waitTime -= sec;
-				min =  ((int)(waitTime / 60)) % 60;
-				hour = ((int)(waitTime / 60)) / 60;
-				CCString* str = CCString::createWithFormat("%d:%d:%d", hour, min, sec);
-
+                MY_TIME sendLifeWaitTime = CONVERT_SECOND_TO_TIME(waitTime);
+				CCString* str = CCString::createWithFormat("%d:%d:%d", sendLifeWaitTime.hour, sendLifeWaitTime.min, sendLifeWaitTime.sec);
+                
 				if (cell->m_lbSendLifeTimer != NULL)
 				{
 					cell->m_lbSendLifeTimer->setString(str->getCString());
@@ -976,6 +952,11 @@ void ScoreScene::onGetFriendListCompleted(bool isSuccess, CCArray* arrFriends)
     
     CCLOG("Close dialog : onGetFriendListCompleted");
     this->closeWaitDialog();
+    
+    
+    //check inbox
+    this->getInbox();
+
 }
 
 void ScoreScene::onGetScoreCompleted( bool isSuccess, int score, std::string time )
@@ -1027,8 +1008,6 @@ void ScoreScene::onGetScoreCompleted( bool isSuccess, int score, std::string tim
         this->closeWaitDialog();
 	}	
 }
-
-
 
 
 //END MY FUNCTION
@@ -1120,23 +1099,24 @@ CCTableViewCell* ScoreScene::getTableCellXepHangAtIndex( CCTableView *table, uns
 	std::string strFriendId;
 
 	//get boom
-	//tm* _lastTimeGetBoom;
     long _lastTimeGetBoom;
 	int _getBoomWaitTime = 0;
 	CCString* strGetBoomTimer = CCString::create("00:00:00");
 
 	//send life
-	tm* _lastTimeSendLife;
+	long _lastTimeSendLife;
 	int _sendLifeWaitTime = 0;
 	CCString* strSendLifeTimer = CCString::create("00:00:00");
 
+    FacebookAccount* fbFriend = NULL;
+    
 	if(m_arrHighScores == NULL)
 	{
 		CCLOG("m_arrHighScores == NULL");
 	}
 	else
 	{
-		FacebookAccount* fbFriend = (FacebookAccount*) (m_arrHighScores->objectAtIndex(idx));
+		fbFriend = (FacebookAccount*) (m_arrHighScores->objectAtIndex(idx));
 		
 		strScore = CCString::createWithFormat("%d", fbFriend->m_score);
 
@@ -1164,24 +1144,9 @@ CCTableViewCell* ScoreScene::getTableCellXepHangAtIndex( CCTableView *table, uns
 		//send life //////////////////////////////////////
 		//
         
-        _lastTimeSendLife = DataManager::sharedDataManager()->GetTimeLifeToFriend(strFriendId.c_str());
-		if (_lastTimeSendLife == NULL)
-		{
-			//2014 - 114 = 1900
-			//very last
-			_lastTimeSendLife = new tm();
-			_lastTimeSendLife->tm_hour = 0;
-			_lastTimeSendLife->tm_min = 0;
-			_lastTimeSendLife->tm_sec = 0;
-			_lastTimeSendLife->tm_mday = 0;
-			_lastTimeSendLife->tm_mon = 0;
-			_lastTimeSendLife->tm_year = 0;
-
-			DataManager::sharedDataManager()->SetTimeLifeToFriend(strFriendId.c_str(), _lastTimeSendLife);
-		}
-		time_t lastTimeSendLife = mktime(_lastTimeSendLife);
-		time_t curTimeSendLife = time(NULL);
-		_sendLifeWaitTime = 24 * 60 * 60 - (int)difftime(curTimeSendLife, lastTimeSendLife);
+        _lastTimeSendLife = fbFriend->m_timeSendLife;
+		      
+		_sendLifeWaitTime = 24 * 60 * 60  - (static_cast<long int> (time(NULL)) - _lastTimeSendLife);
 		_sendLifeWaitTime = (_sendLifeWaitTime > 0) ? _sendLifeWaitTime : 0;
         
         MY_TIME sendLifeWaitTime = CONVERT_SECOND_TO_TIME(_sendLifeWaitTime);
@@ -1207,9 +1172,11 @@ CCTableViewCell* ScoreScene::getTableCellXepHangAtIndex( CCTableView *table, uns
 		cell = new CustomTableViewCell();
 		cell->autorelease();
 
+        CCLOG("~~~~~~~~~~~~~~~~~~~~~~~~CREATE NEW CELL ~~~~~~~~~~~~~~~~~~~~~~~ %s", strFriendId.c_str());
 		((CustomTableViewCell*)cell)->fbID = strFriendId;
 		((CustomTableViewCell*)cell)->m_lastTimeGetBoom = _lastTimeGetBoom;
 		((CustomTableViewCell*)cell)->m_lastTimeSendLife = _lastTimeSendLife;
+        ((CustomTableViewCell*)cell)->m_fbFriend = fbFriend;
 
 
 		CCSprite *sprite = CCSprite::create("table_cell_xephang.png");
@@ -1386,17 +1353,15 @@ CCTableViewCell* ScoreScene::getTableCellXepHangAtIndex( CCTableView *table, uns
 			if (_sendLifeWaitTime <= 0)
 			{
 				//FULL TIME
-				itSendLife->setEnabled(true);
 				lbSendLifeTimer->setVisible(false);
+				itSendLife->setEnabled(true);
 				lbSendLife->setVisible(true);
 			}
 			else
 			{
-				itSendLife->selected();
-
 				itSendLife->setEnabled(false);
-				lbSendLifeTimer->setVisible(true);
 				lbSendLife->setVisible(false);
+				lbSendLifeTimer->setVisible(true);
 			}
 		}
 	}
@@ -1448,7 +1413,6 @@ CCTableViewCell* ScoreScene::getTableCellQuatangAtIndex( CCTableView *table, uns
         
 		strName  = CCString::create(sname);
         strPhoto = CCString::create(photopath);
-        
 	}
 	else
 	{
@@ -1463,14 +1427,13 @@ CCTableViewCell* ScoreScene::getTableCellQuatangAtIndex( CCTableView *table, uns
 		cell->autorelease();
 
 		((CustomTableViewCell*)(cell))->m_gift = gift;
-
+        ((CustomTableViewCell*)(cell))->m_idx = idx;
 
 		CCSprite *sprite = CCSprite::create("table_cell_quatang.png");
 		sprite->setAnchorPoint(CCPointZero);
 		sprite->setPosition(ccp(0, 0));
 		sprite->setTag(1);
 		cell->addChild(sprite);
-
 
 		CCSprite *defaultAvatar = CCSprite::create("fb-profile.png");
 		defaultAvatar->setPosition(ccp(75, m_sprCell->getContentSize().height/2));
@@ -1656,7 +1619,7 @@ void ScoreScene::onGetInboxCompleted(bool isSuccess, CCArray* arrFriends)
 
 void ScoreScene::getFriendInfo(string fbId, string* outName, string* outPhotopath)
 {
-    CCLOG("fbUserPhotoCallback: friends");
+    CCLOG("ScoreScene::getFriendInfo: %s", fbId.c_str());
     
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     
@@ -1666,22 +1629,25 @@ void ScoreScene::getFriendInfo(string fbId, string* outName, string* outPhotopat
         FacebookAccount* fbFriend = (FacebookAccount*) (it);
         if (NULL != fbFriend)
         {
-            if(fbFriend->m_fbId == fbId)
+            if(fbFriend->m_fbId.compare(fbId) == 0)
             {
                 *outName = string(fbFriend->m_fbName);
                 *outPhotopath = string(fbFriend->m_photoPath);
+                
+                break;
             }
         }
     }
     
 #endif
     
+    CCLOG("ScoreScene::getFriendInfo :: END");
 }
 
 
 void ScoreScene::onSendItemCompleted(bool isSuccess, string friendId, string itemId, int count)
 {
-    CCLOG("ScoreScene::onSendItemCompleted ~~~ nothing");
+    CCLOG("ScoreScene::onSendItemCompleted ~~~");
 
     PLAY_GET_BOMB_EFFECT;
     
@@ -1697,25 +1663,88 @@ void ScoreScene::onSendItemCompleted(bool isSuccess, string friendId, string ite
     
     if (isSuccess) {
         
-        cell->m_itSendLife->setEnabled(false);
-        CCLOG("fbSendRequestCallback: FB_REQUEST_SENT: m_friendCell != NULL");
-        
-        //reset timer
-        DataManager::sharedDataManager()->SetTimeLifeToFriendNow(cell->fbID.c_str());
-        
+        CCLOG("Success");
         //show clock
         cell->m_itSendLife->setEnabled(false);
         cell->m_lbSendLifeTimer->setVisible(true);
-        cell->m_lastTimeSendLife = DataManager::sharedDataManager()->GetTimeLifeToFriend(cell->fbID.c_str());
-        
+        cell->m_lastTimeSendLife = static_cast<long int>(time(NULL));
+        cell->m_fbFriend->m_timeSendLife = static_cast<long int>(time(NULL));
         
     } else {
+        CCLOG("Failed");
+        
         cell->m_itSendLife->setEnabled(true);
         cell->m_lbSendLifeTimer->setVisible(false);
     }
     
     cell->m_sprWaitSendLife->setVisible(false);
 }
+
+
+void ScoreScene::onRemoveItemCompleted(bool isSuccess, string senderId, long long time)
+{
+    CCLOG("ScoreScene::onRemoveItemCompleted");
+    
+    
+    CustomTableViewCell *cell;
+    int cellIndex = -1;
+    
+    for (int i = 0; i < m_tableXepHangSize; i++) {
+        cell = (CustomTableViewCell*) m_tableXephang->cellAtIndex(i);
+        
+        if (cell->fbID.compare(senderId) == 0) {
+            CCLOG("FIND OUT CELL");
+            cellIndex = i;
+            break;
+        }
+    }
+    
+    
+    if (isSuccess) {
+        
+        PLAY_GET_BOMB_EFFECT;
+        
+        int curLife = DataManager::sharedDataManager()->GetLastPlayerLife();
+        curLife++;
+        DataManager::sharedDataManager()->SetLastPlayerLife(curLife);
+        CCLOG("CURRENT LIFE = %d", curLife);
+        
+        //save next time
+        long _tm = DataManager::sharedDataManager()->GetLastDeadTime();
+        _tm += G_PLAYER_TIME_TO_REVIVE;
+        DataManager::sharedDataManager()->SetLastDeadTime(_tm);
+        
+        //delete request
+        
+        CCLOG("REMOVE GIFT");
+        
+        int old = m_arrRequests->count();
+        
+        m_arrRequests->removeObjectAtIndex(cell->m_idx);
+        m_tableQuatangSize = m_arrRequests->count();
+        
+        CCLOG("OLD: %d, NEW: %d", old, m_tableQuatangSize);
+        
+        //refresh UI
+        m_tableQuatang->reloadData();
+        
+        refreshUserDetail();
+    }
+    else
+    {
+        PLAY_OUT_PORP_EFFECT;
+    }
+    
+    //animation
+    m_sprLife->runAction(CCSequence::createWithTwoActions(
+          CCScaleTo::create(0.2f, 1.0f),
+          CCScaleTo::create(0.2f, 0.75f)
+          ));
+    
+}
+
+
+
 
 
 

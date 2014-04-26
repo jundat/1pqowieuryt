@@ -144,6 +144,9 @@ public:
     
     void getFriendInfo(string fbId, string* outName, string* outPhotopath);
     
+    virtual void onRemoveItemCompleted(bool isSuccess, string senderId, long long time);
+    
+    
 	void submitScore();
 	void syncScore();
 	void getHighScores();

@@ -20,11 +20,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Classes/MenuScene.cpp"
-            timestampString = "420199966.678841"
+            timestampString = "420222141.091912"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "499"
-            endingLineNumber = "499"
+            startingLineNumber = "501"
+            endingLineNumber = "501"
             landmarkName = "MenuScene::rateCallback( CCObject* pSender )"
             landmarkType = "5">
          </BreakpointContent>
@@ -36,43 +36,43 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Classes/MenuScene.cpp"
-            timestampString = "420199966.678841"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "424"
-            endingLineNumber = "424"
-            landmarkName = "MenuScene::onRateCompleted( CCNode *sender, void *data )"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../Classes/MenuScene.cpp"
-            timestampString = "420199966.678841"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "415"
-            endingLineNumber = "415"
-            landmarkName = "MenuScene::onRateCompleted( CCNode *sender, void *data )"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../Classes/MenuScene.cpp"
-            timestampString = "420199966.678841"
+            timestampString = "420222141.091912"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "426"
             endingLineNumber = "426"
+            landmarkName = "MenuScene::onRateCompleted( CCNode *sender, void *data )"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../Classes/MenuScene.cpp"
+            timestampString = "420222141.091912"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "417"
+            endingLineNumber = "417"
+            landmarkName = "MenuScene::onRateCompleted( CCNode *sender, void *data )"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../Classes/MenuScene.cpp"
+            timestampString = "420222141.091912"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "428"
+            endingLineNumber = "428"
             landmarkName = "MenuScene::onRateCompleted( CCNode *sender, void *data )"
             landmarkType = "5">
          </BreakpointContent>
@@ -99,11 +99,11 @@
                   symbolName = "DataManager::SetHigherFriends(cocos2d::CCArray*)"
                   moduleName = "PhiCongButChi"
                   urlString = "file:///Users/lenguyen/Desktop/cocos2d-x-2.1.5/projects/PhiCongButChi/Classes/GameClientObjects.h"
-                  timestampString = "420199967.142326"
+                  timestampString = "420231524.899995"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "90"
-                  endingLineNumber = "90"
+                  startingLineNumber = "152"
+                  endingLineNumber = "152"
                   offsetFromSymbolStart = "214">
                </Location>
                <Location
@@ -113,11 +113,11 @@
                   symbolName = "TestPostGetScene::onGetFriendLeaderboardCompleted(bool, cocos2d::CCArray*)"
                   moduleName = "PhiCongButChi"
                   urlString = "file:///Users/lenguyen/Desktop/cocos2d-x-2.1.5/projects/PhiCongButChi/Classes/GameClientObjects.h"
-                  timestampString = "420199967.142539"
+                  timestampString = "420231524.900179"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "90"
-                  endingLineNumber = "90"
+                  startingLineNumber = "152"
+                  endingLineNumber = "152"
                   offsetFromSymbolStart = "64">
                </Location>
                <Location
@@ -127,11 +127,11 @@
                   symbolName = "TestPostGetScene::onGetWorldLeaderboardCompleted(bool, cocos2d::CCArray*)"
                   moduleName = "PhiCongButChi"
                   urlString = "file:///Users/lenguyen/Desktop/cocos2d-x-2.1.5/projects/PhiCongButChi/Classes/GameClientObjects.h"
-                  timestampString = "420199967.142728"
+                  timestampString = "420231524.900346"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "90"
-                  endingLineNumber = "90"
+                  startingLineNumber = "152"
+                  endingLineNumber = "152"
                   offsetFromSymbolStart = "64">
                </Location>
             </Locations>
