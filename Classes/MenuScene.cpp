@@ -273,6 +273,8 @@ bool MenuScene::init()
         this->getLife();
         this->getAllItems();
         
+        GameClientManager::sharedGameClientManager()->getScore(DataManager::sharedDataManager()->GetFbID());
+        
         this->checkRefreshFriendList();
     }
     
@@ -1039,6 +1041,8 @@ void MenuScene::onSendPlayerFbProfileCompleted( bool isSuccess )
         //set all user item from server
         this->getLife();
         this->getAllItems();
+        
+        GameClientManager::sharedGameClientManager()->getScore(DataManager::sharedDataManager()->GetFbID());
 	}
 	else
 	{
@@ -1154,12 +1158,14 @@ void MenuScene::onUseLifeCompleted(bool isSuccess, int newLife, long lastTime_cl
 {
     CCLOG("life: %d, lastTime: %ld", newLife, lastTime_client);
     
-    DataManager::sharedDataManager()->SetLastPlayerLife(newLife);
-    DataManager::sharedDataManager()->SetLastDeadTime(lastTime_client);
-    
     if (isSuccess) {
+        
+        DataManager::sharedDataManager()->SetLastPlayerLife(newLife);
+        DataManager::sharedDataManager()->SetLastDeadTime(lastTime_client);
+        
         CCLOG("---USE LIFE SUCCESS~~~");
     } else {
+        
         CCLOG("---USE LIFE FAILED~~~");
     }
 }
@@ -1176,18 +1182,29 @@ void MenuScene::onGetLifeCompleted(bool isSuccess, int life, long lastTimeClient
 {
     CCLOG("MenuScene::onGetLifeCompleted");
     
-    DataManager::sharedDataManager()->SetLastPlayerLife(life);
-    DataManager::sharedDataManager()->SetLastDeadTime(lastTimeClient_Second);
+    if (isSuccess) {
+        
+        DataManager::sharedDataManager()->SetLastPlayerLife(life);
+        DataManager::sharedDataManager()->SetLastDeadTime(lastTimeClient_Second);
+        
+        this->refreshLifeIcon();
     
-    this->refreshLifeIcon();
-    
-    if (isSuccess == false) {
+    } else {
         CCLOG("FAILED TO CONNECT SERVER");
     }
 }
 
 
-
+void MenuScene::onGetScoreCompleted( bool isSuccess, int score, std::string time )
+{
+    CCLOG("MenuScene::onGetScoreCompleted");
+    
+    if (isSuccess) {
+        DataManager::sharedDataManager()->SetHighScore(score);
+    } else {
+        CCLOG("FAILED TO GET SCORE");
+    }
+}
 
 
 

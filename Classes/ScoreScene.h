@@ -53,7 +53,7 @@ public:
 	void itSendLifeCallback(CCObject* pSender);
     
     virtual void onGetLazeFreeCompleted(bool isSuccess, std::string friendId);
-    
+    virtual void onSendItemCompleted(bool isSuccess, string friendId, string itemId, int count);
     
 
 	static int CompareEziFriendScore(const CCObject* p1, const CCObject* p2)
@@ -116,8 +116,8 @@ public:
 	CCArray* m_arrHighScores;
 	CCArray* m_arrRequests;
 
-	CustomTableViewCell* m_getLazeCell;
-    CustomTableViewCell* m_sendLifeCell;
+	//CustomTableViewCell* m_getLazeCell;
+    //CustomTableViewCell* m_sendLifeCell;
     
 
 	// Facebook //=========================================
@@ -138,8 +138,11 @@ public:
     
     
     virtual void onBuyItemCompleted(bool isSuccess, int newCoin, std::string itemType, int itemCount, std::string uniqueTag);
-
     
+    void getInbox();
+    virtual void onGetInboxCompleted(bool isSuccess, CCArray* arrFriends);
+    
+    void getFriendInfo(string fbId, string* outName, string* outPhotopath);
     
 	void submitScore();
 	void syncScore();
@@ -148,10 +151,10 @@ public:
 	virtual void onGetScoreCompleted( bool isSuccess, int score, std::string time );
 
 	//Ezibyte
+    
 	virtual void fbUserPhotoCallback(const char *userPhotoPath, const char* fbID);
 	virtual void fbSendRequestCallback(int responseCode, const char* responseMessage, cocos2d::CCArray* friendsGotRequests);
-	virtual void fbIncomingRequestCallback(int responseCode, const char* responseMessage, int totalIncomingRequests);
-
+	
 	// Facebook //=========================================
 };
 

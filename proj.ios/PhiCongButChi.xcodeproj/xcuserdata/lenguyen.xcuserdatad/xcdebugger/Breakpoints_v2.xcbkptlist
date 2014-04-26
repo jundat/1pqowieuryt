@@ -84,11 +84,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Classes/GameClientObjects.h"
-            timestampString = "420119199.392003"
+            timestampString = "420217187.293322"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "90"
-            endingLineNumber = "90"
+            startingLineNumber = "152"
+            endingLineNumber = "152"
             landmarkName = "toJson()"
             landmarkType = "5">
             <Locations>

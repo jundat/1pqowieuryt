@@ -147,6 +147,7 @@ public:
     virtual void onGetLifeCompleted(bool isSuccess, int life, long lastTimeClient_Second);
     
     
+	virtual void onGetScoreCompleted( bool isSuccess, int score, std::string time );
     
     
     void showWaitDialog(string title);

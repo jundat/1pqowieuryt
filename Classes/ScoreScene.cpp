@@ -39,9 +39,6 @@ bool ScoreScene::init()
 	m_friendList = NULL;
 	m_arrHighScores = NULL;
 	m_arrRequests = NULL;
-    
-    m_getLazeCell = NULL;
-	m_sendLifeCell = NULL;
 
 	m_lbInviteQuatang = NULL;
     m_isFirstTimeLogIn = false;
@@ -301,8 +298,8 @@ bool ScoreScene::init()
 	{
 		syncScore();
 
-		//check incoming request
-		EziSocialObject::sharedObject()->checkIncomingRequest();
+		//check inbox
+        this->getInbox();
 
 
 		m_isLoggedIn = true;
@@ -402,11 +399,7 @@ void ScoreScene::tableCellTouched(CCTableView* table, CCTableViewCell* cell)
 
 	if (table == m_tableXephang) //Xep hang
 	{
-		//nothing
-	} 
-	else ///////////////////////// Qua tang
-	{
-		CustomTableViewCell* customCell = (CustomTableViewCell*) cell;
+        CustomTableViewCell* customCell = (CustomTableViewCell*) cell;
 
 		int curLife = DataManager::sharedDataManager()->GetLastPlayerLife();
 		CCLOG("CURRENT LIFE = %d", curLife);
@@ -426,20 +419,12 @@ void ScoreScene::tableCellTouched(CCTableView* table, CCTableViewCell* cell)
 			DataManager::sharedDataManager()->SetLastDeadTime(_tm);
 
 			//delete request
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 			CCLOG("REMOVE REQUEST");
 
-			m_arrRequests->removeObject(customCell->m_request);
+			m_arrRequests->removeObject(customCell->m_gift);
 			m_tableQuatangSize = m_arrRequests->count();
-
-			//delete request in pool
-			customCell->m_request->purgeFromUserDefault();
-			customCell->m_request->setConsumed(true);
-			EziFBIncomingRequestManager::sharedManager()->consumeItem(customCell->m_request);
-			EziFBIncomingRequestManager::sharedManager()->clearCompletedRequestList();
-#endif
-
-			//refresh UI
+			
+            //refresh UI
 			m_tableQuatang->reloadData();
 
 			refreshUserDetail();
@@ -597,6 +582,21 @@ void ScoreScene::itSendLifeCallback( CCObject* pSender )
 	CustomTableViewCell* cell = (CustomTableViewCell*)m_tableXephang->cellAtIndex(idx);
 	std::string fbID = cell->fbID;
 	
+    
+    ///
+    //
+    
+    string myfbid = DataManager::sharedDataManager()->GetFbID();
+    GameClientManager::sharedGameClientManager()->sendItem(myfbid, fbID, "life", 1);
+    
+    //show wait sprite
+    //disable all item to wait
+    cell->m_sprWaitSendLife->setVisible(true);
+    cell->m_itSendLife->setEnabled(false);
+    
+    //
+    ///
+    /*
 	CCString* s = CCString::createWithFormat("%s", fbID.c_str());
 	CCArray* arrFriends = new CCArray();
 	arrFriends->addObject(s);
@@ -614,8 +614,9 @@ void ScoreScene::itSendLifeCallback( CCObject* pSender )
 		giftDictionary, 
 		TXT("game_name"));
 #endif
-
-	m_sendLifeCell = cell;
+     */
+    
+	//m_sendLifeCell = cell;
 }
 
 
@@ -1096,23 +1097,7 @@ void ScoreScene::fbSendRequestCallback( int responseCode, const char* responseMe
 	if (EziSocialWrapperNS::RESPONSE_CODE::FB_REQUEST_SENT == responseCode)
 	{
 		CCLOG("fbSendRequestCallback: FB_REQUEST_SENT");
-		
 		PLAY_GET_BOMB_EFFECT;
-
-		if (m_sendLifeCell != NULL) //send life
-		{
-			CCLOG("fbSendRequestCallback: FB_REQUEST_SENT: m_friendCell != NULL");
-
-			//reset timer
-			DataManager::sharedDataManager()->SetTimeLifeToFriendNow(m_sendLifeCell->fbID.c_str());
-
-			//show clock
-			m_sendLifeCell->m_lbSendLife->setVisible(false);
-			m_sendLifeCell->m_lbSendLifeTimer->setVisible(true);
-			m_sendLifeCell->m_lastTimeSendLife = DataManager::sharedDataManager()->GetTimeLifeToFriend(m_sendLifeCell->fbID.c_str());
-
-			m_sendLifeCell = NULL;
-		}		
 	}
 	else
 	{
@@ -1123,63 +1108,6 @@ void ScoreScene::fbSendRequestCallback( int responseCode, const char* responseMe
 #endif
 }
 
-void ScoreScene::fbIncomingRequestCallback(int responseCode, const char* responseMessage, int totalIncomingRequests)
-{
-	CCLOG("fbIncomingRequestCallback");
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-	int pendingRequest = EziFBIncomingRequestManager::sharedManager()->getPendingRequestCount();
-	CCLOG("------------------NewRequests= %d\n-----------------PendingRequests= %d", totalIncomingRequests, pendingRequest);
-
-	if (pendingRequest > 0)
-	{
-		if (m_arrRequests != NULL)
-		{
-			m_arrRequests->release();
-			m_arrRequests = NULL;
-		}
-		m_arrRequests = new CCArray();
-		m_arrRequests->retain();
-
-		CCDictionary* dictPendingRequests = EziFBIncomingRequestManager::sharedManager()->getPendingRequests();
-
-		//foreach Dictionary to put into m_arrRequests
-
-		m_tableQuatangSize = 0;
-		CCDictElement* pElement = NULL;
-		CCDICT_FOREACH(dictPendingRequests, pElement)
-		{
-			EziFBIncomingRequest* request = (EziFBIncomingRequest*)pElement->getObject();
-			if (request->getRequestType() == EziSocialWrapperNS::FB_REQUEST::REQUEST_GIFT)
-			{
-				if (request->isConsumed())
-				{
-					CCLOG(" ------------ CONSUMED GIFT ------------- ");
-				} 
-				else
-				{
-					CCLOG(" --------------- NEW GIFT --------------- ");
-					m_arrRequests->addObject(request);
-				}
-			}
-			else if (request->getRequestType() == EziSocialWrapperNS::FB_REQUEST::REQUEST_INVITE)
-			{
-				if (request->isConsumed())
-				{
-					CCLOG(" ------------ CONSUMED INVITE ------------- ");
-				}
-				else
-				{
-					CCLOG(" --------------- NEW INVITE --------------- ");
-				}
-			}
-		}
-		m_tableQuatangSize = m_arrRequests->count();
-		
-		CCLOG("CALL: m_tableQuatang->reloadData()");
-		m_tableQuatang->reloadData();
-	}
-#endif
-}
 
 CCTableViewCell* ScoreScene::getTableCellXepHangAtIndex( CCTableView *table, unsigned int idx )
 {
@@ -1357,7 +1285,7 @@ CCTableViewCell* ScoreScene::getTableCellXepHangAtIndex( CCTableView *table, uns
 			cell->addChild(cell_menu);
 
             //
-            //waiting...
+            //waiting... get laze
             //
             CCSprite* sprWait = CCSprite::create("wait.png");
             sprWait->setPosition( ccpAdd( itGetBoom->getPosition(), ccp(-7, -7)));
@@ -1368,6 +1296,18 @@ CCTableViewCell* ScoreScene::getTableCellXepHangAtIndex( CCTableView *table, uns
             ((CustomTableViewCell*)cell)->m_sprWait = sprWait;
             
 
+            //
+            //waiting... send life
+            //
+            CCSprite* sprWaitSendLife = CCSprite::create("wait.png");
+            sprWaitSendLife->setPosition( ccpAdd( itSendLife->getPosition(), ccp(-2, -2)));
+            sprWaitSendLife->setScale(0.65f);
+            sprWaitSendLife->setVisible(false);
+            sprWaitSendLife->runAction(CCRepeatForever::create(CCRotateBy::create(1.0f, -360.0f)));
+            cell->addChild(sprWaitSendLife);
+            ((CustomTableViewCell*)cell)->m_sprWaitSendLife = sprWaitSendLife;
+            
+            
 
 			//////////////////////////////////////////////////////////////////////////
 
@@ -1479,54 +1419,36 @@ CCTableViewCell* ScoreScene::getTableCellXepHangAtIndex( CCTableView *table, uns
 	return cell;
 }
 
+
 CCTableViewCell* ScoreScene::getTableCellQuatangAtIndex( CCTableView *table, unsigned int idx )
 {
 	//CCLOG("getTableCellQuatangAtIndex: %d", idx);
+    
 	CCString* strName = CCString::create(G_DEFAULT_NAME);
 	CCString* strPhoto = CCString::create("fb-profile.png");
 	std::string strFriendId;
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-	EziFBIncomingRequest* request = (EziFBIncomingRequest*)m_arrRequests->objectAtIndex(idx);
-	if (NULL != request)
+    
+    Gift* gift = (Gift*) m_arrRequests->objectAtIndex(idx);
+	
+    if (NULL != gift)
 	{
-		EziFacebookFriend* fbFriend = request->getSender();
-		strFriendId = std::string(fbFriend->getFBID());
+		strFriendId = std::string(gift->m_senderId);
 
-		std::string sname = std::string(fbFriend->getName());
+		std::string sname;
+        string photopath;
+        
+        this->getFriendInfo(strFriendId, &sname, &photopath);
+        
 		if (sname.length() > 18) {
 			sname = sname.substr(0, 15);
 			sname.append("...");
-		}			
-		strName  = CCString::create(sname);
-				
-		//check if photopath is ok
-		if (strlen(fbFriend->getPhotoPath()) > 1)
-		{
-			CCLOG("GET RIGHT PHOTOPATH");
-			strPhoto = CCString::createWithFormat("%s", fbFriend->getPhotoPath());
-		} 
-		else
-		{
-			CCLOG("FOREACH TO GET PHOTOPATH");
-			//foreach m_arrHighScores to get photopath
-			CCObject* it = NULL;
-			CCARRAY_FOREACH(m_arrHighScores, it)
-			{
-				FacebookAccount* fr = (FacebookAccount*) (it);
-
-				if (NULL != fr && fr->m_fbId == strFriendId)
-				{
-					if (fr->m_photoPath.length() > 1)
-					{
-						CCLOG("FOREACH TO GET PHOTOPATH: --- OK");
-						strPhoto = CCString::create(fr->m_photoPath);
-						fbFriend->setPhotoPath(fr->m_photoPath.c_str());
-						break;
-					}
-				}
-			}
 		}
+        
+		strName  = CCString::create(sname);
+        strPhoto = CCString::create(photopath);
+        
 	}
 	else
 	{
@@ -1540,7 +1462,7 @@ CCTableViewCell* ScoreScene::getTableCellQuatangAtIndex( CCTableView *table, uns
 		cell = new CustomTableViewCell();
 		cell->autorelease();
 
-		((CustomTableViewCell*)(cell))->m_request = request;
+		((CustomTableViewCell*)(cell))->m_gift = gift;
 
 
 		CCSprite *sprite = CCSprite::create("table_cell_quatang.png");
@@ -1674,21 +1596,126 @@ void ScoreScene::onBuyItemCompleted(bool isSuccess, int newCoin, std::string ite
         
 		refreshUserDetail();
         
+        DataManager::sharedDataManager()->SetIsJustGetBoomNowFriend(uniqueTag.c_str(), true);
+        cell->m_itGetBoomNow->setVisible(false);
+        cell->m_itGetBoom->setVisible(true);
+        cell->m_itGetBoom->setEnabled(false);
+        
     } else {
         CCMessageBox(TXT("get_laze_free_error"), TXT("error_caption"));
+        
+        cell->m_itGetBoomNow->setVisible(true);
+        cell->m_itGetBoom->setVisible(false);
+        cell->m_itGetBoom->setEnabled(true);
     }
     
-    DataManager::sharedDataManager()->SetIsJustGetBoomNowFriend(uniqueTag.c_str(), true);
-    cell->m_itGetBoomNow->setVisible(false);
-    cell->m_itGetBoom->setVisible(true);
-    cell->m_itGetBoom->setEnabled(false);
     cell->m_sprWait->setVisible(false);
 }
 
 
+void ScoreScene::getInbox()
+{
+    GameClientManager::sharedGameClientManager()->getInbox(DataManager::sharedDataManager()->GetFbID());
+}
+
+
+void ScoreScene::onGetInboxCompleted(bool isSuccess, CCArray* arrFriends)
+{
+    CCLOG("ScoreScene::onGetInboxCompleted");
+    
+    if (arrFriends == NULL) {
+        return;
+    }
+    
+    int count = arrFriends->count();
+    if (count > 0) {
+        
+        if (m_arrRequests != NULL)
+		{
+			m_arrRequests->release();
+			m_arrRequests = NULL;
+		}
+		m_arrRequests = CCArray::createWithArray(arrFriends);
+		m_arrRequests->retain();
+        
+        //senderid, itemid, count, time
+        //need photopath
+        
+        
+		CCLOG("CALL: m_tableQuatang->reloadData()");
+        
+		m_tableQuatangSize = count;
+		m_tableQuatang->reloadData();
+        
+    } else {
+        CCLOG("NOT GIFT");
+    }
+}
 
 
 
+void ScoreScene::getFriendInfo(string fbId, string* outName, string* outPhotopath)
+{
+    CCLOG("fbUserPhotoCallback: friends");
+    
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    
+    CCObject* it;
+    CCARRAY_FOREACH(m_arrHighScores, it)
+    {
+        FacebookAccount* fbFriend = (FacebookAccount*) (it);
+        if (NULL != fbFriend)
+        {
+            if(fbFriend->m_fbId == fbId)
+            {
+                *outName = string(fbFriend->m_fbName);
+                *outPhotopath = string(fbFriend->m_photoPath);
+            }
+        }
+    }
+    
+#endif
+    
+}
+
+
+void ScoreScene::onSendItemCompleted(bool isSuccess, string friendId, string itemId, int count)
+{
+    CCLOG("ScoreScene::onSendItemCompleted ~~~ nothing");
+
+    PLAY_GET_BOMB_EFFECT;
+    
+    CustomTableViewCell *cell;
+    
+    for (int i = 0; i < m_tableXepHangSize; i++) {
+        cell = (CustomTableViewCell*) m_tableXephang->cellAtIndex(i);
+        if (cell->fbID.compare(friendId) == 0) {
+            CCLOG("FIND OUT CELL");
+            break;
+        }
+    }
+    
+    if (isSuccess) {
+        
+        cell->m_itSendLife->setEnabled(false);
+        CCLOG("fbSendRequestCallback: FB_REQUEST_SENT: m_friendCell != NULL");
+        
+        //reset timer
+        DataManager::sharedDataManager()->SetTimeLifeToFriendNow(cell->fbID.c_str());
+        
+        //show clock
+        cell->m_itSendLife->setEnabled(false);
+        cell->m_lbSendLifeTimer->setVisible(true);
+        cell->m_lastTimeSendLife = DataManager::sharedDataManager()->GetTimeLifeToFriend(cell->fbID.c_str());
+        
+        
+    } else {
+        cell->m_itSendLife->setEnabled(true);
+        cell->m_lbSendLifeTimer->setVisible(false);
+    }
+    
+    cell->m_sprWaitSendLife->setVisible(false);
+}
 
 
 
