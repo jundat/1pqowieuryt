@@ -121,6 +121,8 @@
 		<string>buy_revive</string>
 		<key>get_laze_free_error</key>
 		<string>get_laze_free_error</string>
+		<key>score_limit_life</key>
+		<string>score_limit_life</string>
 	</dict>
 
 	<key>English</key>
@@ -243,6 +245,8 @@
 		<string>Buy revive item...</string>
 		<key>get_laze_free_error</key>
 		<string>Get free laze failed</string>
+		<key>score_limit_life</key>
+		<string>Max life is %d</string>
 	</dict>
 
 	<key>Vietnamese</key>
@@ -298,7 +302,7 @@
 		<key>score_invite_friend</key>
 		<string>%s đang tả xung hữu đột tiêu diệt máy bay địch trong Điện Biên Phủ trên không. Hãy cùng tham chiến nào.</string>
 		<key>score_limit_lazer</key>
-		<string>Chỉ được giữ tối đa %d lazer</string>
+		<string>Giữ tối đa %d lazer</string>
 		<key>score_popup_caption</key>
 		<string>Thông tin</string>
 		<key>score_send_life_msg</key>
@@ -365,6 +369,8 @@
 		<string>Mua hồi sinh</string>
 		<key>get_laze_free_error</key>
 		<string>Không thể nhận quà</string>
+		<key>score_limit_life</key>
+		<string>Tối đa %d mạng</string>
 	</dict>
 
 </dict>
