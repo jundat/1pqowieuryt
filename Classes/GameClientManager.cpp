@@ -1259,8 +1259,8 @@ void GameClientManager::_onGetLifeCompleted(CCHttpClient *sender, CCHttpResponse
 		if (m_clientDelegate)
 		{
 			m_clientDelegate->onGetLifeCompleted(false,
-                                                 DataManager::sharedDataManager()->GetLastPlayerLife() - 1,
-                                                 -1);
+                                                 DataManager::sharedDataManager()->GetLastPlayerLife(),
+                                                 0);
 		}
 	}
 	else

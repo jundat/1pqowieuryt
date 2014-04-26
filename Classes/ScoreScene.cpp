@@ -535,6 +535,13 @@ void ScoreScene::itGetBoomCallback( CCObject* pSender )
 
 void ScoreScene::itGetBoomNowCallback( CCObject* pSender )
 {
+    //buyItem
+    //fbId
+    //friendId
+    //itemId = "laze"
+    //count = 1
+    
+    
 	int tag = ((CCMenuItemImage*)pSender)->getTag();
 	int idx = tag - BEGIN_TAG_IT_GET_BOOM_NOW;
 	CustomTableViewCell* cell = (CustomTableViewCell*)m_tableXephang->cellAtIndex(idx);
@@ -546,26 +553,12 @@ void ScoreScene::itGetBoomNowCallback( CCObject* pSender )
 
 	if (numBoom < G_MAX_BOOM && diamond >= G_DIAMON_TO_GET_BOOM_NOW) //eveything ok
 	{
-		PLAY_GET_BOMB_EFFECT;
-
-		DataManager::sharedDataManager()->SetDiamon(diamond - G_DIAMON_TO_GET_BOOM_NOW);
-		DataManager::sharedDataManager()->IncreaseBoom();
-		DataManager::sharedDataManager()->SetIsJustGetBoomNowFriend(fbID.c_str(), true);
-
-		m_sprDiamond->runAction(CCSequence::createWithTwoActions(
-			CCScaleTo::create(0.2f, 1.25f),
-			CCScaleTo::create(0.2f, 1.0f)
-			));
-
-		m_sprBoom->runAction(CCSequence::createWithTwoActions(
-			CCScaleTo::create(0.2f, 1.0f),
-			CCScaleTo::create(0.2f, 0.75f)
-			));
-
-		refreshUserDetail();
-
-		//disable
-		cell->m_itGetBoomNow->setVisible(false);
+        GameClientManager::sharedGameClientManager()->buyItem(DataManager::sharedDataManager()->GetFbID(), "laze", 1, fbID);
+		
+        //show wait sprite
+        //disable all item to wait
+        cell->m_sprWait->setVisible(true);
+        cell->m_itGetBoom->setEnabled(false);
 	}
 	else
 	{
@@ -1643,6 +1636,64 @@ void ScoreScene::closeWaitDialog()
         }
     }
 }
+
+
+
+void ScoreScene::onBuyItemCompleted(bool isSuccess, int newCoin, std::string itemType, int itemCount, std::string uniqueTag)
+{
+    CCLOG("onBuyItemCompleted: %s, %d, %s", itemType.c_str(), itemCount, uniqueTag.c_str());
+    
+    CustomTableViewCell *cell;
+    
+    for (int i = 0; i < m_tableXepHangSize; i++) {
+        cell = (CustomTableViewCell*) m_tableXephang->cellAtIndex(i);
+        if (cell->fbID.compare(uniqueTag) == 0) {
+            CCLOG("FIND OUT CELL");
+            break;
+        }
+    }
+    
+    if (isSuccess) {
+        PLAY_GET_BOMB_EFFECT;
+		
+        DataManager::sharedDataManager()->SetDiamon(newCoin);
+        DataManager::sharedDataManager()->SetBoom(itemCount + DataManager::sharedDataManager()->GetBoom());
+        
+        CCLOG("NEW LAZE: %d", DataManager::sharedDataManager()->GetBoom());
+        
+		//animation
+		m_sprBoom->runAction(CCSequence::createWithTwoActions(
+              CCScaleTo::create(0.2f, 1.0f),
+              CCScaleTo::create(0.2f, 0.75f)
+              ));
+        
+        m_sprDiamond->runAction(CCSequence::createWithTwoActions(
+             CCScaleTo::create(0.2f, 1.25f),
+             CCScaleTo::create(0.2f, 1.0f)
+             ));
+        
+		refreshUserDetail();
+        
+    } else {
+        CCMessageBox(TXT("get_laze_free_error"), TXT("error_caption"));
+    }
+    
+    DataManager::sharedDataManager()->SetIsJustGetBoomNowFriend(uniqueTag.c_str(), true);
+    cell->m_itGetBoomNow->setVisible(false);
+    cell->m_itGetBoom->setVisible(true);
+    cell->m_itGetBoom->setEnabled(false);
+    cell->m_sprWait->setVisible(false);
+}
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -137,6 +137,10 @@ public:
     WaitDialog* m_waitDialog;
     
     
+    virtual void onBuyItemCompleted(bool isSuccess, int newCoin, std::string itemType, int itemCount, std::string uniqueTag);
+
+    
+    
 	void submitScore();
 	void syncScore();
 	void getHighScores();
