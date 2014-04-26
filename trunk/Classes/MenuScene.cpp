@@ -592,19 +592,13 @@ void MenuScene::ScheduleTick( float dt )
         if (seconds == 0)
         {
             //get life from server
-            this->getLife();
+            CCSequence* seq = CCSequence::create(CCDelayTime::create(2.0f),
+                               CCCallFunc::create(this, callfunc_selector(MenuScene::getLife)));
+            m_lbTime->runAction(seq);
+            CCLOG("Get life to refresh life after 1 seconds (s)....");
             
-            //DataManager::sharedDataManager()->RefreshPlayerLife();
-            //refreshLifeIcon();
-            
-            //int life = DataManager::sharedDataManager()->GetLastPlayerLife();
-            //CCLOG("REFRESH LIFE ICON, Life = %d", life);
-            //if (life >= G_MAX_PLAYER_LIFE)
-            //{
-            //    this->unschedule(schedule_selector(MenuScene::ScheduleTick));
-            //    m_lbTime->setVisible(false);
-            //    return;
-            //}
+            DataManager::sharedDataManager()->RefreshPlayerLife();
+            refreshLifeIcon();
         }
         
         CCString* s;
