@@ -44,6 +44,8 @@ bool WaitForLifeDialog::init()
 	labelTitle->setColor(ccBLACK);
 	labelTitle->setPosition(ccp(400, 700));
 	this->addChild(labelTitle);
+    
+    this->setKeypadEnabled(true);
 	
     return true;
 }
@@ -54,6 +56,11 @@ void WaitForLifeDialog::exitCallback( CCObject* pSender )
 	parent->setTouchEnabled(true);
 	parent->onCloseDialog();
 	this->removeFromParent();
+}
+
+void WaitForLifeDialog::keyBackClicked()
+{
+    //exitCallback(NULL);
 }
 
 void WaitForLifeDialog::askFriendCallback( CCObject* pSender )
@@ -215,15 +222,10 @@ void WaitForLifeDialog::fbSendRequestCallback( int responseCode, const char* res
 
 void WaitForLifeDialog::ScheduleTick( float dt )
 {
-
-	tm* lasttm = DataManager::sharedDataManager()->GetLastDeadTime();
-	time_t lastTime = mktime(lasttm);
-	time_t curTime = time(NULL);
-	double _secondsElapsed = difftime(curTime, lastTime);
+	long lasttm = DataManager::sharedDataManager()->GetLastDeadTime();
+	double _secondsElapsed = static_cast<long int>(time(NULL)) - lasttm;
 
 	m_waitTime = (float)(G_PLAYER_TIME_TO_REVIVE - _secondsElapsed);
-
-	//m_waitTime -= dt;
 
 	if (m_waitTime < 0)
 	{

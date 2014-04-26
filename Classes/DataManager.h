@@ -54,8 +54,8 @@ public:
 	void	SetHighScore(int currentScore);
     void    SetHighScoreNotCheck(int score);
 
-	tm*		GetLastDeadTime();
-	void	SetLastDeadTime(tm* time); //int hour, int min, int sec, int mday, int mon, int year);
+	long	GetLastDeadTime();
+	void	SetLastDeadTime(long time_in_second);
 	void	SetLastDeadTimeNow();
 
 	int		GetLastPlayerLife();

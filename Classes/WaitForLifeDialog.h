@@ -37,6 +37,7 @@ public:
 	void ScheduleTick(float dt);
 	void exitCallback(CCObject* pSender);
 	void askFriendCallback(CCObject* pSender);
+    virtual void keyBackClicked();
 
 	
 	//facebook /////////////////////////////////
