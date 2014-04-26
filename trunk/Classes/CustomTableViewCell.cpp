@@ -16,8 +16,5 @@ CustomTableViewCell::CustomTableViewCell()
 	m_lbSendLifeTimer = NULL;
 	m_lbSendLife = NULL;
 	m_itSendLife = NULL;
-
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-	m_request = NULL;
-#endif
+    
 }

@@ -150,6 +150,14 @@ public:
     void _onSendItemCompleted(CCHttpClient *sender, CCHttpResponse *response);
     
     
+    void getInbox(string fbId);
+    void _onGetInboxCompleted(CCHttpClient *sender, CCHttpResponse *response);
+    
+    
+    void removeItem(std::string fbId, std::string friendId, long long time);
+    void _onRemoveItemCompleted(CCHttpClient *sender, CCHttpResponse *response);
+    
+    
     //////////////////////////////////////////////////////////////////////////
     
     

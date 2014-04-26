@@ -744,7 +744,8 @@ void GameClientManager::_onGetScoreCompleted( CCHttpClient *sender, CCHttpRespon
 		CCLOG("Request failed: %s", response->getErrorBuffer());
 		if (m_clientDelegate)
 		{
-			m_clientDelegate->onGetScoreCompleted(false, -1, std::string());
+			m_clientDelegate->onGetScoreCompleted(false,
+                                                  DataManager::sharedDataManager()->GetHighScore(), "0");
 		}
 	}
 	else
@@ -982,7 +983,9 @@ void GameClientManager::_onGetAllItemCompleted(CCHttpClient *sender, CCHttpRespo
 		CCLOG("Request failed: %s", response->getErrorBuffer());
 		if (m_clientDelegate)
 		{
-			m_clientDelegate->onGetAllItemsCompleted(false, -1, -1);
+			m_clientDelegate->onGetAllItemsCompleted(false,
+                                                     DataManager::sharedDataManager()->GetBoom(),
+                                                     DataManager::sharedDataManager()->GetDiamon());
 		}
 	}
 	else
@@ -1020,7 +1023,9 @@ void GameClientManager::_onGetAllItemCompleted(CCHttpClient *sender, CCHttpRespo
         } else {
             if (m_clientDelegate)
             {
-                m_clientDelegate->onGetAllItemsCompleted(false, -1, -1);
+                m_clientDelegate->onGetAllItemsCompleted(false,
+                                                         DataManager::sharedDataManager()->GetBoom(),
+                                                         DataManager::sharedDataManager()->GetDiamon());
             }
         }
         
@@ -1080,7 +1085,11 @@ void GameClientManager::_onBuyItemCompleted(CCHttpClient *sender, CCHttpResponse
 		CCLOG("Request failed: %s", response->getErrorBuffer());
 		if (m_clientDelegate)
 		{
-			m_clientDelegate->onBuyItemCompleted(false, -1, "", -1, response->getHttpRequest()->getTag());
+			m_clientDelegate->onBuyItemCompleted(false,
+                                                 DataManager::sharedDataManager()->GetDiamon(),
+                                                 "",
+                                                 0,
+                                                 response->getHttpRequest()->getTag());
 		}
 	}
 	else
@@ -1118,7 +1127,12 @@ void GameClientManager::_onBuyItemCompleted(CCHttpClient *sender, CCHttpResponse
         } else {
             if (m_clientDelegate)
             {
-                m_clientDelegate->onBuyItemCompleted(false, -1, "", -1, response->getHttpRequest()->getTag());
+                //m_clientDelegate->onBuyItemCompleted(false, -1, "", -1, response->getHttpRequest()->getTag());
+                m_clientDelegate->onBuyItemCompleted(false,
+                                                     DataManager::sharedDataManager()->GetDiamon(),
+                                                     "",
+                                                     0,
+                                                     response->getHttpRequest()->getTag());
             }
         }
 	}
@@ -1355,7 +1369,7 @@ void GameClientManager::_onUseLifeCompleted(CCHttpClient *sender, CCHttpResponse
 		{
 			m_clientDelegate->onUseLifeCompleted(false,
                                                  DataManager::sharedDataManager()->GetLastPlayerLife() - 1,
-                                                 -1);
+                                                 0);
 		}
 	}
 	else
@@ -1450,7 +1464,9 @@ void GameClientManager::_onUseItemCompleted(CCHttpClient *sender, CCHttpResponse
 		CCLOG("Request failed: %s", response->getErrorBuffer());
 		if (m_clientDelegate)
 		{
-			m_clientDelegate->onUseItemCompleted(false, response->getHttpRequest()->getTag(), -1);
+			m_clientDelegate->onUseItemCompleted(false,
+                                                 response->getHttpRequest()->getTag(),
+                                                 1);
 		}
 	}
 	else
@@ -1592,7 +1608,7 @@ void GameClientManager::sendItem(std::string fbId, std::string friendId, string 
     
 	// write the post data
 	CCString* strData = CCString::createWithFormat(
-           "{ method: \"get\", data: { appId: \"%s\", platform: \"facebook\", userId: \"%s\", receiverId: \"%s\", itemId: \"%s\", count: \"%d\", metadata: \"\"}, sign: \"%s\", appId: \"%s\" }",
+           "{ method: \"get\", data: { appId: \"%s\", fbId: \"%s\", receiverId: \"%s\", itemId: \"%s\", count: \"%d\", metadata: \"\"}, sign: \"%s\", appId: \"%s\" }",
            G_APP_ID, fbId.c_str(), friendId.c_str(), itemId.c_str(), count, getMD5().c_str(), G_APP_ID);
     
     
@@ -1665,6 +1681,209 @@ void GameClientManager::_onSendItemCompleted(CCHttpClient *sender, CCHttpRespons
     
 	CCLOG("------- END %s -------", response->getHttpRequest()->getTag());
 }
+
+
+
+void GameClientManager::getInbox(string fbId)
+{
+    string sUrl = string(G_URL_GIFT_GET_INBOX);
+	CCLOG("URL: %s", sUrl.c_str());
+	CCAssert(sUrl.length() > 0, "Not set G_URL_GIFT_GET_INBOX yet");
+	CCHttpRequest* request = new CCHttpRequest();
+	request->setUrl(sUrl.c_str());
+	request->setRequestType(CCHttpRequest::kHttpPost);
+    
+	request->setTag("GEt_inbox");
+	request->setResponseCallback(this, httpresponse_selector(GameClientManager::_onGetInboxCompleted));
+    
+    
+	// write the post data
+	CCString* strData = CCString::createWithFormat(
+           "{ method: \"get\", data: { appId: \"%s\", fbId: \"%s\"}, sign: \"%s\", appId: \"%s\" }",
+           G_APP_ID, fbId.c_str(), getMD5().c_str(), G_APP_ID);
+    
+    
+	std::string s = encodeBeforeSend(strData->getCString());
+	request->setRequestData(s.c_str(), strlen(s.c_str()));
+    
+	CCHttpClient::getInstance()->send(request);
+	request->release();
+}
+
+void GameClientManager::_onGetInboxCompleted(CCHttpClient *sender, CCHttpResponse *response)
+{
+    if (!response)
+	{
+		return;
+	}
+    
+	//Show info
+	CCLOG("------- BEGIN %s -------", response->getHttpRequest()->getTag());
+	CCLOG("Status: [%i]", response->getResponseCode());
+
+	if (!response->isSucceed())
+	{
+		CCLOG("Request failed: %s", response->getErrorBuffer());
+		if (m_clientDelegate)
+		{
+			m_clientDelegate->onGetInboxCompleted(false, NULL);
+		}
+	}
+	else
+	{
+		std::vector<char> *buffer = response->getResponseData();
+		std::string str(buffer->begin(), buffer->end());
+        
+		str = decodeBeforeProcess(str);
+        
+		CCLOG("Content: %s", str.c_str());
+        
+		json_t *root;
+		json_error_t error;
+		json_t *isSuccess;
+        json_t *friendList;
+        
+        
+		root = json_loads(str.c_str(), strlen(str.c_str()), &error);
+		isSuccess = json_object_get(root, "isSuccess");
+		bool success = CCString::create(json_string_value(isSuccess))->boolValue();
+        friendList = json_object_get(root, "list");
+        
+        //foreach to get all friend, insert to list
+		int count = json_array_size(friendList);
+		CCArray* arrFriends = CCArray::create();
+        
+		for(int i = 0; i < count; i++)
+		{
+			json_t *fbFriend = json_array_get(friendList, i);
+            
+			
+            json_t *senderId;
+            json_t *itemId;
+            json_t *count;
+            json_t *time;
+            
+            
+			senderId = json_object_get(fbFriend, "senderId");
+			itemId = json_object_get(fbFriend, "itemId");
+			count = json_object_get(fbFriend, "count");
+			time = json_object_get(fbFriend, "time");
+            
+            long long _time =  (long long) atoll(json_string_value(time));
+            
+			Gift* acc = new Gift(json_string_value(senderId),
+                                 json_string_value(itemId),
+                                 (int)atoi(json_string_value(count)),
+                                 _time);
+            
+			arrFriends->addObject(acc);
+            
+            CCLOG("%s", acc->toJson().c_str());
+		}
+        
+        if (m_clientDelegate)
+        {
+            m_clientDelegate->onGetInboxCompleted(success, arrFriends);
+        }
+    }
+    
+	CCLOG("------- END %s -------", response->getHttpRequest()->getTag());
+}
+
+
+
+void GameClientManager::removeItem(std::string fbId, std::string senderId, long long time)
+{
+    string sUrl = string(G_URL_GIFT_REMOVE_ITEM);
+	CCLOG("URL: %s", sUrl.c_str());
+	CCAssert(sUrl.length() > 0, "Not set G_URL_GIFT_REMOVE_ITEM yet");
+	CCHttpRequest* request = new CCHttpRequest();
+	request->setUrl(sUrl.c_str());
+	request->setRequestType(CCHttpRequest::kHttpPost);
+    
+    CCString *stag = CCString::createWithFormat("{ \"senderId\": \"%s\", \"time\": %lld }", senderId.c_str(), time);
+	request->setTag(stag->getCString());
+	request->setResponseCallback(this, httpresponse_selector(GameClientManager::_onRemoveItemCompleted));
+    
+    
+	// write the post data
+	CCString* strData = CCString::createWithFormat(
+           "{ method: \"set\", data: { appId: \"%s\", fbId: \"%s\", senderId: \"%s\", time: \"%lld\" }, sign: \"%s\", appId: \"%s\" }",
+           G_APP_ID, fbId.c_str(), senderId.c_str(), time, getMD5().c_str(), G_APP_ID);
+    
+    
+	std::string s = encodeBeforeSend(strData->getCString());
+	request->setRequestData(s.c_str(), strlen(s.c_str()));
+    
+	CCHttpClient::getInstance()->send(request);
+	request->release();
+}
+
+void GameClientManager::_onRemoveItemCompleted(CCHttpClient *sender, CCHttpResponse *response)
+{
+    if (!response)
+	{
+		return;
+	}
+    
+	//Show info
+	CCLOG("------- BEGIN %s -------", response->getHttpRequest()->getTag());
+	CCLOG("Status: [%i]", response->getResponseCode());
+    
+    string senderId;
+    long long time;
+    
+    const char* stag = response->getHttpRequest()->getTag();
+    if (true)
+    {
+        json_t *root;
+        json_error_t error;
+        
+        root = json_loads(stag, strlen(stag), &error);
+        senderId = string( json_string_value( json_object_get(root, "senderId") ) );
+        time = (long long)atoll( json_string_value( json_object_get(root, "time") ) );
+    }
+    
+    
+	if (!response->isSucceed())
+	{
+		CCLOG("Request failed: %s", response->getErrorBuffer());
+		if (m_clientDelegate)
+		{
+			m_clientDelegate->onRemoveItemCompleted(false, senderId, time);
+		}
+	}
+	else
+	{
+		std::vector<char> *buffer = response->getResponseData();
+		std::string str(buffer->begin(), buffer->end());
+        
+		str = decodeBeforeProcess(str);
+        
+		CCLOG("Content: %s", str.c_str());
+        
+		json_t *root;
+		json_error_t error;
+		json_t *isSuccess;
+        
+        
+		root = json_loads(str.c_str(), strlen(str.c_str()), &error);
+		isSuccess = json_object_get(root, "isSuccess");
+		bool success = CCString::create(json_string_value(isSuccess))->boolValue();
+        
+        if (m_clientDelegate)
+        {
+            m_clientDelegate->onRemoveItemCompleted(success, senderId, time);
+        }
+    }
+    
+	CCLOG("------- END %s -------", response->getHttpRequest()->getTag());
+}
+
+
+
+
+
 
 
 

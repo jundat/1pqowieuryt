@@ -7,6 +7,68 @@ USING_NS_CC;
 using namespace std;
 
 
+class Gift : public CCObject
+{
+public:
+    string m_senderId;
+    string m_itemId;
+    int m_count;
+    long long m_time;
+    
+public:
+    Gift()
+    {
+        m_senderId = string();
+        m_itemId = string();
+        m_count = 0;
+        m_time = 0;
+    }
+    
+    
+    Gift(string senderId, string itemId, int count, long long time)
+    {
+        m_senderId = string(senderId);
+        m_itemId = string(itemId);
+        m_count = count;
+        m_time = time;
+    }
+    
+    
+    CCObject* copyWithZone(CCZone *pZone)
+	{
+		CCZone *pNewZone = NULL;
+		Gift *pRet = NULL;
+		if(pZone && pZone->m_pCopyObject) //in case of being called at sub class
+		{
+			pRet = (Gift*)(pZone->m_pCopyObject);
+		}
+		else
+		{
+			pRet = new Gift();
+			pZone = pNewZone = new CCZone(pRet);
+		}
+		CCObject::copyWithZone(pZone);
+		// copy member data
+		//pRet->m_nTag = m_nTag;
+		pRet->m_senderId = string(m_senderId);
+        pRet->m_itemId = string(m_itemId);
+        pRet->m_count = m_count;
+        pRet->m_time = m_time;
+        
+        
+		CC_SAFE_DELETE(pNewZone);
+		return pRet;
+	}
+    
+    
+    string toJson()
+    {
+        CCString *s = CCString::createWithFormat("{ \"senderId\": %s, \"itemId\": %s, \"count\": %d, \"time\": %lld }", m_senderId.c_str(), m_itemId.c_str(), m_count, m_time);
+        
+        return s->getCString();
+    }
+};;
+
 
 
 class FacebookAccount : public CCObject

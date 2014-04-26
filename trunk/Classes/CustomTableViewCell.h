@@ -12,6 +12,10 @@
 #include "EziFBIncomingRequest.h"
 #endif
 
+#include "GameClientDelegate.h"
+#include "GameClientManager.h"
+#include "GameClientObjects.h"
+
 USING_NS_CC;
 
 class CustomTableViewCell : public cocos2d::extension::CCTableViewCell
@@ -33,11 +37,10 @@ public:
 	CCLabelTTF* m_lbSendLifeTimer;
 	CCLabelTTF* m_lbSendLife;
 	CCMenuItemImage* m_itSendLife;
+    CCSprite* m_sprWaitSendLife;
+    
 
-
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-	EziFBIncomingRequest* m_request;
-#endif
+    Gift* m_gift;
 	
 	CustomTableViewCell();
 };

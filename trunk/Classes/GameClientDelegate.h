@@ -46,6 +46,8 @@ public:
     
     virtual void onGetInboxCompleted(bool isSuccess, CCArray* arrFriends){}
     
+    virtual void onRemoveItemCompleted(bool isSuccess, string senderId, long long time){}
+    
     
 };
 
