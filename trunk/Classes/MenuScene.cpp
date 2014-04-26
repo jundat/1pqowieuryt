@@ -321,7 +321,6 @@ void MenuScene::refreshLifeIcon()
 	{
 		CCSprite* _spr = (CCSprite*) m_arrSprLife->objectAtIndex(i);
 		_spr->setVisible(false);
-        CCLOG("invi %d", i);
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////
@@ -331,7 +330,6 @@ void MenuScene::refreshLifeIcon()
 	{
 		CCSprite* _spr = (CCSprite*) m_arrSprLife->objectAtIndex(i);
 		_spr->setVisible(true);
-        CCLOG("vis %d", i);
 	}
 }
 
@@ -446,7 +444,7 @@ void MenuScene::onShowDialog()
 void MenuScene::onCloseDialog()
 {
 	DataManager::sharedDataManager()->RefreshPlayerLife();
-	initLifeIcon();
+    this->refreshLifeIcon();
 	
 	m_menu->setEnabled(true);
 	this->setKeypadEnabled(true);
