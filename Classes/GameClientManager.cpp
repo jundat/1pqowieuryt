@@ -208,7 +208,7 @@ void GameClientManager::_onGetPlayerFbProfileCompleted( CCHttpClient *sender, CC
 		json_t *fbId;
 		json_t *fbName;
 		json_t *email;
-		json_t *coin;
+        json_t *coin;
 
 
 		root = json_loads(str.c_str(), strlen(str.c_str()), &error);

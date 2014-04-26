@@ -293,8 +293,7 @@ void MenuScene::initLifeIcon()
 	//life icon
 	for (int i = 0; i < G_MAX_PLAYER_LIFE; ++i)
 	{
-		CCSprite* _sprBlur = CCSprite::create("oil.png");
-		_sprBlur->setOpacity(50);
+		CCSprite* _sprBlur = CCSprite::create("oil_blur.png");
 		_sprBlur->setPosition(ccp(x + i * w, y));
 		this->addChild(_sprBlur, 1); //////////////////////////////////new ////////////////////////////////////////
 
@@ -316,10 +315,13 @@ void MenuScene::initLifeIcon()
 
 void MenuScene::refreshLifeIcon()
 {
+    CCLOG("MenuScene::refreshLifeIcon");
+    
 	for (int i = 0; i < G_MAX_PLAYER_LIFE; ++i)
 	{
 		CCSprite* _spr = (CCSprite*) m_arrSprLife->objectAtIndex(i);
 		_spr->setVisible(false);
+        CCLOG("invi %d", i);
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////
@@ -329,6 +331,7 @@ void MenuScene::refreshLifeIcon()
 	{
 		CCSprite* _spr = (CCSprite*) m_arrSprLife->objectAtIndex(i);
 		_spr->setVisible(true);
+        CCLOG("vis %d", i);
 	}
 }
 
@@ -363,7 +366,7 @@ void MenuScene::playStartAnimation(int lastLife)
 
 void MenuScene::gotoMainGame()
 {
-    PLAY_GUN_RELOAD_EFFECT;
+    PLAY_ENEMY1_DOWN_EFFECT;
     
     GameClientManager::sharedGameClientManager()->setDelegate(NULL);
     
@@ -373,9 +376,9 @@ void MenuScene::gotoMainGame()
 
 void MenuScene::playCallback(CCObject* pSender)
 {
-    PLAY_ENEMY1_DOWN_EFFECT;
-
-	//check if last_player_life > 0
+    PLAY_GUN_RELOAD_EFFECT;
+	
+    //check if last_player_life > 0
 	int lastLife = DataManager::sharedDataManager()->GetLastPlayerLife();
 	if (lastLife > 0) //enough life -> go play
 	{

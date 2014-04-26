@@ -583,9 +583,9 @@ void DataManager::ResetDataToLogIn()
 {
     CCLOG(" ------------------- RESET DATA AFTER LOG IN ------------------- ");
     DataManager::sharedDataManager()->SetHighScoreNotCheck(0);
-    DataManager::sharedDataManager()->SetLastPlayerLife(G_MAX_PLAYER_LIFE);
-    DataManager::sharedDataManager()->SetDiamon(G_DEFAULT_DIAMON);
-    DataManager::sharedDataManager()->SetBoom(G_DEFAULT_BOOM);
+    DataManager::sharedDataManager()->SetLastPlayerLife(0);
+    DataManager::sharedDataManager()->SetDiamon(0);
+    DataManager::sharedDataManager()->SetBoom(0);
 }
 
 
