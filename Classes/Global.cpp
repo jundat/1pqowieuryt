@@ -14,6 +14,10 @@ std::string G_URL_REVIVE;
 std::string G_URL_GET_LAZER;
 std::string G_URL_ITEM;
 
+std::string G_URL_GIFT_SEND_ITEM;
+std::string G_URL_GIFT_GET_INBOX;
+std::string G_URL_GIFT_REMOVE_ITEM;
+
 std::string G_URL_RATE;
 
 

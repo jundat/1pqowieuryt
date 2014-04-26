@@ -30,6 +30,12 @@ ConfigLoader::ConfigLoader(void)
 	G_URL_REVIVE = std::string(GetValue(std::string("G_URL_REVIVE"))->getCString());
 	G_URL_GET_LAZER = std::string(GetValue(std::string("G_URL_GET_LAZER"))->getCString());
     G_URL_ITEM = std::string(GetValue(std::string("G_URL_ITEM"))->getCString());
+    
+    
+    G_URL_GIFT_SEND_ITEM = std::string(GetValue(std::string("G_URL_GIFT_SEND_ITEM"))->getCString());
+    G_URL_GIFT_GET_INBOX = std::string(GetValue(std::string("G_URL_GIFT_GET_INBOX"))->getCString());
+    G_URL_GIFT_REMOVE_ITEM = std::string(GetValue(std::string("G_URL_GIFT_REMOVE_ITEM"))->getCString());
+    
 
 	G_URL_RATE = std::string(GetValue(std::string("G_URL_RATE"))->getCString());
     
@@ -109,6 +115,8 @@ ConfigLoader::ConfigLoader(void)
 
 	G_IS_ENCODE = GetValue(std::string("G_IS_ENCODE"))->boolValue();
 	G_IS_MONEYTIZE = GetValue(std::string("G_IS_MONEYTIZE"))->boolValue();
+    
+    
 	
 }
 

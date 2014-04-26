@@ -33,6 +33,10 @@ public:
     virtual void onGetLazeFreeCompleted(bool isSuccess, std::string friendId){}
     
     virtual void onUseLifeCompleted(bool isSuccess, int newLife){}
+    
+    virtual void onSendItemCompleted(bool isSuccess, string friendId, string itemId, int count){}
+    
+    virtual void onGetInboxCompleted(bool isSuccess, CCArray* arrFriends){}
 };
 
 

@@ -66,7 +66,7 @@ public:
 
 	string getMD5();
 
-	void sendPlayerFbProfile(std::string fbId, std::string fbName, std::string email, string appId);
+	void sendPlayerFbProfile(std::string fbId, std::string fbName, std::string email);
 	void _onSendPlayerFbProfileCompleted(CCHttpClient *sender, CCHttpResponse *response);
 
 	void getPlayerFbProfile(std::string fbId );
@@ -78,7 +78,7 @@ public:
 	void sendFriendList( std::string fbId, CCArray* arrFriends );
 	void _onSendFriendListCompleted(CCHttpClient *sender, CCHttpResponse *response);
 
-	void getFriendList( std::string appId, std::string fbId );
+	void getFriendList(std::string fbId );
 	void _onGetFriendListCompleted(CCHttpClient *sender, CCHttpResponse *response);
 
 	//////////////////////////////////////////////////////////////////////////
@@ -91,45 +91,54 @@ public:
 
 	//////////////////////////////////////////////////////////////////////////
 
-	void sendScore( std::string appId, std::string fbId, int score );
+	void sendScore(std::string fbId, int score );
 	void _onSendScoreCompleted(CCHttpClient *sender, CCHttpResponse *response);
 
-	void getScore( std::string appId, std::string fbId );
+	void getScore(std::string fbId );
 	void _onGetScoreCompleted(CCHttpClient *sender, CCHttpResponse *response);
 
 	//////////////////////////////////////////////////////////////////////////
 
-	void requestRevive(string appId, string fbId);
+	void requestRevive(string fbId);
 	void _onRequestReviveCompleted(CCHttpClient *sender, CCHttpResponse *response);
 	
 	//////////////////////////////////////////////////////////////////////////
 
-	void requestGetLazer(string appId, string fbId, string friendId);
+	void requestGetLazer(string fbId, string friendId);
 	void _onRequestGetLazerCompleted(CCHttpClient *sender, CCHttpResponse *response);
 
 	//////////////////////////////////////////////////////////////////////////
 
-    void getAllItem(std::string appId, std::string fbId);
+    void getAllItem(std::string fbId);
     void _onGetAllItemCompleted(CCHttpClient *sender, CCHttpResponse *response);
     
     
     //////////////////////////////////////////////////////////////////////////
     
-    void buyItem(std::string appId, std::string fbId, std::string itemName, int count, std::string uniqueTag);
+    void buyItem(std::string fbId, std::string itemName, int count, std::string uniqueTag);
     void _onBuyItemCompleted(CCHttpClient *sender, CCHttpResponse *response);
     
     
-    void getLazeFree(std::string appId, std::string fbId, std::string friendId);
+    void getLazeFree(std::string fbId, std::string friendId);
     void _onGetLazeFreeCompleted(CCHttpClient *sender, CCHttpResponse *response);
     
     
     //////////////////////////////////////////////////////////////////////////
     
-    void useLife(std::string appId, std::string fbId);
+    void useLife(std::string fbId);
     void _onUseLifeCompleted(CCHttpClient *sender, CCHttpResponse *response);
     
     
     //////////////////////////////////////////////////////////////////////////
+    
+    void sendItem(std::string fbId, std::string friendId, string itemId, int count);
+    void _onSendItemCompleted(CCHttpClient *sender, CCHttpResponse *response);
+    
+    
+    //////////////////////////////////////////////////////////////////////////
+    
+    
+    
     
     
     

@@ -189,7 +189,6 @@ void MainGameScene::showEndGame( int score, int killedEnemies )
 	if (DataManager::sharedDataManager()->GetFbID().compare("NULL") != 0)
 	{
 		GameClientManager::sharedGameClientManager()->sendScore(
-			string(G_APP_ID), 
 			DataManager::sharedDataManager()->GetFbID(), 
 			DataManager::sharedDataManager()->GetHighScore());
 	}

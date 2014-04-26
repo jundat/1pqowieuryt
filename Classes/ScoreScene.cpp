@@ -512,7 +512,7 @@ void ScoreScene::itGetBoomCallback( CCObject* pSender )
 	int numBoom = DataManager::sharedDataManager()->GetBoom();
 	if (numBoom < G_MAX_BOOM)
 	{
-        GameClientManager::sharedGameClientManager()->getLazeFree(G_APP_ID, DataManager::sharedDataManager()->GetFbID(), fbID);
+        GameClientManager::sharedGameClientManager()->getLazeFree(DataManager::sharedDataManager()->GetFbID(), fbID);
 		
         //show wait sprite
         //disable all item to wait
@@ -873,7 +873,6 @@ void ScoreScene::submitScore()
 {
 	CCLOG("callSubmitScore");
 	GameClientManager::sharedGameClientManager()->sendScore(
-		string(G_APP_ID), 
 		DataManager::sharedDataManager()->GetFbID(), 
 		DataManager::sharedDataManager()->GetHighScore());
 }
@@ -884,7 +883,7 @@ void ScoreScene::syncScore()
     this->showWaitDialog(TXT("wait_connect_server"));
     
 	//get score from server
-	GameClientManager::sharedGameClientManager()->getScore(string(G_APP_ID), DataManager::sharedDataManager()->GetFbID());
+	GameClientManager::sharedGameClientManager()->getScore(DataManager::sharedDataManager()->GetFbID());
 }
 
 void ScoreScene::getHighScores()
@@ -893,7 +892,7 @@ void ScoreScene::getHighScores()
     
     this->showWaitDialog(TXT("wait_connect_server"));
     
-	GameClientManager::sharedGameClientManager()->getFriendList(string(G_APP_ID), DataManager::sharedDataManager()->GetFbID());
+	GameClientManager::sharedGameClientManager()->getFriendList( DataManager::sharedDataManager()->GetFbID());
 }
 
 
