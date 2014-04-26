@@ -6,12 +6,18 @@
 #include "ObjectLayer.h"
 #include "EffectLayer.h"
 
+#include "GameClientDelegate.h"
+#include "GameClientManager.h"
+#include "GameClientObjects.h"
+
+#include "DataManager.h"
+
 
 USING_NS_CC;
 using namespace std;
 
 
-class MainGameScene : public cocos2d::CCLayerColor
+class MainGameScene : public cocos2d::CCLayerColor, public GameClientDelegate
 {
 public:
 	~MainGameScene() {
@@ -42,6 +48,40 @@ public:
 	void reviveCallback();
 	void restartCallback();
 	void ShowTutorial();
+    
+    virtual void onUseItemCompleted(bool isSuccess, string itemId, int newCount)
+    {
+        CCLOG("MainGameScene::onUseItemCompleted");
+        
+        if (newCount != -1) {
+            DataManager::sharedDataManager()->SetBoom(newCount);
+        }
+    }
+    
+    virtual void onAddItemCompleted(bool isSuccess, string itemId, int newCount)
+    {
+        CCLOG("MainGameScene::onAddItemCompleted");
+        
+        if (newCount != -1) {
+            DataManager::sharedDataManager()->SetBoom(newCount);
+        }
+    }
+    
+    void addLaze()
+    {
+        GameClientManager::sharedGameClientManager()->setDelegate(this);
+        string fbid = DataManager::sharedDataManager()->GetFbID();
+        
+        GameClientManager::sharedGameClientManager()->addItem(fbid, "laze");
+    }
+    
+    void useLaze()
+    {
+        GameClientManager::sharedGameClientManager()->setDelegate(this);
+        string fbid = DataManager::sharedDataManager()->GetFbID();
+        
+        GameClientManager::sharedGameClientManager()->useItem(fbid, "laze");
+    }
 
 private:
 	BackgroundLayer* m_BackgroundLayer;

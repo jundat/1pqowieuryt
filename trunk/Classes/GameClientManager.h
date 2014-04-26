@@ -134,6 +134,15 @@ public:
     void useLife(std::string fbId);
     void _onUseLifeCompleted(CCHttpClient *sender, CCHttpResponse *response);
     
+    //////////////////////
+    
+    void useItem(std::string fbId, string itemId);
+    void _onUseItemCompleted(CCHttpClient *sender, CCHttpResponse *response);
+    
+    void addItem(std::string fbId, string itemId);
+    void _onAddItemCompleted(CCHttpClient *sender, CCHttpResponse *response);
+    
+    
     
     //////////////////////////////////////////////////////////////////////////
     

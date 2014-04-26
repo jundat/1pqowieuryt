@@ -146,6 +146,9 @@ public:
     void getLife();
     virtual void onGetLifeCompleted(bool isSuccess, int life, long lastTimeClient_Second);
     
+    
+    
+    
     void showWaitDialog(string title);
     void closeWaitDialog();
     WaitDialog* m_waitDialog;

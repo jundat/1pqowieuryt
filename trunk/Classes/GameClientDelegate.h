@@ -36,6 +36,12 @@ public:
     
     virtual void onUseLifeCompleted(bool isSuccess, int newLife, long lastTime_client){}
     
+    virtual void onUseItemCompleted(bool isSuccess, string itemId, int newCount){}
+    
+    virtual void onAddItemCompleted(bool isSuccess, string itemId, int newCount){}
+    
+    
+    
     virtual void onSendItemCompleted(bool isSuccess, string friendId, string itemId, int count){}
     
     virtual void onGetInboxCompleted(bool isSuccess, CCArray* arrFriends){}
