@@ -145,6 +145,21 @@ public:
             CCMessageBox("FAIL to Mua đồ", "Èo");
         }
     }
+    
+    virtual void onSendItemCompleted(bool isSuccess, string friendId, string itemId, int count)
+    {
+        if (isSuccess) {
+            CCLOG("TRUE");
+        } else {
+            CCLOG("FALSE");
+        }
+        
+        CCLOG("friendId: %s, itemId: %s, count: %d", friendId.c_str(), itemId.c_str(), count);
+    }
+    
+    
+    
+    
 };
 
 

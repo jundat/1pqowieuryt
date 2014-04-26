@@ -103,7 +103,7 @@ bool TestPostGetScene::init()
 void TestPostGetScene::testPost1(CCObject *sender)
 {
 	string fbid = DataManager::sharedDataManager()->GetFbID();
-	GameClientManager::sharedGameClientManager()->sendPlayerFbProfile(fbid.c_str(), "PhamLong", "PhamLong@gmail.com", string(G_APP_ID));
+	GameClientManager::sharedGameClientManager()->sendPlayerFbProfile(fbid.c_str(), "PhamLong", "PhamLong@gmail.com");
 // 	GameClientManager::sharedGameClientManager()->sendPlayerFbProfile("Fb2", "DinhDung", "DinhDung@gmail.com", string(G_APP_ID));
 // 	GameClientManager::sharedGameClientManager()->sendPlayerFbProfile("Fb3", "BuiHieu", "BuiHieu@gmail.com", string(G_APP_ID));
 // 	GameClientManager::sharedGameClientManager()->sendPlayerFbProfile("Fb4", "DangTran", "DangTran@gmail.com", string(G_APP_ID));
@@ -158,7 +158,7 @@ void TestPostGetScene::testPost3(CCObject *sender)
 void TestPostGetScene::testPost4(CCObject *sender)
 {
 	string fbid = DataManager::sharedDataManager()->GetFbID();
-	GameClientManager::sharedGameClientManager()->sendScore(G_APP_ID, fbid.c_str(), 5000);
+	GameClientManager::sharedGameClientManager()->sendScore(fbid.c_str(), 5000);
 // 	GameClientManager::sharedGameClientManager()->sendScore(G_APP_ID, "Fb2", 10000);
 // 	GameClientManager::sharedGameClientManager()->sendScore(G_APP_ID, "Fb3", 15000);
 // 	GameClientManager::sharedGameClientManager()->sendScore(G_APP_ID, "Fb4", 20000);
@@ -170,7 +170,7 @@ void TestPostGetScene::testPost4(CCObject *sender)
 void TestPostGetScene::testPost5(CCObject *sender)
 {
 	string fbid = DataManager::sharedDataManager()->GetFbID();
-	GameClientManager::sharedGameClientManager()->getScore(G_APP_ID, fbid.c_str());
+	GameClientManager::sharedGameClientManager()->getScore(fbid.c_str());
 }
 
 //getPlayerFbProfile
@@ -191,7 +191,7 @@ void TestPostGetScene::testPost7(CCObject *sender)
 void TestPostGetScene::testPost8(CCObject *sender)
 {
 	string fbid = DataManager::sharedDataManager()->GetFbID();
-	GameClientManager::sharedGameClientManager()->getFriendList(G_APP_ID, fbid.c_str());
+	GameClientManager::sharedGameClientManager()->getFriendList(fbid.c_str());
 }
 
 
@@ -199,11 +199,19 @@ void TestPostGetScene::testPost8(CCObject *sender)
 void TestPostGetScene::testPost9(CCObject *sender)
 {
 	string fbid = DataManager::sharedDataManager()->GetFbID();
+    //if (fbid.compare("NULL") == 0) {
+        fbid = "100006639370902";
+        DataManager::sharedDataManager()->SetFbProfileID(fbid.c_str());
+    //}
 	
-    //Laze
+    //Buy Laze
     //GameClientManager::sharedGameClientManager()->buyItem(G_APP_ID, fbid.c_str(), string(G_ITEM_LAZE), 1, string("MuaLaze"));
 
-    //Revive
-    GameClientManager::sharedGameClientManager()->buyItem(G_APP_ID, fbid.c_str(), string(G_ITEM_REVIVE), 1, string("HoiSinh"));
+    //Buy Revive
+    //GameClientManager::sharedGameClientManager()->buyItem(fbid.c_str(), string(G_ITEM_REVIVE), 1, string("HoiSinh"));
+    
+    //Send Life
+    GameClientManager::sharedGameClientManager()->sendItem("100006639370902", "100001986079146", "test_lazer", 1);
+    
 }
 

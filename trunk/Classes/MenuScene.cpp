@@ -382,7 +382,7 @@ void MenuScene::playCallback(CCObject* pSender)
         m_playItem->selected();
         
         //request to server
-        GameClientManager::sharedGameClientManager()->useLife(G_APP_ID, DataManager::sharedDataManager()->GetFbID());
+        GameClientManager::sharedGameClientManager()->useLife(DataManager::sharedDataManager()->GetFbID());
 	}
 	else //not enough life -> request life
 	{
@@ -795,7 +795,7 @@ void MenuScene::fbUserPhotoCallback(const char *userPhotoPath, const char* fbID)
 void MenuScene::sendUserProfileToServer(string fbId, string fbName, string email)
 {
 	//CCLOG("sendUserProfileToServer");
-	GameClientManager::sharedGameClientManager()->sendPlayerFbProfile(fbId, fbName, email, string(G_APP_ID));
+	GameClientManager::sharedGameClientManager()->sendPlayerFbProfile(fbId, fbName, email);
 	
 	//send device token to server
 	string regid = DataManager::sharedDataManager()->GetRegistrationId();
@@ -1059,7 +1059,7 @@ void MenuScene::disableMoneytize()
 void MenuScene::getAllItems()
 {
     CCLOG("MenuScene::getAllItems");
-    GameClientManager::sharedGameClientManager()->getAllItem(G_APP_ID, DataManager::sharedDataManager()->GetFbID());
+    GameClientManager::sharedGameClientManager()->getAllItem(DataManager::sharedDataManager()->GetFbID());
 }
 
 

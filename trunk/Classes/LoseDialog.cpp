@@ -208,12 +208,12 @@ void LoseDialog::menuCallBack( CCObject* pSender )
 
 void LoseDialog::reviveCallBack( CCObject* pSender )
 {
-    string fbid = DataManager::sharedDataManager()->GetFbID();
-    GameClientManager::sharedGameClientManager()->buyItem(G_APP_ID, fbid.c_str(), string(G_ITEM_REVIVE), 1, string("Hoi_sinh"));
-    
     int diamond = DataManager::sharedDataManager()->GetDiamon();
     if (diamond >= G_DIAMON_PER_LIFE) {
         this->showWaitDialog(TXT("buy_revive"));
+        
+        string fbid = DataManager::sharedDataManager()->GetFbID();
+        GameClientManager::sharedGameClientManager()->buyItem(fbid.c_str(), string(G_ITEM_REVIVE), 1, string("Hoi_sinh"));
     } else {
         PLAY_OUT_PORP_EFFECT;
         CCMessageBox(TXT("lose_lack_diamond"), TXT("lose_error_caption"));
@@ -472,7 +472,6 @@ void LoseDialog::onBuyItemCompleted(bool isSuccess, int newCoin, std::string ite
     } else {
         PLAY_OUT_PORP_EFFECT;
         CCMessageBox(TXT("buy_revive_error"), TXT("error_caption"));
-        //CCMessageBox(TXT("lose_lack_diamond"), TXT("lose_error_caption"));
     }
     
     this->closeWaitDialog();

@@ -62,23 +62,30 @@ std::string GameClientManager::decodeBeforeProcess( std::string src )
 
 std::string GameClientManager::getMD5()
 {
-	string srcMd5 = "";
-	srcMd5.append(G_APP_ID);
-	srcMd5.append(KEY); //Key
-	srcMd5.append(DataManager::sharedDataManager()->GetFbID());
-	srcMd5.append(""); //meId
-	
-	//CCLOG("SRC MD5: %s", srcMd5.c_str());
-	
-	string md5 = MD5::createMd5(srcMd5);
-
-	//CCLOG("DEST MD5: %s", md5.c_str());
-
+    static string md5 = "";
+    
+    if (md5.empty()) {
+        
+        string srcMd5 = "";
+        srcMd5.append(G_APP_ID);
+        srcMd5.append(KEY); //Key
+        srcMd5.append(DataManager::sharedDataManager()->GetFbID());
+        srcMd5.append(""); //meId
+        
+        CCLOG("SRC MD5: %s", srcMd5.c_str());
+        
+        md5 = MD5::createMd5(srcMd5);
+        
+        //CCLOG("DEST MD5: %s", md5.c_str());
+    }
+    
+    CCLOG("MD5: %s", md5.c_str());
+    
 	return md5;
 }
 
 
-void GameClientManager::sendPlayerFbProfile( std::string fbId, std::string fbName, std::string email, string appId )
+void GameClientManager::sendPlayerFbProfile( std::string fbId, std::string fbName, std::string email)
 {
 	CCAssert(s_urlProfile.length() > 0, "Not set s_urlProfile yet");
 	CCHttpRequest* request = new CCHttpRequest();
@@ -323,7 +330,7 @@ void GameClientManager::_onSendFriendListCompleted( CCHttpClient *sender, CCHttp
 	CCLOG("------- END %s -------", response->getHttpRequest()->getTag());
 }
 
-void GameClientManager::getFriendList( std::string appId, std::string fbId )
+void GameClientManager::getFriendList(std::string fbId )
 {
 	CCAssert(s_urlFriend.length() > 0, "Not set s_urlFriend yet");
 	CCHttpRequest* request = new CCHttpRequest();
@@ -607,7 +614,7 @@ void GameClientManager::_onGetDeviceProfileCompleted( CCHttpClient *sender, CCHt
 
 //
 
-void GameClientManager::sendScore( std::string appId, std::string fbId, int score )
+void GameClientManager::sendScore(std::string fbId, int score )
 {
 	CCLOG("URL: %s", s_urlScore.c_str());
 	CCAssert(s_urlScore.length() > 0, "Not set s_urlScore yet");
@@ -694,7 +701,7 @@ void GameClientManager::_onSendScoreCompleted( CCHttpClient *sender, CCHttpRespo
 	CCLOG("------- END %s -------", response->getHttpRequest()->getTag());
 }
 
-void GameClientManager::getScore( std::string appId, std::string fbId )
+void GameClientManager::getScore( std::string fbId )
 {
 	CCAssert(s_urlScore.length() > 0, "Not set s_urlScore yet");
 	CCHttpRequest* request = new CCHttpRequest();
@@ -771,7 +778,7 @@ void GameClientManager::_onGetScoreCompleted( CCHttpClient *sender, CCHttpRespon
 
 //request to check diamond and charge with diamond
 
-void GameClientManager::requestRevive( string appId, string fbId )
+void GameClientManager::requestRevive( string fbId )
 {
 	string sUrl = string(G_URL_REVIVE);
 	CCLOG("URL: %s", sUrl.c_str());
@@ -850,7 +857,7 @@ void GameClientManager::_onRequestReviveCompleted( CCHttpClient *sender, CCHttpR
 
 //
 
-void GameClientManager::requestGetLazer( string appId, string fbId, string friendId)
+void GameClientManager::requestGetLazer( string fbId, string friendId)
 {
 	string sUrl = string(G_URL_GET_LAZER);
 	CCLOG("URL: %s", sUrl.c_str());
@@ -931,7 +938,7 @@ void GameClientManager::_onRequestGetLazerCompleted( CCHttpClient *sender, CCHtt
 
 //
 
-void GameClientManager::getAllItem(std::string appId, std::string fbId)
+void GameClientManager::getAllItem( std::string fbId)
 {
     CCAssert(G_URL_ITEM.length() > 0, "Not set G_URL_ITEM yet");
 	CCHttpRequest* request = new CCHttpRequest();
@@ -942,6 +949,7 @@ void GameClientManager::getAllItem(std::string appId, std::string fbId)
 	request->setResponseCallback(this, httpresponse_selector(GameClientManager::_onGetAllItemCompleted));
 	
 	// write the post data
+    /*
 	CCString* strData = CCString::createWithFormat(
        "{ method: \"get\", data: { appId: \"%s\", fbId: \"%s\", typeArr:[\"%s\", \"%s\", \"%s\"] }, sign: \"%s\", appId: \"%s\" }",
        G_APP_ID,
@@ -951,7 +959,16 @@ void GameClientManager::getAllItem(std::string appId, std::string fbId)
        G_ITEM_COIN,
        getMD5().c_str(),
        G_APP_ID);
+    */
     
+    CCString* strData = CCString::createWithFormat(
+           "{ method: \"get\", data: { appId: \"%s\", fbId: \"%s\", typeArr:[\"%s\", \"%s\"] }, sign: \"%s\", appId: \"%s\" }",
+           G_APP_ID,
+           fbId.c_str(),
+           G_ITEM_LAZE,
+           G_ITEM_COIN,
+           getMD5().c_str(),
+           G_APP_ID);
     
 	std::string s = encodeBeforeSend(strData->getCString());
 	request->setRequestData(s.c_str(), strlen(s.c_str()));
@@ -995,7 +1012,7 @@ void GameClientManager::_onGetAllItemCompleted(CCHttpClient *sender, CCHttpRespo
 		json_error_t error;
         json_t *isSuccess;
 		json_t *laze;
-		json_t *life;
+		//json_t *life;
         json_t *coin;
         
 		root = json_loads(str.c_str(), strlen(str.c_str()), &error);
@@ -1005,12 +1022,16 @@ void GameClientManager::_onGetAllItemCompleted(CCHttpClient *sender, CCHttpRespo
         if (success == true) {
             
             laze = json_object_get(root, G_ITEM_LAZE);
-            life = json_object_get(root, G_ITEM_LIFE);
+            //life = json_object_get(root, G_ITEM_LIFE);
             coin = json_object_get(root, G_ITEM_COIN);
             
             if (m_clientDelegate)
             {
-                m_clientDelegate->onGetAllItemsCompleted(true, (int)atof(json_string_value(laze)), (int)atof(json_string_value(life)), (int)atof(json_string_value(coin)));
+                m_clientDelegate->onGetAllItemsCompleted(
+                         true,
+                         (int)atof(json_string_value(laze)),
+                         5, //(int)atof(json_string_value(life)),
+                         (int)atof(json_string_value(coin)));
             }
         } else {
             if (m_clientDelegate)
@@ -1028,7 +1049,7 @@ void GameClientManager::_onGetAllItemCompleted(CCHttpClient *sender, CCHttpRespo
 //
 
 
-void GameClientManager::buyItem(std::string appId, std::string fbId, std::string itemName,  int count, std::string uniqueTag)
+void GameClientManager::buyItem( std::string fbId, std::string itemName,  int count, std::string uniqueTag)
 {
     string sUrl = string(G_URL_ITEM);
 	CCLOG("URL: %s", sUrl.c_str());
@@ -1125,7 +1146,7 @@ void GameClientManager::_onBuyItemCompleted(CCHttpClient *sender, CCHttpResponse
 //
 
 
-void GameClientManager::getLazeFree(std::string appId, std::string fbId, std::string friendId)
+void GameClientManager::getLazeFree(std::string fbId, std::string friendId)
 {
     string sUrl = string(G_URL_FRIEND_LIST);
 	CCLOG("URL: %s", sUrl.c_str());
@@ -1208,7 +1229,7 @@ void GameClientManager::_onGetLazeFreeCompleted(CCHttpClient *sender, CCHttpResp
 //
 
 
-void GameClientManager::useLife(std::string appId, std::string fbId)
+void GameClientManager::useLife( std::string fbId)
 {
     string sUrl = string(G_URL_PLAYER_FB_PROFILE);
 	CCLOG("URL: %s", sUrl.c_str());
@@ -1308,5 +1329,103 @@ void GameClientManager::_onUseLifeCompleted(CCHttpClient *sender, CCHttpResponse
 
 
 
+
 //Send, receive items
 //
+
+
+void GameClientManager::sendItem(std::string fbId, std::string friendId, string itemId, int count)
+{
+    string sUrl = string(G_URL_GIFT_SEND_ITEM);
+	CCLOG("URL: %s", sUrl.c_str());
+	CCAssert(sUrl.length() > 0, "Not set G_URL_GIFT_SEND_ITEM yet");
+	CCHttpRequest* request = new CCHttpRequest();
+	request->setUrl(sUrl.c_str());
+	request->setRequestType(CCHttpRequest::kHttpPost);
+    
+    CCString *stag = CCString::createWithFormat("{ \"friendId\": \"%s\", \"itemId\": \"%s\", \"count\": %d}", friendId.c_str(), itemId.c_str(), count);
+	request->setTag(stag->getCString());
+	request->setResponseCallback(this, httpresponse_selector(GameClientManager::_onSendItemCompleted));
+    
+    
+	// write the post data
+	CCString* strData = CCString::createWithFormat(
+           "{ method: \"get\", data: { appId: \"%s\", platform: \"facebook\", userId: \"%s\", receiverId: \"%s\", itemId: \"%s\", count: \"%d\", metadata: \"\"}, sign: \"%s\", appId: \"%s\" }",
+           G_APP_ID, fbId.c_str(), friendId.c_str(), itemId.c_str(), count, getMD5().c_str(), G_APP_ID);
+    
+    
+	std::string s = encodeBeforeSend(strData->getCString());
+	request->setRequestData(s.c_str(), strlen(s.c_str()));
+    
+	CCHttpClient::getInstance()->send(request);
+	request->release();
+}
+
+void GameClientManager::_onSendItemCompleted(CCHttpClient *sender, CCHttpResponse *response)
+{
+    if (!response)
+	{
+		return;
+	}
+    
+	//Show info
+	CCLOG("------- BEGIN %s -------", response->getHttpRequest()->getTag());
+	CCLOG("Status: [%i]", response->getResponseCode());
+    
+    string friendId;
+    string itemId;
+    int count;
+
+    const char* stag = response->getHttpRequest()->getTag();
+    if (true)
+    {
+        json_t *root;
+        json_error_t error;
+        
+        root = json_loads(stag, strlen(stag), &error);
+        friendId = string( json_string_value( json_object_get(root, "friendId") ) );
+        itemId = string( json_string_value( json_object_get(root, "itemId") ) );
+        count = (int)json_integer_value( json_object_get(root, "count") );
+    }
+    
+    
+	if (!response->isSucceed())
+	{
+		CCLOG("Request failed: %s", response->getErrorBuffer());
+		if (m_clientDelegate)
+		{
+			m_clientDelegate->onSendItemCompleted(false, friendId, itemId, count);
+		}
+	}
+	else
+	{
+		std::vector<char> *buffer = response->getResponseData();
+		std::string str(buffer->begin(), buffer->end());
+        
+		str = decodeBeforeProcess(str);
+        
+		CCLOG("Content: %s", str.c_str());
+        
+		json_t *root;
+		json_error_t error;
+		json_t *isSuccess;
+       
+        
+		root = json_loads(str.c_str(), strlen(str.c_str()), &error);
+		isSuccess = json_object_get(root, "isSuccess");
+		bool success = CCString::create(json_string_value(isSuccess))->boolValue();
+        
+        if (m_clientDelegate)
+        {
+            m_clientDelegate->onSendItemCompleted(success, friendId, itemId, count);
+        }
+    }
+    
+	CCLOG("------- END %s -------", response->getHttpRequest()->getTag());
+}
+
+
+
+
+
+

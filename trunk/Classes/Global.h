@@ -51,6 +51,10 @@ extern std::string G_URL_REVIVE;
 extern std::string G_URL_GET_LAZER;
 extern std::string G_URL_ITEM;
 
+extern std::string G_URL_GIFT_SEND_ITEM;
+extern std::string G_URL_GIFT_GET_INBOX;
+extern std::string G_URL_GIFT_REMOVE_ITEM;
+
 extern std::string G_URL_RATE;
 
 
