@@ -1032,6 +1032,7 @@ void MenuScene::onGetPlayerFbProfileCompleted( bool isSuccess, FacebookAccount* 
 	}
 	else
 	{
+        //failed to connect server
 		this->disableMoneytize();
 	}
 }
@@ -1085,7 +1086,7 @@ void MenuScene::onGetAllItemsCompleted(bool isSuccess, int laze, int coin)
     CCLOG("laze: %d", laze);
     CCLOG("coin: %d", coin);
 
-    if (isSuccess == true) {
+    if (isSuccess) {
         DataManager::sharedDataManager()->SetBoom(laze);
         DataManager::sharedDataManager()->SetDiamon(coin);
         
@@ -1172,6 +1173,8 @@ void MenuScene::onUseLifeCompleted(bool isSuccess, int newLife, long lastTime_cl
     } else {
         
         CCLOG("---USE LIFE FAILED~~~");
+        //failed to connect server
+		this->disableMoneytize();
     }
 }
 
@@ -1196,6 +1199,8 @@ void MenuScene::onGetLifeCompleted(bool isSuccess, int life, long lastTimeClient
     
     } else {
         CCLOG("FAILED TO CONNECT SERVER");
+        //failed to connect server
+		this->disableMoneytize();
     }
 }
 
@@ -1208,6 +1213,8 @@ void MenuScene::onGetScoreCompleted( bool isSuccess, int score, std::string time
         DataManager::sharedDataManager()->SetHighScore(score);
     } else {
         CCLOG("FAILED TO GET SCORE");
+        //failed to connect server
+		this->disableMoneytize();
     }
 }
 
