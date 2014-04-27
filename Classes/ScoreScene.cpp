@@ -1416,9 +1416,9 @@ CCTableViewCell* ScoreScene::getTableCellQuatangAtIndex( CCTableView *table, uns
         
         this->getFriendInfo(strFriendId, &sname, &photopath);
         
-		if (sname.length() > 18) {
-			sname = sname.substr(0, 15);
-			sname.append("...");
+		if (sname.length() > 24) {
+			sname = sname.substr(0, 22);
+			sname.append("..");
 		}
         
 		strName  = CCString::create(sname);
@@ -1748,9 +1748,9 @@ void ScoreScene::onRemoveItemCompleted(bool isSuccess, string senderId, long lon
         CCLOG("CURRENT LIFE = %d", curLife);
         
         //save next time
-        long _tm = DataManager::sharedDataManager()->GetLastDeadTime();
-        _tm += G_PLAYER_TIME_TO_REVIVE;
-        DataManager::sharedDataManager()->SetLastDeadTime(_tm);
+        //long _tm = DataManager::sharedDataManager()->GetLastDeadTime();
+        //_tm += G_PLAYER_TIME_TO_REVIVE;
+        //DataManager::sharedDataManager()->SetLastDeadTime(_tm);
         
         //delete request
         

@@ -411,6 +411,11 @@ void LoseDialog::showWaitDialog(string title)
     CCLOG("LoseDialog::showWaitDialog");
     this->setKeypadEnabled(false);
     
+    if (m_waitDialog != NULL) {
+        if (m_waitDialog->m_refCount == 0) {
+            m_waitDialog = NULL;
+        }
+    }
     
     if (m_waitDialog != NULL) {
         m_waitDialog->m_refCount++;
@@ -432,8 +437,7 @@ void LoseDialog::closeWaitDialog()
         
         if (m_waitDialog->m_refCount <= 0) {
             this->removeChild(m_waitDialog);
-            m_waitDialog = NULL;
-
+            //m_waitDialog = NULL;
             
             this->setKeypadEnabled(true);
         }
