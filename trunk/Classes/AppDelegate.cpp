@@ -106,7 +106,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
     
     
-    CCScene *pScene = MenuScene::scene();// TestPostGetScene::scene(); // NotLoggedInMenuScene::scene();// IntroScene::scene(); // MenuScene::scene(); // IntroScene::scene(); //
+    CCScene *pScene =  IntroScene::scene(); // MenuScene::scene();// TestPostGetScene::scene(); // NotLoggedInMenuScene::scene();// IntroScene::scene(); // MenuScene::scene(); // IntroScene::scene(); //
 	pDirector->runWithScene(pScene);
 
     return true;
