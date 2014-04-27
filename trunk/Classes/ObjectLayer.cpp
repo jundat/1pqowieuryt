@@ -519,7 +519,6 @@ void ObjectLayer::Revive()
 	this->schedule(schedule_selector(ObjectLayer::ScheduleCheckCollision), CCDirector::sharedDirector()->getAnimationInterval());
 	this->scheduleUpdate();
 
-	m_player->scheduleUpdate();
 
 	//reset
 	m_player->setVisible(true);

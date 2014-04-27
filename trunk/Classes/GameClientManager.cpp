@@ -753,21 +753,32 @@ void GameClientManager::_onGetScoreCompleted( CCHttpClient *sender, CCHttpRespon
 		str = decodeBeforeProcess(str);
 
 		CCLOG("Content: %s", str.c_str());
+        
+        if (str.length() == 0) {
+            CCLOG("Request failed: %s", response->getErrorBuffer());
+            if (m_clientDelegate)
+            {
+                m_clientDelegate->onGetScoreCompleted(
+                                                      false,
+                                                      DataManager::sharedDataManager()->GetHighScore(), "0");
+            }
+        } else {
 
-		//get score from response
-		json_t *root;
-		json_error_t error;
-		json_t *score;
-		json_t *time;
+            //get score from response
+            json_t *root;
+            json_error_t error;
+            json_t *score;
+            json_t *time;
 
-		root = json_loads(str.c_str(), strlen(str.c_str()), &error);
-		score = json_object_get(root, "score");
-		time = json_object_get(root, "time");
+            root = json_loads(str.c_str(), strlen(str.c_str()), &error);
+            score = json_object_get(root, "score");
+            time = json_object_get(root, "time");
 
-		if (m_clientDelegate)
-		{
-			m_clientDelegate->onGetScoreCompleted(true, (int)atof(json_string_value(score)), json_string_value(time));
-		}
+            if (m_clientDelegate)
+            {
+                m_clientDelegate->onGetScoreCompleted(true, (int)atof(json_string_value(score)), json_string_value(time));
+            }
+        }
 	}
 
 	CCLOG("------- END %s -------", response->getHttpRequest()->getTag());
@@ -980,9 +991,10 @@ void GameClientManager::_onGetAllItemCompleted(CCHttpClient *sender, CCHttpRespo
 		CCLOG("Request failed: %s", response->getErrorBuffer());
 		if (m_clientDelegate)
 		{
-			m_clientDelegate->onGetAllItemsCompleted(false,
-                                                     DataManager::sharedDataManager()->GetBoom(),
-                                                     DataManager::sharedDataManager()->GetDiamon());
+			m_clientDelegate->onGetAllItemsCompleted(
+                 false,
+                 DataManager::sharedDataManager()->GetBoom(),
+                 DataManager::sharedDataManager()->GetDiamon());
 		}
 	}
 	else
@@ -994,38 +1006,49 @@ void GameClientManager::_onGetAllItemCompleted(CCHttpClient *sender, CCHttpRespo
         
 		CCLOG("Content: %s", str.c_str());
         
-		//get score from response
-		json_t *root;
-		json_error_t error;
-        json_t *isSuccess;
-		json_t *laze;
-        json_t *coin;
-        
-		root = json_loads(str.c_str(), strlen(str.c_str()), &error);
-        isSuccess = json_object_get(root, "isSuccess");
-		bool success = CCString::create(json_string_value(isSuccess))->boolValue();
-        
-        if (success == true) {
-            
-            laze = json_object_get(root, G_ITEM_LAZE);
-            coin = json_object_get(root, G_ITEM_COIN);
-            
-            if (m_clientDelegate)
-            {
+        if (str.length() == 0) {
+            CCLOG("Request failed: %s", response->getErrorBuffer());
+            if (m_clientDelegate) {
                 m_clientDelegate->onGetAllItemsCompleted(
-                         true,
-                         (int)atof(json_string_value(laze)),
-                         (int)atof(json_string_value(coin)));
+                     false,
+                     DataManager::sharedDataManager()->GetBoom(),
+                     DataManager::sharedDataManager()->GetDiamon());
             }
         } else {
-            if (m_clientDelegate)
-            {
-                m_clientDelegate->onGetAllItemsCompleted(false,
-                                                         DataManager::sharedDataManager()->GetBoom(),
-                                                         DataManager::sharedDataManager()->GetDiamon());
+        
+            //get score from response
+            json_t *root;
+            json_error_t error;
+            json_t *isSuccess;
+            json_t *laze;
+            json_t *coin;
+            
+            root = json_loads(str.c_str(), strlen(str.c_str()), &error);
+            isSuccess = json_object_get(root, "isSuccess");
+            bool success = CCString::create(json_string_value(isSuccess))->boolValue();
+            
+            if (success == true) {
+                
+                laze = json_object_get(root, G_ITEM_LAZE);
+                coin = json_object_get(root, G_ITEM_COIN);
+                
+                if (m_clientDelegate)
+                {
+                    m_clientDelegate->onGetAllItemsCompleted(
+                             true,
+                             (int)atof(json_string_value(laze)),
+                             (int)atof(json_string_value(coin)));
+                }
+            } else {
+                if (m_clientDelegate)
+                {
+                    m_clientDelegate->onGetAllItemsCompleted(
+                             false,
+                             DataManager::sharedDataManager()->GetBoom(),
+                             DataManager::sharedDataManager()->GetDiamon());
+                }
             }
         }
-        
 	}
     
 	CCLOG("------- END %s -------", response->getHttpRequest()->getTag());

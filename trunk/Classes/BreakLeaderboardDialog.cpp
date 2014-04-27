@@ -190,7 +190,10 @@ void BreakLeaderboardDialog::postMessageToLoser( string loserName, int yourScore
 {
 	CCLOG("postMessageToLoser");
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-	if(EziSocialObject::sharedObject()->isFacebookSessionActive()) //logged in state
+	
+    string sfbid = DataManager::sharedDataManager()->GetFbID();
+    if (sfbid.compare("NULL") != 0)
+    //if(EziSocialObject::sharedObject()->isFacebookSessionActive()) //logged in state
 	{
 		CCString* strMessage = CCString::createWithFormat(TXT("feed_msg"), yourScore, loserName.c_str());
 

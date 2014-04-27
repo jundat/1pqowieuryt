@@ -34,7 +34,7 @@ public:
     }
     
     
-    CCObject* copyWithZone(CCZone *pZone)
+    Gift* copyWithZone(CCZone *pZone)
 	{
 		CCZone *pNewZone = NULL;
 		Gift *pRet = NULL;
@@ -47,8 +47,10 @@ public:
 			pRet = new Gift();
 			pZone = pNewZone = new CCZone(pRet);
 		}
-		CCObject::copyWithZone(pZone);
-		// copy member data
+		
+        //CCObject::copyWithZone(pZone);
+		
+        // copy member data
 		//pRet->m_nTag = m_nTag;
 		pRet->m_senderId = string(m_senderId);
         pRet->m_itemId = string(m_itemId);
@@ -115,7 +117,7 @@ public:
 		m_photoPath = string();
 	}
 
-	CCObject* copyWithZone(CCZone *pZone)
+	FacebookAccount* copyWithZone(CCZone *pZone)
 	{
 		CCZone *pNewZone = NULL;
 		FacebookAccount *pRet = NULL;
@@ -128,7 +130,9 @@ public:
 			pRet = new FacebookAccount();
 			pZone = pNewZone = new CCZone(pRet);
 		}
-		CCObject::copyWithZone(pZone);
+        
+		//CCObject::copyWithZone(pZone);
+        
 		// copy member data
 		//pRet->m_nTag = m_nTag;
 		pRet->m_fbId = string(m_fbId);
@@ -175,7 +179,7 @@ public:
 		m_devicePhoneNumber = _devicePhoneNumber;
 	}
 
-	CCObject* copyWithZone(CCZone *pZone)
+	DeviceProfile* copyWithZone(CCZone *pZone)
 	{
 		CCZone *pNewZone = NULL;
 		DeviceProfile *pRet = NULL;
@@ -188,8 +192,10 @@ public:
 			pRet = new DeviceProfile();
 			pZone = pNewZone = new CCZone(pRet);
 		}
-		CCObject::copyWithZone(pZone);
-		// copy member data
+		
+        //CCObject::copyWithZone(pZone);
+		
+        // copy member data
 		//pRet->m_nTag = m_nTag;
 
 		pRet->m_deviceId = string(m_deviceId);
@@ -227,11 +233,13 @@ public:
 	}
 
 
-	CCObject* copyWithZone(CCZone *pZone)
+	GameItem* copyWithZone(CCZone *pZone)
 	{
 		CCZone *pNewZone = NULL;
-		GameItem *pRet = NULL;
-		if(pZone && pZone->m_pCopyObject) //in case of being called at sub class
+		
+        GameItem *pRet = NULL;
+		
+        if(pZone && pZone->m_pCopyObject) //in case of being called at sub class
 		{
 			pRet = (GameItem*)(pZone->m_pCopyObject);
 		}
@@ -240,8 +248,10 @@ public:
 			pRet = new GameItem();
 			pZone = pNewZone = new CCZone(pRet);
 		}
-		CCObject::copyWithZone(pZone);
-		// copy member data
+		
+        //CCObject::copyWithZone(pZone);
+		
+        // copy member data
 		//pRet->m_nTag = m_nTag;
 
 		pRet->m_id = string(m_id);
