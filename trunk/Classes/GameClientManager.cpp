@@ -1306,32 +1306,61 @@ void GameClientManager::_onGetLifeCompleted(CCHttpClient *sender, CCHttpResponse
         
 		CCLOG("Content: %s", str.c_str());
         
-		//get score from response
-		json_t *root;
-		json_error_t error;
-        json_t *newLife;
-        json_t *serverTime;
-        json_t *lastTime;
+        if (str.length() == 0) {
+            CCLOG("Request failed: %s", response->getErrorBuffer());
+            if (m_clientDelegate)
+            {
+                m_clientDelegate->onGetLifeCompleted(false,
+                                                     DataManager::sharedDataManager()->GetLastPlayerLife(),
+                                                     0);
+            }
+            
+        } else {
         
-		root = json_loads(str.c_str(), strlen(str.c_str()), &error);
-        newLife = json_object_get(root, "life");
-        serverTime = json_object_get(root, "time");
-        lastTime = json_object_get(root, "lastTime");
-        
-        
-        long _serverTime = ((long long)atoll(json_string_value(serverTime)) / 1000);
-        long _clientTime = static_cast<long int> (time(NULL));
-        
-        
-        long _lastTime = _clientTime - ( _serverTime - ((long long)atoll(json_string_value(lastTime)) / 1000));
-        
-        CCLOG("~~~LAST TIME GET LIFE Client: %ld", _lastTime);
-        
-        
-        if (m_clientDelegate)
-        {
-            m_clientDelegate->onGetLifeCompleted(true, (int)atoi(json_string_value(newLife)), _lastTime);
+            //get score from response
+            json_t *root;
+            json_error_t error;
+            //json_t *isSuccess;
+            json_t *newLife;
+            json_t *serverTime;
+            json_t *lastTime;
+            
+            root = json_loads(str.c_str(), strlen(str.c_str()), &error);
+            //isSuccess = json_object_get(root, "isSuccess");
+            
+            bool success = true;//(bool) CCString::create(json_string_value(isSuccess))->boolValue();
+            
+            if (success ) {
+                newLife = json_object_get(root, "life");
+                serverTime = json_object_get(root, "time");
+                lastTime = json_object_get(root, "lastTime");
+                
+                
+                long _serverTime = ((long long)atoll(json_string_value(serverTime)) / 1000);
+                long _clientTime = static_cast<long int> (time(NULL));
+                
+                
+                long _lastTime = _clientTime - ( _serverTime - ((long long)atoll(json_string_value(lastTime)) / 1000));
+                
+                CCLOG("~~~LAST TIME GET LIFE Client: %ld", _lastTime);
+                
+                
+                if (m_clientDelegate)
+                {
+                    m_clientDelegate->onGetLifeCompleted(true, (int)atoi(json_string_value(newLife)), _lastTime);
+                }
+            } else {
+                CCLOG("Request failed: %s", response->getErrorBuffer());
+                if (m_clientDelegate)
+                {
+                    m_clientDelegate->onGetLifeCompleted(
+                         false,
+                         DataManager::sharedDataManager()->GetLastPlayerLife(),
+                         0);
+                }
+            }
         }
+        
     }
     
 	CCLOG("------- END %s -------", response->getHttpRequest()->getTag());
