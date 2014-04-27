@@ -1460,22 +1460,40 @@ CCTableViewCell* ScoreScene::getTableCellQuatangAtIndex( CCTableView *table, uns
 
 		CCLabelTTF *lbName = CCLabelTTF::create(strName->getCString(), "Roboto-Medium.ttf", 42);
 		lbName->setColor(ccc3(0,0,0));
-		lbName->setPosition(ccp(0.75f * G_FRIEND_AVATAR_SIZE + 60, m_sprCell->getContentSize().height/2));
+		lbName->setPosition(ccp(0.75f * G_FRIEND_AVATAR_SIZE + 60, 0.75f * m_sprCell->getContentSize().height));
 		lbName->setAnchorPoint(ccp(0.0f, 0.5f));
 		lbName->setTag(4);
 		cell->addChild(lbName);
 
 		//icon life 
 		CCSprite* iconLife = CCSprite::create("oil.png");
-		iconLife->setPosition(ccp(600, m_sprCell->getContentSize().height/2 + 15));
+		iconLife->setPosition(ccp(700, m_sprCell->getContentSize().height/2 + 15));
 		cell->addChild(iconLife);
 
 		//lable nhận
 		CCLabelTTF* lbGetBoom = CCLabelTTF::create(TXT("score_get"), "Roboto-Medium.ttf", 28);
 		lbGetBoom->setColor(ccc3(0, 0, 0));
 		lbGetBoom->setAnchorPoint(ccp(0.5f, 0.75f));
-		lbGetBoom->setPosition(ccp(600, m_sprCell->getContentSize().height/4));
+		lbGetBoom->setPosition(ccp(700, m_sprCell->getContentSize().height/4));
 		cell->addChild(lbGetBoom);
+        
+        //label time
+        char buffer[25];
+        struct tm* tm_info;
+        time_t tt = static_cast<time_t>(gift->m_time / 1000);
+        tm_info = localtime(&tt);
+        strftime(buffer, 25, "%r - %F", tm_info);
+        CCString *s = CCString::create(buffer);
+        
+        
+        CCLabelTTF *lbTime = CCLabelTTF::create(s->getCString(), "Roboto-Medium.ttf", 32);
+		lbTime->setColor(ccc3(50,50,50));
+		lbTime->setPosition(ccp(0.75f * G_FRIEND_AVATAR_SIZE + 60, 0.35f * m_sprCell->getContentSize().height));
+		lbTime->setAnchorPoint(ccp(0.0f, 0.5f));
+		lbTime->setTag(5);
+		cell->addChild(lbTime);
+        
+
 	}
 	else
 	{

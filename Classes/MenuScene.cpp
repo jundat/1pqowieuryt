@@ -255,12 +255,14 @@ bool MenuScene::init()
 
 	//check if life = 0 to show
 
-	int life = DataManager::sharedDataManager()->GetLastPlayerLife();
+	//int life = DataManager::sharedDataManager()->GetLastPlayerLife();
 	//CCLOG("MenuScene: Last life = %d", life);
-	if (life < G_MAX_PLAYER_LIFE) //start counter when not full of life
-	{
-		initTimer();
-	}
+	//if (life < G_MAX_PLAYER_LIFE) //start counter when not full of life
+	//{
+	
+    initTimer();
+	
+    //}
 
 	if (DataManager::sharedDataManager()->GetRegistrationId().length() == 0)
 	{
