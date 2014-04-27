@@ -98,7 +98,14 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	AudioManager::sharedAudioManager()->SetVolumeMusic(G_DEFAULT_VOLUME);
 	AudioManager::sharedAudioManager()->SetVolumeFX(G_DEFAULT_VOLUME);
 
+    //DEBUG on iOS Emulator 
+    //DataManager::sharedDataManager()->SetFbProfileID("100006639370902");
+    //DataManager::sharedDataManager()->SetFbUserName("Cần Một Cái Tên");
+    //DataManager::sharedDataManager()->SetFbEmail("jundatpham@gmail.com");
+    //DataManager::sharedDataManager()->SetFbFullName("Cần Một Cái Tên");
 
+    
+    
     CCScene *pScene = MenuScene::scene();// TestPostGetScene::scene(); // NotLoggedInMenuScene::scene();// IntroScene::scene(); // MenuScene::scene(); // IntroScene::scene(); //
 	pDirector->runWithScene(pScene);
 

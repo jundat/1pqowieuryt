@@ -67,7 +67,9 @@ void WaitForLifeDialog::askFriendCallback( CCObject* pSender )
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 
-	if(EziSocialObject::sharedObject()->isFacebookSessionActive()) //logged in state
+    string sfbid = DataManager::sharedDataManager()->GetFbID();
+    if (sfbid.compare("NULL") != 0)
+	//if(EziSocialObject::sharedObject()->isFacebookSessionActive()) //logged in state
 	{
 		inviteFriends();
 	}

@@ -20,11 +20,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Classes/MenuScene.cpp"
-            timestampString = "420222141.091912"
+            timestampString = "420260646.397607"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "501"
-            endingLineNumber = "501"
+            startingLineNumber = "504"
+            endingLineNumber = "504"
             landmarkName = "MenuScene::rateCallback( CCObject* pSender )"
             landmarkType = "5">
          </BreakpointContent>
@@ -36,11 +36,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Classes/MenuScene.cpp"
-            timestampString = "420222141.091912"
+            timestampString = "420260646.397607"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "426"
-            endingLineNumber = "426"
+            startingLineNumber = "429"
+            endingLineNumber = "429"
             landmarkName = "MenuScene::onRateCompleted( CCNode *sender, void *data )"
             landmarkType = "5">
          </BreakpointContent>
@@ -52,11 +52,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Classes/MenuScene.cpp"
-            timestampString = "420222141.091912"
+            timestampString = "420260646.397607"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "417"
-            endingLineNumber = "417"
+            startingLineNumber = "420"
+            endingLineNumber = "420"
             landmarkName = "MenuScene::onRateCompleted( CCNode *sender, void *data )"
             landmarkType = "5">
          </BreakpointContent>
@@ -68,11 +68,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../Classes/MenuScene.cpp"
-            timestampString = "420222141.091912"
+            timestampString = "420260646.397607"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "428"
-            endingLineNumber = "428"
+            startingLineNumber = "431"
+            endingLineNumber = "431"
             landmarkName = "MenuScene::onRateCompleted( CCNode *sender, void *data )"
             landmarkType = "5">
          </BreakpointContent>
@@ -83,58 +83,14 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../Classes/GameClientObjects.h"
-            timestampString = "420217187.293322"
+            filePath = "../Classes/ScoreScene.cpp"
+            timestampString = "420264919.557008"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "152"
-            endingLineNumber = "152"
-            landmarkName = "toJson()"
+            startingLineNumber = "1756"
+            endingLineNumber = "1756"
+            landmarkName = "ScoreScene::onRemoveItemCompleted(bool isSuccess, string senderId, long long time)"
             landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "DataManager::SetHigherFriends(cocos2d::CCArray*)"
-                  moduleName = "PhiCongButChi"
-                  urlString = "file:///Users/lenguyen/Desktop/cocos2d-x-2.1.5/projects/PhiCongButChi/Classes/GameClientObjects.h"
-                  timestampString = "420231524.899995"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "152"
-                  endingLineNumber = "152"
-                  offsetFromSymbolStart = "214">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "TestPostGetScene::onGetFriendLeaderboardCompleted(bool, cocos2d::CCArray*)"
-                  moduleName = "PhiCongButChi"
-                  urlString = "file:///Users/lenguyen/Desktop/cocos2d-x-2.1.5/projects/PhiCongButChi/Classes/GameClientObjects.h"
-                  timestampString = "420231524.900179"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "152"
-                  endingLineNumber = "152"
-                  offsetFromSymbolStart = "64">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "TestPostGetScene::onGetWorldLeaderboardCompleted(bool, cocos2d::CCArray*)"
-                  moduleName = "PhiCongButChi"
-                  urlString = "file:///Users/lenguyen/Desktop/cocos2d-x-2.1.5/projects/PhiCongButChi/Classes/GameClientObjects.h"
-                  timestampString = "420231524.900346"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "152"
-                  endingLineNumber = "152"
-                  offsetFromSymbolStart = "64">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

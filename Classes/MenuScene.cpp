@@ -53,7 +53,10 @@ bool MenuScene::init()
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	EziSocialObject::sharedObject()->setFacebookDelegate(this);
-	if(EziSocialObject::sharedObject()->isFacebookSessionActive()) //logged in state
+	
+    string sfbid = DataManager::sharedDataManager()->GetFbID();
+    if (sfbid.compare("NULL") != 0)
+    //if(EziSocialObject::sharedObject()->isFacebookSessionActive()) //logged in state
 	{
 		m_isLoggedIn = true;
 	}
