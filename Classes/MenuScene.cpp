@@ -804,26 +804,6 @@ void MenuScene::fbUserPhotoCallback(const char *userPhotoPath, const char* fbID)
 		DataManager::sharedDataManager()->SetPhotoPath(userPhotoPath);
 	}
 }
-
-void MenuScene::sendUserProfileToServer(string fbId, string fbName, string email)
-{
-	//CCLOG("sendUserProfileToServer");
-	GameClientManager::sharedGameClientManager()->sendPlayerFbProfile(fbId, fbName, email);
-	
-	//send device token to server
-	string regid = DataManager::sharedDataManager()->GetRegistrationId();
-	if (regid.length() > 0)
-	{
-		GameClientManager::sharedGameClientManager()->sendDeviceProfile(
-			DataManager::sharedDataManager()->GetFbID(),
-			string(""),
-			DataManager::sharedDataManager()->GetRegistrationId(),
-			string(""),
-			string("")
-			);
-	}
-}
-
 void MenuScene::getFacebookFriends()
 {
     //DEBUG
@@ -881,6 +861,7 @@ void MenuScene::fbFriendsCallback( int responseCode, const char* responseMessage
 		MenuScene::s_endFriendInd += G_NUMBER_FRIEND_TO_GET;
 		EziSocialObject::sharedObject()->getFriends(EziSocialWrapperNS::FB_FRIEND_SEARCH::ALL_FRIENDS, MenuScene::s_beginFriendInd, MenuScene::s_endFriendInd);
 	} else {
+        
         //end of friends
         this->closeWaitDialog();
     }
@@ -1037,8 +1018,32 @@ void MenuScene::onGetPlayerFbProfileCompleted( bool isSuccess, FacebookAccount* 
 	}
 }
 
+void MenuScene::sendUserProfileToServer(string fbId, string fbName, string email)
+{
+    this->showWaitDialog(TXT("wait_connect_server"));
+    
+	//CCLOG("sendUserProfileToServer");
+	GameClientManager::sharedGameClientManager()->sendPlayerFbProfile(fbId, fbName, email);
+	
+	//send device token to server
+	string regid = DataManager::sharedDataManager()->GetRegistrationId();
+	if (regid.length() > 0)
+	{
+		GameClientManager::sharedGameClientManager()->sendDeviceProfile(
+			DataManager::sharedDataManager()->GetFbID(),
+			string(""),
+			DataManager::sharedDataManager()->GetRegistrationId(),
+			string(""),
+			string("")
+			);
+	}
+}
+
+
 void MenuScene::onSendPlayerFbProfileCompleted( bool isSuccess )
 {
+    this->closeWaitDialog();
+    
 	if (isSuccess)
 	{
 		//get User Profile
@@ -1070,11 +1075,23 @@ void MenuScene::disableMoneytize()
 	//Android, Windows Phone
 	CCLOG("...... Disable monitize, SET DIAMOND = DEFAULT......");
 	DataManager::sharedDataManager()->SetDiamon(G_DEFAULT_DIAMON);
+    
+    
+    
+    facebookLogInOut();
+    
+    //go to NotLoggedInMenuSene
+    //GameClientManager::sharedGameClientManager()->setDelegate(NULL);
+    
+    //CCScene *pScene = CCTransitionFade::create(0.5, NotLoggedInMenuScene::scene());
+    //CCDirector::sharedDirector()->replaceScene(pScene);
 }
 
 
 void MenuScene::getAllItems()
 {
+    this->showWaitDialog(TXT("wait_connect_server"));
+    
     CCLOG("MenuScene::getAllItems");
     GameClientManager::sharedGameClientManager()->getAllItem(DataManager::sharedDataManager()->GetFbID());
 }
@@ -1085,12 +1102,15 @@ void MenuScene::onGetAllItemsCompleted(bool isSuccess, int laze, int coin)
     CCLOG("MenuScene::onGetAllItemsCompleted");
     CCLOG("laze: %d", laze);
     CCLOG("coin: %d", coin);
+    
+    this->closeWaitDialog();
 
     if (isSuccess) {
         DataManager::sharedDataManager()->SetBoom(laze);
         DataManager::sharedDataManager()->SetDiamon(coin);
         
     } else {
+        
         this->disableMoneytize();
     }
 }
@@ -1111,6 +1131,7 @@ void MenuScene::showWaitDialog(string title)
         this->addChild(m_waitDialog, WAIT_DIALOG_TAG); // =1
     }
 }
+
 
 void MenuScene::closeWaitDialog()
 {
@@ -1181,14 +1202,19 @@ void MenuScene::onUseLifeCompleted(bool isSuccess, int newLife, long lastTime_cl
 
 void MenuScene::getLife()
 {
+    this->showWaitDialog(TXT("wait_connect_server"));
+    
     CCLOG("MenuScene::getLife");
     
     GameClientManager::sharedGameClientManager()->getLife(DataManager::sharedDataManager()->GetFbID());
 }
 
+
 void MenuScene::onGetLifeCompleted(bool isSuccess, int life, long lastTimeClient_Second)
 {
     CCLOG("MenuScene::onGetLifeCompleted");
+    
+    this->closeWaitDialog();
     
     if (isSuccess) {
         
@@ -1199,7 +1225,7 @@ void MenuScene::onGetLifeCompleted(bool isSuccess, int life, long lastTimeClient
     
     } else {
         CCLOG("FAILED TO CONNECT SERVER");
-        //failed to connect server
+        
 		this->disableMoneytize();
     }
 }
