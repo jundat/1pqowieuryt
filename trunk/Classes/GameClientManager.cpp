@@ -140,10 +140,19 @@ void GameClientManager::_onSendPlayerFbProfileCompleted( CCHttpClient *sender, C
 		str = decodeBeforeProcess(str);
 
 		CCLOG("Content: %s", str.c_str());
-		if (m_clientDelegate)
-		{
-			m_clientDelegate->onSendPlayerFbProfileCompleted(true);
-		}
+        
+        if (str.length() == 0) {
+            if (m_clientDelegate)
+            {
+                m_clientDelegate->onSendPlayerFbProfileCompleted(false);
+            }
+        } else {
+        
+            if (m_clientDelegate)
+            {
+                m_clientDelegate->onSendPlayerFbProfileCompleted(true);
+            }
+        }
 	}
 
 	CCLOG("------- END %s -------", response->getHttpRequest()->getTag());
@@ -201,37 +210,45 @@ void GameClientManager::_onGetPlayerFbProfileCompleted( CCHttpClient *sender, CC
 		str = decodeBeforeProcess(str);
 
 		CCLOG("Content: %s", str.c_str());
-
-		//get score from response
-		json_t *root;
-		json_error_t error;
-		json_t *fbId;
-		json_t *fbName;
-		json_t *email;
-        json_t *coin;
-
-
-		root = json_loads(str.c_str(), strlen(str.c_str()), &error);
-		fbId = json_object_get(root, "fbId");
-		fbName = json_object_get(root, "fbName");
-		email = json_object_get(root, "email");
-		coin = json_object_get(root, "coin");
-
-        //(string _fbId, string _fbName, string _email, int _score, int _coin, long timeGetLaze, long timeSendLife)
         
-		FacebookAccount* acc = new FacebookAccount(
-           json_string_value(fbId),
-           json_string_value(fbName),
-           std::string(json_string_value(email)),
-           -1,
-           (int)atof(json_string_value(coin)),
-           -1,
-           -1);
+        if (str.length() == 0) {
+            if (m_clientDelegate)
+            {
+                m_clientDelegate->onGetPlayerFbProfileCompleted(false, NULL);
+            }
+        } else {
 
-		if (m_clientDelegate)
-		{
-			m_clientDelegate->onGetPlayerFbProfileCompleted(true, acc);
-		}		
+            //get score from response
+            json_t *root;
+            json_error_t error;
+            json_t *fbId;
+            json_t *fbName;
+            json_t *email;
+            json_t *coin;
+
+
+            root = json_loads(str.c_str(), strlen(str.c_str()), &error);
+            fbId = json_object_get(root, "fbId");
+            fbName = json_object_get(root, "fbName");
+            email = json_object_get(root, "email");
+            coin = json_object_get(root, "coin");
+
+            //(string _fbId, string _fbName, string _email, int _score, int _coin, long timeGetLaze, long timeSendLife)
+            
+            FacebookAccount* acc = new FacebookAccount(
+               json_string_value(fbId),
+               json_string_value(fbName),
+               std::string(json_string_value(email)),
+               -1,
+               (int)atof(json_string_value(coin)),
+               -1,
+               -1);
+
+            if (m_clientDelegate)
+            {
+                m_clientDelegate->onGetPlayerFbProfileCompleted(true, acc);
+            }
+        }
 	}
 
 	CCLOG("------- END %s -------", response->getHttpRequest()->getTag());
@@ -387,65 +404,73 @@ void GameClientManager::_onGetFriendListCompleted( CCHttpClient *sender, CCHttpR
 		str = decodeBeforeProcess(str);
 
 		CCLOG("Content: %s", str.c_str());
-
-		//get score from response
-		json_t *root;
-		json_error_t error;
-        json_t *serverTime;
-		json_t *friendList;
-
-		root = json_loads(str.c_str(), strlen(str.c_str()), &error);
-        serverTime = json_object_get(root, "time");
-		friendList = json_object_get(root, "list");
-
-		//foreach to get all friend, insert to list
-		int count = json_array_size(friendList);
-		CCArray* arrFriends = CCArray::create();
         
-        
-        long _serverTime = ((long long)atoll(json_string_value(serverTime)) / 1000);
-        long _clientTime = static_cast<long int> (time(NULL));
+        if (str.length() == 0) {
+            if (m_clientDelegate)
+            {
+                m_clientDelegate->onGetFriendListCompleted(false, NULL);
+            }
+        } else {
 
-		for(int i = 0; i < count; i++)
-		{
-			json_t *fbFriend = json_array_get(friendList, i);
+            //get score from response
+            json_t *root;
+            json_error_t error;
+            json_t *serverTime;
+            json_t *friendList;
 
-			json_t* fbId;
-			json_t* fbName;
-			json_t* timeGetLaze;
-            json_t* timeSendLife;
-			json_t* score;
+            root = json_loads(str.c_str(), strlen(str.c_str()), &error);
+            serverTime = json_object_get(root, "time");
+            friendList = json_object_get(root, "list");
 
-
-			fbId = json_object_get(fbFriend, "id");
-			fbName = json_object_get(fbFriend, "fbName");
-			timeGetLaze = json_object_get(fbFriend, "timeLaze");
-            timeSendLife = json_object_get(fbFriend, "timeSendLife");
-			score = json_object_get(fbFriend, "score");
+            //foreach to get all friend, insert to list
+            int count = json_array_size(friendList);
+            CCArray* arrFriends = CCArray::create();
             
-            long _timeGetLaze = _clientTime - ( _serverTime - ((long long)atoll(json_string_value(timeGetLaze)) / 1000));
-            long _timeSendLife = _clientTime - ( _serverTime - ((long long)atoll(json_string_value(timeSendLife)) / 1000));
             
-            CCLOG("Time_Get_Laze: %ld", _timeGetLaze);
-            CCLOG("Time_Send_Life: %ld", _timeSendLife);
+            long _serverTime = ((long long)atoll(json_string_value(serverTime)) / 1000);
+            long _clientTime = static_cast<long int> (time(NULL));
 
-            //(string _fbId, string _fbName, string _email, int _score, int _coin, long timeGetLaze, long timeSendLife)
-            
-			FacebookAccount* acc = new FacebookAccount(json_string_value(fbId),
-                                                       json_string_value(fbName),
-                                                       std::string(""),
-                                                       (int)atoi(json_string_value(score)),
-                                                       -1,
-                                                       _timeGetLaze,
-                                                       _timeSendLife
-                                                       );
-			arrFriends->addObject(acc);
-		}
+            for(int i = 0; i < count; i++)
+            {
+                json_t *fbFriend = json_array_get(friendList, i);
 
-		if (m_clientDelegate)
-		{
-			m_clientDelegate->onGetFriendListCompleted(true, arrFriends);
-		}
+                json_t* fbId;
+                json_t* fbName;
+                json_t* timeGetLaze;
+                json_t* timeSendLife;
+                json_t* score;
+
+
+                fbId = json_object_get(fbFriend, "id");
+                fbName = json_object_get(fbFriend, "fbName");
+                timeGetLaze = json_object_get(fbFriend, "timeLaze");
+                timeSendLife = json_object_get(fbFriend, "timeSendLife");
+                score = json_object_get(fbFriend, "score");
+                
+                long _timeGetLaze = _clientTime - ( _serverTime - ((long long)atoll(json_string_value(timeGetLaze)) / 1000));
+                long _timeSendLife = _clientTime - ( _serverTime - ((long long)atoll(json_string_value(timeSendLife)) / 1000));
+                
+                CCLOG("Time_Get_Laze: %ld", _timeGetLaze);
+                CCLOG("Time_Send_Life: %ld", _timeSendLife);
+
+                //(string _fbId, string _fbName, string _email, int _score, int _coin, long timeGetLaze, long timeSendLife)
+                
+                FacebookAccount* acc = new FacebookAccount(json_string_value(fbId),
+                                                           json_string_value(fbName),
+                                                           std::string(""),
+                                                           (int)atoi(json_string_value(score)),
+                                                           -1,
+                                                           _timeGetLaze,
+                                                           _timeSendLife
+                                                           );
+                arrFriends->addObject(acc);
+            }
+
+            if (m_clientDelegate)
+            {
+                m_clientDelegate->onGetFriendListCompleted(true, arrFriends);
+            }
+        }
 	}
 
 	CCLOG("------- END %s -------", response->getHttpRequest()->getTag());
@@ -513,10 +538,18 @@ void GameClientManager::_onSendDeviceProfileCompleted( CCHttpClient *sender, CCH
 		str = decodeBeforeProcess(str);
 
 		CCLOG("Content: %s", str.c_str());
-		if (m_clientDelegate)
-		{
-			m_clientDelegate->onSendDeviceProfileCompleted(true);
-		}
+        
+        if (str.length() == 0) {
+            if (m_clientDelegate)
+            {
+                m_clientDelegate->onSendDeviceProfileCompleted(false);
+            }
+        } else {
+            if (m_clientDelegate)
+            {
+                m_clientDelegate->onSendDeviceProfileCompleted(true);
+            }
+        }
 	}
 
 	CCLOG("------- END %s -------", response->getHttpRequest()->getTag());
@@ -576,34 +609,42 @@ void GameClientManager::_onGetDeviceProfileCompleted( CCHttpClient *sender, CCHt
 		str = decodeBeforeProcess(str);
 
 		CCLOG("Content: %s", str.c_str());
+        
+        if (str.length() == 0) {
+            if (m_clientDelegate)
+            {
+                m_clientDelegate->onGetDeviceProfileCompleted(false, NULL);
+            }
+        } else {
 
-		//get score from response
-		json_t *root;
-		json_error_t error;
-		json_t *fbId;
-		json_t *deviceId;
-		json_t *deviceToken;
-		json_t *devicePhoneNumber;
-		json_t *deviceConfig;
+            //get score from response
+            json_t *root;
+            json_error_t error;
+            json_t *fbId;
+            json_t *deviceId;
+            json_t *deviceToken;
+            json_t *devicePhoneNumber;
+            json_t *deviceConfig;
 
-		root = json_loads(str.c_str(), strlen(str.c_str()), &error);
+            root = json_loads(str.c_str(), strlen(str.c_str()), &error);
 
-		fbId = json_object_get(root, "fbId");
-		deviceId = json_object_get(root, "deviceId");
-		deviceToken = json_object_get(root, "deviceToken");
-		deviceConfig = json_object_get(root, "deviceConfig");
-		devicePhoneNumber = json_object_get(root, "devicePhoneNumber");
+            fbId = json_object_get(root, "fbId");
+            deviceId = json_object_get(root, "deviceId");
+            deviceToken = json_object_get(root, "deviceToken");
+            deviceConfig = json_object_get(root, "deviceConfig");
+            devicePhoneNumber = json_object_get(root, "devicePhoneNumber");
 
-		DeviceProfile* acc = new DeviceProfile(
-			json_string_value(deviceId), 
-			json_string_value(deviceToken), 
-			json_string_value(deviceConfig),
-			json_string_value(devicePhoneNumber));
+            DeviceProfile* acc = new DeviceProfile(
+                json_string_value(deviceId), 
+                json_string_value(deviceToken), 
+                json_string_value(deviceConfig),
+                json_string_value(devicePhoneNumber));
 
-		if (m_clientDelegate)
-		{
-			m_clientDelegate->onGetDeviceProfileCompleted(true, acc);
-		}
+            if (m_clientDelegate)
+            {
+                m_clientDelegate->onGetDeviceProfileCompleted(true, acc);
+            }
+        }
 	}
 
 	CCLOG("------- END %s -------", response->getHttpRequest()->getTag());
@@ -667,32 +708,40 @@ void GameClientManager::_onSendScoreCompleted( CCHttpClient *sender, CCHttpRespo
 		str = decodeBeforeProcess(str);
 
 		CCLOG("Content: %s", str.c_str());
+        
+        if (str.length() == 0) {
+            if (m_clientDelegate)
+            {
+                m_clientDelegate->onSendScoreCompleted(false, -1);
+            }
+        } else {
 
-		//get score from response
-		json_t *root;
-		json_error_t error;
-		json_t *isSuccess;
-		json_t *score;
+            //get score from response
+            json_t *root;
+            json_error_t error;
+            json_t *isSuccess;
+            json_t *score;
 
-		root = json_loads(str.c_str(), strlen(str.c_str()), &error);
-		isSuccess = json_object_get(root, "isSuccess");
-		bool success = CCString::create(json_string_value(isSuccess))->boolValue();
+            root = json_loads(str.c_str(), strlen(str.c_str()), &error);
+            isSuccess = json_object_get(root, "isSuccess");
+            bool success = CCString::create(json_string_value(isSuccess))->boolValue();
 
-		if (success == true)
-		{
-			if (m_clientDelegate)
-			{
-				m_clientDelegate->onSendScoreCompleted(success, DataManager::sharedDataManager()->GetHighScore());
-			}
-		} 
-		else //false, get new score from server
-		{
-			score = json_object_get(root, "score");
-			if (m_clientDelegate)
-			{
-				m_clientDelegate->onSendScoreCompleted(success, (int)atof(json_string_value(score)));
-			}
-		}
+            if (success == true)
+            {
+                if (m_clientDelegate)
+                {
+                    m_clientDelegate->onSendScoreCompleted(success, DataManager::sharedDataManager()->GetHighScore());
+                }
+            } 
+            else //false, get new score from server
+            {
+                score = json_object_get(root, "score");
+                if (m_clientDelegate)
+                {
+                    m_clientDelegate->onSendScoreCompleted(success, (int)atof(json_string_value(score)));
+                }
+            }
+        }
 	}
 
 	CCLOG("------- END %s -------", response->getHttpRequest()->getTag());
@@ -843,22 +892,30 @@ void GameClientManager::_onRequestReviveCompleted( CCHttpClient *sender, CCHttpR
 		str = decodeBeforeProcess(str);
 
 		CCLOG("Content: %s", str.c_str());
-
-		//get score from response
-		json_t *root;
-		json_error_t error;
-		json_t *isSuccess;
-		json_t *newDiamond;
-
-		root = json_loads(str.c_str(), strlen(str.c_str()), &error);
-		isSuccess = json_object_get(root, "isSuccess");
-		newDiamond = json_object_get(root, "newDiamond");
-        bool success = CCString::create(json_string_value(isSuccess))->boolValue();
         
-		if (m_clientDelegate)
-		{
-			m_clientDelegate->onRequestReviveCompleted(success, (int)atof(json_string_value(newDiamond)));
-		}
+        if (str.length() == 0) {
+            if (m_clientDelegate)
+            {
+                m_clientDelegate->onRequestReviveCompleted(false, -1);
+            }
+        } else {
+
+            //get score from response
+            json_t *root;
+            json_error_t error;
+            json_t *isSuccess;
+            json_t *newDiamond;
+
+            root = json_loads(str.c_str(), strlen(str.c_str()), &error);
+            isSuccess = json_object_get(root, "isSuccess");
+            newDiamond = json_object_get(root, "newDiamond");
+            bool success = CCString::create(json_string_value(isSuccess))->boolValue();
+            
+            if (m_clientDelegate)
+            {
+                m_clientDelegate->onRequestReviveCompleted(success, (int)atof(json_string_value(newDiamond)));
+            }
+        }
 	}
 
 	CCLOG("------- END %s -------", response->getHttpRequest()->getTag());
@@ -923,22 +980,30 @@ void GameClientManager::_onRequestGetLazerCompleted( CCHttpClient *sender, CCHtt
 		str = decodeBeforeProcess(str);
 
 		CCLOG("Content: %s", str.c_str());
-
-		//get score from response
-		json_t *root;
-		json_error_t error;
-		json_t *isSuccess;
-		json_t *newDiamond;
-
-		root = json_loads(str.c_str(), strlen(str.c_str()), &error);
-		isSuccess = json_object_get(root, "isSuccess");
-		newDiamond = json_object_get(root, "newDiamond");
-        bool success = CCString::create(json_string_value(isSuccess))->boolValue();
         
-		if (m_clientDelegate)
-		{
-			m_clientDelegate->onRequestGetLazerCompleted(success, (int)atof(json_string_value(newDiamond)));
-		}
+        if (str.length() == 0) {
+            if (m_clientDelegate)
+            {
+                m_clientDelegate->onRequestGetLazerCompleted(false, -1);
+            }
+        } else {
+
+            //get score from response
+            json_t *root;
+            json_error_t error;
+            json_t *isSuccess;
+            json_t *newDiamond;
+
+            root = json_loads(str.c_str(), strlen(str.c_str()), &error);
+            isSuccess = json_object_get(root, "isSuccess");
+            newDiamond = json_object_get(root, "newDiamond");
+            bool success = CCString::create(json_string_value(isSuccess))->boolValue();
+            
+            if (m_clientDelegate)
+            {
+                m_clientDelegate->onRequestGetLazerCompleted(success, (int)atof(json_string_value(newDiamond)));
+            }
+        }
 	}
 
 	CCLOG("------- END %s -------", response->getHttpRequest()->getTag());
@@ -1121,38 +1186,50 @@ void GameClientManager::_onBuyItemCompleted(CCHttpClient *sender, CCHttpResponse
         
 		CCLOG("Content: %s", str.c_str());
         
-		//get score from response
-		json_t *root;
-		json_error_t error;
-		json_t *isSuccess;
-		json_t *newCoin;
-        json_t *type;
-        json_t *count;
-        
-        
-        
-		root = json_loads(str.c_str(), strlen(str.c_str()), &error);
-		isSuccess = json_object_get(root, "isSuccess");
-		bool success = CCString::create(json_string_value(isSuccess))->boolValue();
-        
-        if (success) {
-            newCoin = json_object_get(root, "coin");
-            type    = json_object_get(root, "type");
-            count    = json_object_get(root, "count");
-            
+        if (str.length() == 0) {
             if (m_clientDelegate)
             {
-                m_clientDelegate->onBuyItemCompleted(success, (int)atof(json_string_value(newCoin)), json_string_value(type), (int)atof(json_string_value(count)), response->getHttpRequest()->getTag());
-            }
-        } else {
-            if (m_clientDelegate)
-            {
-                //m_clientDelegate->onBuyItemCompleted(false, -1, "", -1, response->getHttpRequest()->getTag());
                 m_clientDelegate->onBuyItemCompleted(false,
                                                      DataManager::sharedDataManager()->GetDiamon(),
                                                      "",
                                                      0,
                                                      response->getHttpRequest()->getTag());
+            }
+        } else {
+        
+            //get score from response
+            json_t *root;
+            json_error_t error;
+            json_t *isSuccess;
+            json_t *newCoin;
+            json_t *type;
+            json_t *count;
+            
+            
+            
+            root = json_loads(str.c_str(), strlen(str.c_str()), &error);
+            isSuccess = json_object_get(root, "isSuccess");
+            bool success = CCString::create(json_string_value(isSuccess))->boolValue();
+            
+            if (success) {
+                newCoin = json_object_get(root, "coin");
+                type    = json_object_get(root, "type");
+                count    = json_object_get(root, "count");
+                
+                if (m_clientDelegate)
+                {
+                    m_clientDelegate->onBuyItemCompleted(success, (int)atof(json_string_value(newCoin)), json_string_value(type), (int)atof(json_string_value(count)), response->getHttpRequest()->getTag());
+                }
+            } else {
+                if (m_clientDelegate)
+                {
+                    //m_clientDelegate->onBuyItemCompleted(false, -1, "", -1, response->getHttpRequest()->getTag());
+                    m_clientDelegate->onBuyItemCompleted(false,
+                                                         DataManager::sharedDataManager()->GetDiamon(),
+                                                         "",
+                                                         0,
+                                                         response->getHttpRequest()->getTag());
+                }
             }
         }
 	}
@@ -1222,21 +1299,29 @@ void GameClientManager::_onGetLazeFreeCompleted(CCHttpClient *sender, CCHttpResp
         
 		CCLOG("Content: %s", str.c_str());
         
-		//get score from response
-		json_t *root;
-		json_error_t error;
-		json_t *isSuccess;
-        //json_t *friendId;
+        if (str.length() == 0) {
+            if (m_clientDelegate)
+            {
+                m_clientDelegate->onGetLazeFreeCompleted(false, response->getHttpRequest()->getTag());
+            }
+        } else {
         
-        
-		root = json_loads(str.c_str(), strlen(str.c_str()), &error);
-		isSuccess = json_object_get(root, "isSuccess");
-		bool success = CCString::create(json_string_value(isSuccess))->boolValue();
-        //friendId = json_object_get(root, "friendId");
-        
-        if (m_clientDelegate)
-        {
-            m_clientDelegate->onGetLazeFreeCompleted(success, response->getHttpRequest()->getTag());
+            //get score from response
+            json_t *root;
+            json_error_t error;
+            json_t *isSuccess;
+            //json_t *friendId;
+            
+            
+            root = json_loads(str.c_str(), strlen(str.c_str()), &error);
+            isSuccess = json_object_get(root, "isSuccess");
+            bool success = CCString::create(json_string_value(isSuccess))->boolValue();
+            //friendId = json_object_get(root, "friendId");
+            
+            if (m_clientDelegate)
+            {
+                m_clientDelegate->onGetLazeFreeCompleted(success, response->getHttpRequest()->getTag());
+            }
         }
     }
     
@@ -1430,34 +1515,44 @@ void GameClientManager::_onUseLifeCompleted(CCHttpClient *sender, CCHttpResponse
         
 		CCLOG("Content: %s", str.c_str());
         
-		//get score from response
-		json_t *root;
-		json_error_t error;
-		json_t *isSuccess;
-        json_t *newLife;
-        json_t *serverTime;
-        json_t *lastTime;
+        if (str.length() == 0) {
+            if (m_clientDelegate)
+            {
+                m_clientDelegate->onUseLifeCompleted(false,
+                                                     DataManager::sharedDataManager()->GetLastPlayerLife() - 1,
+                                                     0);
+            }
+        } else {
         
-		root = json_loads(str.c_str(), strlen(str.c_str()), &error);
-		isSuccess = json_object_get(root, "isSuccess");
-		bool success = CCString::create(json_string_value(isSuccess))->boolValue();
-        newLife = json_object_get(root, "life");
-        serverTime = json_object_get(root, "time");
-        lastTime = json_object_get(root, "lastTime");
-        
-        
-        long _serverTime = ((long long)atoll(json_string_value(serverTime)) / 1000);
-        long _clientTime = static_cast<long int> (time(NULL));
-        
+            //get score from response
+            json_t *root;
+            json_error_t error;
+            json_t *isSuccess;
+            json_t *newLife;
+            json_t *serverTime;
+            json_t *lastTime;
+            
+            root = json_loads(str.c_str(), strlen(str.c_str()), &error);
+            isSuccess = json_object_get(root, "isSuccess");
+            bool success = CCString::create(json_string_value(isSuccess))->boolValue();
+            newLife = json_object_get(root, "life");
+            serverTime = json_object_get(root, "time");
+            lastTime = json_object_get(root, "lastTime");
+            
+            
+            long _serverTime = ((long long)atoll(json_string_value(serverTime)) / 1000);
+            long _clientTime = static_cast<long int> (time(NULL));
+            
 
-        long _lastTime = _clientTime - ( _serverTime - ((long long)atoll(json_string_value(lastTime)) / 1000));
-        
-        CCLOG("~~~LAST TIME GET LIFE Client: %ld", _lastTime);
-       
-        
-        if (m_clientDelegate)
-        {
-            m_clientDelegate->onUseLifeCompleted(success, (int)atoi(json_string_value(newLife)), _lastTime);
+            long _lastTime = _clientTime - ( _serverTime - ((long long)atoll(json_string_value(lastTime)) / 1000));
+            
+            CCLOG("~~~LAST TIME GET LIFE Client: %ld", _lastTime);
+           
+            
+            if (m_clientDelegate)
+            {
+                m_clientDelegate->onUseLifeCompleted(success, (int)atoi(json_string_value(newLife)), _lastTime);
+            }
         }
     }
     
@@ -1527,23 +1622,34 @@ void GameClientManager::_onUseItemCompleted(CCHttpClient *sender, CCHttpResponse
         
 		CCLOG("Content: %s", str.c_str());
         
-		//get score from response
-		json_t *root;
-		json_error_t error;
-        json_t *isSuccess;
-        json_t *type;
-        json_t *count;
+        if (str.length() == 0) {
+            if (m_clientDelegate)
+            {
+                m_clientDelegate->onUseItemCompleted(false,
+                                                     response->getHttpRequest()->getTag(),
+                                                     1);
+            }
+
+        } else {
         
-		root = json_loads(str.c_str(), strlen(str.c_str()), &error);
-        isSuccess = json_object_get(root, "isSuccess");
-        type = json_object_get(root, "type");
-        count = json_object_get(root, "count");
-        
-        if (m_clientDelegate)
-        {
-            m_clientDelegate->onUseItemCompleted(isSuccess,
-                                                 json_string_value(type),
-                                                 (int)atoi(json_string_value(count)));
+            //get score from response
+            json_t *root;
+            json_error_t error;
+            json_t *isSuccess;
+            json_t *type;
+            json_t *count;
+            
+            root = json_loads(str.c_str(), strlen(str.c_str()), &error);
+            isSuccess = json_object_get(root, "isSuccess");
+            type = json_object_get(root, "type");
+            count = json_object_get(root, "count");
+            
+            if (m_clientDelegate)
+            {
+                m_clientDelegate->onUseItemCompleted(isSuccess,
+                                                     json_string_value(type),
+                                                     (int)atoi(json_string_value(count)));
+            }
         }
     }
     
@@ -1611,23 +1717,31 @@ void GameClientManager::_onAddItemCompleted(CCHttpClient *sender, CCHttpResponse
         
 		CCLOG("Content: %s", str.c_str());
         
-		//get score from response
-		json_t *root;
-		json_error_t error;
-        json_t *isSuccess;
-        json_t *type;
-        json_t *count;
+        if (str.length() == 0) {
+            if (m_clientDelegate)
+            {
+                m_clientDelegate->onAddItemCompleted(false, response->getHttpRequest()->getTag(), -1);
+            }
+        } else {
         
-		root = json_loads(str.c_str(), strlen(str.c_str()), &error);
-        isSuccess = json_object_get(root, "isSuccess");
-        type = json_object_get(root, "type");
-        count = json_object_get(root, "count");
-        
-        if (m_clientDelegate)
-        {
-            m_clientDelegate->onAddItemCompleted(isSuccess,
-                                                 json_string_value(type),
-                                                 (int)atoi(json_string_value(count)));
+            //get score from response
+            json_t *root;
+            json_error_t error;
+            json_t *isSuccess;
+            json_t *type;
+            json_t *count;
+            
+            root = json_loads(str.c_str(), strlen(str.c_str()), &error);
+            isSuccess = json_object_get(root, "isSuccess");
+            type = json_object_get(root, "type");
+            count = json_object_get(root, "count");
+            
+            if (m_clientDelegate)
+            {
+                m_clientDelegate->onAddItemCompleted(isSuccess,
+                                                     json_string_value(type),
+                                                     (int)atoi(json_string_value(count)));
+            }
         }
     }
     
@@ -1713,18 +1827,26 @@ void GameClientManager::_onSendItemCompleted(CCHttpClient *sender, CCHttpRespons
         
 		CCLOG("Content: %s", str.c_str());
         
-		json_t *root;
-		json_error_t error;
-		json_t *isSuccess;
-       
+        if (str.length() == 0) {
+            if (m_clientDelegate)
+            {
+                m_clientDelegate->onSendItemCompleted(false, friendId, itemId, count);
+            }
+        } else {
         
-		root = json_loads(str.c_str(), strlen(str.c_str()), &error);
-		isSuccess = json_object_get(root, "isSuccess");
-		bool success = CCString::create(json_string_value(isSuccess))->boolValue();
-        
-        if (m_clientDelegate)
-        {
-            m_clientDelegate->onSendItemCompleted(success, friendId, itemId, count);
+            json_t *root;
+            json_error_t error;
+            json_t *isSuccess;
+           
+            
+            root = json_loads(str.c_str(), strlen(str.c_str()), &error);
+            isSuccess = json_object_get(root, "isSuccess");
+            bool success = CCString::create(json_string_value(isSuccess))->boolValue();
+            
+            if (m_clientDelegate)
+            {
+                m_clientDelegate->onSendItemCompleted(success, friendId, itemId, count);
+            }
         }
     }
     
@@ -1787,52 +1909,60 @@ void GameClientManager::_onGetInboxCompleted(CCHttpClient *sender, CCHttpRespons
         
 		CCLOG("Content: %s", str.c_str());
         
-		json_t *root;
-		json_error_t error;
-		json_t *isSuccess;
-        json_t *friendList;
+        if (str.length() == 0) {
+            if (m_clientDelegate)
+            {
+                m_clientDelegate->onGetInboxCompleted(false, NULL);
+            }
+        } else {
         
-        
-		root = json_loads(str.c_str(), strlen(str.c_str()), &error);
-		isSuccess = json_object_get(root, "isSuccess");
-		bool success = CCString::create(json_string_value(isSuccess))->boolValue();
-        friendList = json_object_get(root, "list");
-        
-        //foreach to get all friend, insert to list
-		int count = json_array_size(friendList);
-		CCArray* arrFriends = CCArray::create();
-        
-		for(int i = 0; i < count; i++)
-		{
-			json_t *fbFriend = json_array_get(friendList, i);
-            
-			
-            json_t *senderId;
-            json_t *itemId;
-            json_t *count;
-            json_t *time;
+            json_t *root;
+            json_error_t error;
+            json_t *isSuccess;
+            json_t *friendList;
             
             
-			senderId = json_object_get(fbFriend, "senderId");
-			itemId = json_object_get(fbFriend, "itemId");
-			count = json_object_get(fbFriend, "count");
-			time = json_object_get(fbFriend, "time");
+            root = json_loads(str.c_str(), strlen(str.c_str()), &error);
+            isSuccess = json_object_get(root, "isSuccess");
+            bool success = CCString::create(json_string_value(isSuccess))->boolValue();
+            friendList = json_object_get(root, "list");
             
-            long long _time =  (long long) atoll(json_string_value(time));
+            //foreach to get all friend, insert to list
+            int count = json_array_size(friendList);
+            CCArray* arrFriends = CCArray::create();
             
-			Gift* acc = new Gift(json_string_value(senderId),
-                                 json_string_value(itemId),
-                                 (int)atoi(json_string_value(count)),
-                                 _time);
+            for(int i = 0; i < count; i++)
+            {
+                json_t *fbFriend = json_array_get(friendList, i);
+                
+                
+                json_t *senderId;
+                json_t *itemId;
+                json_t *count;
+                json_t *time;
+                
+                
+                senderId = json_object_get(fbFriend, "senderId");
+                itemId = json_object_get(fbFriend, "itemId");
+                count = json_object_get(fbFriend, "count");
+                time = json_object_get(fbFriend, "time");
+                
+                long long _time =  (long long) atoll(json_string_value(time));
+                
+                Gift* acc = new Gift(json_string_value(senderId),
+                                     json_string_value(itemId),
+                                     (int)atoi(json_string_value(count)),
+                                     _time);
+                
+                arrFriends->addObject(acc);
+                
+                CCLOG("%s", acc->toJson().c_str());
+            }
             
-			arrFriends->addObject(acc);
-            
-            CCLOG("%s", acc->toJson().c_str());
-		}
-        
-        if (m_clientDelegate)
-        {
-            m_clientDelegate->onGetInboxCompleted(success, arrFriends);
+            if (m_clientDelegate)
+            {
+                m_clientDelegate->onGetInboxCompleted(success, arrFriends);
+            }
         }
     }
     
@@ -1911,18 +2041,26 @@ void GameClientManager::_onRemoveItemCompleted(CCHttpClient *sender, CCHttpRespo
         
 		CCLOG("Content: %s", str.c_str());
         
-		json_t *root;
-		json_error_t error;
-		json_t *isSuccess;
-        
-        
-		root = json_loads(str.c_str(), strlen(str.c_str()), &error);
-		isSuccess = json_object_get(root, "isSuccess");
-		bool success = CCString::create(json_string_value(isSuccess))->boolValue();
-        
-        if (m_clientDelegate)
-        {
-            m_clientDelegate->onRemoveItemCompleted(success, senderId, time);
+        if (str.length() == 0) {
+            if (m_clientDelegate)
+            {
+                m_clientDelegate->onRemoveItemCompleted(false, senderId, time);
+            }
+        } else {
+            
+            json_t *root;
+            json_error_t error;
+            json_t *isSuccess;
+            
+            
+            root = json_loads(str.c_str(), strlen(str.c_str()), &error);
+            isSuccess = json_object_get(root, "isSuccess");
+            bool success = CCString::create(json_string_value(isSuccess))->boolValue();
+            
+            if (m_clientDelegate)
+            {
+                m_clientDelegate->onRemoveItemCompleted(success, senderId, time);
+            }
         }
     }
     
