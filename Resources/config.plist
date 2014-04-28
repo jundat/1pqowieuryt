@@ -3,25 +3,27 @@
 <plist version="1.0">
 <dict>
 	<key>G_URL_FRIEND_LIST</key>
-	<string>192.168.0.114:8025/friend</string>
+	<string>192.168.0.114:8026/friend</string>
 	<key>G_URL_GET_LAZER</key>
-	<string>192.168.0.114:8025/getlazer</string>
+	<string>192.168.0.114:8026/getlazer</string>
 	<key>G_URL_PLAYER_FB_PROFILE</key>
-	<string>192.168.0.114:8025/profile</string>
+	<string>192.168.0.114:8026/profile</string>
 	<key>G_URL_DEVICE_PROFILE</key>
-	<string>192.168.0.114:8025/device</string>
+	<string>192.168.0.114:8026/device</string>
 	<key>G_URL_SCORE</key>
-	<string>192.168.0.114:8025/score</string>
+	<string>192.168.0.114:8026/score</string>
 	<key>G_URL_REVIVE</key>
-	<string>192.168.0.114:8025/revive</string>
+	<string>192.168.0.114:8026/revive</string>
 	<key>G_URL_ITEM</key>
-	<string>192.168.0.114:8025/item</string>
+	<string>192.168.0.114:8026/item</string>
 	<key>G_URL_GIFT_SEND_ITEM</key>
-	<string>192.168.0.114:8025/gift/send_inbox</string>
+	<string>192.168.0.114:8026/gift/send_inbox</string>
 	<key>G_URL_GIFT_GET_INBOX</key>
-	<string>192.168.0.114:8025/gift/get_inbox</string>
+	<string>192.168.0.114:8026/gift/get_inbox</string>
 	<key>G_URL_GIFT_REMOVE_ITEM</key>
-	<string>192.168.0.114:8025/gift/remove_inbox</string>
+	<string>192.168.0.114:8026/gift/remove_inbox</string>
+
+	
 	<key>G_URL_RATE</key>
 	<string>https://play.google.com/store/apps/details?id=com.chimgokien.phicongbutchi</string>
 	<key>G_MAX_PLAYER_BULLET_LEVEL</key>

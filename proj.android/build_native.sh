@@ -1,6 +1,6 @@
 NDK_ROOT="/Users/lenguyen/Desktop/NDK"
 
-APPNAME="PhiCongButChi"
+APPNAME="DBPTK"
 
 # options
 

@@ -6,7 +6,7 @@
 //
 //
 
-package com.chimgokien.phicongbutchi.classes;
+package com.cgkstudio.dbptk.classes;
 
 import java.lang.reflect.Method;
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.chimgokien.phicongbutchi;
+package com.cgkstudio.dbptk;
 
 import android.app.IntentService;
 import android.app.Notification;
@@ -123,7 +123,7 @@ public class GcmIntentService extends IntentService {
                 this.getSystemService(Context.NOTIFICATION_SERVICE);
 
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-                new Intent(this, PhiCongButChi.class), 0);
+                new Intent(this, DBPTK.class), 0);
 
         //long[] vibrate = {0, 300, 0};
         //Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
