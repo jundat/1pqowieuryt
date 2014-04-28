@@ -287,7 +287,6 @@ void GameClientManager::sendFriendList(std::string fbId, CCArray* arrFriends )
 
 	//////////////////////////////////////////////////////////////////////////
 	// write the post data
-    CCLOG("1");
 	CCString* strData = CCString::createWithFormat(
 		"{ method: \"set\", data: { fbId: \"%s\", list: [%s] }, sign: \"%s\", appId: \"%s\" }",
 		fbId.c_str(),
@@ -295,17 +294,8 @@ void GameClientManager::sendFriendList(std::string fbId, CCArray* arrFriends )
 		getMD5().c_str(),
 		G_APP_ID);
     
-    CCLOG("2");
-	CCLOG("%s", strData->getCString());
-	//////////////////////////////////////////////////////////////////////////
-    CCLOG("3");
-    static int c = 1;
-    c++;
-    CCLOG("COUNT: %d", c);
-	std::string s = encodeBeforeSend(strData->getCString());
-    CCLOG("4");
+    std::string s = encodeBeforeSend(strData->getCString());
 	request->setRequestData(s.c_str(), strlen(s.c_str()));
-    CCLOG("5");
 
 	CCHttpClient::getInstance()->send(request);
 	request->release();
