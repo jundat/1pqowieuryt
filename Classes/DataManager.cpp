@@ -456,7 +456,7 @@ void DataManager::SetHigherFriends( CCArray* arrFriends )
         }
 
         CCString* strData = CCString::createWithFormat("{\"list\": [%s]}", strFriendList.c_str());
-        CCLOG("SAVE: %s", strData->getCString());
+        //CCLOG("SAVE: %s", strData->getCString());
 
         CCUserDefault::sharedUserDefault()->setStringForKey("HIGHER_FRIENDS", strData->getCString());
         CCUserDefault::sharedUserDefault()->flush();

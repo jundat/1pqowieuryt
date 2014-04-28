@@ -440,8 +440,8 @@ void GameClientManager::_onGetFriendListCompleted( CCHttpClient *sender, CCHttpR
                 long _timeGetLaze = _clientTime - ( _serverTime - ((long long)atoll(json_string_value(timeGetLaze)) / 1000));
                 long _timeSendLife = _clientTime - ( _serverTime - ((long long)atoll(json_string_value(timeSendLife)) / 1000));
                 
-                CCLOG("Time_Get_Laze: %ld", _timeGetLaze);
-                CCLOG("Time_Send_Life: %ld", _timeSendLife);
+                //CCLOG("Time_Get_Laze: %ld", _timeGetLaze);
+                //CCLOG("Time_Send_Life: %ld", _timeSendLife);
 
                 //(string _fbId, string _fbName, string _email, int _score, int _coin, long timeGetLaze, long timeSendLife)
                 
@@ -824,97 +824,11 @@ void GameClientManager::_onGetScoreCompleted( CCHttpClient *sender, CCHttpRespon
 }
 
 
-//request to check diamond and charge with diamond
-
-void GameClientManager::requestRevive( string fbId )
-{
-	string sUrl = string(G_URL_REVIVE);
-	CCLOG("URL: %s", sUrl.c_str());
-	CCAssert(sUrl.length() > 0, "Not set G_URL_REVIVE yet");
-	CCHttpRequest* request = new CCHttpRequest();
-	request->setUrl(sUrl.c_str());
-	request->setRequestType(CCHttpRequest::kHttpPost);
-
-	request->setTag("requestRevive");
-	request->setResponseCallback(this, httpresponse_selector(GameClientManager::_onRequestReviveCompleted));
-
-
-	// write the post data
-	CCString* strData = CCString::createWithFormat(
-		"{ method: \"set\", data: { appId: \"%s\", fbId: \"%s\" }, sign: \"%s\", appId: \"%s\" }",
-		G_APP_ID,
-		fbId.c_str(),
-		getMD5().c_str(),
-		G_APP_ID);
-
-
-	std::string s = encodeBeforeSend(strData->getCString());
-	request->setRequestData(s.c_str(), strlen(s.c_str()));
-
-	CCHttpClient::getInstance()->send(request);
-	request->release();
-}
-
-void GameClientManager::_onRequestReviveCompleted( CCHttpClient *sender, CCHttpResponse *response )
-{
-	if (!response)
-	{
-		return;
-	}
-
-	//Show info
-	CCLOG("------- BEGIN %s -------", response->getHttpRequest()->getTag());
-	CCLOG("Status: [%i]", response->getResponseCode());
-
-	if (!response->isSucceed())
-	{
-		CCLOG("Request failed: %s", response->getErrorBuffer());
-		if (m_clientDelegate)
-		{
-			m_clientDelegate->onRequestReviveCompleted(false, -1);
-		}
-	}
-	else
-	{
-		std::vector<char> *buffer = response->getResponseData();
-		std::string str(buffer->begin(), buffer->end());
-
-		str = decodeBeforeProcess(str);
-
-		CCLOG("Content: %s", str.c_str());
-        
-        if (str.length() == 0) {
-            if (m_clientDelegate)
-            {
-                m_clientDelegate->onRequestReviveCompleted(false, -1);
-            }
-        } else {
-
-            //get score from response
-            json_t *root;
-            json_error_t error;
-            json_t *isSuccess;
-            json_t *newDiamond;
-
-            root = json_loads(str.c_str(), strlen(str.c_str()), &error);
-            isSuccess = json_object_get(root, "isSuccess");
-            newDiamond = json_object_get(root, "newDiamond");
-            bool success = CCString::create(json_string_value(isSuccess))->boolValue();
-            
-            if (m_clientDelegate)
-            {
-                m_clientDelegate->onRequestReviveCompleted(success, (int)atof(json_string_value(newDiamond)));
-            }
-        }
-	}
-
-	CCLOG("------- END %s -------", response->getHttpRequest()->getTag());
-}
-
 //
 
 void GameClientManager::requestGetLazer( string fbId, string friendId)
 {
+    CCLOG("requestGetLazer");
 	string sUrl = string(G_URL_GET_LAZER);
 	CCLOG("URL: %s", sUrl.c_str());
 	CCAssert(sUrl.length() > 0, "Not set G_URL_GET_LAZER yet");
@@ -945,6 +859,7 @@ void GameClientManager::requestGetLazer( string fbId, string friendId)
 
 void GameClientManager::_onRequestGetLazerCompleted( CCHttpClient *sender, CCHttpResponse *response )
 {
+    CCLOG("_onRequestGetLazerCompleted");
 	if (!response)
 	{
 		return;
@@ -1004,6 +919,7 @@ void GameClientManager::_onRequestGetLazerCompleted( CCHttpClient *sender, CCHtt
 
 void GameClientManager::getAllItem( std::string fbId)
 {
+    CCLOG("getAllItem");
     CCAssert(G_URL_ITEM.length() > 0, "Not set G_URL_ITEM yet");
 	CCHttpRequest* request = new CCHttpRequest();
 	request->setRequestType(CCHttpRequest::kHttpPost);
@@ -1032,6 +948,7 @@ void GameClientManager::getAllItem( std::string fbId)
 
 void GameClientManager::_onGetAllItemCompleted(CCHttpClient *sender, CCHttpResponse *response)
 {
+    CCLOG("_onGetAllItemCompleted");
     if (!response)
 	{
 		return;
@@ -1115,6 +1032,7 @@ void GameClientManager::_onGetAllItemCompleted(CCHttpClient *sender, CCHttpRespo
 
 void GameClientManager::buyItem( std::string fbId, std::string itemName,  int count, std::string uniqueTag)
 {
+    CCLOG("buyItem");
     string sUrl = string(G_URL_ITEM);
 	CCLOG("URL: %s", sUrl.c_str());
 	CCAssert(sUrl.length() > 0, "Not set G_URL_ITEM yet");
@@ -1146,6 +1064,7 @@ void GameClientManager::buyItem( std::string fbId, std::string itemName,  int co
 
 void GameClientManager::_onBuyItemCompleted(CCHttpClient *sender, CCHttpResponse *response)
 {
+    CCLOG("_onBuyItemCompleted");
     if (!response)
 	{
 		return;
@@ -1233,6 +1152,7 @@ void GameClientManager::_onBuyItemCompleted(CCHttpClient *sender, CCHttpResponse
 
 void GameClientManager::getLazeFree(std::string fbId, std::string friendId)
 {
+    CCLOG("getLazeFree");
     string sUrl = string(G_URL_FRIEND_LIST);
 	CCLOG("URL: %s", sUrl.c_str());
 	CCAssert(sUrl.length() > 0, "Not set G_URL_FRIEND_LIST yet");
@@ -1263,6 +1183,7 @@ void GameClientManager::getLazeFree(std::string fbId, std::string friendId)
 
 void GameClientManager::_onGetLazeFreeCompleted(CCHttpClient *sender, CCHttpResponse *response)
 {
+    CCLOG("_onGetLazeFreeCompleted");
     if (!response)
 	{
 		return;
@@ -1324,6 +1245,7 @@ void GameClientManager::_onGetLazeFreeCompleted(CCHttpClient *sender, CCHttpResp
 
 void GameClientManager::getLife(string fbId)
 {
+    CCLOG("getLife");
     string sUrl = string(G_URL_ITEM);
 	CCLOG("URL: %s", sUrl.c_str());
 	CCAssert(sUrl.length() > 0, "Not set G_URL_ITEM yet");
@@ -1353,6 +1275,7 @@ void GameClientManager::getLife(string fbId)
 
 void GameClientManager::_onGetLifeCompleted(CCHttpClient *sender, CCHttpResponse *response)
 {
+    CCLOG("_onGetLifeCompleted");
     if (!response)
 	{
 		return;
@@ -1447,6 +1370,7 @@ void GameClientManager::_onGetLifeCompleted(CCHttpClient *sender, CCHttpResponse
 
 void GameClientManager::useLife( std::string fbId)
 {
+    CCLOG("useLife");
     string sUrl = string(G_URL_ITEM);
 	CCLOG("URL: %s", sUrl.c_str());
 	CCAssert(sUrl.length() > 0, "Not set G_URL_ITEM yet");
@@ -1477,6 +1401,7 @@ void GameClientManager::useLife( std::string fbId)
 
 void GameClientManager::_onUseLifeCompleted(CCHttpClient *sender, CCHttpResponse *response)
 {
+    CCLOG("_onUseLifeCompleted");
     if (!response)
 	{
 		return;
@@ -1555,6 +1480,7 @@ void GameClientManager::_onUseLifeCompleted(CCHttpClient *sender, CCHttpResponse
 
 void GameClientManager::useItem(std::string fbId, string itemId)
 {
+    CCLOG("useItem");
     string sUrl = string(G_URL_ITEM);
 	CCLOG("URL: %s", sUrl.c_str());
 	CCAssert(sUrl.length() > 0, "Not set G_URL_ITEM yet");
@@ -1584,6 +1510,7 @@ void GameClientManager::useItem(std::string fbId, string itemId)
 
 void GameClientManager::_onUseItemCompleted(CCHttpClient *sender, CCHttpResponse *response)
 {
+    CCLOG("_onUseItemCompleted");
     if (!response)
 	{
 		return;
@@ -1652,6 +1579,7 @@ void GameClientManager::_onUseItemCompleted(CCHttpClient *sender, CCHttpResponse
 
 void GameClientManager::addItem(std::string fbId, string itemId)
 {
+    CCLOG("addItem");
     string sUrl = string(G_URL_ITEM);
 	CCLOG("URL: %s", sUrl.c_str());
 	CCAssert(sUrl.length() > 0, "Not set G_URL_ITEM yet");
@@ -1681,6 +1609,7 @@ void GameClientManager::addItem(std::string fbId, string itemId)
 
 void GameClientManager::_onAddItemCompleted(CCHttpClient *sender, CCHttpResponse *response)
 {
+    CCLOG("_onAddItemCompleted");
     if (!response)
 	{
 		return;
@@ -1747,6 +1676,7 @@ void GameClientManager::_onAddItemCompleted(CCHttpClient *sender, CCHttpResponse
 
 void GameClientManager::sendItem(std::string fbId, std::string friendId, string itemId, int count)
 {
+    CCLOG("sendItem");
     string sUrl = string(G_URL_GIFT_SEND_ITEM);
 	CCLOG("URL: %s", sUrl.c_str());
 	CCAssert(sUrl.length() > 0, "Not set G_URL_GIFT_SEND_ITEM yet");
@@ -1774,6 +1704,7 @@ void GameClientManager::sendItem(std::string fbId, std::string friendId, string 
 
 void GameClientManager::_onSendItemCompleted(CCHttpClient *sender, CCHttpResponse *response)
 {
+    CCLOG("_onSendItemCompleted");
     if (!response)
 	{
 		return;
@@ -1847,6 +1778,7 @@ void GameClientManager::_onSendItemCompleted(CCHttpClient *sender, CCHttpRespons
 
 void GameClientManager::getInbox(string fbId)
 {
+    CCLOG("getInbox");
     string sUrl = string(G_URL_GIFT_GET_INBOX);
 	CCLOG("URL: %s", sUrl.c_str());
 	CCAssert(sUrl.length() > 0, "Not set G_URL_GIFT_GET_INBOX yet");
@@ -1873,6 +1805,7 @@ void GameClientManager::getInbox(string fbId)
 
 void GameClientManager::_onGetInboxCompleted(CCHttpClient *sender, CCHttpResponse *response)
 {
+    CCLOG("_onGetInboxCompleted");
     if (!response)
 	{
 		return;
@@ -1963,6 +1896,7 @@ void GameClientManager::_onGetInboxCompleted(CCHttpClient *sender, CCHttpRespons
 
 void GameClientManager::removeItem(std::string fbId, std::string senderId, long long time, string itemId)
 {
+    CCLOG("removeItem");
     string sUrl = string(G_URL_GIFT_REMOVE_ITEM);
 	CCLOG("URL: %s", sUrl.c_str());
 	CCAssert(sUrl.length() > 0, "Not set G_URL_GIFT_REMOVE_ITEM yet");
@@ -1990,6 +1924,7 @@ void GameClientManager::removeItem(std::string fbId, std::string senderId, long 
 
 void GameClientManager::_onRemoveItemCompleted(CCHttpClient *sender, CCHttpResponse *response)
 {
+    CCLOG("_onRemoveItemCompleted");
     if (!response)
 	{
 		return;

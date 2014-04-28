@@ -1182,7 +1182,6 @@ CCTableViewCell* ScoreScene::getTableCellXepHangAtIndex( CCTableView *table, uns
 		cell = new CustomTableViewCell();
 		cell->autorelease();
 
-        CCLOG("~~~~~~~~~~~~~~~~~~~~~~~~CREATE NEW CELL ~~~~~~~~~~~~~~~~~~~~~~~ %s", strFriendId.c_str());
 		((CustomTableViewCell*)cell)->fbID = strFriendId;
 		((CustomTableViewCell*)cell)->m_lastTimeGetBoom = _lastTimeGetBoom;
 		((CustomTableViewCell*)cell)->m_lastTimeSendLife = _lastTimeSendLife;
