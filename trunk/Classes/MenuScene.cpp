@@ -825,7 +825,7 @@ void MenuScene::fbFriendsCallback( int responseCode, const char* responseMessage
 	//CCLOG("fbFriendsCallback");
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	int count = friends->count();
-    CCLOG("GOT >>>>>>>>>>>>>> %d friends", count);
+    //CCLOG("GOT >>>>>>>>>>>>>> %d friends", count);
 	if (count > 0)
 	{
 		CCArray* arrFriends = new CCArray();

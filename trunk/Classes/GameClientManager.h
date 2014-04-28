@@ -99,11 +99,6 @@ public:
 
 	//////////////////////////////////////////////////////////////////////////
 
-	void requestRevive(string fbId);
-	void _onRequestReviveCompleted(CCHttpClient *sender, CCHttpResponse *response);
-	
-	//////////////////////////////////////////////////////////////////////////
-
 	void requestGetLazer(string fbId, string friendId);
 	void _onRequestGetLazerCompleted(CCHttpClient *sender, CCHttpResponse *response);
 
