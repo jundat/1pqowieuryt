@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.chimgokien.phicongbutchi;
+package com.cgkstudio.dbptk;
 
 import android.app.Activity;
 import android.content.ComponentName;
@@ -54,8 +54,8 @@ public class GcmBroadcastReceiver extends WakefulBroadcastReceiver {
         ////////////////////////////////////////////////////////////////////////
         
         //check if app is running
-        SharedPreferences sp = context.getSharedPreferences(PhiCongButChi.SAVE_KEY, Context.MODE_PRIVATE);
-        boolean isActive = sp.getBoolean(PhiCongButChi.KEY_IS_ACTIVE, false);
+        SharedPreferences sp = context.getSharedPreferences(DBPTK.SAVE_KEY, Context.MODE_PRIVATE);
+        boolean isActive = sp.getBoolean(DBPTK.KEY_IS_ACTIVE, false);
         if (isActive) {
 			//Log.i("PUSH", "App is active --- ");
 		} else {
