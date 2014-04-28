@@ -52,7 +52,7 @@ void LogOutDialog::yesCallback( CCObject* pSender )
 {
 	MenuScene* parent = (MenuScene*)this->getParent();
 
-	parent->facebookLogInOut();
+	parent->facebookLogOut();
 
 	parent->setTouchEnabled(true);
 	parent->onCloseDialog();

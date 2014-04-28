@@ -149,7 +149,7 @@ public:
     void _onGetInboxCompleted(CCHttpClient *sender, CCHttpResponse *response);
     
     
-    void removeItem(std::string fbId, std::string friendId, long long time, string itemId);
+    void removeItem(std::string fbId, std::string friendId, long long time, string itemId, int count);
     void _onRemoveItemCompleted(CCHttpClient *sender, CCHttpResponse *response);
     
     

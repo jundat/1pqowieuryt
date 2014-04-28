@@ -1684,7 +1684,8 @@ void GameClientManager::sendItem(std::string fbId, std::string friendId, string 
 	request->setUrl(sUrl.c_str());
 	request->setRequestType(CCHttpRequest::kHttpPost);
     
-    CCString *stag = CCString::createWithFormat("{ \"friendId\": \"%s\", \"itemId\": \"%s\", \"count\": %d}", friendId.c_str(), itemId.c_str(), count);
+    CCString *stag = CCString::createWithFormat("{ \"friendId\": \"%s\", \"itemId\": \"%s\", \"count\": %d }", friendId.c_str(), itemId.c_str(), count);
+    CCLOG("TAG: %s", stag->getCString());
 	request->setTag(stag->getCString());
 	request->setResponseCallback(this, httpresponse_selector(GameClientManager::_onSendItemCompleted));
     
@@ -1894,7 +1895,7 @@ void GameClientManager::_onGetInboxCompleted(CCHttpClient *sender, CCHttpRespons
 
 
 
-void GameClientManager::removeItem(std::string fbId, std::string senderId, long long time, string itemId)
+void GameClientManager::removeItem(std::string fbId, std::string senderId, long long time, string itemId, int count)
 {
     CCLOG("removeItem");
     string sUrl = string(G_URL_GIFT_REMOVE_ITEM);
@@ -1911,8 +1912,8 @@ void GameClientManager::removeItem(std::string fbId, std::string senderId, long 
     
 	// write the post data
 	CCString* strData = CCString::createWithFormat(
-           "{ method: \"set\", data: { appId: \"%s\", fbId: \"%s\", senderId: \"%s\", time: \"%lld\", itemId: \"%s\" }, sign: \"%s\", appId: \"%s\" }",
-           G_APP_ID, fbId.c_str(), senderId.c_str(), time, itemId.c_str(), getMD5().c_str(), G_APP_ID);
+           "{ method: \"set\", data: { appId: \"%s\", fbId: \"%s\", senderId: \"%s\", time: \"%lld\", itemId: \"%s\", count: \"%d\" }, sign: \"%s\", appId: \"%s\" }",
+           G_APP_ID, fbId.c_str(), senderId.c_str(), time, itemId.c_str(), count, getMD5().c_str(), G_APP_ID);
     
     
 	std::string s = encodeBeforeSend(strData->getCString());

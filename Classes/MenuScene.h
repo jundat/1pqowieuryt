@@ -98,7 +98,8 @@ public:
     void rateCallback(CCObject* pSender);
     void settingCallback(CCObject* pSender);
     void facebookCallback(CCObject* pSender);
-    void facebookLogInOut();
+    void facebookLogIn();
+    void facebookLogOut();
     void exitCallback(CCObject* pSender);
     void showChargeCallback(CCObject* pSender);
     void languageCallback(CCObject* pSender);

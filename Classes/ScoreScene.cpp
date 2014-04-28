@@ -414,7 +414,7 @@ void ScoreScene::tableCellTouched(CCTableView* table, CCTableViewCell* cell)
             //
             
             GameClientManager::sharedGameClientManager()->removeItem(DataManager::sharedDataManager()->GetFbID(),
-                                                                     customCell->m_gift->m_senderId, customCell->m_gift->m_time, customCell->m_gift->m_itemId);
+                                                                     customCell->m_gift->m_senderId, customCell->m_gift->m_time, customCell->m_gift->m_itemId, customCell->m_gift->m_count);
             
             PLAY_BUTTON_EFFECT;
 		} 
@@ -614,13 +614,21 @@ void ScoreScene::itSendLifeCallback( CCObject* pSender )
 
 void ScoreScene::onGetLazeFreeCompleted(bool isSuccess, std::string friendId)
 {
-    CustomTableViewCell *cell;
+    CustomTableViewCell *cell = NULL;
 
     for (int i = 0; i < m_tableXepHangSize; i++) {
         cell = (CustomTableViewCell*) m_tableXephang->cellAtIndex(i);
         if (cell->fbID.compare(friendId) == 0) {
+            CCLOG("Find Out Cell");
             break;
+        } else {
+            cell = NULL;
         }
+    }
+    
+    if (cell == NULL) {
+        CCLOG("cell == NULL, return");
+        return;
     }
     
     if (isSuccess) {
@@ -631,7 +639,7 @@ void ScoreScene::onGetLazeFreeCompleted(bool isSuccess, std::string friendId)
 		cell->m_lbGetBoom->setVisible(false);
 		cell->m_lbGetBoomTimer->setVisible(true);
 		cell->m_lastTimeGetBoom = static_cast<long int>(time(NULL));
-        
+        cell->m_fbFriend->m_timeGetLaze = static_cast<long int>(time(NULL));
         
 		refreshUserDetail();
         
@@ -1466,7 +1474,7 @@ CCTableViewCell* ScoreScene::getTableCellQuatangAtIndex( CCTableView *table, uns
 
 		//icon life 
 		CCSprite* iconLife = CCSprite::create("oil.png");
-		iconLife->setPosition(ccp(700, m_sprCell->getContentSize().height/2 + 15));
+		iconLife->setPosition(ccp(650, m_sprCell->getContentSize().height/2 + 15));
 		cell->addChild(iconLife);
 
 		//lable nhận
@@ -1492,6 +1500,14 @@ CCTableViewCell* ScoreScene::getTableCellQuatangAtIndex( CCTableView *table, uns
 		lbTime->setTag(5);
 		cell->addChild(lbTime);
         
+        
+        //Count
+        CCString *sCount = CCString::createWithFormat("x%d", gift->m_count);
+		CCLabelTTF* lbCount = CCLabelTTF::create(sCount->getCString(), "Roboto-Medium.ttf", 36);
+		lbCount->setColor(ccc3(200, 0, 0));
+		lbCount->setAnchorPoint(ccp(0.5f, 0.75f));
+		lbCount->setPosition(ccpAdd(iconLife->getPosition(), ccp(iconLife->getContentSize().width * 0.75f, 0)));
+		cell->addChild(lbCount);
 
 	}
 	else
@@ -1676,17 +1692,25 @@ void ScoreScene::getFriendInfo(string fbId, string* outName, string* outPhotopat
 void ScoreScene::onSendItemCompleted(bool isSuccess, string friendId, string itemId, int count)
 {
     CCLOG("ScoreScene::onSendItemCompleted ~~~");
-
+    CCLOG("GOT: %s, %s, %d", friendId.c_str(), itemId.c_str(), count);
     PLAY_GET_BOMB_EFFECT;
     
-    CustomTableViewCell *cell;
+    CustomTableViewCell *cell = NULL;
     
     for (int i = 0; i < m_tableXepHangSize; i++) {
         cell = (CustomTableViewCell*) m_tableXephang->cellAtIndex(i);
+        
         if (cell->fbID.compare(friendId) == 0) {
             CCLOG("FIND OUT CELL");
             break;
+        } else {
+            cell = NULL;
         }
+    }
+    
+    if (cell == NULL) {
+        CCLOG("CELL == NULL, return");
+        return;
     }
     
     if (isSuccess) {
@@ -1742,7 +1766,8 @@ void ScoreScene::onRemoveItemCompleted(bool isSuccess, string senderId, long lon
         PLAY_GET_BOMB_EFFECT;
         
         int curLife = DataManager::sharedDataManager()->GetLastPlayerLife();
-        curLife += 1;
+        curLife += cell->m_gift->m_count;
+        
         DataManager::sharedDataManager()->SetLastPlayerLife(curLife);
         CCLOG("CURRENT LIFE = %d", curLife);
         
