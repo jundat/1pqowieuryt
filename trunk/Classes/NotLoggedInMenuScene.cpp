@@ -108,12 +108,13 @@ bool NotLoggedInMenuScene::init()
 
 void NotLoggedInMenuScene::initCloud()
 {
-    for (int i = 0; i < 8; ++i) {
+    for (int i = 0; i < 10; ++i) {
+        
         CCString* file = CCString::createWithFormat("cloud%d.png", 1 + (i % 3));
         CCSprite* c = CCSprite::create(file->getCString());
         this->addChild(c);
         
-        float rdx = CCRANDOM_0_1() * 1000-200;
+        float rdx = CCRANDOM_0_1() * 1000-100;
         float rdy = 1280 - CCRANDOM_0_1() * 600;
         
         c->setPosition(ccp(rdx, rdy));
@@ -125,13 +126,13 @@ void NotLoggedInMenuScene::initCloud()
         CCSequence* seq;
         if (rdDirectionX > 0.5f) {
             seq = CCSequence::create(
-                                     CCMoveTo::create(rdTime, ccp(800 + 500, rdy)),
-                                     CCMoveTo::create(rdTime, ccp(- 500, rdy)),
+                                     CCMoveTo::create(rdTime, ccp(800 + 300, rdy)),
+                                     CCMoveTo::create(rdTime, ccp(- 300, rdy)),
                                      NULL);
                                      } else {
                                          seq = CCSequence::create(
-                                                                  CCMoveTo::create(rdTime, ccp(- 500, rdy)),
-                                                                  CCMoveTo::create(rdTime, ccp(800 + 500, rdy)),
+                                                                  CCMoveTo::create(rdTime, ccp(- 300, rdy)),
+                                                                  CCMoveTo::create(rdTime, ccp(800 + 300, rdy)),
                                                                   NULL);
                                      }
         
@@ -178,8 +179,10 @@ void NotLoggedInMenuScene::facebookCallback( CCObject* pSender )
     CCScene *scene = CCScene::create();
     MenuScene *layer = MenuScene::create();
     scene->addChild(layer);
+    
     CCDirector::sharedDirector()->replaceScene(scene);
-    layer->facebookCallback(NULL);
+    
+    layer->facebookLogIn();
 }
 
 void NotLoggedInMenuScene::exitCallback( CCObject* pSender )

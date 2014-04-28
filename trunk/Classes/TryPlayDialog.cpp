@@ -51,7 +51,7 @@ bool TryPlayDialog::init()
 void TryPlayDialog::yesCallback( CCObject* pSender )
 {
 	MenuScene* menu = (MenuScene*) this->getParent();
-    menu->facebookLogInOut();
+    menu->facebookLogIn();
     
     menu->onCloseDialog();
     this->removeFromParent();

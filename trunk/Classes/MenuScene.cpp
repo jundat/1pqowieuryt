@@ -450,8 +450,8 @@ void MenuScene::onShowDialog()
 
 void MenuScene::onCloseDialog()
 {
-	DataManager::sharedDataManager()->RefreshPlayerLife();
-    this->refreshLifeIcon();
+	//DataManager::sharedDataManager()->RefreshPlayerLife();
+    //this->refreshLifeIcon();
 	
 	m_menu->setEnabled(true);
 	this->setKeypadEnabled(true);
@@ -536,42 +536,29 @@ void MenuScene::facebookCallback( CCObject* pSender )
     CCLOG("MenuScene::facebookCallback");
 	PLAY_BUTTON_EFFECT;
 
-	if (m_isLoggedIn == true)
-	{
-        m_facebookItem->setSelectedIndex(1);
-        
-		LogOutDialog* dialog = LogOutDialog::create();
-		this->addChild(dialog, 10);
-		this->onShowDialog();
-	}
-	else
-	{
-        m_facebookItem->setSelectedIndex(0);
-        
-		facebookLogInOut();
-	}
+    this->facebookLogOut();
 }
 
-void MenuScene::facebookLogInOut()
+void MenuScene::facebookLogOut()
 {
-    CCLOG("MenuScene::facebookLogInOut");
-	if (m_isLoggedIn)
-	{
+    CCLOG("MenuScene::facebookLogOut");
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-		EziSocialObject::sharedObject()->perfromLogoutFromFacebook();
+    EziSocialObject::sharedObject()->perfromLogoutFromFacebook();
 #endif
-	} 
-	else
-	{
-        CCLOG("MenuScene::facebookLogInOut/LogIn");
+}
+
+void MenuScene::facebookLogIn()
+{
+    
+    CCLOG("MenuScene::facebookLogIn");
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-		bool needPublicPermission = true;
-		EziSocialObject::sharedObject()->performLoginUsingFacebook(needPublicPermission); // Pass true if you need publish permission also
-        
-        //show wait dialog to ignore all touch
-        this->showWaitDialog(TXT("wait_connect_server"));
+    bool needPublicPermission = true;
+    EziSocialObject::sharedObject()->performLoginUsingFacebook(needPublicPermission); // Pass true if you need publish permission also
+    
+    //show wait dialog to ignore all touch
+    this->showWaitDialog(TXT("wait_connect_server"));
 #endif
-	}
+    
 }
 
 void MenuScene::exitCallback( CCObject* pSender )
@@ -592,12 +579,13 @@ void MenuScene::ScheduleTick( float dt )
         int diff = static_cast<long int>(time(NULL)) - lasttm;
         
         m_waitTime = 1000 * G_PLAYER_TIME_TO_REVIVE - diff;
+        m_waitTime = (m_waitTime < 0) ? 0 : m_waitTime;
         m_waitTime %= G_PLAYER_TIME_TO_REVIVE;
         
         int mins = m_waitTime / 60;
         int seconds = m_waitTime % 60;
         
-        if (seconds == 0)
+        if (seconds == 0 && mins == 0)
         {
             //get life from server
             CCSequence* seq = CCSequence::create(CCDelayTime::create(2.0f),
@@ -1078,7 +1066,7 @@ void MenuScene::disableMoneytize()
     
     
     
-    facebookLogInOut();
+    facebookLogOut();
     
     //go to NotLoggedInMenuSene
     //GameClientManager::sharedGameClientManager()->setDelegate(NULL);
