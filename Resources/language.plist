@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
+<plist>
 <dict>
+
 	<key>Id</key>
 	<dict>
 		<key>game_name</key>
@@ -124,19 +123,22 @@
 		<string>get_laze_free_error</string>
 		<key>score_limit_life</key>
 		<string>score_limit_life</string>
+		<key>fb_failed_connect</key>
+		<string>fb_failed_connect</string>
 	</dict>
+
 	<key>English</key>
 	<dict>
 		<key>game_name</key>
 		<string>LineBacker</string>
 		<key>game_package</key>
-		<string>com.chimgokien.phicongbutchi</string>
+		<string>com.cgkstudio.dbptk</string>
 		<key>feed_heading</key>
 		<string>Line Backer -- the best shoot them up game in 2014</string>
 		<key>feed_caption</key>
 		<string>Challenge your friends</string>
 		<key>feed_msg</key>
-		<string>I&apos;ve got %d pts in Line Backer, follow me is %s. Kaka :v</string>
+		<string>I've got %d pts in Line Backer, follow me is %s. Kaka :v</string>
 		<key>feed_description</key>
 		<string>Live in the legend of 12-days </string>
 		<key>feed_badge_icon</key>
@@ -247,13 +249,16 @@
 		<string>Get free laze failed</string>
 		<key>score_limit_life</key>
 		<string>Max life is %d</string>
+		<key>fb_failed_connect</key>
+		<string>Failed to connect Facebook!</string>
 	</dict>
+
 	<key>Vietnamese</key>
 	<dict>
 		<key>game_name</key>
 		<string>Điện Biên Phủ trên không</string>
 		<key>game_package</key>
-		<string>com.chimgokien.phicongbutchi</string>
+		<string>com.cgkstudio.dbptk</string>
 		<key>feed_heading</key>
 		<string>Điện Biên Phủ trên không -- Game bắn máy bay hot nhất 2014</string>
 		<key>feed_caption</key>
@@ -261,7 +266,7 @@
 		<key>feed_msg</key>
 		<string>Ta vừa đạt %d điểm trong game Điện Biên Phủ trên không, vượt qua %s. Kaka :v</string>
 		<key>feed_description</key>
-		<string>Cùng sống lại những giây phút hào hùng của dân tộc trong chiến thắng vẻ vang của &quot;12 ngày đêm&quot;. Thử thách cùng bạn bè, vượt lên bảng xếp hạng. Click ngay để tải!</string>
+		<string>Cùng sống lại những giây phút hào hùng của dân tộc trong chiến thắng vẻ vang của "12 ngày đêm". Thử thách cùng bạn bè, vượt lên bảng xếp hạng. Click ngay để tải!</string>
 		<key>feed_badge_icon</key>
 		<string>https://fbcdn-photos-d-a.akamaihd.net/hphotos-ak-prn1/t39.2081-0/p128x128/851550_506180472824367_331363700_n.png</string>
 		<key>feed_deep_link</key>
@@ -370,6 +375,9 @@
 		<string>Không thể nhận quà</string>
 		<key>score_limit_life</key>
 		<string>Tối đa %d mạng</string>
+		<key>fb_failed_connect</key>
+		<string></string>
 	</dict>
+
 </dict>
 </plist>
