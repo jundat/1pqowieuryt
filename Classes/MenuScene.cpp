@@ -272,6 +272,8 @@ bool MenuScene::init()
 
 void MenuScene::onEnterTransitionDidFinish()
 {
+    CCLOG("MenuScene::onEnterTransitionDidFinish");
+    
     CCSpriteFrameCache* sprcache = CCSpriteFrameCache::sharedSpriteFrameCache();
     sprcache->addSpriteFramesWithFile("MainGame.plist");
     
@@ -863,16 +865,9 @@ void MenuScene::fbFriendsCallback( int responseCode, const char* responseMessage
 
 		GameClientManager::sharedGameClientManager()->sendFriendList(DataManager::sharedDataManager()->GetFbID(), arrFriends);		
 
-        if (m_isLoggedIn) {
-            MenuScene::s_beginFriendInd += G_NUMBER_FRIEND_TO_GET;
-            MenuScene::s_endFriendInd += G_NUMBER_FRIEND_TO_GET;
-            EziSocialObject::sharedObject()->getFriends(EziSocialWrapperNS::FB_FRIEND_SEARCH::ALL_FRIENDS, MenuScene::s_beginFriendInd, MenuScene::s_endFriendInd);
-        } else {
-            
-            //end of friends
-            this->closeWaitDialog();
-        }
-        
+        MenuScene::s_beginFriendInd += G_NUMBER_FRIEND_TO_GET;
+        MenuScene::s_endFriendInd += G_NUMBER_FRIEND_TO_GET;
+        EziSocialObject::sharedObject()->getFriends(EziSocialWrapperNS::FB_FRIEND_SEARCH::ALL_FRIENDS, MenuScene::s_beginFriendInd, MenuScene::s_endFriendInd);
 	} else {
         
         //end of friends

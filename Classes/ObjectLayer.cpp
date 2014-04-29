@@ -369,7 +369,6 @@ void ObjectLayer::RemoveEnemy( Enemy* enemy )
 		break;
 	case 3:
 		Enemy::S_NUMBER_BIG--;
-		CCLOG("Remove: %d <<<<<<<<<<<<", Enemy::S_NUMBER_BIG);
 		break;
 	}
 
