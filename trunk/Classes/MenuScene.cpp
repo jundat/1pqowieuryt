@@ -264,9 +264,21 @@ bool MenuScene::init()
 	
     //}
 
+    
+	STOP_BACKGROUND_MUSIC;
+    return true;
+}
+
+
+void MenuScene::onEnterTransitionDidFinish()
+{
+    CCSpriteFrameCache* sprcache = CCSpriteFrameCache::sharedSpriteFrameCache();
+    sprcache->addSpriteFramesWithFile("MainGame.plist");
+    
+    
 	if (DataManager::sharedDataManager()->GetRegistrationId().length() == 0)
 	{
-		GetRegistrationId();
+		this->GetRegistrationId();
 	}
 
     //
@@ -283,9 +295,6 @@ bool MenuScene::init()
         this->checkRefreshFriendList();
     }
     
-    
-	STOP_BACKGROUND_MUSIC;
-    return true;
 }
 
 void MenuScene::initLifeIcon()
@@ -1069,9 +1078,9 @@ void MenuScene::onSendPlayerFbProfileCompleted( bool isSuccess )
 
 void MenuScene::disableMoneytize()
 {
-    this->closeWaitDialog();
-    this->closeWaitDialog();
-    this->closeWaitDialog();
+    //this->closeWaitDialog();
+    //this->closeWaitDialog();
+    //this->closeWaitDialog();
     
     CCMessageBox(TXT("menu_error_server"), TXT("menu_error_caption"));
     
@@ -1089,11 +1098,34 @@ void MenuScene::disableMoneytize()
     
     facebookLogOut();
     
+    
     //go to NotLoggedInMenuSene
     //GameClientManager::sharedGameClientManager()->setDelegate(NULL);
     
     //CCScene *pScene = CCTransitionFade::create(0.5, NotLoggedInMenuScene::scene());
     //CCDirector::sharedDirector()->replaceScene(pScene);
+    
+    //~~~~
+    /*
+    m_isLoggedIn = false;
+    m_facebookItem->setSelectedIndex(0);
+    
+    //
+    //Clear data
+    //
+    //set FbId = "NULL";
+    DataManager::sharedDataManager()->ClearFbProfileID();
+    
+    //clear highscores
+    DataManager::sharedDataManager()->SetHigherFriends(NULL);
+    
+    
+    //go to NotLoggedInMenuSene
+    GameClientManager::sharedGameClientManager()->setDelegate(NULL);
+    
+    CCScene *pScene = CCTransitionFade::create(0.5, NotLoggedInMenuScene::scene());
+    CCDirector::sharedDirector()->replaceScene(pScene);
+     */
 }
 
 
@@ -1243,7 +1275,6 @@ void MenuScene::onGetLifeCompleted(bool isSuccess, int life, long lastTimeClient
         this->refreshLifeIcon();
     
     } else {
-        CCLOG("FAILED TO CONNECT SERVER");
         
 		this->disableMoneytize();
     }
