@@ -274,3 +274,11 @@ void Ship::AfterDeadEffectCallback()
 	ObjectLayer* parent = (ObjectLayer*)this->getParent();
 	parent->AfterDeadEffectCallback();
 }
+
+float Ship::getTimeoutBulletPercent()
+{
+    return (float) m_timeOutBulletLevel / G_TIMEOUT_BULLET_LEVEL - 1;
+}
+
+
+

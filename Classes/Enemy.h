@@ -65,6 +65,9 @@ public:
 	CCRepeatForever* m_acFlying;
 	CCSequence* m_acPreExplosion;
 	CCSequence* m_acExplosion;
+    
+    CCSprite* m_sprHpBlank;
+    CCSprite* m_sprHp;
 
 public:
 	virtual void update(float delta);

@@ -18,7 +18,7 @@ public:
 	virtual bool init();
 	CREATE_FUNC(Ship); //static function: new, init, autorelease, return reference
 
-private:
+public:
 	CC_SYNTHESIZE(int, m_hp, Hp);
 	CC_SYNTHESIZE(int, m_damage, Damage);
 	CC_SYNTHESIZE(int, m_bulletLevel, BulletLevel); //1-2-3
@@ -47,6 +47,8 @@ public:
 	void AfterDeadEffectCallback();
 	void Dead();
 	void Restart();
+    
+    float getTimeoutBulletPercent();
 };
 
 #endif //__SHIP_H__
