@@ -376,7 +376,7 @@
 		<key>score_limit_life</key>
 		<string>Tối đa %d mạng</string>
 		<key>fb_failed_connect</key>
-		<string></string>
+		<string>Không thể kết nối Facebook!</string>
 	</dict>
 
 </dict>
