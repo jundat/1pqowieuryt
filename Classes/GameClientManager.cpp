@@ -3,7 +3,7 @@
 #include "Base64.h"
 #include "Md5.h"
 
-#define ENCODE_BUFFER_SIZE		8192//4096
+#define ENCODE_BUFFER_SIZE		10000 //8192 //4096
 
 GameClientManager* GameClientManager::s_instance = NULL;
 
@@ -72,14 +72,12 @@ std::string GameClientManager::getMD5()
         srcMd5.append(DataManager::sharedDataManager()->GetFbID());
         srcMd5.append(""); //meId
         
-        CCLOG("SRC MD5: %s", srcMd5.c_str());
-        
         md5 = MD5::createMd5(srcMd5);
         
         //CCLOG("DEST MD5: %s", md5.c_str());
     }
     
-    CCLOG("MD5: %s", md5.c_str());
+    //CCLOG("MD5: %s", md5.c_str());
     
 	return md5;
 }
@@ -1318,29 +1316,29 @@ void GameClientManager::_onGetLifeCompleted(CCHttpClient *sender, CCHttpResponse
             //get score from response
             json_t *root;
             json_error_t error;
-            //json_t *isSuccess;
+            json_t *isSuccess;
             json_t *newLife;
             json_t *serverTime;
             json_t *lastTime;
             
             root = json_loads(str.c_str(), strlen(str.c_str()), &error);
-            //isSuccess = json_object_get(root, "isSuccess");
+            isSuccess = json_object_get(root, "isSuccess");
+            newLife = json_object_get(root, "life");
+            serverTime = json_object_get(root, "time");
             
-            bool success = true;//(bool) CCString::create(json_string_value(isSuccess))->boolValue();
+            bool success = true;
+
+            if (isSuccess != NULL) {
+                success = (bool) CCString::create(json_string_value(isSuccess))->boolValue();
+            }
             
             if (success ) {
-                newLife = json_object_get(root, "life");
-                serverTime = json_object_get(root, "time");
                 lastTime = json_object_get(root, "lastTime");
-                
                 
                 long _serverTime = ((long long)atoll(json_string_value(serverTime)) / 1000);
                 long _clientTime = static_cast<long int> (time(NULL));
-                
-                
+                                
                 long _lastTime = _clientTime - ( _serverTime - ((long long)atoll(json_string_value(lastTime)) / 1000));
-                
-                CCLOG("~~~LAST TIME GET LIFE Client: %ld", _lastTime);
                 
                 
                 if (m_clientDelegate)

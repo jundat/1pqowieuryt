@@ -405,7 +405,6 @@ void LoseDialog::closeReviveAnimation()
 	this->removeFromParent();
 }
 
-
 void LoseDialog::showWaitDialog(string title)
 {
     CCLOG("LoseDialog::showWaitDialog");
@@ -444,8 +443,6 @@ void LoseDialog::closeWaitDialog()
     }
 }
 
-
-
 void LoseDialog::onBuyItemCompleted(bool isSuccess, int newCoin, std::string itemType, int itemCount, std::string uniqueTag)
 {
     if (isSuccess) {
@@ -480,3 +477,7 @@ void LoseDialog::onBuyItemCompleted(bool isSuccess, int newCoin, std::string ite
     
     this->closeWaitDialog();
 }
+
+
+
+
