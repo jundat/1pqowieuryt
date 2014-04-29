@@ -47,6 +47,29 @@ bool ObjectLayer::init()
 	m_difficulty = 0;
 	m_crossCount = 0;
 
+    
+#ifdef BULLET_COOL_DOWN
+    //Cool down
+    
+    m_sprCooldownBlank = CCSprite::create("bullet_cooldown_blank.png");
+    m_sprCooldown = CCSprite::create("bullet_cooldown.png");
+    
+    m_sprCooldownBlank->setAnchorPoint(ccp(0.5f, 0.0f));
+    m_sprCooldown->setAnchorPoint(ccp(0.5f, 0.0f));
+    
+    m_sprCooldownBlank->setPosition(ccp(690, 1100));
+    m_sprCooldown->setPosition(ccp(690, 1100));
+    
+    m_sprCooldown->setVisible(false);
+    m_sprCooldownBlank->setVisible(false);
+    
+    this->addChild(m_sprCooldownBlank);
+    this->addChild(m_sprCooldown);
+    
+    //end cool down
+#endif
+    
+    
 	m_sprLazer = CCSprite::createWithSpriteFrameName("lazer.png");
 	m_sprLazer->setVisible(false);
 	this->addChild(m_sprLazer, 1);
@@ -496,6 +519,30 @@ void ObjectLayer::update( float delta )
 		m_sprLazer->setAnchorPoint(ccp(0.5f, 0.0f));
 		m_sprLazer->setPosition(m_player->getPosition());
 	}
+    
+#ifdef BULLET_COOL_DOWN
+    
+    //bullet level
+    
+    if (m_player->getBulletLevel() > G_MIN_PLAYER_BULLET_LEVEL) {
+        m_sprCooldownBlank->setVisible(true);
+        m_sprCooldown->setVisible(true);
+        
+        float cooldownpercent = m_player->getTimeoutBulletPercent();
+        
+        CCLOG("%f", cooldownpercent);
+        
+        
+        m_sprCooldown->setTextureRect(CCRect(0, (1 - cooldownpercent) * m_sprCooldownBlank->getContentSize().height,
+                                             m_sprCooldownBlank->getContentSize().width,
+                                             cooldownpercent * m_sprCooldownBlank->getContentSize().height));
+    } else {
+        m_sprCooldownBlank->setVisible(false);
+        m_sprCooldown->setVisible(false);
+    }
+
+#endif
+    
 }
 
 void ObjectLayer::Revive()

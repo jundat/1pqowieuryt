@@ -15,6 +15,7 @@ USING_NS_CC;
 
 
 #define CROSS_NUMBER  3
+#define BULLET_COOL_DOWN    true
 
 
 
@@ -92,6 +93,13 @@ public:
 	EffectLayer* m_EffectLayer;
 
 	EnemyFactory* m_enemyFactory;
+    
+    //cool down
+
+#ifdef BULLET_COOL_DOWN
+    CCSprite* m_sprCooldown;
+    CCSprite* m_sprCooldownBlank;
+#endif
 };
 
 #endif // __GAME_OBJECT_MANAGER_H__
