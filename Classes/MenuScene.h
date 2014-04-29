@@ -107,11 +107,7 @@ public:
     void vietnamCallback(CCObject* pSender);
     void refreshLanguageUI();
 
-    void onEnterTransitionDidFinish()
-    {
-        CCSpriteFrameCache* sprcache = CCSpriteFrameCache::sharedSpriteFrameCache();
-        sprcache->addSpriteFramesWithFile("MainGame.plist");
-    }
+    virtual void onEnterTransitionDidFinish();
     void onRateCompleted( CCNode *sender, void *data );
     void onPushNotification( CCNode *sender, void *data );
     void onShowChargeCompleted( CCNode *sender, void *data );
