@@ -37,7 +37,7 @@
 #define G_ITEM_REVIVE           "revive"
 
 
-const int CONNECTION_TIMEOUT = 15;
+#define CONNECTION_TIMEOUT      15
 
 
 //////////////////////////////////////////////////////////////////////////

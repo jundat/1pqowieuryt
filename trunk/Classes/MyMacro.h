@@ -5,6 +5,17 @@
 USING_NS_CC;
 using namespace std;
 
+
+static const char* BoolToStr(bool val)
+{
+    if (val == true) {
+        return "true";
+    } else {
+        return "false";
+    }
+}
+
+
 typedef struct MY_TIME
 {
     int hour;
