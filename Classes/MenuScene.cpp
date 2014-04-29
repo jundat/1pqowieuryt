@@ -1230,7 +1230,7 @@ void MenuScene::getLife()
 
 void MenuScene::onGetLifeCompleted(bool isSuccess, int life, long lastTimeClient_Second)
 {
-    CCLOG("MenuScene::onGetLifeCompleted");
+    CCLOG("MenuScene::onGetLifeCompleted: %s, %d, %ld", BoolToStr(isSuccess), life, lastTimeClient_Second);
     
     //this->closeWaitDialog();
     
