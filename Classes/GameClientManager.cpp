@@ -1356,7 +1356,6 @@ void GameClientManager::_onGetLifeCompleted(CCHttpClient *sender, CCHttpResponse
                 }
             }
         }
-        
     }
     
 	CCLOG("------- END %s -------", response->getHttpRequest()->getTag());
