@@ -854,9 +854,16 @@ void MenuScene::fbFriendsCallback( int responseCode, const char* responseMessage
 
 		GameClientManager::sharedGameClientManager()->sendFriendList(DataManager::sharedDataManager()->GetFbID(), arrFriends);		
 
-		MenuScene::s_beginFriendInd += G_NUMBER_FRIEND_TO_GET;
-		MenuScene::s_endFriendInd += G_NUMBER_FRIEND_TO_GET;
-		EziSocialObject::sharedObject()->getFriends(EziSocialWrapperNS::FB_FRIEND_SEARCH::ALL_FRIENDS, MenuScene::s_beginFriendInd, MenuScene::s_endFriendInd);
+        if (m_isLoggedIn) {
+            MenuScene::s_beginFriendInd += G_NUMBER_FRIEND_TO_GET;
+            MenuScene::s_endFriendInd += G_NUMBER_FRIEND_TO_GET;
+            EziSocialObject::sharedObject()->getFriends(EziSocialWrapperNS::FB_FRIEND_SEARCH::ALL_FRIENDS, MenuScene::s_beginFriendInd, MenuScene::s_endFriendInd);
+        } else {
+            
+            //end of friends
+            this->closeWaitDialog();
+        }
+        
 	} else {
         
         //end of friends
@@ -1075,7 +1082,7 @@ void MenuScene::disableMoneytize()
 	//m_itShowCharge->setVisible(false);
 
 	//Android, Windows Phone
-	CCLOG("...... Disable monitize, SET DIAMOND = DEFAULT......");
+	CCLOG("................ Disable monitize, SET DIAMOND = DEFAULT ..................");
 	DataManager::sharedDataManager()->SetDiamon(G_DEFAULT_DIAMON);
     
     

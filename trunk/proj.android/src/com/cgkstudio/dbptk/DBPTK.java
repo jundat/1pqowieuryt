@@ -238,12 +238,17 @@ public class DBPTK extends Cocos2dxActivity {
 		    for (Signature signature : info.signatures) {
 		        MessageDigest md = MessageDigest.getInstance("SHA");
 		        md.update(signature.toByteArray());
-		        Log.e("MY KEY HASH:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+		        String hashkey = Base64.encodeToString(md.digest(), Base64.DEFAULT);
+		        
+		        Log.e("MY KEY HASH:", hashkey);
+		        Log.e("MY KEY HASH:", hashkey);
+		        Log.e("MY KEY HASH:", hashkey);
+		        Log.e("MY KEY HASH:", hashkey);
+		        Log.e("MY KEY HASH:", hashkey);
 		    }
 		}
         catch (NameNotFoundException e)
         {
-            
 		}
         catch (NoSuchAlgorithmException e)
         {

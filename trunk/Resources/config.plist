@@ -3,25 +3,25 @@
 <plist version="1.0">
 <dict>
 	<key>G_URL_FRIEND_LIST</key>
-	<string>dbp.cgkstudio.com:8025/friend</string>
+	<string>dbp.cgkstudio.com:8026/friend</string>
 	<key>G_URL_GET_LAZER</key>
-	<string>dbp.cgkstudio.com:8025/getlazer</string>
+	<string>dbp.cgkstudio.com:8026/getlazer</string>
 	<key>G_URL_PLAYER_FB_PROFILE</key>
-	<string>dbp.cgkstudio.com:8025/profile</string>
+	<string>dbp.cgkstudio.com:8026/profile</string>
 	<key>G_URL_DEVICE_PROFILE</key>
-	<string>dbp.cgkstudio.com:8025/device</string>
+	<string>dbp.cgkstudio.com:8026/device</string>
 	<key>G_URL_SCORE</key>
-	<string>dbp.cgkstudio.com:8025/score</string>
+	<string>dbp.cgkstudio.com:8026/score</string>
 	<key>G_URL_REVIVE</key>
-	<string>dbp.cgkstudio.com:8025/revive</string>
+	<string>dbp.cgkstudio.com:8026/revive</string>
 	<key>G_URL_ITEM</key>
-	<string>dbp.cgkstudio.com:8025/item</string>
+	<string>dbp.cgkstudio.com:8026/item</string>
 	<key>G_URL_GIFT_SEND_ITEM</key>
-	<string>dbp.cgkstudio.com:8025/gift/send_inbox</string>
+	<string>dbp.cgkstudio.com:8026/gift/send_inbox</string>
 	<key>G_URL_GIFT_GET_INBOX</key>
-	<string>dbp.cgkstudio.com:8025/gift/get_inbox</string>
+	<string>dbp.cgkstudio.com:8026/gift/get_inbox</string>
 	<key>G_URL_GIFT_REMOVE_ITEM</key>
-	<string>dbp.cgkstudio.com:8025/gift/remove_inbox</string>
+	<string>dbp.cgkstudio.com:8026/gift/remove_inbox</string>
 
 	
 	<key>G_URL_RATE</key>

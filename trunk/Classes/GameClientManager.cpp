@@ -326,10 +326,21 @@ void GameClientManager::_onSendFriendListCompleted( CCHttpClient *sender, CCHttp
 		str = decodeBeforeProcess(str);
 
 		CCLOG("Content: %s", str.c_str());
-		if (m_clientDelegate)
-		{
-			m_clientDelegate->onSendFriendListCompleted(true);	
-		}			
+        
+        if (str.empty()) {
+            if (m_clientDelegate)
+            {
+                m_clientDelegate->onSendFriendListCompleted(false);
+            }
+        }
+        else  {
+            if (m_clientDelegate)
+            {
+                m_clientDelegate->onSendFriendListCompleted(true);	
+            } else {
+                CCLOG("NULL Delegate @@");
+            }
+        }
 	}
 
 	CCLOG("------- END %s -------", response->getHttpRequest()->getTag());
@@ -965,7 +976,9 @@ void GameClientManager::_onGetAllItemCompleted(CCHttpClient *sender, CCHttpRespo
                  false,
                  DataManager::sharedDataManager()->GetBoom(),
                  DataManager::sharedDataManager()->GetDiamon());
-		}
+		} else {
+            CCLOG("NULL delegate @@");
+        }
 	}
 	else
 	{
@@ -977,7 +990,6 @@ void GameClientManager::_onGetAllItemCompleted(CCHttpClient *sender, CCHttpRespo
 		CCLOG("Content: %s", str.c_str());
         
         if (str.length() == 0) {
-            CCLOG("Request failed: %s", response->getErrorBuffer());
             if (m_clientDelegate) {
                 m_clientDelegate->onGetAllItemsCompleted(
                      false,
