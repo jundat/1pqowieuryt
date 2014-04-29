@@ -98,6 +98,7 @@ bool NotLoggedInMenuScene::init()
     
     string fbId = DataManager::sharedDataManager()->GetFbID();
     if (fbId.compare("NULL") != 0) {
+        m_menu->setEnabled(false);
         this->scheduleOnce(schedule_selector(NotLoggedInMenuScene::scheduleTick), 1.0f);
     }
     
@@ -208,6 +209,8 @@ void NotLoggedInMenuScene::onCloseDialog()
 
 void NotLoggedInMenuScene::scheduleTick(float dt)
 {
+    PLAY_BUTTON_EFFECT;
+    
     m_facebookItem->selected();
     
     m_facebookItem->runAction(CCSequence::createWithTwoActions(CCDelayTime::create(0.5f), CCCallFunc::create(this, callfunc_selector(NotLoggedInMenuScene::jumpMenu))));

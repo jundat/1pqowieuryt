@@ -133,6 +133,8 @@ public:
 
     void initTimer();
     void ScheduleTick(float dt);
+    
+    void connectionTimeOut();
 
     //////////////////////////////////////////////////////////////////////////
     void GetRegistrationId();

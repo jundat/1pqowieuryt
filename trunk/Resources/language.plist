@@ -1,6 +1,7 @@
-<plist>
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
 <dict>
-
 	<key>Id</key>
 	<dict>
 		<key>game_name</key>
@@ -124,7 +125,6 @@
 		<key>score_limit_life</key>
 		<string>score_limit_life</string>
 	</dict>
-
 	<key>English</key>
 	<dict>
 		<key>game_name</key>
@@ -136,13 +136,13 @@
 		<key>feed_caption</key>
 		<string>Challenge your friends</string>
 		<key>feed_msg</key>
-		<string>I've got %d pts in Line Backer, follow me is %s. Kaka :v</string>
+		<string>I&apos;ve got %d pts in Line Backer, follow me is %s. Kaka :v</string>
 		<key>feed_description</key>
 		<string>Live in the legend of 12-days </string>
 		<key>feed_badge_icon</key>
-		<string>https://dl.dropboxusercontent.com/u/41829250/DienBienPhuTrenKhong/DienBienPhuTrenKhong.jpg</string>
+		<string>https://fbcdn-photos-d-a.akamaihd.net/hphotos-ak-prn1/t39.2081-0/p128x128/851550_506180472824367_331363700_n.png</string>
 		<key>feed_deep_link</key>
-		<string>https://play.google.com/store/apps/details?id=com.chimgokien.phicongbutchi</string>
+		<string>https://play.google.com/store/apps/details?id=com.cgkstudio.dbptk</string>
 		<key>feed_error_caption</key>
 		<string>Error</string>
 		<key>feed_error</key>
@@ -248,7 +248,6 @@
 		<key>score_limit_life</key>
 		<string>Max life is %d</string>
 	</dict>
-
 	<key>Vietnamese</key>
 	<dict>
 		<key>game_name</key>
@@ -262,11 +261,11 @@
 		<key>feed_msg</key>
 		<string>Ta vừa đạt %d điểm trong game Điện Biên Phủ trên không, vượt qua %s. Kaka :v</string>
 		<key>feed_description</key>
-		<string>Cùng sống lại những giây phút hào hùng của dân tộc trong chiến thắng vẻ vang của "12 ngày đêm". Thử thách cùng bạn bè, vượt lên bảng xếp hạng. Click ngay để tải!</string>
+		<string>Cùng sống lại những giây phút hào hùng của dân tộc trong chiến thắng vẻ vang của &quot;12 ngày đêm&quot;. Thử thách cùng bạn bè, vượt lên bảng xếp hạng. Click ngay để tải!</string>
 		<key>feed_badge_icon</key>
-		<string>https://dl.dropboxusercontent.com/u/41829250/DienBienPhuTrenKhong/DienBienPhuTrenKhong.jpg</string>
+		<string>https://fbcdn-photos-d-a.akamaihd.net/hphotos-ak-prn1/t39.2081-0/p128x128/851550_506180472824367_331363700_n.png</string>
 		<key>feed_deep_link</key>
-		<string>https://play.google.com/store/apps/details?id=com.chimgokien.phicongbutchi</string>
+		<string>https://play.google.com/store/apps/details?id=com.cgkstudio.dbptk</string>
 		<key>feed_error_caption</key>
 		<string>Lỗi</string>
 		<key>feed_error</key>
@@ -372,6 +371,5 @@
 		<key>score_limit_life</key>
 		<string>Tối đa %d mạng</string>
 	</dict>
-
 </dict>
 </plist>

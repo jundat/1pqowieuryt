@@ -619,7 +619,7 @@ void MenuScene::initTimer()
 {
 	//CCLOG("Initing... timer! ...");
 
-	DataManager::sharedDataManager()->GetLastPlayerLife();
+	int life = DataManager::sharedDataManager()->GetLastPlayerLife();
 	long lasttm = DataManager::sharedDataManager()->GetLastDeadTime();
 	long diff = static_cast<long int>(time(NULL)) - lasttm;
 
@@ -627,7 +627,7 @@ void MenuScene::initTimer()
 	m_waitTime %= G_PLAYER_TIME_TO_REVIVE;
 
 
-	if (m_waitTime < 0)
+	if (m_waitTime < 0 || life >= G_MAX_PLAYER_LIFE)
 	{
 		DataManager::sharedDataManager()->SetLastPlayerLife(G_MAX_PLAYER_LIFE);
 		return;
@@ -713,17 +713,25 @@ void MenuScene::fbSessionCallback(int responseCode, const char *responseMessage)
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	if (responseCode == EziSocialWrapperNS::RESPONSE_CODE::FB_LOGIN_SUCCESSFUL)
 	{
-		//CCLOG("fbSessionCallback: SUCCESSFUL");
+		CCLOG("fbSessionCallback: INNNNN");
 		m_isLoggedIn = true;
         m_facebookItem->setSelectedIndex(1);
         
         //
 		//auto get profile, info
         //
+        
+        bool needsEmail = true;
+        EziSocialObject::sharedObject()->fetchFBUserDetails(needsEmail);
 	}
 	else
 	{
-		//CCLOG("fbSessionCallback: FAILED");
+		CCLOG("fbSessionCallback: OUTTTT");
+        
+        if (m_isLoggedIn == false) { //truoc do chwa log in
+            CCMessageBox(TXT("menu_error_server"), TXT("menu_error_caption"));
+        }
+        
 		m_isLoggedIn = false;
         m_facebookItem->setSelectedIndex(0);
         
@@ -792,6 +800,7 @@ void MenuScene::fbUserPhotoCallback(const char *userPhotoPath, const char* fbID)
 		DataManager::sharedDataManager()->SetPhotoPath(userPhotoPath);
 	}
 }
+
 void MenuScene::getFacebookFriends()
 {
     //DEBUG
@@ -1050,8 +1059,13 @@ void MenuScene::onSendPlayerFbProfileCompleted( bool isSuccess )
 	}
 }
 
+
 void MenuScene::disableMoneytize()
 {
+    this->closeWaitDialog();
+    this->closeWaitDialog();
+    this->closeWaitDialog();
+    
     CCMessageBox(TXT("menu_error_server"), TXT("menu_error_caption"));
     
 	////iOS
@@ -1078,7 +1092,7 @@ void MenuScene::disableMoneytize()
 
 void MenuScene::getAllItems()
 {
-    this->showWaitDialog(TXT("wait_connect_server"));
+    //this->showWaitDialog(TXT("wait_connect_server"));
     
     CCLOG("MenuScene::getAllItems");
     GameClientManager::sharedGameClientManager()->getAllItem(DataManager::sharedDataManager()->GetFbID());
@@ -1091,7 +1105,7 @@ void MenuScene::onGetAllItemsCompleted(bool isSuccess, int laze, int coin)
     CCLOG("laze: %d", laze);
     CCLOG("coin: %d", coin);
     
-    this->closeWaitDialog();
+    //this->closeWaitDialog();
 
     if (isSuccess) {
         DataManager::sharedDataManager()->SetBoom(laze);
@@ -1103,6 +1117,7 @@ void MenuScene::onGetAllItemsCompleted(bool isSuccess, int laze, int coin)
     }
 }
 
+
 void MenuScene::showWaitDialog(string title)
 {
     CCLOG("MenuScene::showWaitDialog");
@@ -1112,6 +1127,13 @@ void MenuScene::showWaitDialog(string title)
         m_waitDialog->m_refCount++;
 
     } else {
+        
+        //time out to close waiting dialog
+        
+        CCLOG("Schedule connection timeout...");
+        this->scheduleOnce(schedule_selector(MenuScene::connectionTimeOut), CONNECTION_TIMEOUT);
+        
+        
         m_waitDialog = WaitDialog::create();
         m_waitDialog->m_refCount = 1;
         m_waitDialog->setTitle(title);
@@ -1123,10 +1145,17 @@ void MenuScene::showWaitDialog(string title)
 
 void MenuScene::closeWaitDialog()
 {
+    CCLOG("MenuScene::closeWaitDialog");
+    
     if (m_waitDialog != NULL) {
         m_waitDialog->m_refCount--;
         
         if (m_waitDialog->m_refCount <= 0) {
+            
+            //unschedule close waitdialog
+            CCLOG("Unschedule connection timeout...");
+            this->unschedule(schedule_selector(MenuScene::connectionTimeOut));
+            
             this->removeChild(m_waitDialog);
             m_waitDialog = NULL;
             this->onCloseDialog();
@@ -1171,26 +1200,27 @@ bool MenuScene::checkRefreshFriendList()
 
 void MenuScene::onUseLifeCompleted(bool isSuccess, int newLife, long lastTime_client)
 {
+    CCLOG("MenuScene::onUseLifeCompleted");
+    
     CCLOG("life: %d, lastTime: %ld", newLife, lastTime_client);
     
     if (isSuccess) {
-        
+        CCLOG("Success");
         DataManager::sharedDataManager()->SetLastPlayerLife(newLife);
         DataManager::sharedDataManager()->SetLastDeadTime(lastTime_client);
         
-        CCLOG("---USE LIFE SUCCESS~~~");
     } else {
+        CCLOG("Failed");
         
-        CCLOG("---USE LIFE FAILED~~~");
         //failed to connect server
-		this->disableMoneytize();
+		//this->disableMoneytize();
     }
 }
 
 
 void MenuScene::getLife()
 {
-    this->showWaitDialog(TXT("wait_connect_server"));
+    //this->showWaitDialog(TXT("wait_connect_server"));
     
     CCLOG("MenuScene::getLife");
     
@@ -1202,7 +1232,7 @@ void MenuScene::onGetLifeCompleted(bool isSuccess, int life, long lastTimeClient
 {
     CCLOG("MenuScene::onGetLifeCompleted");
     
-    this->closeWaitDialog();
+    //this->closeWaitDialog();
     
     if (isSuccess) {
         
@@ -1227,12 +1257,18 @@ void MenuScene::onGetScoreCompleted( bool isSuccess, int score, std::string time
         DataManager::sharedDataManager()->SetHighScore(score);
     } else {
         CCLOG("FAILED TO GET SCORE");
-        //failed to connect server
+        
 		this->disableMoneytize();
     }
 }
 
 
+void MenuScene::connectionTimeOut()
+{
+    CCLOG("~~~~~~~~~~~~~~~~~~ MenuScene::connectionTimeOut ~~~~~~~~~~~~~~~~~~");
+    
+    this->disableMoneytize();
+}
 
 
 

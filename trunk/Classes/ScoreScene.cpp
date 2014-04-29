@@ -7,6 +7,9 @@
 #include "AudioManager.h"
 #include "Global.h"
 #include "TextLoader.h"
+#include "NotLoggedInMenuScene.h"
+
+
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -614,26 +617,41 @@ void ScoreScene::itSendLifeCallback( CCObject* pSender )
 
 void ScoreScene::onGetLazeFreeCompleted(bool isSuccess, std::string friendId)
 {
+    CCLOG("ScoreScene::onGetLazeFreeCompleted");
+    
     CustomTableViewCell *cell = NULL;
 
+    CCLOG("1");
     for (int i = 0; i < m_tableXepHangSize; i++) {
+        
         cell = (CustomTableViewCell*) m_tableXephang->cellAtIndex(i);
-        if (cell->fbID.compare(friendId) == 0) {
+        
+        CCLOG("2");
+        
+        if (cell != NULL && cell->fbID.empty() == false && cell->fbID.compare(friendId) == 0) {
             CCLOG("Find Out Cell");
+            CCLOG("3");
+            
             break;
         } else {
             cell = NULL;
         }
     }
     
+    CCLOG("4");
+    
     if (cell == NULL) {
         CCLOG("cell == NULL, return");
         return;
     }
     
+    CCLOG("5");
+    
     if (isSuccess) {
         PLAY_GET_BOMB_EFFECT;
 		DataManager::sharedDataManager()->IncreaseBoom();
+        
+        CCLOG("6");
         
 		//show clock
 		cell->m_lbGetBoom->setVisible(false);
@@ -641,20 +659,32 @@ void ScoreScene::onGetLazeFreeCompleted(bool isSuccess, std::string friendId)
 		cell->m_lastTimeGetBoom = static_cast<long int>(time(NULL));
         cell->m_fbFriend->m_timeGetLaze = static_cast<long int>(time(NULL));
         
+        CCLOG("7");
+        
 		refreshUserDetail();
+        
+        CCLOG("8");
         
 		//animation
 		m_sprBoom->runAction(CCSequence::createWithTwoActions(
               CCScaleTo::create(0.2f, 1.0f),
               CCScaleTo::create(0.2f, 0.75f)
               ));
+        
+        CCLOG("9");
+        
     } else {
         CCMessageBox(TXT("get_laze_free_error"), TXT("error_caption"));
     }
     
+    CCLOG("10");
+    
     cell->m_itGetBoom->setEnabled(true);
     cell->m_itGetBoom->setVisible(true);
     cell->m_sprWait->setVisible(false);
+    
+    CCLOG("11");
+    
 }
 
 
@@ -966,7 +996,6 @@ void ScoreScene::onGetFriendListCompleted(bool isSuccess, CCArray* arrFriends)
 
 	m_sprWaiting->setVisible(false);
 	m_tableXephang->reloadData();
-	m_tableQuatang->reloadData();
     
     CCLOG("Close dialog : onGetFriendListCompleted");
     this->closeWaitDialog();
@@ -979,7 +1008,7 @@ void ScoreScene::onGetFriendListCompleted(bool isSuccess, CCArray* arrFriends)
 
 void ScoreScene::onGetScoreCompleted( bool isSuccess, int score, std::string time )
 {
-	CCLOG("onGetScoreCompleted");
+	CCLOG("ScoreScene::onGetScoreCompleted");
 
 	if (isSuccess)
 	{
@@ -1022,7 +1051,6 @@ void ScoreScene::onGetScoreCompleted( bool isSuccess, int score, std::string tim
 		m_lbLostConnection->setVisible(true);
 		m_lbInviteQuatang->setVisible(false);
         
-        CCLOG("Close dialog : onGetScoreCompleted");
         this->closeWaitDialog();
 	}	
 }
@@ -1411,72 +1439,77 @@ CCTableViewCell* ScoreScene::getTableCellQuatangAtIndex( CCTableView *table, uns
 	std::string strFriendId;
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    
+    CCLOG("1");
     Gift* gift = (Gift*) m_arrRequests->objectAtIndex(idx);
-	
+	CCLOG("2");
     if (NULL != gift)
 	{
 		strFriendId = std::string(gift->m_senderId);
-
-		std::string sname;
-        string photopath;
+CCLOG("3");
+		std::string sname = G_DEFAULT_NAME;
+        string photopath = "";
         
         this->getFriendInfo(strFriendId, &sname, &photopath);
-        
+CCLOG("4");
 		if (sname.length() > 24) {
 			sname = sname.substr(0, 22);
 			sname.append("..");
 		}
         
-		strName  = CCString::create(sname);
-        strPhoto = CCString::create(photopath);
+        if (sname.empty() == false) {
+            strName  = CCString::create(sname);
+        }
+        
+        if (photopath.empty() == false) {
+            strPhoto = CCString::create(photopath);
+        }
 	}
 	else
 	{
 		CCLOG("NULL REQUEST");
 		return NULL;
 	}
-
+CCLOG("5");
 	CCTableViewCell *cell = table->cellAtIndex(idx);
 	if (!cell) 
 	{
 		cell = new CustomTableViewCell();
 		cell->autorelease();
-
+CCLOG("6");
         ((CustomTableViewCell*)(cell))->fbID = string(gift->m_senderId);
 		((CustomTableViewCell*)(cell))->m_gift = gift;
         ((CustomTableViewCell*)(cell))->m_idx = idx;
-
+CCLOG("7");
 		CCSprite *sprite = CCSprite::create("table_cell_quatang.png");
 		sprite->setAnchorPoint(CCPointZero);
 		sprite->setPosition(ccp(0, 0));
 		sprite->setTag(1);
 		cell->addChild(sprite);
-
+CCLOG("8");
 		CCSprite *defaultAvatar = CCSprite::create("fb-profile.png");
 		defaultAvatar->setPosition(ccp(75, m_sprCell->getContentSize().height/2));
 		defaultAvatar->setScale((float)G_FRIEND_AVATAR_SIZE/(float)G_AVATAR_SIZE);
 		defaultAvatar->setTag(2);
 		cell->addChild(defaultAvatar);
-
+CCLOG("9");
 		CCSprite *avatar = CCSprite::create(strPhoto->getCString());
 		avatar->setPosition(ccp(defaultAvatar->getContentSize().width/2, defaultAvatar->getContentSize().height/2));
 		avatar->setTag(2);
 		defaultAvatar->addChild(avatar);
 
-
+CCLOG("10");
 		CCLabelTTF *lbName = CCLabelTTF::create(strName->getCString(), "Roboto-Medium.ttf", 42);
 		lbName->setColor(ccc3(0,0,0));
 		lbName->setPosition(ccp(0.75f * G_FRIEND_AVATAR_SIZE + 60, 0.75f * m_sprCell->getContentSize().height));
 		lbName->setAnchorPoint(ccp(0.0f, 0.5f));
 		lbName->setTag(4);
 		cell->addChild(lbName);
-
+CCLOG("11");
 		//icon life 
 		CCSprite* iconLife = CCSprite::create("oil.png");
 		iconLife->setPosition(ccp(650, m_sprCell->getContentSize().height/2 + 15));
 		cell->addChild(iconLife);
-
+CCLOG("12");
 		//lable nhận
 		CCLabelTTF* lbGetBoom = CCLabelTTF::create(TXT("score_get"), "Roboto-Medium.ttf", 28);
 		lbGetBoom->setColor(ccc3(0, 0, 0));
@@ -1504,7 +1537,7 @@ CCTableViewCell* ScoreScene::getTableCellQuatangAtIndex( CCTableView *table, uns
         //Count
         CCString *sCount = CCString::createWithFormat("x%d", gift->m_count);
 		CCLabelTTF* lbCount = CCLabelTTF::create(sCount->getCString(), "Roboto-Medium.ttf", 36);
-		lbCount->setColor(ccc3(200, 0, 0));
+		lbCount->setColor(ccc3(150, 0, 0));
 		lbCount->setAnchorPoint(ccp(0.5f, 0.75f));
 		lbCount->setPosition(ccpAdd(iconLife->getPosition(), ccp(iconLife->getContentSize().width * 0.75f, 0)));
 		cell->addChild(lbCount);
@@ -1541,6 +1574,11 @@ void ScoreScene::showWaitDialog(string title)
         m_waitDialog->m_refCount++;
         
     } else {
+        //time out to close waiting dialog
+        
+        CCLOG("Schedule connection timeout...");
+        this->scheduleOnce(schedule_selector(ScoreScene::connectionTimeOut), CONNECTION_TIMEOUT);
+        
         m_waitDialog = WaitDialog::create();
         m_waitDialog->m_refCount = 1;
         m_waitDialog->setTitle(title);
@@ -1556,6 +1594,13 @@ void ScoreScene::closeWaitDialog()
         m_waitDialog->m_refCount--;
         
         if (m_waitDialog->m_refCount <= 1) {
+            
+            
+            //unschedule close waitdialog
+            CCLOG("Unschedule connection timeout...");
+            this->unschedule(schedule_selector(ScoreScene::connectionTimeOut));
+            
+
             this->removeChild(m_waitDialog);
             m_waitDialog = NULL;
             
@@ -1567,20 +1612,33 @@ void ScoreScene::closeWaitDialog()
 }
 
 
-
 void ScoreScene::onBuyItemCompleted(bool isSuccess, int newCoin, std::string itemType, int itemCount, std::string uniqueTag)
 {
     CCLOG("onBuyItemCompleted: %s, %d, %s", itemType.c_str(), itemCount, uniqueTag.c_str());
     
-    CustomTableViewCell *cell;
+    CustomTableViewCell *cell = NULL;
     
     for (int i = 0; i < m_tableXepHangSize; i++) {
+        
         cell = (CustomTableViewCell*) m_tableXephang->cellAtIndex(i);
-        if (cell->fbID.compare(uniqueTag) == 0) {
+        
+        if (cell != NULL && cell->fbID.empty() == false && cell->fbID.compare(uniqueTag) == 0) {
             CCLOG("FIND OUT CELL");
+            
             break;
+        } else {
+            cell = NULL;
         }
     }
+    
+    
+    if (cell == NULL) {
+        
+        CCLOG("cell == NULL, return");
+        
+        return;
+    }
+    
     
     if (isSuccess) {
         PLAY_GET_BOMB_EFFECT;
@@ -1694,25 +1752,33 @@ void ScoreScene::onSendItemCompleted(bool isSuccess, string friendId, string ite
     CCLOG("ScoreScene::onSendItemCompleted ~~~");
     CCLOG("GOT: %s, %s, %d", friendId.c_str(), itemId.c_str(), count);
     PLAY_GET_BOMB_EFFECT;
+    CCLOG("1");
     
     CustomTableViewCell *cell = NULL;
     
     for (int i = 0; i < m_tableXepHangSize; i++) {
+        
         cell = (CustomTableViewCell*) m_tableXephang->cellAtIndex(i);
         
-        if (cell->fbID.compare(friendId) == 0) {
+        CCLOG("Index: %d-1", i);
+        
+        if (cell != NULL && cell->fbID.empty() == false && cell->fbID.compare(friendId) == 0) {
             CCLOG("FIND OUT CELL");
+            
             break;
         } else {
             cell = NULL;
         }
-    }
+        
+        CCLOG("Index: %d-2", i);
     
+    }
+    CCLOG("2");
     if (cell == NULL) {
         CCLOG("CELL == NULL, return");
         return;
     }
-    
+    CCLOG("3");
     if (isSuccess) {
         
         CCLOG("Success");
@@ -1720,18 +1786,18 @@ void ScoreScene::onSendItemCompleted(bool isSuccess, string friendId, string ite
         cell->m_itSendLife->setEnabled(false);
         cell->m_lbSendLife->setVisible(false);
         cell->m_lbSendLifeTimer->setVisible(true);
-        
+        CCLOG("4");
         cell->m_lastTimeSendLife = static_cast<long int>(time(NULL));
         cell->m_fbFriend->m_timeSendLife = static_cast<long int>(time(NULL));
-        
+        CCLOG("5");
     } else {
         CCLOG("Failed");
-        
+        CCLOG("6");
         cell->m_itSendLife->setEnabled(true);
         cell->m_lbSendLife->setVisible(true);
         cell->m_lbSendLifeTimer->setVisible(false);
     }
-    
+    CCLOG("7");
     cell->m_sprWaitSendLife->setVisible(false);
 }
 
@@ -1803,6 +1869,62 @@ void ScoreScene::onRemoveItemCompleted(bool isSuccess, string senderId, long lon
           CCScaleTo::create(0.2f, 1.0f),
           CCScaleTo::create(0.2f, 0.75f)
           ));
+    
+}
+
+
+void ScoreScene::connectionTimeOut()
+{
+    CCLOG("~~~~~~~~~~~~~~~~~~ ScoreScene::connectionTimeOut ~~~~~~~~~~~~~~~~~~");
+    
+    //message box
+    //goto menu
+    
+    this->closeWaitDialog();
+    this->closeWaitDialog();
+    this->closeWaitDialog();
+    
+    CCMessageBox(TXT("menu_error_server"), TXT("menu_error_caption"));
+    
+	////iOS
+	//CCLOG("DISABLE MONEYTIZE...");
+	//DataManager::sharedDataManager()->SetIsMoneytize(false);
+	////remove chargeTutorial
+	//m_itShowCharge->setVisible(false);
+    
+	//Android, Windows Phone
+	CCLOG("...... Disable monitize, SET DIAMOND = DEFAULT......");
+	DataManager::sharedDataManager()->SetDiamon(G_DEFAULT_DIAMON);
+    
+    
+    this->facebookLogOut();
+    
+    
+    //
+    //Clear data
+    //
+    //set FbId = "NULL";
+    DataManager::sharedDataManager()->ClearFbProfileID();
+    
+    //clear highscores
+    DataManager::sharedDataManager()->SetHigherFriends(NULL);
+    
+    //go to NotLoggedInMenuSene
+    GameClientManager::sharedGameClientManager()->setDelegate(NULL);
+    
+    CCScene *pScene = CCTransitionFade::create(0.5, NotLoggedInMenuScene::scene());
+    CCDirector::sharedDirector()->replaceScene(pScene);
+}
+
+
+void ScoreScene::facebookLogOut()
+{
+    CCLOG("ScoreScene::facebookLogOut");
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    
+    EziSocialObject::sharedObject()->perfromLogoutFromFacebook();
+    
+#endif
     
 }
 

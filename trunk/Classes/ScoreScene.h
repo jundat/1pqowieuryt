@@ -67,6 +67,8 @@ public:
 			return true;
 		#endif
 	}
+    
+    
 	static void SortEziFriendScoreList(CCArray* arr)
 	{
 		std::sort(arr->data->arr, 
@@ -137,6 +139,9 @@ public:
     WaitDialog* m_waitDialog;
     
     
+    void connectionTimeOut();
+    void facebookLogOut();
+
     virtual void onBuyItemCompleted(bool isSuccess, int newCoin, std::string itemType, int itemCount, std::string uniqueTag);
     
     void getInbox();
@@ -152,6 +157,7 @@ public:
 	void getHighScores();
 	virtual void onGetFriendListCompleted(bool isSuccess,  CCArray* arrFriends);
 	virtual void onGetScoreCompleted( bool isSuccess, int score, std::string time );
+    
 
 	//Ezibyte
     

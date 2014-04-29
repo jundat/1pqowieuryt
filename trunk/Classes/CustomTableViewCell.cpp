@@ -4,6 +4,8 @@ USING_NS_CC;
 
 CustomTableViewCell::CustomTableViewCell()
 {
+    fbID = "";
+    
 	//get boom
 	m_lastTimeGetBoom = 0;
 	m_lbGetBoomTimer = NULL;
@@ -16,5 +18,11 @@ CustomTableViewCell::CustomTableViewCell()
 	m_lbSendLifeTimer = NULL;
 	m_lbSendLife = NULL;
 	m_itSendLife = NULL;
+    m_sprWaitSendLife = NULL;
+    
+    m_gift = NULL;
+    
+    m_fbFriend = NULL;
+    
     
 }

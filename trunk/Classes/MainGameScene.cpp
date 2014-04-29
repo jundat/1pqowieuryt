@@ -186,7 +186,7 @@ void MainGameScene::showEndGame( int score, int killedEnemies )
 	DataManager::sharedDataManager()->SetHighScore(score);
 
 	//submit score
-	if (DataManager::sharedDataManager()->GetFbID().compare("NULL") != 0)
+	if (isBreakRecord == true &&  DataManager::sharedDataManager()->GetFbID().compare("NULL") != 0)
 	{
 		GameClientManager::sharedGameClientManager()->sendScore(
 			DataManager::sharedDataManager()->GetFbID(), 
