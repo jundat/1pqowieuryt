@@ -729,7 +729,7 @@ void MenuScene::fbSessionCallback(int responseCode, const char *responseMessage)
 		CCLOG("fbSessionCallback: OUTTTT");
         
         if (m_isLoggedIn == false) { //truoc do chwa log in
-            CCMessageBox(TXT("menu_error_server"), TXT("menu_error_caption"));
+            CCMessageBox(TXT("fb_failed_connect"), TXT("error_caption"));
         }
         
 		m_isLoggedIn = false;
@@ -1101,9 +1101,7 @@ void MenuScene::getAllItems()
 
 void MenuScene::onGetAllItemsCompleted(bool isSuccess, int laze, int coin)
 {
-    CCLOG("MenuScene::onGetAllItemsCompleted");
-    CCLOG("laze: %d", laze);
-    CCLOG("coin: %d", coin);
+    CCLOG("MenuScene::onGetAllItemsCompleted: %s, laze: %d, coin: %d", BoolToStr(isSuccess), laze, coin);
     
     //this->closeWaitDialog();
 
@@ -1200,17 +1198,13 @@ bool MenuScene::checkRefreshFriendList()
 
 void MenuScene::onUseLifeCompleted(bool isSuccess, int newLife, long lastTime_client)
 {
-    CCLOG("MenuScene::onUseLifeCompleted");
-    
-    CCLOG("life: %d, lastTime: %ld", newLife, lastTime_client);
+    CCLOG("MenuScene::onUseLifeCompleted: %s, %d, %ld", BoolToStr(isSuccess), newLife, lastTime_client);
     
     if (isSuccess) {
-        CCLOG("Success");
         DataManager::sharedDataManager()->SetLastPlayerLife(newLife);
         DataManager::sharedDataManager()->SetLastDeadTime(lastTime_client);
         
     } else {
-        CCLOG("Failed");
         
         //failed to connect server
 		//this->disableMoneytize();
@@ -1251,12 +1245,11 @@ void MenuScene::onGetLifeCompleted(bool isSuccess, int life, long lastTimeClient
 
 void MenuScene::onGetScoreCompleted( bool isSuccess, int score, std::string time )
 {
-    CCLOG("MenuScene::onGetScoreCompleted");
+    CCLOG("MenuScene::onGetScoreCompleted: %s, %d, %s", BoolToStr(isSuccess), score, time.c_str());
     
     if (isSuccess) {
         DataManager::sharedDataManager()->SetHighScore(score);
     } else {
-        CCLOG("FAILED TO GET SCORE");
         
 		this->disableMoneytize();
     }
