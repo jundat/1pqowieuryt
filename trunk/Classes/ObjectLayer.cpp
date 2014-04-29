@@ -530,9 +530,6 @@ void ObjectLayer::update( float delta )
         
         float cooldownpercent = m_player->getTimeoutBulletPercent();
         
-        CCLOG("%f", cooldownpercent);
-        
-        
         m_sprCooldown->setTextureRect(CCRect(0, (1 - cooldownpercent) * m_sprCooldownBlank->getContentSize().height,
                                              m_sprCooldownBlank->getContentSize().width,
                                              cooldownpercent * m_sprCooldownBlank->getContentSize().height));
