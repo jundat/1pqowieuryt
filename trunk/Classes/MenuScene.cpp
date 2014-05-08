@@ -732,8 +732,8 @@ void MenuScene::fbSessionCallback(int responseCode, const char *responseMessage)
 		//auto get profile, info
         //
         
-        bool needsEmail = true;
-        EziSocialObject::sharedObject()->fetchFBUserDetails(needsEmail);
+        //bool needsEmail = true;
+        //EziSocialObject::sharedObject()->fetchFBUserDetails(needsEmail);
 	}
 	else
 	{
@@ -830,11 +830,14 @@ void MenuScene::getFacebookFriends()
 
 void MenuScene::fbFriendsCallback( int responseCode, const char* responseMessage, cocos2d::CCArray* friends )
 {
-	//CCLOG("fbFriendsCallback");
+	CCLOG("fbFriendsCallback");
+    
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	int count = friends->count();
-    //CCLOG("GOT >>>>>>>>>>>>>> %d friends", count);
-	if (count > 0)
+    
+    CCLOG("GOT >>>>>>>>>>>>>> %d friends", count);
+	
+    if (count > 0)
 	{
 		CCArray* arrFriends = new CCArray();
 		arrFriends->retain();
@@ -869,6 +872,8 @@ void MenuScene::fbFriendsCallback( int responseCode, const char* responseMessage
         MenuScene::s_endFriendInd += G_NUMBER_FRIEND_TO_GET;
         EziSocialObject::sharedObject()->getFriends(EziSocialWrapperNS::FB_FRIEND_SEARCH::ALL_FRIENDS, MenuScene::s_beginFriendInd, MenuScene::s_endFriendInd);
 	} else {
+        
+        CCLOG("<<<<<<<<<  End Friend List  >>>>>>>");
         
         //end of friends
         this->closeWaitDialog();
@@ -1281,7 +1286,9 @@ void MenuScene::onGetScoreCompleted( bool isSuccess, int score, std::string time
     CCLOG("MenuScene::onGetScoreCompleted: %s, %d, %s", BoolToStr(isSuccess), score, time.c_str());
     
     if (isSuccess) {
+        
         DataManager::sharedDataManager()->SetHighScore(score);
+        
     } else {
         
 		this->disableMoneytize();
